@@ -1,1646 +1,1680 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-inputDocuments: [
-  'product-brief-gmao-hiansa-2026-02-26.md',
-  'prd.md',
-  'edge-cases-scenarios.md'
-]
-date: 2026-02-27
-author: Bernardo
-project_name: gmao-hiansa
-workflowType: 'ux-design'
+stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-03-core-experience', 'step-04-emotional-response', 'step-05-inspiration', 'step-06-design-system', 'step-07-defining-experience', 'step-08-visual-foundation', 'step-09-design-directions', 'step-10-user-journeys', 'step-11-component-strategy', 'step-12-ux-patterns', 'step-13-responsive-accessibility', 'step-14-complete']
+inputDocuments: ['prd.md']
+lastStep: 14
+workflowCompleted: true
+completionDate: 2026-03-07
 ---
 
 # UX Design Specification gmao-hiansa
 
 **Author:** Bernardo
-**Date:** 2026-02-27
-**Last Updated:** 2026-03-07 (Actualización a 15 capacidades PBAC desde PRD 2026-03-07)
+**Date:** 2026-03-07
+**Status**: ✅ COMPLETE
 
 ---
-
-## ⚠️ IMPORTANTE - Actualización Sprint Change Proposal (2026-03-01, corregido 2026-03-07)
-
-**Este documento ha sido ACTUALIZADO** para reflejar la transición de **RBAC a PBAC** (Permission-Based Access Control) con **15 capacidades** según PRD actualizado (2026-03-07).
-
-**Cambios Principales en UX:**
-
-1. **Dashboard Único para Todos:**
-   - ❌ **Eliminados:** 4 dashboards específicos por rol (Operario, Técnico, Supervisor, Admin)
-   - ✅ **Nuevo:** Dashboard común para todos los usuarios con KPIs de la planta
-   - ✅ **Nuevo:** Botones de acceso rápido filtrados por capabilities del usuario
-
-2. **Formulario de Registro de Usuario:**
-   - ✅ **Nuevo:** Dropdown de rol (etiqueta) + 15 checkboxes individuales de capabilities
-   - ✅ **Nuevo:** `can_create_failure_report` siempre marcada por defecto (todos los usuarios)
-   - ✅ **Nuevo:** Permite selección flexible de las 15 capacidades del sistema
-
-3. **Perfil de Usuario:**
-   - ✅ **Nuevo:** Muestra rol como etiqueta + lista de 15 capabilities con nombres descriptivos
-   - ✅ **Nuevo:** Nombres legibles para cada capability (ej: "✅ Reportar averías", "Ver OTs asignadas", "Gestionar stock", "Ver KPIs avanzados", "Gestionar usuarios y roles")
-
-4. **Navegación Lateral:**
-   - ✅ **Actualizado:** Filtrado por capabilities individuales (NO por roles)
-
-**Referencia:** Ver `sprint-change-proposal-2026-03-01.md` para detalles completos de wireframes y especificaciones.
-
----
-
-<!-- UX design content will be appended sequentially through collaborative workflow steps -->
 
 ## Executive Summary
 
 ### Project Vision
 
-**gmao-hiansa** es un GMAO (Gestión de Mantenimiento Asistido por Ordenador) **single-tenant optimizado** diseñado específicamente para una empresa del sector metal con dos plantas especializadas (acero perfilado y panel sandwich). La solución transforma un departamento de mantenimiento puramente reactivo que opera con herramientas dispersas (Excel, WhatsApp, pizarra Kanban física) en una organización profesional, controlada y basada en datos mediante una PWA (Progressive Web App).
+**gmao-hiansa** es un GMAO (Gestión de Mantenimiento Asistido por Ordenador) **single-tenant optimizado** diseñado para transformar un departamento de mantenimiento reactivo en una organización profesional basada en datos. Es una Web App Responsiva (PWA) para una empresa metalúrgica con dos plantas especializadas (acero perfilado y panel sandwich).
+
+**El Problema que Resuelve:**
+
+El departamento opera con información fragmentada en herramientas dispersas:
+- WhatsApp en celulares personales (sin "fuente única de verdad")
+- Múltiples versiones de Excel sin sincronización
+- Pizarra Kanban física con visibilidad limitada
+- Pérdida de tiempo productivo, paradas por falta de repuestos, fallas recurrentes
+- Incapacidad de medir y mejorar el desempeño
+- Departamento percibido como "caótico" que necesita transición a proactivo
+
+**La Solución:**
+
+MVP con 13 funcionalidades base diseñadas para establecer cultura de datos desde el día 1:
+- Aviso de averías <30 segundos con búsqueda predictiva
+- Control de activos con jerarquía de 5 niveles
+- Generación de Órdenes de Trabajo (OTs) con 8 estados
+- Control de repuestos con stock en tiempo real
+- Kanban digital de 8 columnas con código de colores
+- KPIs en tiempo real (MTTR, MTBF) con drill-down
+- Gestión de usuarios con 15 capacidades PBAC (Permission-Based Access Control)
+- Gestión de proveedores (mantenimiento y repuestos)
+- Componentes multi-equipos (relaciones muchos-a-muchos)
+- Rutinas de mantenimiento (diario/semanal/mensual)
+- PWA (Progressive Web App) responsive
+- Reparación dual (interna/externa)
+- Reportes automáticos por email
+
+**Arquitectura de Crecimiento Progresivo:**
+
+Fase 1.5 (3 meses): Mantenimiento Reglamentario y Certificaciones (PCI, eléctrico, presión)
+Fase 2 (6 meses): Estructura completa, búsqueda universal, plantillas
+Fase 3 (12 meses): QR tracking, IoT opcional
+Fase 4 (18 meses): Optimización y predicción
 
 **Diferenciadores Fundamentales:**
 
-- **Single-tenant optimizado** (no SaaS multi-tenant genérico) → permite personalización profunda imposible en soluciones genéricas
-- **Arquitectura progresiva** → MVP con 12 funcionalidades base, crecimiento orgánico según necesidad real del departamento
-- **Diseñado desde la experiencia real** → creado por quien experimentó el problema (Excel + WhatsApp + pizarra)
-- **Transformación cultural** → no solo tecnología, sino crear cultura de datos y profesionalización del departamento
-
-**Visión de Éxito:**
-
-Departamento transformado de "caótico" a "profesional" con cultura de datos establecida. Operarios sienten "mi voz importa" al reportar y recibir feedback inmediato. Técnicos preguntan "¿cómo hacíamos antes sin esto?". Dashboard público genera transparencia total. Decisión de mantenimiento fundamentada en MTTR/MTBF, no intuición.
+1. **Single-tenant optimizado** (no SaaS genérico) → personalización profunda imposible en soluciones genéricas
+2. **Reporte de avería en <30 segundos** vs 2-5 minutos actuales
+3. **Notificaciones push transparencia**: "recibido", "autorizado", "en progreso", "completado" → operario siente "mi voz importa"
+4. **Dashboard público** genera transparencia total → profesionalización y confianza
+5. **Búsqueda predictiva** en <200ms vs búsquedas manuales en Excel
 
 ### Target Users
 
-**Usuarios Primarios:**
+**1. Carlos - Operario de Línea (25 años)**
 
-#### 1. Carlos - Operario de Línea (25 años)
-- **Perfil:** Trabajador joven en planta, conocimientos tech básicos (usa WhatsApp, redes sociales)
-- **Dispositivos:** Móvil personal con PWA instalada
-- **Rol:** Reporta averías cuando algo falla en su puesto de trabajo
-- **Problema actual:** Reporta por WhatsApp, nunca sabe si alguien leyó el mensaje, siente que "nadie hace caso"
-- **Outcome deseado:** Sentirse escuchado y ver que sus averías se atienden
-- **Necesidades UX:** Interfaz muy simple, rapidez (<30 segundos para reportar), feedback inmediato, visibilidad de estado
+- **Contexto:** Reporta averías en el piso de fábrica
+- **Necesidad:** Sentirse escuchado y ver que sus averías se atienden
+- **Comportamiento actual:** Usa WhatsApp personal, siente que "nadie hace caso"
+- **Comportamiento deseado:** Reporta en app <30 segundos, recibe notificaciones de estado, confirma reparación → siente "mi voz importa"
+- **Device:** Móvil (Android/iOS)
+- **Capabilities clave:** `can_create_failure_report` (PREDETERMINADA)
 
-#### 2. María - Técnica de Mantenimiento (28 años)
-- **Perfil:** Técnica con experiencia, conocimientos tech medios
-- **Dispositivos:** Móvil en campo, tablet para detalles de OT, desktop por la mañana para planificar
-- **Rol:** Ejecuta órdenes de trabajo (OTs), actualiza estados en tiempo real, registra repuestos usados
-- **Problema actual:** Llega sin saber claro qué tiene que hacer, a veces duplica trabajo con otros técnicos
-- **Outcome deseado:** Trabajo organizado con clara visibilidad de tareas
-- **Necesidades UX:** Vista clara de trabajo asignado, detalles completos de OTs, historial de equipos, actualización rápida desde móvil
+**2. María - Técnica de Mantenimiento (28 años)**
 
-#### 3. Javier - Supervisor de Mantenimiento (32 años)
-- **Perfil:** Supervisor de turno, conocimientos tech buenos
-- **Dispositivos:** Desktop principalmente, móvil para urgencias
-- **Rol:** Recibe avisos, evalúa prioridad (triage), asigna OTs a técnicos, controla progreso
-- **Problema actual:** Recibe WhatsApps de 10 personas con info desordenada, no sabe quién está libre/ocupado
-- **Outcome deseado:** Control de carga de trabajo del equipo
-- **Necesidades UX:** Visibilidad total de carga de trabajo, triage rápido, asignación visual (drag-and-drop), alertas de desbalance
+- **Contexto:** Ejecuta Órdenes de Trabajo en el piso de fábrica y taller
+- **Necesidad:** Trabajo organizado con clara visibilidad de tareas y stock de repuestos
+- **Comportamiento actual:** Pregunta repetitivamente por asignaciones, busca repuestos sin saber ubicación
+- **Comportamiento deseado:** Abre app cada mañana, ve OTs del día, actualiza en tiempo real, selecciona repuestos con stock/ubicación → "¿cómo hacíamos antes sin esto?"
+- **Devices:** Tablet (trabajo en campo) + Móvil (notificaciones)
+- **Capabilities clave:** `can_update_own_ot`, `can_complete_ot`, `can_view_own_ots`
 
-#### 4. Elena - Administrador/Jefa de Mantenimiento (38 años)
-- **Perfil:** Jefa del departamento, conocimientos tech buenos, no experta en datos
-- **Dispositivos:** Desktop en su oficina
-- **Rol:** Gestión total del sistema, configura permisos, ve KPIs para toma de decisiones, reporta a dirección
-- **Problema actual:** No tiene indicadores reales, busca en 3 Excels diferentes, no puede fundamentar decisiones
-- **Outcome deseado:** Datos para toma de decisiones y reporte a dirección
-- **Necesidades UX:** Dashboard ejecutivo con KPIs clave, comparativas y tendencias, alertas automáticas, control de permisos
+**3. Javier - Supervisor de Mantenimiento (32 años)**
 
-#### 5. Pedro - Gestor de Stock (35 años)
-- **Perfil:** Administrativo responsable de almacén de repuestos
-- **Dispositivos:** Desktop y tablet para inventario
-- **Rol:** Gestiona inventario, actualiza stock, recibe alertas de stock mínimo, genera pedidos
-- **Problema actual:** Recibe 10+ llamadas/día preguntando stock y ubicación
-- **Outcome deseado:** Control total del inventario sin interrupciones constantes
-- **Necesidades UX:** Stock en tiempo real, alertas solo cuando necesario (sin spam), gestión de pedidos simple
+- **Contexto:** Gestiona carga de trabajo del equipo, triage de averías, asignación de técnicos/proveedores
+- **Necesidad:** Control visual de carga de equipo sin llamar técnicos
+- **Comportamiento actual:** Busca información en múltiples sistemas, llama técnicos para saber estado
+- **Comportamiento deseado:** Tablero Kanban con código de colores, drag-and-drop assignment, modal ℹ️ con detalles completos → control total en 1 clic
+- **Devices:** Desktop (trabajo de oficina) + Tablet (piso de fábrica)
+- **Capabilities clave:** `can_view_all_ots`, `can_assign_technicians`
 
-**Usuario Secundario:**
+**4. Elena - Administrador / Jefa de Mantenimiento (38 años)**
 
-#### Público General (Toda la Fábrica)
-- **Rol:** Consume información de dashboard público en área común
-- **Impacto:** Transparencia → profesionalización → confianza → cultura de datos
+- **Contexto:** Toma decisiones basadas en datos, gestiona usuarios y capacidades, reporta a dirección
+- **Necesidad:** Datos concretos (MTTR, MTBF) para toma de decisiones y reportes
+- **Comportamiento actual:** Busca en 3 Excels diferentes, no tiene datos históricos, decisiones basadas en intuición
+- **Comportamiento deseado:** Dashboard con KPIs drill-down, gestión flexible de 15 capacidades por usuario, reportes automáticos configurables → "Por primera vez, tengo datos. No adivino."
+- **Devices:** Desktop (trabajo de oficina)
+- **Capabilities clave:** `can_view_kpis`, `can_manage_users`, `can_manage_assets`, `can_receive_reports`
+
+**5. Pedro - Usuario con Capacidad de Gestión de Stock (35 años)**
+
+- **Contexto:** Controla stock de repuestos sin spam continuo
+- **Necesidad:** Control total sin interrupciones constantes
+- **Comportamiento actual:** 10+ llamadas/día preguntando stock y ubicación
+- **Comportamiento deseado:** Ve stock mínimo, recibe alerta solo al alcanzar mínimo, genera pedidos → "Qué paz. Sin spam. Solo me avisan cuando necesito actuar."
+- **Devices:** Desktop (trabajo de oficina)
+- **Capabilities clave:** `can_manage_stock`
+
+**Nota:** Todos los usuarios comparten el **Dashboard Común** con KPIs básicos de la planta (MTTR, MTBF, OTs abiertas, stock crítico) al hacer login. Elena y otros usuarios con `can_view_kpis` pueden hacer drill-down (Global → Planta → Línea → Equipo) y ver análisis avanzado.
 
 ### Key Design Challenges
 
-**Desafíos Críticos de UX:**
+**1. Resistencia al Cambio Cultural**
 
-#### 1. Búsqueda Predictiva Ultra-Rápida (<200ms)
-- **Contexto:** Operarios como Carlos necesitan reportar avería en <30 segundos
-- **Complejidad:** 10,000+ activos en jerarquía de 5 niveles (Planta → Línea → Equipo → Componente → Repuesto)
-- **Desafío técnico:** Autocompletado en tiempo real mientras escribe, usabilidad en móviles
-- **Impacto UX:** Si es lento → frustración → abandono del sistema → vuelta a WhatsApp
+- **Descripción:** Operarios acostumbrados a WhatsApp/pizarra física pueden resistir la app
+- **Impacto crítico:** Si Carlos no usa la app, todo el sistema se rompe (sin datos → sin KPIs)
+- **Consideración UX:** Onboarding ultra-simplificado (30 segundos tutorial), feedback inmediato, notificaciones push que demuestran valor instantáneo ("Tu aviso fue autorizado", "María está trabajando en tu OT")
+- **Métrica de éxito:** 90% de averías reportadas por app (no WhatsApp) a 3 meses
 
-#### 2. Sincronización Multi-Dispositivo en Tiempo Real (<1s)
-- **Contexto:** Mismo tablero Kanban visible en desktop (Javier), tablet (María), móvil (Carlos), TV (pública)
-- **Complejidad:** 8 estados de ciclo de vida de OTs, actualizaciones simultáneas desde múltiples dispositivos
-- **Desafío técnico:** WebSockets vs polling para performance sin sobrecargar servidor
-- **Impacto UX:** Si no es instantáneo → desincronización → conflictos → pérdida de confianza
+**2. Búsqueda Predictiva <200ms con Grandes Volúmenes**
 
-#### 3. Código de Colores Visual Complejo
-- **Contexto:** Tablero Kanban con 8 columnas y múltiples significados de color
-- **Códigos:**
-  - 🌸 Rosa (avería triage), ⚪ Blanco (reparación triage)
-  - 🔴 Rojizo (correctivo propio), 🔴📏 Rojo con línea (correctivo externo viene)
-  - 🟡 Amarillento (taller propio), 🔵 Azul (enviado a proveedor)
-  - Prioridades: 🔴 Urgente, 🟡 Media, 🟢 Baja
-- **Desafío UX:** Diferenciación clara sin confundir usuarios
-- **Impacto UX:** Si es confuso → errores de asignación → pérdida de tiempo
+- **Descripción:** 10,000+ activos con jerarquía de 5 niveles (Planta → Línea → Equipo → Componente → Repuesto)
+- **Impacto crítico:** Si la búsqueda es lenta, Carlos no reportará (volverá a WhatsApp)
+- **Consideración UX:** Debouncing (300ms), caché de búsquedas frecuentes, suggestions inmediatas, autocomplete jerárquico, highlighting de término buscado
+- **Métrica de éxito:** Tiempo desde detección hasta reporte en app <5 minutos
 
-#### 4. Feedback de Transparencia al Operario
-- **Contexto:** Carlos necesita ver que "su aviso fue atendido" en cada paso
-- **Flujo de notificaciones:** Recibido → Autorizado → En Progreso → Completado → Confirmación
-- **Desafío UX:** Balance entre informar sin spam (demasiadas notificaciones)
-- **Impacto UX:** Si no recibe feedback → "¿para qué reporto?" → abandono del sistema
+**3. Kanban de 8 Columnas en Móvil vs Tablet vs Desktop**
 
-#### 5. KPIs Ejecutivos Accesibles para No-Expertos
-- **Contexto:** Elena no es experta en datos, necesita entender MTTR/MTBF rápidamente
-- **Complejidad:** Drill-down (Global → Planta → Línea → Equipo), tendencias vs mes anterior
-- **Desafío UX:** Visualización clara de métricas técnicas sin abrumar
-- **Impacto UX:** Si es confuso → no usa dashboard → pierde valor de datos → decisiones por intuición
+- **Descripción:** Pantallas pequeñas (<768px) no pueden mostrar 8 columnas horizontalmente
+- **Impacto crítico:** Javier no puede gestionar visualmente en el suelo de fábrica
+- **Consideración UX:**
+  - Desktop (>1200px): 8 columnas visibles
+  - Tablet (768-1200px): 2 columnas (Pendiente y En Progreso), Completada como modal
+  - Móvil (<768px): 1 columna, swipe horizontal para cambiar columnas
+- **Métrica de éxito:** 100% supervisores usan tablero Kanban diariamente
+
+**4. Código de Colores Complejo con 7 Tipos de OT**
+
+- **Descripción:** 7 tipos visuales + Púrpura (Reglamentario Phase 1.5)
+  - 🌸 Rosa - Avisos de avería en Triage
+  - ⚪ Blanco - Avisos de reparación en Triage
+  - 🟢 Verde - Mantenimiento preventivo
+  - 🔴 Rojizo - Correctivo normal (técnico propio)
+  - 🔴📏 Rojo con línea blanca - Correctivo externo (proveedor viene)
+  - 🟠 Naranja - Reparación interna (taller propio)
+  - 🔵 Azul claro - Reparación externa (enviado a proveedor)
+  - 🟣 Púrpura - Mantenimiento Reglamentario (Phase 1.5)
+- **Impacto crítico:** Si no se distinguen claramente, Javier asignará mal técnicos/proveedores
+- **Consideración UX:** Paleta WCAG AA compliance (4.5:1 mínimo), labels textuales redundantes (icon + color + texto), tooltip ℹ️ con detalles completos
+- **Métrica de éxito:** Asignación correcta de técnicos/proveedores >95%
+
+**5. Sistema PBAC con 15 Capacidades (No Roles)**
+
+- **Descripción:** Elena necesita gestionar 15 capacidades individualmente por usuario, no por roles predefinidos
+- **Impacto crítico:** Si la UI de gestión de capacidades es confusa, Elena asignará mal permisos → usuarios frustrados
+- **Consideración UX:** Checkboxes con etiquetas legibles en castellano ("✅ Reportar averías", no `can_create_failure_report`), capacidad de edición en lote, vista de todas las capacidades en una sola pantalla
+- **Métrica de éxito:** 100% de admins gestionan capacidades correctamente
 
 ### Design Opportunities
 
-**Oportunidades para Ventaja Competitiva:**
+**1. "Momento ¡Aha!" para Operarios**
 
-#### 1. Momento "¡Aha!" del Operario
-- **Oportunidad:** Notificación push inmediata: "Tu aviso #AV-234 fue autorizado - OT #OT-567 asignada a María"
-- **Transformación:** Cambio de percepción de "¿para qué reporto?" a "¡Wow! Esto funciona. Me escucharon."
-- **Diferenciador:** GMAOs genéricos no enfatizan feedback al operario (enfocan en técnicos/supervisores)
-- **Impacto cultural:** Operario siente que su voz importa → reporta más → mejores datos → mejor mantenimiento
+- **Oportunidad:** Diseñar notificaciones push que generen el momento mágico: "¡Wow! Esto funciona. Me escucharon."
+- **Innovación UX:**
+  - Confirmación inmediata tras reporte (dentro de 3 segundos con número de aviso)
+  - Actualizaciones de estado en tiempo real (recibido → autorizado → en progreso → completado)
+  - Mensaje de gratitude tras confirmación de operario ("Gracias por tu reporte. Tu aviso #123 ha contribuido a mantener la operación.")
+- **Impacto:** Cambio cultural de "¿para qué reporto si no hacen caso?" a "siento que me escuchan"
 
-#### 2. Kanban Digital con Modal ℹ️ de Trazabilidad Completa
-- **Oportunidad:** Un clic en tarjeta = toda la historia (fechas, origen, técnico, repuestos usados, proveedor, teléfono)
-- **Transformación:** Javier: "Un clic y tengo toda la historia. No busco en múltiples sistemas."
-- **Diferenciador:** Integración de toda la información relevante en un solo modal vs navegar múltiples pantallas
-- **Impacto productividad:** Supervisor ahorra tiempo preguntando → gestiona más eficientemente
+**2. Dashboard de Transparencia Pública**
 
-#### 3. Dashboard Público de Transparencia
-- **Oportunidad:** Toda la fábrica ve mismos KPIs en TV (MTTR, MTBF, técnicos activos, OTs abiertas/completadas)
-- **Transformación:** Transparencia → profesionalización → confianza en departamento de mantenimiento
-- **Diferenciador:** GMAOs enterprise típicamente son cerrados (solo gerencia ve datos)
-- **Impacto cultural:** Métricas visibles generan consciencia de mejora continua en toda la organización
+- **Oportunidad:** Dashboard en TV área común visible para toda la fábrica
+- **Innovación UX:**
+  - KPIs simplificados (MTTR, MTBF, OTs abiertas/completadas, técnicos activos)
+  - Código de colores (verde = mejora, rojo = problema)
+  - Sin datos sensibles (sin nombres de técnicos, sin costos)
+  - Genera cultura de transparencia → profesionalización → confianza
+- **Impacto:** Departamento transformado de "caótico" a "profesional"
 
-#### 4. Alertas Sin Spam (Stock Mínimo Únicamente)
-- **Oportunidad:** Pedro recibe solo alertas accionables (stock mínimo), NO por cada uso de repuesto
-- **Transformación:** De 10+ llamadas/día a 1 llamada en toda la mañana
-- **Diferenciador:** Sistemas típicos notifican todo o nada → either spam or opacity
-- **Impacto productividad:** Gestor de stock ahorra 2+ horas diarias, control total sin interrupciones
+**3. Modal ℹ️ con Trazabilidad Completa en 1 Clic**
 
-#### 5. Asignación Visual Drag-and-Drop con Balanceo de Carga
-- **Oportunidad:** Arrastrar tarjeta a técnico → sistema alerta si desbalance ("Técnico Pedro tiene 8 OTs, Laura solo 2")
-- **Transformación:** Supervisor distribuye trabajo eficientemente sin calcular mentalmente
-- **Diferenciador:** GMAOs genéricos requieren listados y cálculos manuales
-- **Impacto productividad:** Equipo balanceado → técnicos no sobrecargados → mayor moral → mejor desempeño
+- **Oportunidad:** Javier accede a toda la historia de una OT en un clic
+- **Innovación UX:**
+  - Modal scrollable con timeline visual
+  - Fechas (creación, autorización, inicio, completado)
+  - Origen (operario que reportó)
+  - Técnicos/proveedores asignados con contacto telefónico
+  - Repuestos usados con stock actualizado
+  - Sin navegar a múltiples pantallas
+- **Impacto:** Reduce tiempo de respuesta gerencial ("¿Qué pasa con la Prensa?" → 1 clic)
 
-#### 6. Confirmación de "¿Funciona?" al Operario
-- **Oportunidad:** Al completar OT, Carlos recibe: "OT completada - ¿Confirma que su perfiladora funciona bien?"
-- **Transformación:** Operario participa en cierre del ciclo → siente que su opinión importa
-- **Diferenciador:** La mayoría de GMAOs no incluyen validación del operario
-- **Impacto calidad:** Feedback loop → detectar reparaciones incompletas → mejora MTBF
+**4. Búsqueda Predictiva con Contexto Jerárquico**
+
+- **Oportunidad:** Carlos escribe "prensa" → sistema sugiere con contexto
+- **Innovación UX:**
+  - Suggestions con ubicación en planta ("Prensa PH-500 (Panel Sandwich, Línea 2)")
+  - Historial reciente ("Última avería: hace 3 días")
+  - Estado actual ("Estado: Operativo / Averiado / En Reparación")
+  - Reducir errores de selección
+- **Impacto:** Reporte de avería en <30 segundos vs 2-5 minutos actuales
+
+**5. Stock sin Spam: Alertas Solo cuando Importa**
+
+- **Oportunidad:** Pedro recibe 1 llamada al día en lugar de 10+
+- **Innovación UX:**
+  - Técnicos ven stock y ubicación solos (Estante A3, Cajón 3)
+  - Pedro solo recibe alerta cuando alcanza mínimo
+  - Notificación silenciosa cuando María usa repuesto (sin spam)
+  - Ahorra 2+ horas diarias
+- **Impacto:** Control total sin interrupciones constantes
 
 ## Core User Experience
 
-### Core User Action
+### Defining Experience
 
-**La Acción Más Frecuente y Crítica:**
+**La Acción Core: Reportar Avería en <30 Segundos**
 
-Para **gmao-hiansa**, la acción core más frecuente y crítica es **reportar avería y recibir feedback transparencia**. Este es el flujo fundamental que define el valor del producto:
+La experiencia central de **gmao-hiansa** se define por una interacción crítica: **Carlos reportando una avería desde el piso de fábrica**.
 
-1. **Carlos (Operario)** reporta avería en <30 segundos
-2. Recibe confirmación inmediata: "✓ Aviso recibido - Evaluando"
-3. Recibe notificaciones push en cada transición: "Autorizado - OT asignada a María"
-4. Recibe: "En progreso - María está trabajando"
-5. Recibe: "Completada - ¿Confirma que funciona bien?"
-6. Carlos toca "Sí, funciona bien" → "Gracias por tu reporte"
+Esta acción es el "core loop" del sistema por varias razones fundamentales:
 
-**¿Por qué es esta acción core?**
+1. **Es el punto de entrada de todos los datos:** Sin reportes de averías, no hay OTs, no hay KPIs, no hay datos históricos
+2. **Es la interacción más frecuente:** Cada operario puede reportar múltiples averías por turno
+3. **Es el momento de mayor fricción potencial:** Si Carlos tarda >2 minutos o no recibe confirmación, volverá a WhatsApp
+4. **Es el make-or-break del sistema:** Si esta interacción falla, todo el sistema se rompe (sin datos → sin KPIs → sin valor)
 
-- **Si es rápida y con feedback:** Carlos siente "mi voz importa" → usa app sistemáticamente → departamento tiene datos → mejora continua
-- **Si es lenta o sin feedback:** Carlos vuelve a WhatsApp → sistema falla → transformación cultural no ocurre
+**El Core Loop Completo:**
 
-**Acciones Core Secundarias por Rol:**
+```
+Carlos detecta falla → Reporta en app <30s → Recibe confirmación <3s
+→ Javier ve aviso en Kanban → Convierte a OT → Asigna técnico
+→ María recibe notificación → Inicia OT → Completa
+→ Carlos recibe "OT completada" → Confirma "Sí, funciona bien"
+→ Sistema: "Gracias por tu reporte"
+```
 
-- **Javier (Supervisor):** Asignar OT a técnico vía drag-and-drop en Kanban
-- **María (Técnica):** Ver lista de OTs del día al llegar por la mañana
-- **Elena (Admin):** Revisar MTTR/MTBF en dashboard para toma de decisiones
-- **Pedro (Stock):** Ver stock al seleccionar repuesto (sin llamar a nadie)
+Este loop se reparte entre múltiples usuarios, pero **comienza con Carlos reportando en <30 segundos**.
+
+**Por Qué Esta Acción Core Define Todo el Producto:**
+
+- Si Carlos reporta rápido y recibe feedback → Sistema tiene datos → KPIs funcionan → Departamento se profesionaliza
+- Si Carlos NO reporta (vuelve a WhatsApp) → Sistema sin datos → KPIs vacíos → Proyecto falla
+
+**Metrica de Éxito del Core Loop:**
+- Tiempo desde detección hasta reporte en app: <5 minutos (objetivo)
+- Tasa de conversión de avisos a OTs autorizadas: >70% (indica reportes válidos)
+- 90% de averías reportadas por app (no WhatsApp) a 3 meses
 
 ### Platform Strategy
 
-**Plataforma: PWA Responsiva de Múltiples Dispositivos**
+**Plataforma: PWA (Progressive Web App) Responsiva con WebSockets**
 
-**Arquitectura técnica:**
-- **Una sola base de código** (Next.js/React) para desktop, tablet, móvil y TV
-- **PWA instalable** en cualquier dispositivo (add to home screen)
-- **Chrome y Edge solamente** (motores Chromium) → optimización para renderizado consistente
+**gmao-hiansa** es una **Web App Responsiva** construida como aplicación web interactiva moderna, diseñada específicamente para funcionar en entornos industriales (fábricas metalúrgicas).
 
-**Responsive Breakpoints:**
+**Decisiones de Plataforma:**
 
-| Dispositivo | Tamaño | Layout Principal | Casos de Uso |
-|-------------|--------|------------------|--------------|
-| **Desktop** | >1200px | Kanban 8 columnas expandido, dashboard completo | Supervisor (Javier), Admin (Elena) |
-| **Tablet** | 768-1200px | Kanban 2 columnas, detalles de OT, modal ℹ️ | Técnica (María) en campo |
-| **Móvil** | <768px | Reporte averías, lista OTs, notificaciones | Operario (Carlos) |
-| **TV** | 4K | Dashboard público modo "reunión" | Toda la fábrica |
+**1. PWA (Progressive Web App) - No App Nativa**
 
-**Input Methods:**
+**Razón:**
+- Un solo codebase para Desktop, Tablet y Móvil
+- Instalable en dispositivos (icono en home screen)
+- Actualizaciones automáticas (sin App Store approval)
+- Chrome/Edge solamente (motores Chromium) → consistencia garantizada
+- Costo de desarrollo menor vs apps nativas iOS + Android
 
-- **Touch-first para móvil/tablet:**
-  - Touch targets mínimos 44x44px (WCAG AA)
-  - Gestos táctiles (swipe, tap, long-press)
-  - Drag-and-drop táctil para tablets
+**Trade-off aceptado:** No acceso a hardware nativo (cámara, GPS) - no es crítico para MVP
 
-- **Mouse/keyboard para desktop:**
-  - Drag-and-drop con mouse
-  - Keyboard shortcuts (Tab, Enter, Esc)
-  - Hover states para información adicional
+**2. Responsive Design con 3 Breakpoints**
 
-**Requisitos de Conectividad:**
+**Desktop (>1200px):**
+- Layout completo con navegación lateral
+- Kanban de 8 columnas visible en su totalidad
+- Dashboard de KPIs con drill-down
+- Ideal para: Elena (Admin), Javier (Supervisor)
 
-- **WiFi estable requerido** (producción en planta industrial)
-- **Sincronización en tiempo real via WebSockets** (<1 segundo)
-- **Offline parcial:** Datos se guardan localmente si se pierde conexión, sincronizan al reconectar
-- **Heartbeat:** 30 segundos para detectar reconexión
+**Tablet (768-1200px):**
+- Navegación simplificada
+- Kanban de 2 columnas (Pendiente y En Progreso), Completada como modal
+- Dashboard adaptado
+- Ideal para: María (Técnica), Javier (piso de fábrica)
 
-**Estrategia PWA:**
+**Móvil (<768px):**
+- Navegación inferior (bottom nav)
+- Kanban de 1 columna con swipe horizontal
+- Botones 44x44px (WCAG AA compliance)
+- Ideal para: Carlos (Operario)
 
-- **Instalable:** "Add to Home Screen" en móviles
-- **Notificaciones push:** Transparencia de estados, alertas accionables
-- **Service Worker:** Cache estratégico para carga rápida
-- **Manifest.json:** Iconos, splash screen, tema
+**3. Touch-First para Tablets/Móviles**
+
+**Especificaciones:**
+- Touch targets mínimos: 44x44px (WCAG AA)
+- Gestures soportados: swipe (cambiar columnas Kanban), drag-and-drop (asignación OTs)
+- Zoom: 200% sin romper layout
+- Input methods: touch principal, keyboard accesible en desktop
+
+**4. WebSockets para Sincronización Real-Time**
+
+**Casos de uso críticos:**
+- Notificaciones push de estado: "Tu aviso fue autorizado" → llega en <30 segundos
+- Actualización de OTs: Javier asigna técnica → María recibe notificación inmediata
+- Stock en tiempo real: María usa repuesto → Pedro ve stock actualizado (sin notificación spam)
+- KPIs en dashboard: Actualizados cada 30-60 segundos (websockets, no polling)
+
+**Requerimiento técnico:** Heartbeat optimizado (30 segundos) para soportar 50+ usuarios concurrentes
+
+**5. Always Online - Sin Modo Offline**
+
+**Decisión arquitectónica:** MVP requiere conexión a internet constante
+
+**Razón:**
+- Sincronización real-time es crítica (notificaciones push, stock, KPIs)
+- Escritura concurrente (múltiples usuarios actualizando mismos datos)
+- Complejidad de sync offline > valor para MVP (Phase 1)
+- WiFi industrial estable es requerimiento (especificado en NFRs)
+
+**Trade-off:** Si WiFi cae, app no funciona - mitigación con mensajes claros de error y reconexión automática <30 segundos
+
+**6. Navegadores Soportados: Chrome y Edge Solamente**
+
+**Razón:**
+- Motores Chromium → comportamiento consistente
+- APIs modernas (WebSockets, PWA, Service Workers) bien soportadas
+- Depuración más simple
+- Base de usuarios empresariales típicamente usa Chrome/Edge
+
+**Excluidos:** Firefox, Safari, IE - no soportados
+
+**Resumen de Dispositivos por Usuario:**
+
+| Usuario | Device Primario | Device Secundario | Contexto de Uso |
+|---------|----------------|-------------------|-----------------|
+| Carlos (Operario) | Móvil | - | Reporte en campo, notificaciones |
+| María (Técnica) | Tablet | Móvil | Trabajo en campo, notificaciones |
+| Javier (Supervisor) | Desktop | Tablet | Oficina (Kanban completo), piso de fábrica |
+| Elena (Admin) | Desktop | - | Oficina (KPIs, gestión) |
+| Pedro (Stock) | Desktop | - | Oficina (gestión de repuestos) |
 
 ### Effortless Interactions
 
-**1. Búsqueda Predictiva Ultra-Rápida (<200ms)**
+**Áreas de Interacción que Deben Sentirse Completamente Naturales:**
 
-**Interacción effortless:**
-- Carlos escribe "perfi" → sistema sugiere "Perfiladora P-201" instantáneamente
-- Muestra stock: "Stock: 12, 📍 Estante A3, Cajón 3"
-- Un toque para seleccionar
+**1. Búsqueda Predictiva <200ms con Contexto Jerárquico**
 
-**Por qué se siente mágica:**
-- Autocompletado mientras escribe (debouncing 300ms)
-- Filtra por jerarquía (Planta → Línea → Equipo)
-- Muestra contexto relevante (ubicación, stock)
-- No requiere navegación por menús
+**Lo que hace effortless:**
+- Carlos escribe "pren" (3 caracteres) → sistema muestra "Prensa PH-500 (Panel Sandwich, Línea 2)" en <200ms
+- No necesita escribir nombre completo ni recordar jerarquía
+- Suggestions incluyen: ubicación en planta, estado actual, última avería (ej: "hace 3 días")
+- Highlighting del término buscado para confirmar selección correcta
 
-**Contraste con estado actual:**
-- Carlos pregunta por WhatsApp → espera respuesta → busca en Excel desactualizado
+**Implementación UX:**
+- Debouncing (300ms) para no saturar con cada tecla
+- Caché de búsquedas frecuentes
+- Autocomplete jerárquico (Planta → Línea → Equipo)
+- Flechas arriba/abajo + Enter para selección rápida (keyboard accesibility)
 
----
+**Resultado:** Carlos reporta en <30 segundos vs 2-5 minutos actuales
 
-**2. Asignación Visual Drag-and-Drop (2 segundos)**
+**2. Notificaciones Push de Estado en Tiempo Real**
 
-**Interacción effortless:**
-- Javier arrastra tarjeta OT sobre "María" → assigned
-- Confirmación visual: tarjeta aparece en columna de María
-- Sistema alerta si desbalance: "María tiene 8 OTs, Laura solo 2"
+**Lo que hace effortless:**
+- Carlos toca "Enviar" → recibe confirmación en <3 segundos: "Aviso #123 recibido. Gracias por tu reporte."
+- 10 minutos después: notificación "Tu aviso #123 fue autorizado. OT asignada a María."
+- 30 minutos después: notificación "María está trabajando en tu OT #123."
+- 2 horas después: notificación "OT #123 completada. ¿Confirma que funciona?"
 
-**Por qué se siente mágica:**
-- Un movimiento = tarea completada
-- Feedback visual inmediato
-- Balanceo de carga visible
-- No requiere abrir formularios
+**Resultado:** Carlos siente "mi voz importa" sin tener que verificar activamente
 
-**Contraste con estado actual:**
-- Javier llama a cada técnico → pregunta disponibilidad → asigna verbalmente
+**Implementación UX:**
+- Push notifications con acción (toca para ver detalles)
+- Preferencias configurables (habilitar/deshabilitar tipos)
+- Historial de notificaciones (últimas 24 horas)
+- Sonoro/vibración opcional por tipo de notificación
 
----
+**3. Modal ℹ️ con Trazabilidad Completa en 1 Clic**
 
-**3. Modal ℹ️ de Trazabilidad Completa (1 clic)**
+**Lo que hace effortless:**
+- Javier ve tarjeta OT en Kanban → toca ℹ️ → modal con toda la historia:
+  - Timeline visual: Creación → Autorización → Inicio → Completado
+  - Origen: Carlos (Operario) reportó el 2026-03-07 a las 09:03
+  - Asignados: María (Técnica) + Juan (Técnico)
+  - Proveedor: Talleres Eléctricos SA - Tel: +54 11 1234-5678
+  - Repuestos usados: Rodamiento SKF-6208 (Stock: 11, 📍 Estante A3, Cajón 3)
+  - Fotos antes/después (si adjuntadas)
+  - Notas internas de técnicos
 
-**Interacción effortless:**
-- Javier toca tarjeta OT → modal ℹ️ se abre
-- Toda la historia en un solo lugar: fechas, origen, técnico, repuestos, proveedor, teléfono
-- Un clic para llamar al técnico o proveedor
+**Resultado:** Javier responde "¿Qué pasa con la Prensa?" en 10 segundos vs 2-3 minutos de búsqueda
 
-**Por qué se siente mágica:**
-- Toda la información relevante en un solo lugar
-- No navegar múltiples pantallas
-- Click-to-call directamente desde modal
-- Historial completo de intervenciones previas
+**Implementación UX:**
+- Modal scrollable con secciones colapsables
+- Timeline vertical con iconos de estado
+- Click-to-call para teléfonos
+- Links directos a equipos/componentes/repuestos
 
-**Contraste con estado actual:**
-- Javier busca en WhatsApp + Excel + pizarra física + llamar a técnicos
+**4. Stock Visible para Todos Sin Spam**
 
----
+**Lo que hace effortless:**
+- María toca "Agregar Repuesto" → escribe "skf" → ve "Rodamiento SKF-6208 (Stock: 12, 📍 Estante A3, Cajón 3)"
+- Selecciona, cantidad "1", toca "Guardar" → sistema confirma: "✓ Agregado. Stock actualizado: 11"
+- Pedro NO recibe notificación (sin spam)
 
-**4. Notificaciones Push de Transiciones Automáticas**
+**Resultado:** María trabaja sin interrupciones, Pedro solo recibe alertas cuando alcanza mínimo
 
-**Interacción effortless:**
-- Carlos recibe: "Tu aviso #AV-234 fue autorizado - OT #OT-567 asignada a María"
-- Transparencia automática sin preguntar
-- Un toque para ver detalles de la OT
+**Implementación UX:**
+- Stock visible en catálogo (todos pueden ver)
+- Ubicación física siempre visible (Estante + Cajón)
+- Solo usuarios con `can_manage_stock` reciben alertas de mínimo
+- Ajustes manuales requieren motivo (auditoría)
 
-**Por qué se siente mágica:**
-- Información fluye automáticamente al usuario
-- No requiere que Carlos pregunte "¿qué pasó con mi reporte?"
-- Participación en cada paso del proceso
-- Sentido de "mi voz importa"
+**5. Drag-and-Drop para Asignación Visual**
 
-**Contraste con estado actual:**
-- Carlos reporta por WhatsApp → nunca sabe si alguien leyó el mensaje
+**Lo que hace effortless:**
+- Javier ve tarjeta en columna "Pendiente" → arrastra a "Asignada" → dropdown "Asignar a:" aparece
+- Selecciona "María" → tarjeta baja a "Programada" (parte inferior de Asignaciones)
+- María recibe notificación inmediata
 
----
+**Resultado:** Asignación en 5 segundos vs formulario de 2-3 minutos
 
-**5. Stock Visible al Seleccionar Repuesto**
-
-**Interacción effortless:**
-- María toca "Agregar Repuesto" → escribe "skf"
-- Dropdown muestra: "Rodamiento SKF-6208 (Stock: 12, 📍 Estante A3, Cajón 3)"
-- Un toque para agregar
-
-**Por qué se siente mágica:**
-- Información contextual sin navegación adicional
-- No necesita llamar a Pedro
-- Ubicación exacta del repuesto
-- Stock se actualiza automáticamente al usar
-
-**Contraste con estado actual:**
-- María llama a Pedro 10+ veces al día preguntando stock y ubicación
-
----
-
-**6. Confirmación de "¿Funciona?" al Operario**
-
-**Interacción effortless:**
-- Al completar OT, Carlos recibe notificación: "OT completada - ¿Confirma que su perfiladora funciona bien?"
-- Carlos toca "Sí, funciona bien" → app: "Gracias por tu reporte"
-- Un toque para cerrar el ciclo
-
-**Por qué se siente mágica:**
-- Operario participa en validación de calidad
-- Feedback loop completo
-- Sentido de contribución al proceso
-- Detección de reparaciones incompletas
-
-**Contraste con estado actual:**
-- Técnico completa OT y nadie confirma con operario si realmente funciona
+**Implementación UX:**
+- Visual feedback durante drag (sombra, opacidad)
+- Drop zones claras (columnas highlight)
+- Alternativa keyboard-accessible (Tab + Enter)
+- Undo automático (5 segundos) por si acaso
 
 ### Critical Success Moments
 
-**1. Primer Reporte de Avería de Carlos (Momento de Verdad)**
+**Momentos que Determinan el Éxito o Fracaso del Sistema:**
+
+**Momento 1: Primer Reporte de Carlos (First Run Success)**
 
 **Escenario:**
-- 09:00 - Perfiladora falla
-- 09:01 - Carlos saca móvil, abre app
-- 09:02 - Búsqueda "perfi" → "Perfiladora P-201"
-- 09:03 - Describe problema, toca "Enviar"
-- 09:03 - **Confirmación inmediata:** "✓ Aviso #AV-234 recibido - Evaluando"
+- Carlos llega a trabajo, Elena anuncia la nueva app
+- Recibe demo de 3 minutos, instala PWA en su móvil
+- Siente escepticismo: "Otra app más..."
 
-**Éxito:**
-- Carlos piensa: "¡Qué rápido! 2 minutos y ya está reportado"
-- Confianza inicial establecida
+**Interacción Crítica:**
+- 09:00 - Su perfiladora falla
+- 09:02 - Abre app, búsqueda predictiva sugiere "Perfiladora P-201"
+- 09:03 - Describe "No arranca, hace raro ruido", toca "Enviar"
+- **<3 segundos después** - Recibe confirmación: "✓ Aviso #456 recibido. Gracias por tu reporte."
 
-**Fallo (si tarda >2 minutos o no recibe confirmación):**
-- Carlos piensa: "Qué app más lenta, mejor usar WhatsApp"
-- Abandono del sistema
+**Resultado ÉXITO:** Carlos piensa: "¡Wow! Esto es rápido. Mejor que WhatsApp."
+
+**Resultado FRACASO:** No recibe confirmación o tarda >10 segundos → "Igual que antes, no sirve" → Vuelve a WhatsApp
+
+**Impacto:** Si fallamos aquí, Carlos abandona el sistema y todo el loop se rompe
+
+**Métrica:** Tasa de "first-time success" >95% (confirmación recibida <3 segundos)
 
 ---
 
-**2. Primera Notificación Push de Carlos (Momento "¡Aha!")**
+**Momento 2: "Momento ¡Aha!" con Notificación de Estado**
 
 **Escenario:**
-- 10:15 - Carlos recibe notificación: "Tu aviso #AV-234 fue autorizado - OT #OT-567 asignada a María"
-- Carlos piensa: "¡Wow! Esto funciona de verdad. Me escucharon. No es como WhatsApp que nadie contesta."
+- 09:15 - Carlos ya volvió a trabajar, olvidó del aviso
+- De repente, notificación en móvil: "Tu aviso #456 fue autorizado. OT asignada a María"
 
-**Éxito:**
-- Transformación de percepción: "¿para qué reporto?" → "mi voz importa"
-- Carlos se vuelve evangelizador del sistema entre compañeros
+**Interacción Crítica:**
+- Carlos lee notificación → piensa: "¡Me escucharon! No fue en vano"
+- Siente confianza en el sistema: "Vale la pena reportar"
 
-**Fallo (si no recibe notificación):**
-- Carlos piensa: "Igual que WhatsApp, nadie hace caso"
-- Abandono del sistema
+**Resultado ÉXITO:** Carlos siente "mi voz importa" → app se vuelve indispensable
+
+**Resultado FRACASO:** No recibe notificación o tarda horas → "Nadie hace caso, igual que siempre" → Deja de reportar
+
+**Impacto:** Este momento genera el cambio cultural de reactivo a proactivo
+
+**Métrica:** % de avisos con notificación de estado = 100% (objetivo)
 
 ---
 
-**3. Lista de OTs de la Mañana de María (Productividad)**
+**Momento 3: Primer Acceso de María - "Todo Organizado"**
 
 **Escenario:**
-- 07:45 - María llega 15 min antes, abre app en desktop
-- Ve su lista del día: 5 OTs priorizadas, 2 rutinas
-- Cada OT muestra: equipo, ubicación, problema, repuestos necesarios, tiempo estimado
-- María piensa: "Sé exactamente qué tengo que hacer hoy. No corro preguntando."
+- 07:45 - María llega 15 min antes, como siempre
+- Abre app por primera vez, tutorial de 1 minuto
+- Ve su lista del día: 5 OTs, 2 rutinas
 
-**Éxito:**
-- María se siente profesional y organizada
-- No pierde tiempo preguntando a Javier
-- Empieza primera OT a las 08:00
+**Interacción Crítica:**
+- María explora pantalla → ve OTs organizadas por prioridad
+- Toca primera OT → ve detalles completos: equipo, avería, repuestos necesarios
+- Piensa: "Todo está aquí. No tengo que preguntar nada"
 
-**Fallo (si lista es confusa o incompleta):**
-- María piensa: "Voy a preguntar a Javier como siempre"
-- Vuelta a métodos antiguos
+**Resultado ÉXITO:** María abre app cada mañana como primera acción → "¿Cómo hacíamos antes sin esto?"
+
+**Resultado FRACASO:** Tiene que buscar en múltiples pantallas → "Igual que antes, solo que digital" → Resistencia
+
+**Impacto:** Determina productividad de técnicos y calidad de datos
+
+**Métrica:** Tiempo de primera OT desde llegada <15 minutos (objetivo)
 
 ---
 
-**4. Asignación sin Llamadas de Javier (Control Total)**
+**Momento 4: Javier - "Un Clic y Tengo Toda la Historia"**
 
 **Escenario:**
-- 07:00 - Javier abre tablero Kanban
-- Toca tarjeta rosa (aviso Carlos) → modal ℹ️: origen, fechas, equipo P-201
-- "Convertir en OT" → tarjeta rojiza 🔴
-- Arrastra tarjeta a técnica Ana → assigned
-- Todo en 10 segundos sin llamar a nadie
+- 11:00 - Gerente de producción pasa por oficina de mantenimiento
+- Pregunta: "¿Qué pasa con la Prensa? ¿Cuándo estará lista?"
 
-**Éxito:**
-- Javier piensa: "Tengo control total. Distribuyo trabajo eficientemente."
-- Técnicos no son interrumpidos
-- Equipo balanceado
+**Interacción Crítica:**
+- Javier abre Kanban → toca tarjeta ℹ️ de Prensa PH-500
+- Modal muestra: Originó Carlos 09:03, autorizado 09:10, asignado María 09:12, en progreso 09:15, repuestos usados (Rodamiento SKF-6208), ETA 12:00
+- Javier responde: "La Prensa estará lista a las 12:00. María está cambiando el rodamiento."
 
-**Fallo (si requiere 5+ clicks o formularios):**
-- Javier piensa: "Voy a llamarle, es más rápido"
-- Sistema subutilizado
+**Resultado ÉXITO:** Gerente asiente impresionado → "Excelente, muy organizado" → Validación del sistema
+
+**Resultado FRACASO:** Javier dice: "Déjame buscar... uh... creo que María está trabajando en eso, déjame llamarla" → Percibido como "caótico" de nuevo
+
+**Impacto:** Validación ante dirección genera credibilidad del departamento
+
+**Métrica:** Tiempo de respuesta a consultas gerenciales <30 segundos (objetivo)
 
 ---
 
-**5. Dashboard de KPIs de Elena (Toma de Decisiones)**
+**Momento 5: Elena - "Por Primera Vez, Tengo Datos"**
 
 **Escenario:**
-- 08:00 - Elena abre dashboard
-- Ve MTTR 4.2h (↓15%), MTBF 127h (↑8%), OTs abiertas: 23, técnicos activos: 5
-- Toca MTTR → drill-down: Planta Panel → Línea 2 → Prensa PH-500 (MTTR 12h, 3 fallos)
-- Elena piensa: "Por primera vez tengo datos para fundamentar decisiones"
+- 10:00 - Reunión mensual con dirección
+- Director pregunta: "¿Cómo va el departamento? ¿Necesitan más presupuesto?"
 
-**Éxito:**
-- Elena puede reportar a dirección con números concretos
-- Toma decisiones basadas en datos, no intuición
-- Identifica equipos problemáticos (Prensa PH-500)
+**Interacción Crítica:**
+- Elena proyecta dashboard: "MTTR 4.2h (↓15% vs mes anterior), MTBF 127h (↑8%), OTs abiertas: 23 (↓5 vs mes anterior)"
+- Director: "Excelente. Datos claros. Mejorando. Aprobado."
 
-**Fallo (si dashboard es confuso o requiere análisis complejo):**
-- Elena piensa: "Voy a buscar en los Excels como siempre"
-- Sistema no genera valor
+**Resultado ÉXITO:** Elena piensa: "Por primera vez, tengo datos. No adivino. Tengo credibilidad."
+
+**Resultado FRACASO:** Elena dice: "Uh... bueno... tenemos varias órdenes abiertas... creo que vamos bien... déjame ver los Excels..." → Percibido como improvisado
+
+**Impacto:** Datos concretos generan decisiones fundamentadas y presupuesto
+
+**Métrica:** Frecuencia de revisión de KPIs semanal (objetivo: >90% de admins)
 
 ---
 
-**6. Stock sin Spam de Pedro (Control + Paz)**
+**Momento 6: Pedro - "Qué Paz. Sin Spam."**
 
 **Escenario:**
-- 07:30 - Pedro abre app: ve SKF-6208: 3 unidades 🔴 (mínimo: 5)
-- 08:00 - Notificación: "Pedido recibido" → confirma 10 rodamientos
-- SKF-6208: 3 → 13 unidades 🔴 → 🟢
-- 10:45 - María usa repuesto → Pedro NO recibe notificación (sin spam)
-- Pedro piensa: "Qué paz. Solo me avisan cuando necesito actuar."
+- 07:30 - Pedro abre app, como siempre
+- Ve SKF-6208: 13 unidades 🟢 (mínimo: 5)
+- Piensa: "Todo bien. Hoy tendré un día tranquilo"
 
-**Éxito:**
-- Pedro ahorra 2+ horas diarias
-- Control total sin interrupciones constantes
-- Una llamada en toda la mañana
+**10:45 - María usa repuesto** → Pedro NO recibe notificación (sin spam)
 
-**Fallo (si recibe notificación por cada uso):**
-- Pedro piensa: "Demasiado spam, mejor ignorar notificaciones"
-- Pérdida de control
+**14:00 - Primera (y única) llamada del día**: Alerta "Filtro F-205 alcanzó mínimo (6 unidades, mínimo: 5)"
+- Pedro genera pedido de 10 unidades → vuelve a trabajar tranquilo
+
+**Resultado ÉXITO:** Pedro recibe 1 llamada en todo el día vs 10+ antes → Ahorra 2+ horas diarias → "Qué paz. Solo me avisan cuando necesito actuar."
+
+**Resultado FRACASO:** Pedro recibe notificación por cada uso de repuesto → "Es spam, lo voy a ignorar" → Pierde alertas importantes
+
+**Impacto:** Sin spam = adopción sostenida del módulo de stock
+
+**Métrica:** % de alertas stock mínimo que resultan en acción >80% (objetivo)
 
 ### Experience Principles
 
 **Principios Rectores para Todas las Decisiones de UX:**
 
-#### 1. Rapidez de Feedback (Speed Matters)
+**1. Velocidad es Confianza**
 
-**Principio:** Todo lo que el usuario hace debe tener confirmación visual inmediata.
+**Principio:** Las respuestas rápidas generan confianza inmediata en el sistema.
 
-**Aplicación:**
-- Búsqueda <200ms (autocompletado instantáneo)
-- Asignación <2 segundos (drag-and-drop)
-- Actualizaciones <1 segundo (WebSockets real-time)
-- Confirmación inmediata al enviar (envío de aviso, completar OT)
+**Aplicación práctica:**
+- Búsqueda predictiva <200ms → Usuario piensa: "Este sistema es rápido"
+- Confirmación de reporte <3 segundos → Usuario piensa: "Me escucharon"
+- Notificaciones push en tiempo real → Usuario piensa: "Está pasando ahora"
+- Dashboard KPIs carga <2 segundos → Usuario piensa: "Tengo el control"
 
-**Por qué importa:**
-- Si no es rápido → frustración → abandono del sistema
-- Usuarios acostumbrados a WhatsApp (instantáneo)
+**Anti-pattern:** Spinner de carga >5 segundos → Usuario piensa: "Esto es lento como los sistemas viejos" → Abandono
 
-**Trade-off:**
-- Performance vs funcionalidad → priorizar velocidad
+**Validación:** Medir tiempos de respuesta en every user interaction
 
 ---
 
-#### 2. Transparencia Total (Radical Transparency)
+**2. Transparencia Genera Profesionalización**
 
-**Principio:** El usuario siempre debe saber qué está pasando sin preguntar.
+**Principio:** La visibilidad total de información transforma la percepción de "caótico" a "profesional".
 
-**Aplicación:**
-- Carlos ve cada transición de estado de su aviso (notificaciones push)
-- Modal ℹ️ muestra toda la historia (fechas, origen, técnico, repuestos, proveedor)
-- Toda la fábrica ve mismos KPIs (dashboard público)
-- Stock visible al seleccionar repuesto (no en página separada)
+**Aplicación práctica:**
+- Dashboard público en TV área común → Todos ven mismos KPIs → Transparencia → Confianza
+- Notificaciones push de estado a todos → Operario ve que su aviso avanza → Siente "mi voz importa"
+- Stock visible para todos → Técnicos ven stock y ubicación solos → Pedro no recibe 10+ llamadas/día
+- Historial completo en modal ℹ️ → Javier tiene toda la info en 1 clic → Percibido como organizado
 
-**Por qué importa:**
-- Genera confianza → profesionalización → cultura de datos
-- Usuarios pasan de "¿qué pasa?" a "tengo control"
+**Anti-pattern:** Información siloada (solo admins ven X, solo técnicos ven Y) → Percepción de "favoritismo" o "caos"
 
-**Trade-off:**
-- Demasiadas notificaciones = spam → balance entre informar y abrumar
+**Validación:** Encuestas de percepción del departamento (6 meses) → "Profesional" vs "Caótico"
 
 ---
 
-#### 3. Acción Mínima, Máximo Valor (Minimal Action, Maximum Value)
+**3. Feedback Inmediato Valida al Usuario**
 
-**Principio:** Un clic o un movimiento debería completar la tarea más frecuente.
+**Principio:** Cada acción del usuario debe recibir confirmación inmediata para generar confianza.
 
-**Aplicación:**
-- Drag-and-drop vs formularios de 10 campos
-- Autocompletado vs escribir texto completo
-- Un clic en modal ℹ️ vs navegar múltiples pantallas
-- Un toque para confirmar vs múltiples clicks
+**Aplicación práctica:**
+- Carlos toca "Enviar" → Recibe confirmación <3s con número de aviso → "¡Funcionó!"
+- María toca "Iniciar OT" → OT pasa a "En Progreso" visualmente → "Vieron que empecé"
+- Javier arrastra OT → Tarjeta cambia de columna + María recibe notificación → "Asignación completa"
+- Pedro ajusta stock → Sistema confirma "Stock actualizado: 11" → "Quedó registrado"
 
-**Por qué importa:**
-- Reduce fricción → usuarios adoptan sistema
-- Ahorra tiempo → productividad
+**Anti-pattern:** Acciones sin feedback visible → Usuario duda "¿Hice clic? ¿Quedó registrado?" → Frustración
 
-**Trade-off:**
-- Simplicidad vs flexibilidad → MVP enfocado en casos core
+**Validación:** % de acciones con feedback visual = 100% (objetivo)
 
 ---
 
-#### 4. Contexto sobre Navegación (Context over Navigation)
+**4. Menos Clics = Más Productividad**
 
-**Principio:** La información relevante debe aparecer donde se necesita, no en páginas separadas.
+**Principio:** Cada clic eliminado ahorra segundos que se multiplican por 100 operaciones/día.
 
-**Aplicación:**
-- Stock visible al seleccionar repuesto (no en módulo separado)
-- Historial de equipo en modal ℹ️ (no en otra pestaña)
-- Ubicación de repuesto en dropdown de búsqueda (no en detalle de producto)
-- Notificaciones en contexto (push notification, no dentro de app)
+**Aplicación práctica:**
+- Modal ℹ️ con toda la info en 1 clic (vs navegar 3-4 pantallas) → Ahorra 10-30 segundos por consulta
+- Búsqueda predictiva con suggestions (vs escribir nombre completo) → Ahorra 5-10 segundos por selección
+- Drag-and-drop para asignación (vs formulario con dropdowns) → Ahorra 2-3 minutos por asignación
+- Stock visible al seleccionar repuesto (vs ir a pantalla separada) → Ahorra 5 segundos por repuesto
 
-**Por qué importa:**
-- Usuario no pierde contexto de tarea actual
-- Reduce necesidad de multitarea
+**Cálculo de impacto:**
+- 100 consultas/día × 20 segundos ahorrados = 33 minutos ahorrados/día
+- 20 asignaciones/día × 2 minutos ahorrados = 40 minutos ahorrados/día
+- **Total: ~1.3 horas ahorradas/día por técnico**
 
-**Trade-off:**
-- UI más densa vs claridad visual → usar diseño limpio con tooltips
+**Anti-pattern:** "Pero si le agregamos este botón extra..." → Cada clic extra = fricción acumulativa
+
+**Validación:** Medir número de clics en user flows críticos (benchmark vs competencia)
 
 ---
 
-#### 5. Visual First (Visual sobre Textual)
+**5. Single Source of Truth Elimina Caos**
 
-**Principio:** Usar código de colores y elementos visuales antes que texto cuando sea posible.
+**Principio:** Un sistema centralizado reemplaza herramientas fragmentadas (WhatsApp + Excel + pizarra física).
 
-**Aplicación:**
-- Código de colores de tarjetas Kanban (🌸 rosa, ⚪ blanco, 🔴 rojizo, 🔴📏 rojo línea, 🟡 amarillento, 🔵 azul)
-- KPIs con flechas ↑↓ vs comparar números manualmente
-- Badges visuales (🔴 stock crítico, 🟢 stock OK)
-- Iconos de estados (✓ completado, ▶️ en progreso, ⏱️ pendiente)
+**Aplicación práctica:**
+- Jerarquía de activos de 5 niveles → "¿A qué línea pertenece esta prensa?" → 1 clic en ℹ️
+- Stock en tiempo real → "¿Cuántos rodamientos quedan?" → 1 clic en catálogo
+- Historial de OTs por equipo → "¿Cuándo falló la última vez?" → 1 clic en historial
+- Estados de OT en tiempo real → "¿En qué estado está la OT?" → Columna Kanban visible
 
-**Por qué importa:**
-- Procesamiento visual más rápido que lectura de texto
-- Ambiente industrial con luz variable → alto contraste ayuda
+**Anti-pattern:** "Déjame revisar el Excel de... uh... ¿quién tenía la última versión?" → Pérdida de tiempo + errores
 
-**Trade-off:**
-- Accesibilidad (color blindness) → siempre combinar color con iconos/texto
+**Validación:** % de usuarios que dejan de usar herramientas legacy (WhatsApp, Excel) → >90% a 3 meses (objetivo)
+
+---
+
+**6. Touch-First para Ambientes Industriales**
+
+**Principio:** Diseñar para touch (44x44px) primero, keyboard/mouse después, considerando ambiente de fábrica.
+
+**Aplicación práctica:**
+- Botones mínimos 44x44px (WCAG AA compliance) → María con guantes de trabajo puede tocar fácilmente
+- Drag-and-drop con feedback visual → Javier en tablet puede asignar sin keyboard
+- Swipe gestures para móvil → Carlos puede cambiar columnas Kanban con una mano
+- Zoom 200% sin romper layout → Elena con vista cansada puede escalar texto
+
+**Anti-pattern:** Botones pequeños de 32x32px → Imposible tocar con guantes → Frustración
+
+**Validación:** Testing con usuarios reales en ambiente de fábrica (tablets industriales)
+
+---
+
+**7. WCAG AA Compliance es No-Negotiable**
+
+**Principio:** Accesibilidad no es "nice-to-have", es requisito para ambiente industrial con iluminación variable.
+
+**Aplicación práctica:**
+- Contraste mínimo 4.5:1 (texto normal sobre fondo) → Legible en luz de fábrica
+- Texto base 16px mínimo → Legible sin hacer zoom
+- Labels textuales redundantes (icon + color + texto) → Daltónicos pueden distinguir OTs
+- Keyboard navigation (Tab, Enter, Esc) → Accessibility sin mouse
+
+**Anti-pattern:** "El rosa se ve bien" → En luz de fábrica con fluorescentes → ilegible
+
+**Validación:** Automated accessibility testing + testing con usuarios con visión limitada
 
 ## Desired Emotional Response
 
 ### Primary Emotional Goals
 
-**Emoción Primaria: "Mi voz importa y tengo control"**
+**Transformación de Percepción: "Caótico" → "Profesional"**
 
-Para **gmao-hiansa**, la respuesta emocional primaria es que los usuarios sientan que **su voz importa** y que **tienen control** sobre su trabajo, transitando de la frustración y el caos actual a la profesionalización y la confianza.
+El objetivo emocional primario de **gmao-hiansa** es hacer que cada usuario sienta que su contribución importa y que tiene el control, transformando colectivamente la percepción del departamento de mantenimiento de "caótico" a "profesional".
 
-**Transformación Emocional por Usuario:**
+**5 Pilares Emocionales Core:**
 
-| Usuario | Estado Actual (Emoción Negativa) | Estado Deseado (Emoción Positiva) |
-|---------|----------------------------------|-----------------------------------|
-| **Carlos** (Operario) | "¿Para qué reporto si nadie hace caso?" - Frustración, impotencia, aislamiento | "¡Me escuchan! Mi voz importa." - Asombro, validación, pertenencia |
-| **María** (Técnica) | "Voy corriendo de un lado a otro sin plan" - Estrés, desorganización | "Trabajo de forma profesional y organizada" - Confianza, profesionalismo |
-| **Javier** (Supervisor) | "Voy apagando fuegos todo el día" - Abrumamiento, frustración, impotencia | "Tengo control total de mi equipo" - Control, eficiencia, dominio |
-| **Elena** (Admin) | "No tengo datos para responder a dirección" - Inseguridad, ansiedad | "Por fin tengo datos" - Confianza, seguridad, alivio |
-| **Pedro** (Stock) | "10+ llamadas/día preguntando lo mismo" - Frustración, interrupción constante | "Solo una llamada en toda la mañana" - Paz, control, satisfacción |
+**1. "Mi Voz Importa" (Validación)**
+- **Usuario objetivo:** Carlos (Operario de Línea)
+- **Emoción buscada:** Sentirse escuchado y reconocido
+- **Anti-emoción a evitar:** "Nadie hace caso, para qué reporto"
+- **Diseño UX:** Confirmación <3s con número de aviso, notificaciones push de cada cambio de estado, mensaje de gratitude "Gracias por tu reporte"
 
-**La Emoción que los Haría Contarle a un Amigo:**
+**2. "Tengo el Control" (Confianza)**
+- **Usuarios objetivo:** Javier (Supervisor), María (Técnica)
+- **Emoción buscada:** Sensación de control y dominio de la información
+- **Anti-emoción a evitar:** "¿Qué está pasando? ¿Quién sabe?"
+- **Diseño UX:** Modal ℹ️ con toda la historia en 1 clic, búsqueda predictiva <200ms, Kanban con código de colores, drag-and-drop
 
-> "¡Es increíble! Reporto una avería y en 5 minutos me notifican que ya están trabajando en ella. Nunca había pasado eso. Antes reportaba por WhatsApp y nunca sabía si alguien había leído el mensaje. Ahora siento que realmente me escuchan."
+**3. "Tengo Datos" (Credibilidad)**
+- **Usuario objetivo:** Elena (Admin)
+- **Emoción buscada:** Seguridad en toma de decisiones fundamentada
+- **Anti-emoción a evitar:** "Estoy adivinando, espero que esté bien"
+- **Diseño UX:** Dashboard con KPIs drill-down (MTTR, MTBF), exportar a Excel, reportes automáticos configurables
 
-**Sentimiento Diferenciador vs Competidores:**
+**4. "Qué Paz" (Tranquilidad)**
+- **Usuario objetivo:** Pedro (Stock)
+- **Emoción buscada:** Control sin interrupciones constantes
+- **Anti-emoción a evitar:** "Otra llamada más... no puedo concentrarme"
+- **Diseño UX:** Stock visible para todos, alertas solo stock mínimo, notificaciones silenciosas (sin spam)
 
-- **Transparencia total** vs sistemas opacos donde nunca sabes qué pasa
-- **Feedback inmediato** vs sistemas donde envías algo al vacío
-- **Control visual** vs sistemas abstractos con listados interminables
-
----
+**5. "Somos Profesionales" (Orgullo)**
+- **Usuarios objetivo:** Todos los usuarios
+- **Emoción buscada:** Pertenencia a un equipo profesional y organizado
+- **Anti-emoción a evitar:** "Somos un caos, siempre improvisando"
+- **Diseño UX:** Dashboard público transparencia, código de colores consistente, historial completo, notificaciones push a todos
 
 ### Emotional Journey Mapping
 
-**1. Carlos - Operario de Línea:**
+**Viaje Emocional de Carlos (Operario):**
 
-| Etapa | Estado Actual | Emoción Deseada | Trigger UX |
-|-------|---------------|-----------------|------------|
-| **Descubrimiento** | Escepticismo: "Otra app más que nadie va a usar" | Curiosidad | Demo de 30 segundos, tutorial simple |
-| **Primer Reporte** | Sorpresa: "¡Qué rápido! 2 minutos y ya está reportado" | Esperanza | Confirmación inmediata "✓ Aviso recibido" |
-| **Primera Notificación** | **Momento "¡Aha!"** "¡Me escucharon!" | **Validación, asombro** | Push: "Tu aviso fue autorizado - OT asignada a María" |
-| **Uso Continuado** | "Reportar es natural y rápido" | Hábito, pertenencia | Feedback consistente en cada transición |
-| **Post-Validación** | "Participé en cerrar el ciclo" | Satisfacción | "Gracias por tu reporte" al confirmar OT |
+| Etapa | Emoción Actual | Emoción Deseada | Momento de Transformación |
+|-------|----------------|-----------------|---------------------------|
+| **Descubrimiento** | "Otra app más..." (Escepticismo) | Curiosidad | Elena anuncia la app con demo 3 min |
+| **Primer reporte** | "¿Funcionará?" (Duda) | "¡Wow! Esto es rápido" (Sorpresa positiva) | Confirmación recibida <3s con número de aviso |
+| **30 min después** | "Olvidé del aviso" (Indiferencia) | "¡Me escucharon! No fue en vano" (Validación) | Notificación push: "Tu aviso fue autorizado" |
+| **2 horas después** | "¿Cómo irá?" (Incertidumbre) | "¡María está trabajando en mi OT!" (Pertenencia) | Notificación: "En progreso - María asignada" |
+| **OT completada** | "¿Funcionará?" (Preocupación) | "¡Sí! Mi aporte fue valioso" (Satisfacción) | Confirmación: "Gracias por tu reporte" |
+| **1 semana después** | "¿Funciona siempre?" | "Siento que mi voz importa" (Confianza) | 3er reporte con misma velocidad de respuesta |
 
-**Palabras Clave del Viaje de Carlos:**
-- Escepticismo → Sorpresa → **Asombro** → Validación → Pertenencia
+**Viaje Emocional de María (Técnica):**
 
----
+| Etapa | Emoción Actual | Emoción Deseada | Momento de Transformación |
+|-------|----------------|-----------------|---------------------------|
+| **Primer login** | "¿Qué tan difícil será?" (Ansiedad leve) | Interés | Tutorial 1 min, ve 5 OTs del día |
+| **Explora pantalla** | "¿Dónde empiezo?" (Confusión inicial) | "Todo está aquí" (Alivio) | Ve OTs organizadas por prioridad |
+| **Inicia primera OT** | "¿Quedó registrado?" (Incertidumbre) | "Vieron que empecé" (Confianza) | OT pasa visualmente a "En Progreso" |
+| **Agrega repuesto** | "¿Habrá stock?" (Preocupación) | "Qué fluido" (Satisfacción) | Ve stock 12, ubicación A3-Cajón 3 |
+| **Completa OT** | "¿Todo bien?" (Duda) | "¡Una más!" (Logro) | Sistema confirma, ve progreso en dashboard |
+| **2 semanas después** | "¿Cómo hacía antes?" | "¿Cómo hacíamos antes sin esto?" (Euforia productiva) | Compara con proceso manual anterior |
 
-**2. María - Técnica de Mantenimiento:**
+**Viaje Emocional de Javier (Supervisor):**
 
-| Etapa | Estado Actual | Emoción Deseada | Trigger UX |
-|-------|---------------|-----------------|------------|
-| **Descubrimiento** | Esperanza: "Quizás esto me ayude a organizarme" | Anticipación | Demo de lista de OTs |
-| **Lista Matutina** | "Sé exactamente qué tengo que hacer hoy" | Claridad, confianza | Lista priorizada con toda la info |
-| **Durante OT** | "Tengo todo lo que necesito sin preguntar" | Eficiencia, profesionalismo | Modal ℹ️ con historial, stock visible |
-| **Completar OT** | "Una tarea más completada con éxito" | Satisfacción, logro | Botón "Completar" con confirmación |
-| **Uso Continuado** | "¿Cómo hacíamos antes sin esto?" | Indispensable, orgullo | Métricas de productividad visibles |
+| Etapa | Emoción Actual | Emoción Deseada | Momento de Transformación |
+|-------|----------------|-----------------|---------------------------|
+| **Gerente pregunta** | "¿Qué diré?" (Ansiedad de desempeño) | "Sé la respuesta" (Confianza) | Toca tarjeta ℹ️ en Kanban |
+| **Lee modal** | "Espero que sepa..." | "Tengo toda la historia" (Seguridad) | Ve timeline completo: origen, fechas, técnico |
+| **Responde** | "Ojalá sepa..." | "La Prensa estará lista a las 12:00" (Certeza) | Responde con precisión en 10 segundos |
+| **Gerente asiente** | "¿Estará bien?" (Validación externa pendiente) | "Excelente, muy organizado" (Reconocimiento) | Gerente impresionado con respuesta |
+| **Diario** | "¿Qué está pasando hoy?" | "Tengo control total" (Dominio) | Kanban de 8 columnas con código de colores |
+| **1 mes después** | "Espero que funcione" | "¿Cómo hacíamos antes?" (Transformación cultural) | Compara con pizarra Kanban física |
 
-**Palabras Clave del Viaje de María:**
-- Esperanza → Claridad → **Confianza** → Profesionalismo → Orgullo
+**Viaje Emocional de Elena (Admin):**
 
----
+| Etapa | Emoción Actual | Emoción Deseada | Momento de Transformación |
+|-------|----------------|-----------------|---------------------------|
+| **Reunión dirección** | "¿Qué diré?" (Ansiedad de credibilidad) | "Tengo la verdad" (Confianza) | Abre dashboard KPIs |
+| **Proyecta dashboard** | "¿Será suficiente?" (Duda) | "MTTR ↓15%, MTBF ↑8%" (Certeza) | Datos concretos en pantalla |
+| **Director pregunta** | "¿Me creerán?" | "Datos claros. Mejorando." (Fundamentación) | Presenta métricas con drill-down |
+| **Director aprueba** | "¿Estará bien?" | "Aprobado" (Validación profesional) | Director asiente con datos |
+| **Semanalmente** | "¿Cómo vamos?" | "Tomo decisiones fundamentadas" (Poder) | Revisa KPIs, identifica tendencias |
+| **3 meses después** | "¿Funciona?" | "Por primera vez, tengo datos" (Transformación) | Compara con 3 Excels anteriores |
 
-**3. Javier - Supervisor de Mantenimiento:**
+**Viaje Emocional de Pedro (Stock):**
 
-| Etapa | Estado Actual | Emoción Deseada | Trigger UX |
-|-------|---------------|-----------------|------------|
-| **Descubrimiento** | Escepticismo: "Otro sistema que aprender" | Curiosidad reservada | Demo de Kanban visual |
-| **Primer Triage** | "Veo todos los avisos en un solo lugar" | Control inicial | Columna "Pendientes Triage" |
-| **Asignación** | "Asigno en 2 segundos sin llamar a nadie" | Eficiencia, poder | Drag-and-drop visual |
-| **Balanceo** | "Veo desbalance y actúo proactivamente" | Dominio, equidad | Alerta: "María tiene 8 OTs, Laura solo 2" |
-| **Modal ℹ️** | "Un clic y tengo toda la historia" | Satisfacción profunda | Modal con fechas, origen, técnico, teléfono |
-
-**Palabras Clave del Viaje de Javier:**
-- Escepticismo → **Control** → Eficiencia → Dominio → Satisfacción
-
----
-
-**4. Elena - Administrador/Jefa de Mantenimiento:**
-
-| Etapa | Estado Actual | Emoción Deseada | Trigger UX |
-|-------|---------------|-----------------|------------|
-| **Dashboard** | "Por primera vez tengo datos" | **Alivio, confianza** | KPIs grandes: MTTR ↓15%, MTBF ↑8% |
-| **Drill-down** | "Puedo profundizar al equipo problemático" | Seguridad, claridad | Un toque: Global → Planta → Línea → Equipo |
-| **Reporte a Dirección** | "Muestro dashboard con datos concretos" | Orgullo, validez | Dashboard proyectado, director aprueba |
-| **Alertas** | "Sé qué necesita atención" | Control, previsibilidad | Alertas accionables (stock mínimo, MTFR alto) |
-| **Exportar** | "Tengo reporte listo para dirección" | Eficiencia, profesionalismo | Un botón para Excel |
-
-**Palabras Clave del Viaje de Elena:**
-- Ansiedad → **Alivio** → Confianza → Seguridad → Orgullo
-
----
-
-**5. Pedro - Gestor de Stock:**
-
-| Etapa | Estado Actual | Emoción Deseada | Trigger UX |
-|-------|---------------|-----------------|------------|
-| **Stock Visible** | "Veo stock en tiempo real sin llamadas" | Control inicial | Stock contextual al seleccionar |
-| **Alerta Stock Mínimo** | "Solo me avisan cuando necesito actuar" | **Paz, alivio** | Notificación: "Filtro alcanzó mínimo (6 unidades)" |
-| **Confirmar Pedido** | "Un toque y pedido confirmado" | Eficiencia | Botón "Confirmar pedido" |
-| **María usa Repuesto** | "NO recibo notificación (sin spam)" | **Satisfacción profunda** | Silencio = sistema funciona |
-| **Final del Día** | "Solo una llamada en toda la mañana" | Paz, logro | Comparación vs 10+ llamadas antes |
-
-**Palabras Clave del Viaje de Pedro:**
-- Frustración → **Paz** → Control → Satisfacción → Alivio
-
----
+| Etapa | Emoción Actual | Emoción Deseada | Momento de Transformación |
+|-------|----------------|-----------------|---------------------------|
+| **Antes (proceso anterior)** | "Otra llamada..." (Frustración acumulada) | - | 10+ llamadas/día preguntando stock |
+| **Primer acceso** | "¿Será diferente?" (Escepticismo) | "Veo stock en tiempo real" (Sorpresa) | Abre app, ve SKF-6208: 13 🟢 |
+| **María usa repuesto** | "Teléfono otra vez..." (Irritación anticipada) | "¡NO recibí notificación!" (Alivio) | Stock actualizado silenciosamente |
+| **14:00 - Alerta** | "Otra interrupción..." | "¡Es solo 1 hoy!" (Satisfacción) | "Filtro alcanzó mínimo" - única llamada del día |
+| **Genera pedido** | "¿Habrá stock?" | "Sé qué hacer" (Control) | Genera pedido de 10 unidades |
+| **Diario** | "¿Cuántas llamadas hoy?" | "Qué paz. Sin spam" (Tranquilidad) | Ahorra 2+ horas diarias |
+| **1 semana después** | "¿Funciona siempre?" | "Solo me avisan cuando necesito actuar" (Confianza) | 1-2 llamadas/día vs 10+ antes |
 
 ### Micro-Emotions
 
-**Micro-Emociones Críticas para el Éxito del Producto:**
+**Micro-emociones son estados emocionales sutiles pero críticos que ocurren durante interacciones específicas. Si se diseñan correctamente, generan confianza y satisfacción acumulativa. Si se ignoran, generan fricción y abandono.**
 
-#### 1. Confianza vs. Confusión
+**1. Confianza vs Escepticismo**
 
-**Confianza (✅ Queremos):**
-- Sistema confirma cada acción inmediatamente
-- Código de colores claro con tooltips explicativos
-- Usuario siempre sabe qué hacer a continuación
+**Contexto:** Usuario realiza una acción (reportar avería, iniciar OT, actualizar stock)
 
-**Confusión (❌ Evitar):**
-- Botones sin etiquetas claras
-- Estados ambiguos ("¿Qué significa este color?")
-- Navegación sin breadcrumb o indicador de ubicación
+**Diseño UX que genera confianza:**
+- Confirmación visual <3 segundos tras cada acción
+- Número de referencia (ej: "Aviso #456 recibido")
+- Feedback visible: OT cambia de columna, stock actualizado
+- Mensaje claro: "✓ Guardado. Stock actualizado: 11"
 
-**UX Approach:**
-- Tooltips en código de colores de Kanban (modal ℹ️ con leyenda)
-- Confirmaciones visuales en cada acción
-- Indicadores de progreso en procesos largos
+**Resultado emocional:** Usuario piensa "Sistema confiable" → Continúa usando
 
----
+**Anti-pattern (genera escepticismo):**
+- Sin confirmación → Usuario duda "¿Hice clic? ¿Quedó registrado?"
+- Spinner >5 segundos → Usuario piensa "Se colgó, intentaré de nuevo"
+- Error genérico → Usuario piensa "Otra falla más"
 
-#### 2. Trust vs. Escepticismo
-
-**Trust (✅ Queremos):**
-- Notificaciones push en tiempo real = transparencia
-- Historial completo en modal ℹ️
-- Dashboard público = todos ven mismos datos
-
-**Escepticismo (❌ Evitar):**
-- Primer uso fallado o lento
-- Sin feedback después de enviar
-- Información oculta o difícil de encontrar
-
-**UX Approach:**
-- Primer uso debe ser exitoso (rapidez + feedback)
-- Notificaciones en cada transición de estado
-- Radical transparency (todos ven misma información)
+**Validación:** % de acciones con feedback visible = 100% (objetivo)
 
 ---
 
-#### 3. Excitement vs. Ansiedad
+**2. Control vs Frustración**
 
-**Excitement (✅ Queremos):**
-- Momento "¡Aha!" primera notificación push
-- Búsqueda predictiva instantánea ("¡Magia!")
-- Drag-and-drop fluido
+**Contexto:** Usuario busca información (equipo, OT, repuesto)
 
-**Ansiedad (❌ Evitar):**
-- "¿Se envió mi aviso?" (sin confirmación)
-- "¿Qué pasó con mi OT?" (sin notificaciones)
-- "¿Está bien lo que hice?" (sin feedback)
+**Diseño UX que genera control:**
+- Búsqueda predictiva <200ms con suggestions inteligentes
+- Modal ℹ️ con toda la historia en 1 clic
+- Código de colores visible (7 tipos de OT + estados)
+- Stock visible con ubicación (Estante A3, Cajón 3)
 
-**UX Approach:**
-- Confirmación inmediata en cada acción
-- Notificaciones push proactivas
-- Estados visibles y claros
+**Resultado emocional:** Usuario piensa "Tengo el control" → Se siente competente
 
----
+**Anti-pattern (genera frustración):**
+- Búsqueda lenta >1 segundo → Usuario piensa "Esto es lento"
+- Información fragmentada en 3-4 pantallas → "¿Dónde está...?"
+- Sin ubicación de repuesto → "¿En qué establo está?"
 
-#### 4. Accomplishment vs. Frustración
-
-**Accomplishment (✅ Queremos):**
-- Drag-and-drop = tarea completada
-- Un clic = toda la información (modal ℹ️)
-- Lista de OTs = "Sé qué hacer hoy"
-
-**Frustración (❌ Evitar):**
-- Búsqueda lenta (>1 segundo)
-- Formularios de 10 campos
-- Navegar por múltiples pantallas
-
-**UX Approach:**
-- Búsqueda <200ms
-- Un clic vs múltiples clicks
-- Información contextual sin navegar
+**Validación:** Tiempo de búsqueda <200ms (objetivo), información en 1 clic (objetivo)
 
 ---
 
-#### 5. Delight vs. Satisfacción
+**3. Validación vs Indiferencia**
 
-**Delight (✅ Queremos):**
-- Momento "¡Aha!" cuando Carlos recibe primera notificación
-- Búsqueda predictiva que "adivina" lo que quiere
-- Alerta de balanceo que ayuda a Javier
+**Contexto:** Usuario contribuye (reporta avería, completa OT, ajusta stock)
 
-**Satisfacción (baseline):**
-- Usuario logra objetivo sin fricción
-- Sistema funciona como esperado
+**Diseño UX que genera validación:**
+- Confirmación con número de referencia personalizado ("Aviso #456")
+- Notificaciones push de cada estado ("Tu aviso fue autorizado")
+- Mensaje de gratitude ("Gracias por tu reporte. Tu aviso #123 ha contribuido a mantener la operación.")
+- Historial visible de sus contribuciones
 
-**UX Approach:**
-- Momentos de "magia" (búsqueda instantánea, notificaciones proactivas)
-- Pequeños detalles que generan delight (animaciones suaves, mensajes amigables)
+**Resultado emocional:** Usuario piensa "Mi aporte importa" → Se siente valorado
+
+**Anti-pattern (genera indiferencia):**
+- Sin confirmación → "Nadie se da cuenta"
+- Sin notificaciones → "¿Sirvió para algo mi reporte?"
+- Sin gratitude → "Solo estoy haciendo mi trabajo"
+
+**Validación:** % de contribuciones con feedback = 100% (objetivo)
+
+---
+
+**4. Pertenencia vs Aislamiento**
+
+**Contexto:** Usuario trabaja en equipo con otros departamentos
+
+**Diseño UX que genera pertenencia:**
+- Dashboard público con mismos KPIs para toda la fábrica
+- Notificaciones push a todos (transparencia de estado)
+- Código de colores compartido (todos ven mismos tipos de OT)
+- Historial completo visible (trazabilidad total)
+
+**Resultado emocional:** Usuario piensa "Somos un equipo profesional" → Se siente parte de algo mayor
+
+**Anti-pattern (genera aislamiento):**
+- Información siloada (solo admins ven X) → "¿Por qué ellos sí y yo no?"
+- Sin visibilidad del trabajo de otros → "Estoy solo en esto"
+- Dashboard opaco → "¿Qué están haciendo los demás?"
+
+**Validación:** Encuesta de percepción 6 meses → "Profesional" vs "Caótico"
 
 ---
 
-#### 6. Belonging vs. Aislamiento
+**5. Eficiencia vs Caos**
 
-**Belonging (✅ Queremos):**
-- Carlos siente "mi voz importa" con notificaciones
-- Dashboard público = transparencia para toda la fábrica
-- "Gracias por tu reporte" al confirmar OT
+**Contexto:** Usuario gestiona múltiples tareas (OTs, repuestos, técnicos)
 
-**Aislamiento (❌ Evitar):**
-- Enviar al vacío (sin respuesta)
-- Información silo (solo gerencia ve datos)
-- Sentir que "no me escuchan"
+**Diseño UX que genera eficiencia:**
+- Kanban visual con drag-and-drop (asignación en 5 segundos)
+- Búsqueda predictiva con autocomplete (reporte en 30 segundos)
+- Modal ℹ️ con toda la info (1 clic vs 3-4 pantallas)
+- Stock visible al seleccionar repuesto (sin navegación extra)
 
-**UX Approach:**
-- Feedback loop completo (operario participa en validación)
-- Transparencia radical (todos mismos datos)
-- Mensajes que generan pertenencia
+**Resultado emocional:** Usuario piensa "Todo está organizado" → Se siente productivo
+
+**Anti-pattern (genera caos):**
+- Formularios largos → "Esto es una pérdida de tiempo"
+- Información dispersa → "¿En qué pantalla estaba...?"
+- Sin código de colores → "¿Qué OT es qué?"
+
+**Validación:** Número de clics en user flows (benchmark vs competencia)
 
 ---
+
+**6. Calma vs Ansiedad**
+
+**Contexto:** Usuario gestiona situaciones críticas (stock mínimo, OTs vencidas)
+
+**Diseño UX que genera calma:**
+- Alertas accionables con acción clara ("Filtro alcanzó mínimo → Generar pedido")
+- Código de colores (rojo = crítico, naranja = atención)
+- Mensajes claros de error ("Sin conexión" + "Reconectando...")
+- Undo automático (5 segundos) por si acaso
+
+**Resultado emocional:** Usuario piensa "Sé qué hacer" → Actúa con confianza
+
+**Anti-pattern (genera ansiedad):**
+- Alertas genéricas ("Error en el sistema") → "¿Qué hago ahora?"
+- Sin acción clara → "¿A quién llamo?"
+- Sin undo → "¡Lo arruiné!"
+
+**Validación:** % de alertas con acción clara = 100% (objetivo)
 
 ### Design Implications
 
-**Conexión Emoción → Decisión de Diseño:**
+**Cómo los objetivos emocionales informan decisiones de diseño UX:**
 
-#### Emoción: "Mi voz importa" (Carlos)
+**Emoción 1: "Mi Voz Importa" (Validación) → Confirmación Inmediata + Notificaciones Push**
 
-**UX Design Approach:**
-- **Notificaciones push** en cada transición de estado
-  - "Tu aviso fue autorizado - OT asignada a María"
-  - "OT en progreso - María está trabajando"
-  - "OT completada - ¿Confirma que funciona bien?"
-- **Confirmación final:** "Gracias por tu reporte" al validar
-- **Cierre de ciclo:** Pregunta "¿Funciona?" al operario
+**Diseño UX específico:**
+- Carlos toca "Enviar" → App responde <3s: "✓ Aviso #456 recibido. Gracias por tu reporte."
+- 10 minutos después → Push: "Tu aviso #456 fue autorizado. OT asignada a María."
+- 2 horas después → Push: "María está trabajando en tu OT #456."
+- OT completada → Push: "OT #456 completada. ¿Confirma que funciona?" + Botón "Sí/No"
 
-**Por qué genera esta emoción:**
-- Carlos ve que el sistema responde a sus acciones
-- Participación en cada paso del proceso
-- Validación de su contribución
+**Resultado:** Carlos siente "Mi voz importa" → App se vuelve indispensable
+
+**Métrica de éxito:** Tasa de conversión de avisos a OTs >70% (indica reportes válidos + valor percibido)
 
 ---
 
-#### Emoción: "Soy profesional" (María)
+**Emoción 2: "Tengo el Control" (Confianza) → Modal ℹ️ + Búsqueda Predictiva <200ms**
 
-**UX Design Approach:**
-- **Lista clara de OTs** priorizadas al abrir app
-- **Cada OT tiene contexto:** equipo, ubicación, repuestos necesarios
-- **Botón ▶️ "Iniciar"** con feedback visual inmediato
-- **Historial disponible** en modal ℹ️
+**Diseño UX específico:**
+- Javier ve tarjeta OT en Kanban → Toca ℹ️ → Modal con:
+  - Timeline visual: Creación → Autorización → Inicio → Completado
+  - Origen: Carlos (Operario) reportó el 2026-03-07 a las 09:03
+  - Asignados: María (Técnica) + Juan (Técnico)
+  - Proveedor: Talleres Eléctricos SA - Tel: +54 11 1234-5678 (click-to-call)
+  - Repuestos usados: Rodamiento SKF-6208 (Stock: 11, 📍 Estante A3, Cajón 3)
+  - Fotos antes/después (si adjuntadas)
 
-**Por qué genera esta emoción:**
-- María siente que tiene información completa
-- No necesita preguntar constantemente
-- Se ve a sí misma como profesional organizada
+**Resultado:** Javier responde "¿Qué pasa con la Prensa?" en 10 segundos → Percibido como organizado
 
----
-
-#### Emoción: "Tengo control" (Javier)
-
-**UX Design Approach:**
-- **Kanban visual** con código de colores
-- **Drag-and-drop:** Asignación en 2 segundos
-- **Modal ℹ️:** Un clic = toda la historia
-- **Alertas de balanceo:** "María tiene 8 OTs, Laura solo 2"
-
-**Por qué genera esta emoción:**
-- Javier ve carga de trabajo completa del equipo
-- Distribuye trabajo sin llamar a nadie
-- Toma decisiones informadas visualmente
+**Métrica de éxito:** Tiempo de respuesta a consultas gerenciales <30 segundos (objetivo)
 
 ---
 
-#### Emoción: "Tengo datos" (Elena)
+**Emoción 3: "Tengo Datos" (Credibilidad) → Dashboard KPIs + Exportar Excel**
 
-**UX Design Approach:**
-- **Dashboard con KPIs grandes:** MTTR, MTBF, OTs abiertas, técnicos activos
-- **Drill-down simple:** Un toque para profundizar
-- **Flechas de tendencia:** ↑↓ vs mes anterior
-- **Un botón para Excel** exportar
+**Diseño UX específico:**
+- Elena abre dashboard → Ve:
+  - MTTR 4.2h (↓15% vs mes anterior) - Icono trending down verde
+  - MTBF 127h (↑8% vs mes anterior) - Icono trending up verde
+  - OTs abiertas: 23 (↓5 vs mes anterior)
+  - Stock crítico: 3 items - Icono de alerta rojo
+- Drill-down: Toca MTTR → Planta Panel → Línea 2 → Prensa PH-500 (MTFR 12h, 3 fallos)
+- Botón "Exportar Excel" → Descarga .xlsx con hojas separadas por KPI
 
-**Por qué genera esta emoción:**
-- Elena ve números concretos inmediatamente
-- Puede fundamentar decisiones con datos
-- Reporta a dirección con dashboard visual
+**Resultado:** Elena piensa "Por primera vez, tengo datos. No adivino." → Credibilidad ante dirección
+
+**Métrica de éxito:** Frecuencia de revisión de KPIs semanal >90% (objetivo)
+
+---
+
+**Emoción 4: "Qué Paz" (Tranquilidad) → Stock Visible + Alertas Solo Mínimo**
+
+**Diseño UX específico:**
+- María toca "Agregar Repuesto" → Escribe "skf" → Ve:
+  - "Rodamiento SKF-6208 (Stock: 12, 📍 Estante A3, Cajón 3)"
+- Selecciona, cantidad "1", toca "Guardar" → Sistema: "✓ Agregado. Stock actualizado: 11"
+- **PEDRO NO RECIBE NOTIFICACIÓN** (sin spam)
+- 14:00 - Stock alcanza mínimo (6 unidades, mínimo: 5) → Pedro recibe **única** alerta del día
+- Pedro toca alerta → "Filtro F-205 alcanzó mínimo (6 unidades)" → Botón "Generar pedido"
+
+**Resultado:** Pedro recibe 1 llamada/día vs 10+ antes → "Qué paz. Solo me avisan cuando necesito actuar."
+
+**Métrica de éxito:** % de alertas stock mínimo que resultan en acción >80% (objetivo)
 
 ---
 
-#### Emoción: "Paz sin spam" (Pedro)
+**Emoción 5: "Somos Profesionales" (Orgullo) → Dashboard Público + Código de Colores**
 
-**UX Design Approach:**
-- **Alertas solo stock mínimo** (NO por cada uso)
-- **Stock visible contextual** al seleccionar repuesto
-- **Confirmación un toque:** "Pedido recibido"
-- **Silencio = éxito:** María usa repuesto → Pedro NO recibe notificación
+**Diseño UX específico:**
+- Dashboard en TV área común visible para toda la fábrica:
+  - MTTR 4.2h (↓15%)
+  - MTBF 127h (↑8%)
+  - OTs abiertas: 23
+  - Técnicos activos: 5
+  - **Sin datos sensibles** (sin nombres, sin costos)
+- Código de colores consistente en toda la app:
+  - 🟢 Verde = Bueno (OT completada, stock OK)
+  - 🟠 Naranja = Atención (OT en progreso, stock bajo)
+  - 🔴 Rojo = Crítico (OT vencida, stock crítico)
 
-**Por qué genera esta emoción:**
-- Pedro solo es interrumpido cuando necesita actuar
-- Control total sin spam constante
-- Ahorra 2+ horas diarias
+**Resultado:** Todos ven mismos datos → Transparencia → Confianza → "Somos un equipo profesional"
 
----
+**Métrica de éxito:** Encuesta de percepción 6 meses → "Profesional" vs "Caótico"
 
 ### Emotional Design Principles
 
 **Principios Rectores para Diseño Emocional:**
 
-#### 1. Feedback Inmediato = Confianza
+**1. Velocidad = Confianza**
 
-**Principio:** Cada acción del usuario debe tener confirmación visual inmediata.
+**Principio:** Respuestas rápidas generan confianza emocional inmediata.
 
-**Aplicación:**
-- Carlos toca "Enviar" → "✓ Aviso #AV-234 recibido - Evaluando"
-- María toca "▶️ Iniciar" → tarjeta cambia a "En Progreso"
-- Javier arrastra tarjeta → confirmación visual de asignación
-- Elena exporta → "Tu exportación está lista. Click para descargar."
+**Aplicación práctica:**
+- Búsqueda predictiva <200ms → Usuario siente "Este sistema es rápido"
+- Confirmación de reporte <3s → Usuario siente "Me escucharon"
+- Dashboard KPIs carga <2s → Usuario siente "Tengo el control"
 
-**Por qué genera confianza:**
-- Usuario sabe que su acción fue recibida
-- No hay duda "¿funcionó o no?"
-- Refuerza comportamiento positivo
+**Anti-pattern:** Spinner >5s → Usuario siente "Esto es lento como los sistemas viejos" → Abandono
+
+**Validación:** Medir tiempos de respuesta + encuestas de percepción de velocidad
 
 ---
 
-#### 2. Transparencia = Pertenencia
+**2. Feedback = Validación**
 
-**Principio:** El usuario siempre debe ver qué está pasando sin preguntar.
+**Principio:** Feedback inmediato y visible valida al usuario emocionalmente.
 
-**Aplicación:**
-- Carlos ve cada transición de estado de su aviso
-- Modal ℹ️ muestra toda la historia (fechas, origen, técnico, repuestos)
-- Dashboard público = todos ven mismos datos
-- Stock visible al seleccionar (no en página separada)
+**Aplicación práctica:**
+- Carlos toca "Enviar" → Recibe confirmación <3s con número de aviso → Siente "¡Funcionó!"
+- María toca "Iniciar OT" → OT pasa a "En Progreso" visualmente → Siente "Vieron que empecé"
+- Pedro ajusta stock → Sistema confirma "Stock actualizado: 11" → Siente "Quedó registrado"
 
-**Por qué genera pertenencia:**
-- Usuario siente que es parte del proceso
-- No hay información oculta o exclusiva
-- Genera cultura de transparencia
+**Anti-pattern:** Acciones sin feedback → Usuario duda "¿Hice clic? ¿Quedó registrado?" → Frustración
+
+**Validación:** % de acciones con feedback visual = 100% (objetivo)
 
 ---
 
-#### 3. Rapidez = Satisfacción
+**3. Transparencia = Pertenencia**
 
-**Principio:** El usuario debe lograr su objetivo sin esperar.
+**Principio:** Visibilidad total de información genera sentido de pertenencia a un equipo profesional.
 
-**Aplicación:**
-- <30 segundos para reportar avería
-- <200ms para búsqueda predictiva
-- <2 segundos para asignar OT
-- <1 segundo para actualizaciones en tiempo real
+**Aplicación práctica:**
+- Dashboard público → Todos ven mismos KPIs → "Somos un equipo"
+- Notificaciones push a todos → Operario ve que su aviso avanza → "Mi contribución importa"
+- Código de colores compartido → "Hablamos el mismo idioma visual"
 
-**Por qué genera satisfacción:**
-- Usuario siente que el sistema respeta su tiempo
-- Comparación favorable con métodos lentos actuales
-- "¡Qué rápido!" momento de delight
+**Anti-pattern:** Información siloada → "¿Por qué ellos sí y yo no?" → Aislamiento
+
+**Validación:** Encuestas de percepción de equipo y colaboración
 
 ---
 
-#### 4. Control = Profesionalismo
+**4. Control = Calma**
 
-**Principio:** El usuario debe sentir que tiene dominio sobre su trabajo.
+**Principio:** Sensación de control reduce ansiedad en situaciones críticas.
 
-**Aplicación:**
-- Drag-and-drop visual (Javier asigna sin llamar)
-- Lista clara de OTs (María sabe qué hacer)
-- Dashboard KPIs (Elena tiene datos)
-- Stock visible (Pedro controla inventario)
+**Aplicación práctica:**
+- Modal ℹ️ con toda la info en 1 clic → "Sé qué está pasando"
+- Búsqueda predictiva con suggestions → "Encuentro lo que busco"
+- Alertas accionables → "Sé qué hacer"
 
-**Por qué genera profesionalismo:**
-- Usuario se siente competente y organizado
-- No depende de preguntar a otros
-- Se ve a sí mismo como profesional
+**Anti-pattern:** Información dispersa → "No tengo control" → Ansiedad
+
+**Validación:** Tiempo de resolución de tareas + encuestas de estrés percibido
 
 ---
 
-#### 5. Contexto = Eficiencia
+**5. Simplicidad = Eficiencia**
 
-**Principio:** La información relevante debe aparecer donde se necesita.
+**Principio:** Interacciones simples generan sensación de eficiencia y competencia.
 
-**Aplicación:**
-- Stock al seleccionar repuesto (María no llama a Pedro)
-- Historial en modal ℹ️ (Javier no navega múltiples pantallas)
-- Ubicación en dropdown (Carlos ve dónde está repuesto)
-- Notificaciones push (Carlos no abre app para ver estado)
+**Aplicación práctica:**
+- Reporte de avería en 30 segundos (vs 2-5 minutos antes) → "Soy eficiente"
+- Asignación con drag-and-drop (vs formulario) → "Fluido"
+- Stock visible al seleccionar (vs pantalla separada) → "Intuitivo"
 
-**Por qué genera eficiencia:**
-- Usuario no pierde contexto de tarea
-- Reduce multitarea y cambio de contexto
-- "Todo lo que necesito en un solo lugar"
+**Anti-pattern:** Interacciones complejas → "Esto es complicado" → Frustración
+
+**Validación:** Número de clics en user flows + encuestas de facilidad de uso
 
 ---
 
-## Emotional Validation
+**6. Gratitud = Lealtad**
 
-**Emoción Primaria:** **"Mi voz importa y tengo control"**
+**Principio:** Mensajes de gratitude generan lealtad emocional al sistema.
 
-**Sentimientos Secundarios:**
-- Profesionalismo ("Trabajo de forma organizada")
-- Confianza ("El sistema funciona")
-- Pertenencia ("Soy parte del proceso")
-- Eficiencia ("Logro más en menos tiempo")
-- Transparencia ("Sé qué está pasando")
+**Aplicación práctica:**
+- "Gracias por tu reporte. Tu aviso #123 ha contribuido a mantener la operación." → Carlos siente "Mi aporte es valioso"
+- "¡Excelente trabajo! OT completada en 2 horas (vs 4h promedio)." → María siente "Soy reconocida"
 
-**Emociones a Evitar:**
-- Frustración ("Es lento", "No entiendo cómo funciona")
-- Impotencia ("¿Para qué reporto?", "Nadie hace caso")
-- Confusión ("¿Qué significa este color?", "¿Cómo hago X?")
-- Ansiedad ("¿Se envió?", "¿Qué pasó con mi aviso?")
-- Aislamiento ("Nadie me escucha", "No sé qué está pasando")
-- Spam ("Demasiadas notificaciones", "Interrupciones constantes")
+**Anti-pattern:** Sin gratitude → "Solo hago mi trabajo, da igual" → Indiferencia
 
-**Validación de Alineación con Visión del Producto:**
+**Validación:** Tasa de retención de usuarios + Net Promoter Score (NPS)
 
-✅ **Transformación Cultural:** De "caótico" a "profesional"
-✅ **Feedback Loop:** Operario participa en validación
-✅ **Transparencia Radical:** Dashboard público
-✅ **Control Visual:** Kanban, KPIs, alertas
-✅ **Rapidez:** <30s reportar, <200ms buscar
+---
+
+**7. Consistencia = Confianza**
+
+**Principio:** Comportamiento consistente genera confianza emocional a largo plazo.
+
+**Aplicación práctica:**
+- Código de colores consistente en toda la app (siempre rojo = crítico)
+- Feedback siempre en mismos tiempos (<3s confirmación)
+- Navegación predecible (mismo patrón en todas las pantallas)
+
+**Anti-pattern:** Comportamiento errático → "¿Qué hará esta vez?" → Escepticismo
+
+**Validación:** Encuestas de confianza en el sistema + tasa de abandono
 
 ## UX Pattern Analysis & Inspiration
 
 ### Inspiring Products Analysis
 
-Basándome en los usuarios de **gmao-hiansa** (Carlos, María, Javier, Elena, Pedro), he identificado productos que ya usan y aman, y de los cuales podemos aprender patrones UX probados:
+**Análisis de Productos Inspiradores para gmao-hiansa**
+
+Basado en el contexto de una aplicación industrial de mantenimiento (GMAO), he identificado productos que los usuarios objetivo ya conocen y aman, cuyos patrones UX podemos adaptar.
 
 ---
 
-#### 1. WhatsApp - Transparencia de Estado
+### 1. WhatsApp / Telegram (Comunicación y Notificaciones)
 
-**Qué hace bien desde UX:**
-- **Transparencia inmediata:** ✓ azul de "visto", doble check ✓✓ de "entregado"
-- **Notificaciones push:** Sabes cuando recibes mensaje sin abrir app
-- **Simplicidad:** Un input de texto, un botón de enviar
-- **Velocidad:** Mensajes se envían instantáneamente
-- **Multi-dispositivo:** Funciona en móvil, desktop, web
+**Lo que hacen bien:**
+- **Confirmación visual inmediata:** Check azul ✓ aparece al enviar mensaje
+- **Notificaciones push no intrusivas:** Preview del mensaje sin abrir la app
+- **Timestamps claros:** "Hace 5 min", "12:30", "Ayer"
+- **Estados de mensaje:** Enviado → Entregado → Leído (dos checks azules)
+- **Search predictivo:** Encuentra conversaciones <200ms
+- **Feedback de estado:** "Escribiendo...", "En línea", "Visto por última vez..."
 
-**Core Problem Solucionado:**
-- Incertidumbre de "¿me recibieron?" → Confirmación visual inmediata
-
-**Momento "¡Aha!" de Carlos:**
-- Envia mensaje → recibe notificación "visto" → sabe que el otro lo leyó
-- Transparencia total sin preguntar "¿me recibiste?"
-
-**Patrón UX exitoso:**
-- **Feedback visual inmediato** en cada acción
-- **Notificaciones push** proactivas (usuario no necesita preguntar)
-- **Simplicidad extrema** (un input, un botón)
+**Aplicación a gmao-hiansa:**
+- Confirmación <3s tras reportar avería (como check azul ✓)
+- Notificaciones push: "Tu aviso #456 fue autorizado. OT asignada a María"
+- Estados de OT: Recibido → Autorizado → En Progreso → Completado
+- Búsqueda predictiva de equipos <200ms
 
 ---
 
-#### 2. Trello - Kanban Visual con Drag-and-Drop
+### 2. Trello / Asana (Gestión de Tareas y Kanban)
 
-**Qué hace bien desde UX:**
-- **Visual first:** Tarjetas con código de colores, drag-and-drop intuitivo
-- **Drag-and-drop fluido:** Un movimiento = tarea completada
-- **Etiquetas visibles:** Colores, etiquetas, fechas límite visibles de un vistazo
-- **Modal de detalle:** Un clic en tarjeta = toda la información
+**Lo que hacen bien:**
+- **Kanban visual:** Drag-and-drop entre columnas
+- **Código de colores:** Labels y etiquetas visuales
+- **Modal ℹ️ con toda la info:** Click en tarjeta → modal con detalles
+- **Asignación visual:** Dropdown con avatares de usuarios
+- **Filtros rápidos:** Por etiqueta, usuario, fecha
+- **Timeline de actividad:** Historial de cambios en la tarjeta
 
-**Core Problem Solucionado:**
-- Gestión visual de tareas vs listados abstractos interminables
-
-**Momento "¡Aha!" de Javier:**
-- Ve columnas visuales, arrastra tarjeta de "To Do" a "Doing"
-- Asignación visual sin formularios ni menús complejos
-
-**Patrón UX exitoso:**
-- **Código de colores** para identificación instantánea
-- **Drag-and-drop** para acciones frecuentes
-- **Modal ℹ️** con toda la información relevante
+**Aplicación a gmao-hiansa:**
+- Kanban de 8 columnas con drag-and-drop
+- 7 tipos de OT con código de colores
+- Modal ℹ️ con timeline visual de la OT
+- Asignación con avatares de técnicos (1-3 técnicos o proveedor)
+- Filtros por estado, técnico, fecha, tipo, equipo
 
 ---
 
-#### 3. Spotify - Búsqueda Predictiva Instantánea
+### 3. Amazon (Búsqueda y Catálogo)
 
-**Qué hace bien desde UX:**
-- **Búsqueda predictiva ultra-rápida:** Escribe "Beat" → sugiere "The Beatles" en milisegundos
-- **Autocompletado mientras escribes:** No necesitas escribir el nombre completo
-- **Contexto en resultados:** Muestra artista, álbum, canción en el dropdown
-- **Un toque para reproducir:** No navegar por menús
+**Lo que hacen bien:**
+- **Búsqueda predictiva con suggestions:** "pren" → "Prensa hidráulica industrial..."
+- **Autocomplete con contexto:** Muestra categoría, precio, rating
+- **Historial de búsqueda:** "Buscasto recientemente: rodamiento SKF"
+- **Filtros laterales:** Categoría, precio, marca, rating
+- **Reviews y ratings:** Estrellas + número de reseñas
+- **Stock visible:** "Quedan 3 unidades" + "Envío gratis"
 
-**Core Problem Solucionado:**
-- Encontrar contenido entre millones de opciones sin fricción
-
-**Momento "¡Aha!" de Carlos:**
-- Escribe "perfi" → "Perfiladora P-201" aparece instantáneamente
-- Stock y ubicación visibles en el dropdown
-
-**Patrón UX exitoso:**
-- **Autocompletado en tiempo real** (<200ms)
-- **Resultados contextuales** con información relevante
-- **Un toque/selección** para acción principal
+**Aplicación a gmao-hiansa:**
+- Búsqueda predictiva: "pren" → "Prensa PH-500 (Panel Sandwich, Línea 2)"
+- Suggestions con: ubicación en planta, estado actual, última avería
+- Filtros por planta, línea, tipo de equipo
+- Stock visible: "Rodamiento SKF-6208 (Stock: 12, 📍 Estante A3, Cajón 3)"
+- Historial del equipo: "Última avería: hace 3 días"
 
 ---
 
-#### 4. Slack - Sincronización Multi-Dispositivo en Tiempo Real
+### 4. Google Maps (Search y Ubicación)
 
-**Qué hace bien desde UX:**
-- **Sincronización instantánea:** Mensaje en desktop → aparece en móvil inmediatamente
-- **Canales/temas:** Organización por contexto, no solo por persona
-- **Notificaciones inteligentes:** Te avisa de mentions, no de todo
-- **Search potente:** Encuentra mensajes, archivos, personas en <1 segundo
+**Lo que hacen bien:**
+- **Búsqueda predictiva <200ms:** Empieza a escribir → suggestions inmediatas
+- **Autocomplete con ubicación:** "Prensa" → "Prensa industrial [Dirección]"
+- **Historial reciente:** "Buscasto recientemente: Plaza de Mayo"
+- **Modos de transporte:** Auto 🚗, Caminar 🚶, Transporte 🚌
+- **Info en modal ℹ️:** Click en lugar → dirección, teléfono, horarios
+- **Reviews con fotos:** "4.5 ⭐ (123 reseñas)"
 
-**Core Problem Solucionado:**
-- Coordinación de equipo sin llamadas constantes
-
-**Momento "¡Aha!" de María:**
-- Actualiza OT en desktop → Javier ve cambio en su desktop inmediatamente
-- Sincronización sin "refresh" manual
-
-**Patrón UX exitoso:**
-- **WebSockets para actualizaciones <1s**
-- **Notificaciones push inteligentes** (solo lo importante)
-- **Búsqueda universal** en un solo lugar
+**Aplicación a gmao-hiansa:**
+- Búsqueda predictiva <200ms con autocomplete jerárquico
+- Suggestions con: ubicación en planta, estado actual, historial
+- Modal ℹ️ con: ubicación, teléfono del proveedor, historial de OTs
+- Stock con ubicación física: "📍 Estante A3, Cajón 3"
 
 ---
 
-#### 5. Notion - Contexto sobre Navegación
+### 5. Google Analytics / Strava (Dashboards y KPIs)
 
-**Qué hace bien desde UX:**
-- **Información contextual aparece donde se necesita:** Slash commands, inline editing
-- **Drill-down sin perder lugar:** Página dentro de página
-- **Búsqueda instantánea:** "/" + comando → acción en milisegundos
+**Lo que hacen bien:**
+- **Dashboard con trending icons:** MTTR ↓15% (icono flecha verde), MTBF ↑8% (flecha arriba)
+- **Drill-down:** Click en métrica → Planta → Línea → Equipo
+- **Comparación temporal:** "vs mes anterior", "vs año pasado"
+- **Gráficos interactivos:** Hover para ver valores exactos
+- **Exportar datos:** Botón "Exportar a Excel/CSV"
+- **Alertas:** "MTFR aumentó 20% esta semana"
 
-**Core Problem Solucionado:**
-- Acceder a información profunda sin navegar múltiples páginas
-
-**Momento "¡Aha!" de Elena:**
-- Toca MTTR → drill-down: Global → Planta → Línea → Equipo
-- Un toque para profundizar sin perder contexto
-
-**Patrón UX exitoso:**
-- **Información contextual** donde se necesita
-- **Drill-down simple** sin navegación profunda
-- **Un comando/acción** para tareas frecuentes
-
----
+**Aplicación a gmao-hiansa:**
+- Dashboard KPIs: MTTR 4.2h (↓15% vs mes anterior), MTBF 127h (↑8%)
+- Drill-down: Global → Planta Panel → Línea 2 → Prensa PH-500
+- Gráficos de OTs por semana, tiempos de reparación
+- Exportar a Excel: .xlsx con hojas separadas por KPI
+- Alertas accionables: Stock mínimo, MTFR alto, rutinas no completadas
 
 ### Transferable UX Patterns
 
-**Patrones de Navegación:**
+**Patrones de Navegación**
 
-#### 1. Kanban Visual con Drag-and-Drop (Trello)
+**1. Bottom Navigation (Mobile) - De WhatsApp/Telegram**
 
-**Patrón:**
-- Columnas horizontales con tarjetas
-- Drag-and-drop para mover tarjetas entre columnas
-- Código de colores para categorización visual
-- Modal ℹ️ con detalles al hacer clic en tarjeta
+**Patrón:** Navegación inferior con 4-5 iconos (Chats, Estados, Llamadas, Configuración)
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Asignación de OTs, gestión de carga de trabajo de técnicos
-- **Resuelve:** Asignación rápida sin llamar a técnicos
-- **Implementación:** 8 columnas (Pendientes Triage → Asignaciones → En Progreso → Pendiente Repuesto → Pendiente Parada → Reparación Externa → Completadas → Descartadas)
-- **Código de colores:** 🌸 Rosa (avería triage), ⚪ Blanco (reparación triage), 🔴 Rojizo (correctivo propio), 🔴📏 Rojo línea (correctivo externo viene), 🟡 Amarillento (taller propio), 🔵 Azul (enviado a proveedor)
+- Móvil <768px → Bottom nav con 5 items: Home, OTs, Activos, Repuestos, KPIs
+- Touch targets 44x44px (WCAG AA compliance)
+- Icon con label + badge de notificaciones (ej: OTs (5))
+
+**Por qué funciona:** Carlos puede navegar con una mano, touch targets accesibles
 
 ---
 
-#### 2. Búsqueda Predictiva Universal (Spotify)
+**2. Lateral Navigation (Desktop) - De Trello/Asana**
 
-**Patrón:**
-- Input de texto con autocompletado en tiempo real
-- Resultados contextuales con información relevante
-- Un toque/selección para acción principal
-- Debouncing (300ms) para optimizar performance
+**Patrón:** Sidebar izquierdo con navegación principal
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Encontrar equipos, repuestos, OTs
-- **Resuelve:** Rapidez en reporte de averías (<30 segundos)
-- **Implementación:**
-  - Carlos escribe "perfi" → "Perfiladora P-201" aparece instantáneamente
-  - Muestra stock, ubicación (Estante A3, Cajón 3)
-  - Un toque para seleccionar
-- **Performance objetivo:** <200ms para resultados
+- Desktop >1200px → Nav lateral con 7 items: Dashboard, Kanban, Mis OTs, Activos, Stock, KPIs, Usuarios
+- Colapsable a iconos solo
+- Highlight de módulo activo
+
+**Por qué funciona:** Elena y Javier tienen acceso rápido a todos los módulos
 
 ---
 
-**Patrones de Interacción:**
+**3. Tab Bar with Badges - De Gmail/Slack**
 
-#### 3. Transparencia de Estado (WhatsApp)
-
-**Patrón:**
-- Confirmación visual inmediata en cada acción
-- Notificaciones push proactivas
-- Estados visibles (enviado ✓, entregado ✓✓, visto ✓✓✓)
+**Patrón:** Pestañas con número de notificaciones (ej: "Chats (3)")
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Feedback loop del operario
-- **Resuelve:** "¿Para qué reporto si nadie hace caso?"
-- **Implementación:**
-  - Carlos toca "Enviar" → "✓ Aviso #AV-234 recibido - Evaluando"
-  - Notificación push: "Tu aviso fue autorizado - OT asignada a María"
-  - Notificación push: "OT en progreso - María está trabajando"
-  - Notificación push: "OT completada - ¿Confirma que funciona bien?"
+- "Mis OTs" → badge con número de OTs asignadas (ej: "Mis OTs (5)")
+- "Kanban" → badge con OTs pendientes de triage (ej: "Kanban (12)")
+- "Stock" → badge con ítems críticos (ej: "Stock (3)")
+
+**Por qué funciona:** María ve rápidamente cuántas OTs tiene asignadas
 
 ---
 
-#### 4. Modal ℹ️ de Detalle Completo (Trello)
+**Patrones de Interacción**
 
-**Patrón:**
-- Un clic en elemento → modal se abre con toda la información
-- Información organizada en secciones
-- Acciones disponibles dentro del modal
-- Cierre con ESC o click fuera
+**1. Drag-and-Drop con Visual Feedback - De Trello**
+
+**Patrón:** Arrastrar tarjeta → sombra + opacidad → drop zone highlight → soltar
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Trazabilidad completa de OT
-- **Resuelve:** "Un clic y tengo toda la historia"
-- **Implementación:**
-  - Javier toca tarjeta OT → modal ℹ️ se abre
-  - Muestra: fechas, origen (Carlos), técnico asignado (María), repuestos usados, proveedor, teléfono
-  - Click-to-call desde modal (llamar a técnico o proveedor)
-  - Historial completo de intervenciones previas en ese equipo
+- Javier arrastra OT "Pendiente" → tarjeta se vuelve semitransparente
+- Columna "Asignada" se highlight (border + fondo sutil)
+- Soltar → dropdown "Asignar a:" aparece
+- Undo automático (5 segundos) por si acaso
+
+**Por qué funciona:** Asignación visual en 5 segundos vs formulario de 2-3 minutos
 
 ---
 
-#### 5. Notificaciones Push Inteligentes (Slack)
+**2. Search Predictive con Autocomplete - De Google Maps/Amazon**
 
-**Patrón:**
-- Notificaciones solo para eventos importantes
-- Usuario no necesita "preguntar" qué pasó
-- Un toque para ver detalles
-- Silencio = no hay novedades (no spam)
+**Patrón:** Escribir 3 caracteres → suggestions inmediatas con contexto
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Transiciones de estado, alertas accionables
-- **Resuelve:** Usuario siempre sabe qué pasa sin abrir app
-- **Implementación:**
-  - Carlos: Notificaciones push en cada transición de su aviso
-  - Pedro: Alertas solo stock mínimo (NO por cada uso de repuesto)
-  - Elena: Alertas accionables (stock mínimo, MTFR alto, rutinas no completadas)
-  - Silencio = sistema funciona, no hay problemas
+- Carlos escribe "pren" (3 caracteres)
+- Sistema muestra: "Prensa PH-500 (Panel Sandwich, Línea 2, Última avería: hace 3 días)"
+- Highlighting de término buscado: "**Pren**sa PH-500"
+- Flechas arriba/abajo + Enter para selección rápida
+
+**Por qué funciona:** Reporte de avería en 30 segundos vs 2-5 minutos actuales
 
 ---
 
-**Patrones Visuales:**
+**3. Modal ℹ️ con Info Completa - De Trello/Google Maps**
 
-#### 6. Código de Colores Visual (Trello)
-
-**Patrón:**
-- Colores semánticos para categorías
-- Identificación instantánea sin leer texto
-- Leyenda/tooltips para claridad
-- Iconos + color (no solo color por accesibilidad)
+**Patrón:** Click en tarjeta → modal con toda la información en 1 lugar
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** Diferenciación rápida de tipos de OT, estados, prioridades
-- **Resuelve:** Identificación instantánea en Kanban
-- **Implementación:**
-  - Tipos de OT: 🌸 Rosa (avería triage), ⚪ Blanco (reparación triage), 🔴 Rojizo (correctivo propio), 🔴📏 Rojo línea (correctivo externo), 🟡 Amarillento (taller propio), 🔵 Azul (enviado a proveedor)
-  - Prioridades: 🔴 Urgente, 🟡 Media, 🟢 Baja
-  - Estados: 🟢 Completada, 🟡 En Progreso, 🔴 Pendiente
-  - Tooltips en modal ℹ️ con leyenda completa
+- Javier ve tarjeta OT en Kanban → toca icono ℹ️
+- Modal scrollable con timeline vertical:
+  - 09:03 - Carlos reportó avería
+  - 09:10 - Javier autorizó OT
+  - 09:12 - Asignado a María + Juan
+  - 09:15 - María inició OT
+  - En progreso - Repuestos usados: Rodamiento SKF-6208 (Stock: 11)
+  - ETA: 12:00 - Completado
+
+**Por qué funciona:** Javier responde "¿Qué pasa con la Prensa?" en 10 segundos
 
 ---
 
-#### 7. KPIs con Flechas de Tendencia (Apps de Finanzas)
+**4. Push Notifications con Acción - De WhatsApp/Telegram**
 
-**Patrón:**
-- Números grandes con flechas ↑↓
-- Comparación vs período anterior
-- Colores semánticos (verde = mejora, rojo = empeoramiento)
-- Un toque para drill-down
+**Patrón:** Notificación con preview + acción (responder, marcar como leído)
 
 **Aplicación a gmao-hiansa:**
-- **Funciona para:** MTTR/MTBF con tendencias
-- **Resuelve:** Elena entiende métricas sin ser experta en datos
-- **Implementación:**
-  - Dashboard: MTTR 4.2h (↓15% vs mes anterior) - verde
-  - Dashboard: MTBF 127h (↑8% vs mes anterior) - verde
-  - Un toque en MTTR → drill-down: Global → Planta → Línea → Equipo
+- Notificación: "Tu aviso #456 fue autorizado. OT asignada a María"
+- Carlos toca notificación → App abre directamente en OT #456
+- Botones de acción rápida: "Confirmar que funciona" (Sí/No)
+
+**Por qué funciona:** Carlos siente "mi voz importa" sin abrir la app
 
 ---
+
+**5. Swipe Gestures - De Gmail/Mailbox**
+
+**Patrón:** Swipe right = archivar, swipe left = borrar
+
+**Aplicación a gmao-hiansa:**
+- Móvil <768px: Swipe horizontal para cambiar columnas Kanban
+- Swipe right → Siguiente columna (Pendiente → En Progreso)
+- Swipe left → Columna anterior (En Progreso → Pendiente)
+- Indicador visual: "1/3" (columna 1 de 3)
+
+**Por qué funciona:** Carlos puede navegar Kanban con una mano
+
+---
+
+**Patrones Visuales**
+
+**1. Código de Colores con Labels - De Trello/Asana**
+
+**Patrón:** Colores semánticos + texto redundante (ej: 🔴 Urgente + texto)
+
+**Aplicación a gmao-hiansa:**
+- 7 tipos de OT con icon + color + texto:
+  - 🌸 Rosa (Avería Triage) + "Avería"
+  - ⚪ Blanco (Reparación Triage) + "Reparación"
+  - 🟢 Verde (Preventivo) + "Preventivo"
+  - 🔴 Rojizo (Correctivo propio) + "Correctivo"
+  - 🔴📏 Rojo con línea (Correctivo externo viene) + "Externo"
+  - 🟠 Naranja (Taller propio) + "Taller propio"
+  - 🔵 Azul (Enviado a proveedor) + "Externo"
+
+**Por qué funciona:** WCAG AA compliance, daltónicos pueden distinguir
+
+---
+
+**2. Avatar Stacks - De Slack/Asana**
+
+**Patrón:** Avatares superpuestos (ej: "👤👤👤+2") para múltiples asignados
+
+**Aplicación a gmao-hiansa:**
+- OT con 3 técnicos → avatares superpuestos: [Avatar1][Avatar2][Avatar3]
+- Si >3 técnicos → [Avatar1][Avatar2][Avatar3]+2
+- Click en avatar stack → dropdown con todos los asignados
+
+**Por qué funciona:** Javier ve rápidamente cuántos técnicos en cada OT
+
+---
+
+**3. Progress Indicators - De Uber/Strava**
+
+**Patrón:** Barra de progreso + porcentaje (ej: "65% completado")
+
+**Aplicación a gmao-hiansa:**
+- OT en progreso → barra de progreso basada en tiempo estimado
+- "Tiempo transcurrido: 45 min | Tiempo estimado: 2h | 37% completado"
+- Color de progreso: Verde (en tiempo), Naranja (atrasado), Rojo (crítico)
+
+**Por qué funciona:** María ve cuánto falta para completar OT
+
+---
+
+**4. Trending Icons - De Google Analytics**
+
+**Patrón:** ⬆️ verde (mejora), ⬇️ rojo (empeor)
+
+**Aplicación a gmao-hiansa:**
+- MTTR 4.2h ⬇️ 15% (flecha hacia abajo verde - mejora)
+- MTBF 127h ⬆️ 8% (flecha hacia arriba verde - mejora)
+- OTs abiertas 23 ⬇️ 5 (flecha hacia abajo verde - mejora)
+
+**Por qué funciona:** Elena ve rápidamente si KPIs mejoran o empeoran
 
 ### Anti-Patterns to Avoid
 
-Basándome en el análisis de GMAOs existentes (IBM Maximo, SAP PM, Infraspeak, Fracttal) y patrones enterprise que frustran a usuarios:
+**Basado en el análisis de apps exitosas y el contexto de gmao-hiansa, identifico estos anti-patrones a evitar:**
 
-#### 1. Bloatware Funcional (500+ Características)
+**1. Formularios Largos con Múltiples Pantallas**
 
-**Anti-Patrón:**
-- Sistemas con 500+ características que nunca se usarán
-- Curva de aprendizaje alta (semanas de formación)
-- Pantallas llenas de opciones que confunden
+**Anti-patrón:** "Regístrate en 7 pasos" con datos innecesarios
 
-**Por qué usuarios lo odian:**
-- Abandono del sistema por sobrecarga
-- Resistencia al cambio ("es muy complicado")
-- 80% de features nunca se usan
+**Por qué evitar:** Carlos abandonará si el reporte de avería toma >2 minutos
 
-**Cómo evitarlo en gmao-hiansa:**
-- MVP con 12 funcionalidades core
-- No agregar "nice-to-haves" hasta validar necesidad real
-- Principio: "Acción mínima, máximo valor"
+**Solución:** Formulario de 1 campo (equipo) + descripción + foto opcional → <30 segundos
+
+**Apps que lo hacen bien:** WhatsApp (registro solo con número), Telegram (nombre opcional)
 
 ---
 
-#### 2. Formularios Largos de 10+ Campos
+**2. Sin Confirmación Visual de Acciones**
 
-**Anti-Patrón:**
-- Crear OT requiere llenar formulario con 10+ campos
-- Campos obligatorios no relevantes para usuario
-- Validaciones complejas que frustran
+**Anti-patrón:** Usuario toca "Guardar" → no pasa nada visible → "¿Se guardó?"
 
-**Por qué usuarios lo odian:**
-- "Es muy lento, mejor uso WhatsApp"
-- Abandono a mitad de formulario
-- Llamadas de soporte constantes
+**Por qué evitar:** Genera escepticismo y duda en el sistema
 
-**Cómo evitarlo en gmao-hiansa:**
-- Drag-and-drop vs formularios
-- Autocompletado vs escribir texto completo
-- Un clic vs múltiples clicks
-- Principio: Minimal Action, Maximum Value
+**Solución:** Confirmación <3s: "✓ Aviso #456 recibido" + número de referencia
+
+**Apps que lo hacen bien:** WhatsApp (check azul ✓), Gmail (Mensaje enviado)
 
 ---
 
-#### 3. Navegación Profunda (5+ Niveles de Menús)
+**3. Información Fragmentada en Múltiples Pantallas**
 
-**Anti-Patrón:**
-- Usuario debe navegar 5+ niveles para encontrar función
-- Breadcrumb confuso o inexistente
-- No sabe dónde está en el sistema
+**Anti-patrón:** Para ver detalles de OT, navegar 3-4 pantallas diferentes
 
-**Por qué usuarios lo odian:**
-- "No encuentro nada"
-- Se pierden, frustración
-- Llamadas de soporte
+**Por qué evitar:** Javier pierde tiempo respondiendo "¿Qué pasa con la Prensa?"
 
-**Cómo evitarlo en gmao-hiansa:**
-- Contexto sobre navegación
-- Modal ℹ️ con drill-down simple
-- Información relevante donde se necesita
-- Principio: Context over Navigation
+**Solución:** Modal ℹ️ con toda la información en 1 clic
+
+**Apps que lo hacen bien:** Trello (modal con toda la info de la tarjeta), Google Maps (modal con lugar)
 
 ---
 
-#### 4. Listados Interminables sin Filtros
+**4. Búsqueda Lenta sin Suggestions**
 
-**Anti-Patrón:**
-- Usuario busca manualmente entre 10,000 items
-- Sin búsqueda predictiva
-- Sin filtros relevantes
+**Anti-patrón:** Usuario escribe nombre completo + Enter → spinner de carga >1 segundo
 
-**Por qué usuarios lo odian:**
-- Búsqueda toma >5 minutos
-- Frustración extrema
-- Abandono del sistema
+**Por qué evitar:** Carlos no reportará si tarda >2 minutos en buscar equipo
 
-**Cómo evitarlo en gmao-hiansa:**
-- Búsqueda predictiva <200ms
-- Filtros visuales por estado, técnico, fecha, tipo
-- Resultados ordenados por relevancia
-- Principio: Rapidez de Feedback
+**Solución:** Búsqueda predictiva <200ms con autocomplete
+
+**Apps que lo hacen bien:** Google Maps (suggestions inmediatos), Amazon (autocomplete con contexto)
 
 ---
 
-#### 5. Notificaciones Spam (Cada Cambio, Cada Actualización)
+**5. Código de Colores sin Texto Redundante**
 
-**Anti-Patrón:**
-- Usuario recibe notificación por cada cambio menor
-- 50+ notificaciones/día
-- Usuario las ignora o desactiva
+**Anti-patrón:** Solo colores para diferenciar OTs (rojo, verde, naranja)
 
-**Por qué usuarios lo odian:**
-- "Demasiado spam, mejor ignorar todo"
-- Pierde valor de alertas reales
-- Desactivan notificaciones completamente
+**Por qué evitar:** Daltónicos no pueden distinguir + ilegible en luz de fábrica
 
-**Cómo evitarlo en gmao-hiansa:**
-- Solo alertas accionables (stock mínimo)
-- Notificaciones push solo transiciones de estado
-- Silencio = sistema funciona
-- Principio: Transparencia sin spam
+**Solución:** Icon + color + texto (🔴 Correctivo + "Correctivo")
+
+**Apps que lo hacen bien:** Trello (labels con icon + color + texto), GitHub (labels con texto)
 
 ---
 
-#### 6. Sistemas Opacos (Sin Visibilidad de Estado)
+**6. Notificaciones Spam**
 
-**Anti-Patrón:**
-- Usuario envía algo y nunca sabe qué pasó
-- Sin notificaciones de progreso
-- Estados ocultos o confusos
+**Anti-patrón:** Notificación por cada acción de otros usuarios
 
-**Por qué usuarios lo odian:**
-- "¿Para qué reporto?", abandono
-- "¿Se envió o no?", ansiedad
-- "Nadie hace caso", impotencia
+**Por qué evitar:** Pedro ignorará todas las notificaciones si recibe spam por cada uso de repuesto
 
-**Cómo evitarlo en gmao-hiansa:**
-- Transparencia radical (notificaciones push en cada transición)
-- Dashboard público (todos mismos datos)
-- Estados visibles y claros
-- Principio: Radical Transparency
+**Solución:** Notificaciones silenciosas (stock actualizado) + alertas solo stock mínimo
+
+**Apps que lo hacen bien:** Slack (puedes silenciar canales), Gmail (notificaciones agrupadas)
 
 ---
 
-#### 7. Interfaces Abstractas sin Contexto Visual
+**7. Sin Undo en Acciones Críticas**
 
-**Anti-Patrón:**
-- Listados de texto interminables
-- Sin código de colores
-- Sin elementos visuales
+**Anti-patrón:** Usuario arrastra OT a columna equivocada → no puede deshacer
 
-**Por qué usuarios lo odian:**
-- "No entiendo qué estoy viendo"
-- Curva de aprendizaje alta
-- How-to guides de 50 páginas
+**Por qué evitar:** Genera ansiedad y resistencia al uso de drag-and-drop
 
-**Cómo evitarlo en gmao-hiansa:**
-- Visual first (código de colores)
-- Kanban visual vs listados
-- Drag-and-drop intuitivo
-- Principio: Visual First
+**Solución:** Undo automático (5 segundos) + botón "Deshacer"
 
----
+**Apps que lo hacen bien:** Gmail (Undo 5 segundos después de enviar), Trello (undo de acciones)
 
 ### Design Inspiration Strategy
 
-**Qué Adoptar (Tal Cual):**
+**Qué Adoptar:**
 
-1. **Transparencia de Estado de WhatsApp** → Notificaciones push en cada transición
-   - **Por qué:** Soporta objetivo emocional "mi voz importa"
-   - **Alinea con:** Feedback inmediato, transparencia radical
-   - **Implementación:**
-     - Carlos: "✓ Aviso recibido" → "Tu aviso fue autorizado" → "OT en progreso" → "OT completada - ¿Confirma?"
-     - Confirmación visual en cada acción
+**1. Confirmación Visual Inmediata (WhatsApp/Telegram)**
+- **Por qué:** Soporta objetivo emocional "Mi voz importa" (Validación)
+- **Implementación:** Confirmación <3s con número de aviso tras reportar avería
+- **Métrica de éxito:** Tasa de "first-time success" >95%
 
-2. **Kanban Visual de Trello** → Drag-and-drop para asignación de OTs
-   - **Por qué:** Soporta objetivo emocional "tengo control"
-   - **Alinea con:** Acción mínima, máximo valor, visual first
-   - **Implementación:**
-     - 8 columnas con código de colores
-     - Arrastrar tarjeta a técnico = assigned
-     - Modal ℹ️ con trazabilidad completa
+**2. Kanban Visual con Drag-and-Drop (Trello/Asana)**
+- **Por qué:** Soporta objetivo emocional "Tengo el control" (Confianza)
+- **Implementación:** 8 columnas con código de colores, asignación en 5 segundos
+- **Métrica de éxito:** Tiempo de asignación <5 segundos
 
-3. **Búsqueda Predictiva de Spotify** → Autocompletado instantáneo de equipos
-   - **Por qué:** Soporta objetivo "rapidez (<30 segundos para reportar)"
-   - **Alinea con:** Rapidez de feedback, búsqueda <200ms
-   - **Implementación:**
-     - Autocompletado mientras escribe (debouncing 300ms)
-     - Resultados contextuales (stock, ubicación)
-     - Un toque para seleccionar
+**3. Búsqueda Predictiva <200ms (Google Maps/Amazon)**
+- **Por qué:** Soporta objetivo emocional "Eficiencia" (Productividad)
+- **Implementación:** Autocomplete con contexto (ubicación, estado, historial)
+- **Métrica de éxito:** Tiempo de búsqueda <200ms
 
----
+**4. Modal ℹ️ con Toda la Info (Trello/Google Maps)**
+- **Por qué:** Soporta principio "Menos clics = más productividad"
+- **Implementación:** Timeline, técnicos, repuestos, proveedor en 1 clic
+- **Métrica de éxito:** Tiempo de respuesta a consultas <30 segundos
 
-**Qué Adaptar (Modificar para Requisitos Únicos):**
-
-1. **Modal ℹ️ de Trello** → Adaptar con trazabilidad completa + click-to-call
-   - **Modificación:** Añadir teléfono de técnico/proveedor para llamar directamente
-   - **Por qué:** Javier necesita contactar técnicos/proveedores rápidamente en ambiente industrial
-   - **Implementación:**
-     - Modal muestra: fechas, origen, técnico, repuestos, proveedor
-     - Click-to-call: Teléfono del técnico en campo, teléfono del proveedor
-     - Historial completo de intervenciones previas en ese equipo
-
-2. **Canales de Slack** → Adaptar a columnas de Kanban por estado
-   - **Modificación:** 8 columnas específicas de ciclo de vida de OT
-   - **Por qué:** Workflow de mantenimiento industrial tiene estados específicos
-   - **Implementación:**
-     - Pendientes Triage → Asignaciones (dividida) → En Progreso → Pendiente Repuesto → Pendiente Parada → Reparación Externa → Completadas → Descartadas
-     - Código de colores por tipo de OT y estado
-
-3. **KPIs de Apps de Finanzas** → Adaptar a MTTR/MTBF con drill-down jerárquico
-   - **Modificación:** Drill-down específico para estructura de empresa metalúrgica
-   - **Por qué:** Empresa tiene dos plantas con líneas y equipos específicos
-   - **Implementación:**
-     - Un toque en MTTR → drill-down: Global → Planta (Acero/Panel) → Línea → Equipo
-     - Flechas ↑↓ vs mes anterior
-     - Colores semánticos (verde = mejora, rojo = empeoramiento)
+**5. Código de Colores con Labels (Trello/Asana)**
+- **Por qué:** WCAG AA compliance + ambiente industrial
+- **Implementación:** Icon + color + texto para cada tipo de OT
+- **Métrica de éxito:** Asignación correcta de técnicos >95%
 
 ---
 
-**Qué Evitar (Anti-Patrones):**
+**Qué Adaptar:**
 
-1. **Bloatware de Maximo/SAP** → 500+ características que nunca se usarán
-   - **Por qué:** Entra en conflicto con objetivo "rapidez y simplicidad"
-   - **No encaja con:** Usuarios con conocimientos tech básicos/medios (Carlos, María)
-   - **Estrategia:** MVP con 12 funcionalidades core, crecimiento progresivo según necesidad real
+**1. Bottom Navigation (WhatsApp) → Simplificar para Gmao**
+- **Adaptación:** Solo 5 items (vs 4-5 en WhatsApp)
+- **Por qué:** Carlos necesita acceso rápido: Home, OTs, Activos, Repuestos, KPIs
+- **Implementación:** Bottom nav con icon + label + badges de notificaciones
 
-2. **Formularios Largos de Enterprise Apps** → 10+ campos para crear OT
-   - **Por qué:** Crea fricción, usuarios abandonan sistema
-   - **No encaja con:** Principio "acción mínima, máximo valor"
-   - **Estrategia:** Drag-and-drop, autocompletado, un clic vs múltiples clicks
+**2. Push Notifications (WhatsApp) → Añadir Contexto de Mantenimiento**
+- **Adaptación:** No solo "Mensaje recibido" sino "Tu aviso #456 fue autorizado. OT asignada a María."
+- **Por qué:** Carlos necesita saber el progreso de su avería, no solo que fue recibida
+- **Implementación:** Notificaciones con número de OT + estado + técnicos asignados
 
-3. **Navegación Profunda de ERPs** → 5+ niveles de menús
-   - **Por qué:** Crea confusión, usuario se pierde
-   - **No encaja con:** Plataforma PWA where contexto es clave
-   - **Estrategia:** Contexto sobre navegación, modal ℹ️, drill-down simple
+**3. Dashboards (Google Analytics) → Simplificar KPIs para Fábrica**
+- **Adaptación:** Solo 4 KPIs core (MTTR, MTBF, OTs abiertas, Stock crítico) vs 20+ en Analytics
+- **Por qué:** Elena necesita claridad, no sobrecarga de información
+- **Implementación:** Dashboard público sin datos sensibles, drill-down para análisis avanzado
+
+---
+
+**Qué Evitar:**
+
+**1. Onboarding Largo (Apps de Banca)**
+- **Por qué:** Carlos abandonará si el tutorial toma >30 segundos
+- **Solución:** Tutorial de 30 segundos + "Empecemos"
+- **Alternativa:** Onboarding contextual (tooltips en primer uso)
+
+**2. Múltiples Pantallas para Ver Detalles (ERPs Legados)**
+- **Por qué:** Javier pierde tiempo buscando información
+- **Solución:** Modal ℹ️ con toda la info en 1 clic
+- **Alternativa:** Vista detallada opcional para casos raros
+
+**3. Notificaciones Spam (Algunas Apps de Social)**
+- **Por qué:** Pedro ignorará alertas importantes
+- **Solución:** Notificaciones silenciosas + alertas solo stock mínimo
+- **Alternativa:** Preferencias configurables por tipo de notificación
 
 ## Design System Foundation
 
 ### Design System Choice
 
-**Sistema de Diseño Seleccionado:** **Tailwind CSS + Shadcn/ui (Radix UI)**
+**shadcn/ui + Tailwind CSS** ⭐
 
-Para **gmao-hiansa**, he seleccionado **Tailwind CSS + Shadcn/ui** como fundación del sistema de diseño. Esta combinación proporciona el balance óptimo entre velocidad de desarrollo (crítico para MVP 3-4 meses) y diferenciación visual profesional industrial (necesario para distinguirse de GMAOs genéricos como IBM Maximo, SAP PM, Infraspeak, Fracttal).
+Para **gmao-hiansa**, hemos seleccionado **shadcn/ui + Tailwind CSS** como base del sistema de diseño.
 
-**Por qué Tailwind CSS + Shadcn/ui:**
+**Shadcn/ui** es una colección de componentes reutilizables construidos con Radix UI y Tailwind CSS, diseñados para ser copiados y pegados directamente en tu proyecto (no es una dependencia npm tradicional).
 
-1. **Velocidad + Unicidad Visual:**
-   - Componentes copiables de Shadcn/ui ("copy and paste" - own the code)
-   - Flexibilidad completa de Tailwind para identidad visual única
-   - No parecemos "otra app de Google" (MUI) ni "otro enterprise genérico" (Ant)
-
-2. **Kanban Profesional Industrial:**
-   - Drag-and-drop fluido con `dnd-kit` + Radix Primitives
-   - Código de colores custom específico para OTs (🌸 Rosa, ⚪ Blanco, 🔴 Rojizo, 🔴📏 Rojo línea, 🟡 Amarillento, 🔵 Azul)
-   - Más flexible que sistemas rígidos para Kanban específico de mantenimiento
-
-3. **Búsqueda Predictiva Ultra-Rápida (<200ms):**
-   - Shadcn `Command` component (Cmd+K style)
-   - Debouncing optimizado
-   - UX similar a VS Code / Spotify (búsqueda instantánea)
-
-4. **Team Size 1 Developer:**
-   - Componentes simples, documentación clara
-   - "Copy and paste" = owner del código (no dependency hell)
-   - Mantenible a largo plazo por 1 persona
-
-5. **Identity Industrial Professional Única:**
-   - Tailwind utility-first CSS permite branding sin restricciones
-   - No hereda visual genérico de otras empresas
-   - Diferenciación clara de competidores enterprise
+**Tailwind CSS** es un framework de utility-first CSS que permite construir interfaces personalizadas rapidamente sin abandonar tu HTML.
 
 ---
 
 ### Rationale for Selection
 
-**Comparación con Opciones Alternativas:**
+**1. Velocidad de Desarrollo**
 
-| Sistema | Ventaja | Desventaja | Por qué NO |
-|--------|----------|------------|------------|
-| **MUI (Material UI)** | Desarrollo rápido, componentes enterprise completos | Visual "Google-like", poca diferenciación | Parecemos "otra app más", no identidad única industrial |
-| **Ant Design** | Excelente para enterprise, componentes ricos | Visual "corporate genérico", API compleja | Parecemos IBM Maximo/SAP, no diferenciación |
-| **Chakra UI** | Componentes themeables, API simple | Comunidad más pequeña, menos componentes | Menor ecosistema, más desarrollo custom necesario |
-| **Tailwind + Shadcn/ui** ✅ | Máxima flexibilidad, componentes modernos | Curva aprendizaje moderada | **Balance óptimo: velocidad + unicidad** |
+**Problema:** gmao-hiansa necesita MVP rápido para transformar departamento reactivo a proactivo
 
-**Decision Factors:**
+**Solución:**
+- shadcn/ui proporciona 50+ componentes pre-construidos (Button, Input, Card, Dialog, Dropdown Menu, etc.)
+- Copiar/pegar código = No requiere configuración compleja
+- Desarrollo de componentes directamente en tu codebase = Full control
 
-1. **Velocidad de Desarrollo MVP (3-4 meses):**
-   - ✅ Shadcn/ui: Componentes copiables, desarrollo rápido
-   - ✅ Tailwind: Utility-first, no escribir CSS desde cero
-   - ⚠️ Trade-off: Curva de aprendizaje inicial vs velocidad a largo plazo
+**Resultado:** Timeline de desarrollo reducido en 40-60% vs construir componentes desde cero
 
-2. **Unicidad Visual vs. Velocidad:**
-   - Prioridad: **Balance** (velocidad importante pero identidad profesional crítica)
-   - Tailwind permite branding único sin sacrificar demasiado tiempo
-   - Shadcn/ui proporciona foundation sólida sin dictar visual
+---
 
-3. **Team Expertise (1 Developer Full-Stack):**
-   - ✅ Tailwind: Documentación clara, comunidad grande
-   - ✅ Shadcn/ui: "You own the code" - fácil mantenimiento
-   - ✅ React/Next.js: Stack alineado con expertise (single developer)
+**2. Profesionalismo sin "Look Genérico"**
 
-4. **Long-term Maintenance:**
-   - ✅ Ecosistema activo (Tailwind: 3M+ weekly downloads, Shadcn creciente)
-   - ✅ No vendor lock-in (código es tuyo)
-   - ✅ Actualizaciones regulares sin breaking changes drásticos
+**Problema:** gmao-hiansa no puede parecer "otro template más"
 
-5. **Integration Requirements:**
-   - ✅ Greenfield project (no integración con sistemas existentes)
-   - ✅ No restricciones de compatibilidad visual
-   - ✅ PWA-friendly (Tailwind purga CSS no usado, performance optimizado)
+**Solución:**
+- shadcn/ui no tiene "look" predeterminado, son componentes base
+- Tailwind CSS permite diseño visual único con utility classes
+- Customización total de colores, tipografía, espaciado, bordes, sombras
+
+**Resultado:** gmao-hiansa tendrá identidad visual única sin parecer "shadcn/ui default"
+
+---
+
+**3. WCAG AA Compliance Out-of-the-Box**
+
+**Problema:** Ambiente industrial con iluminación variable requiere accesibilidad no-negotiable
+
+**Solución:**
+- Radix UI primitives (base de shadcn/ui) = WCAG 2.1 AA compliant por defecto
+- Keyboard navigation (Tab, Enter, Esc) en todos los componentes interactivos
+- ARIA attributes incluidos en todos los componentes
+- Focus management automático
+
+**Resultado:** gmao-hiansa será accesible sin inversión adicional en testing de accesibilidad
+
+---
+
+**4. React-First y Moderno**
+
+**Problema:** gmao-hiansa es una PWA moderna en React
+
+**Solución:**
+- shadcn/ui construido específicamente para React (hooks, context, composition)
+- Server Components compatible (Next.js 13+)
+- TypeScript support incluido
+- Integración perfecta con React ecosystem (React Hook Form, Zod, etc.)
+
+**Resultado:** Desarrollo moderno con mejores prácticas de React
+
+---
+
+**5. Comunidad Activa y Documentación Excelente**
+
+**Problema:** Equipo pequeño necesita soporte y recursos
+
+**Solución:**
+- Documentación clara con ejemplos de código
+- Comunidad creciendo rápidamente (50K+ GitHub stars, 2024)
+- Integraciones probadas con React ecosystem (TanStack Table, React Hook Form, etc.)
+- Actualizaciones frecuentes con nuevas funcionalidades
+
+**Resultado:** Soporte garantizado a largo plazo
+
+---
+
+**6. Performance Optimizado**
+
+**Problema:** gmao-hiansa requiere carga <2s en dashboard KPIs
+
+**Solución:**
+- Tailwind CSS = CSS optimizado con PurgeCSS automático (solo CSS usado en producción)
+- Shadcn/ui components = No runtime overhead (copiados a tu codebase)
+- Tree-shaking friendly = Bundle size mínimo
+- Lazy loading compatible = Carga bajo demanda
+
+**Resultado:** gmao-hiansa cargará rápido incluso en conexiones industriales
 
 ---
 
 ### Implementation Approach
 
-**Fase 1: Setup Foundation (Semana 1)**
+**Fase 1: Setup Inicial (1-2 días)**
 
-**Instalación y Configuración:**
+**1.1 Instalación de Dependencias**
 
 ```bash
-# Install Tailwind CSS
+# Instalar Tailwind CSS
 npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
 
-# Install Shadcn/ui
+# Instalar shadcn/ui CLI
 npx shadcn-ui@latest init
-npx shadcn-ui@latest add button input card badge dialog command
-npx shadcn-ui@latest add table tabs toast dropdown-menu
+
+# Instalar dependencias de shadcn/ui
+npm install class-variance-authority clsx tailwind-merge
 ```
 
-**Configuración Tailwind (`tailwind.config.js`):**
+**1.2 Configuración de Tailwind CSS**
 
 ```javascript
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
-        // Primary: Azul para acciones principales
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#0066CC",      // #0066CC (Main Blue)
-          dark: "#004C99",         // #004C99 (Secondary Blue)
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
-        // Status: Semáforo (WCAG AA compliance)
-        success: {
-          DEFAULT: "#28A745",      // Green (OT completada, stock OK)
-          foreground: "#FFFFFF",
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
-        warning: {
-          DEFAULT: "#FFC107",      // Yellow (OT en progreso, stock bajo)
-          foreground: "#000000",
-        },
-        danger: {
-          DEFAULT: "#DC3545",      // Red (OT vencida, stock crítico, avería)
-          foreground: "#FFFFFF",
-        },
-        info: {
-          DEFAULT: "#17A2B8",       // Blue (información general)
-          foreground: "#FFFFFF",
-        },
-
-        // Neutral: Textos y fondos
-        border: "#DEE2E6",         // Borders, separators
-        input: "#DEE2E6",          // Input borders
-        ring: "#DEE2E6",           // Focus ring
-        background: "#F8F9FA",     // Backgrounds, cards
-        foreground: {
-          DEFAULT: "#212529",      // Text Primary
-          muted: "#6C757D",        // Text Secondary, labels
-        },
-
-        // OT Type Colors (código de colores Kanban)
-        "ot-averia-triage": "#EC4899",       // 🌸 Rosa (Avería Triage)
-        "ot-reparacion-triage": "#F3F4F6",    // ⚪ Blanco (Reparación Triage)
-        "ot-correctivo-propio": "#EF4444",    // 🔴 Rojizo (Correctivo Propio)
-        "ot-correctivo-externo": "#DC2626",   // 🔴📏 Rojo con Línea (Correctivo Externo)
-        "ot-taller-propio": "#F59E0B",        // 🟡 Amarillento (Taller Propio)
-        "ot-enviado-proveedor": "#3B82F6",     // 🔵 Azul (Enviado Proveedor)
-
-        // Priorities
-        "urgencia-critica": "#DC3545",
-        "urgencia-alta": "#FFC107",
-        "urgencia-media": "#F59E0B",
-        "urgencia-baja": "#28A745",
-      },
-      fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        // System UI fonts (San Francisco, Segoe UI, Roboto)
-      },
-      spacing: {
-        "44": "44px",  // Touch target mínimo WCAG AA
+        // ... más colores según PRD design system
       },
       borderRadius: {
-        "4px": "4px",  // Radio estándar para botones, cards
-      },
-      boxShadow: {
-        "card": "0 1px 3px rgba(0,0,0,0.1)",  // Sombra sutil cards
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },
@@ -1648,182 +1682,46 @@ module.exports = {
 }
 ```
 
-**Configuración Shadcn/ui (`components.json`):**
-
-```json
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "app/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils"
-  }
-}
-```
-
----
-
-**Fase 2: Core Components (Semana 2-3)**
-
-**Componentes Shadcn/ui a Instalar:**
-
-```bash
-# Core UI Components
-npx shadcn-ui@latest add button
-npx shadcn-ui@latest add input
-npx shadcn-ui@latest add card
-npx shadcn-ui@latest add badge
-npx shadcn-ui@latest add dialog       # Para modal ℹ️
-npx shadcn-ui@latest add dropdown-menu
-npx shadcn-ui@latest add toast        # Para notificaciones in-app
-npx shadcn-ui@latest add tabs         # Para rutinas, navegación
-npx shadcn-ui@latest add table        # Para listados de OTs
-npx shadcn-ui@latest add checkbox
-npx shadcn-ui@latest add radio-group
-npx shadcn-ui@latest add select
-npx shadcn-ui@latest add textarea
-npx shadcn-ui@latest add label
-```
-
-**Componentes Custom a Construir:**
-
-1. **SearchAutocomplete** (Búsqueda Predictiva)
-   - Basado en Shadcn `Command`
-   - Autocompletado <200ms
-   - Debouncing 300ms
-   - Muestra: equipo, stock, ubicación
-
-2. **OTCard** (Tarjeta de OT para Kanban)
-   - Componente custom con código de colores
-   - Drag-and-drop ready
-   - Touch target 44x44px
-
-3. **KPICard** (Tarjeta de KPI para Dashboard)
-   - Basado en Shadcn `Card`
-   - Números grandes + flechas ↑↓
-   - Click-to-drill-down
-
----
-
-**Fase 3: Specialized Components (Semana 4-8)**
-
-**1. Kanban Board con Drag-and-Drop**
-
-**Librerías:**
-```bash
-npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
-```
-
-**Componente `KanbanBoard`:**
-- 8 columnas: Pendientes Triage → Asignaciones → En Progreso → Pendiente Repuesto → Pendiente Parada → Reparación Externa → Completadas → Descartadas
-- Drag-and-drop fluido con `@dnd-kit/core`
-- Código de colores por tipo de OT
-- Modal ℹ️ con trazabilidad completa
-
-**2. KPIs Dashboard con Gráficos**
-
-**Librerías:**
-```bash
-npm install recharts
-```
-
-**Componentes:**
-- `KPICard`: Tarjeta con número grande, flecha ↑↓, click-to-drill-down
-- `MTTRChart`: Gráfico de línea para MTTR por período
-- `MTBFChart`: Gráfico de barras para MTBF por equipo
-- `OTsPieChart`: Pie chart para OTs por estado
-
-**3. Formularios Simples**
-
-**Componentes:**
-- `ReportarAveriaForm`: Formulario de 3 pasos (Datos básicos → Detalles → Confirmación)
-- Validación en tiempo real
-- Touch targets 44x44px
-- Autocomplete para equipos
-
----
-
-**Fase 4: PWA Components (Semana 9-12)**
-
-**Service Worker Setup:**
-```bash
-npm install next-pwa
-```
-
-**Configuración PWA (`next.config.js`):**
-```javascript
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-});
-
-module.exports = withPWA({
-  // ... other config
-});
-```
-
-**Manifest (`public/manifest.json`):**
-```json
-{
-  "name": "gmao-hiansa",
-  "short_name": "GMAO",
-  "description": "Gestión de Mantenimiento Asistido por Ordenador",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0066CC",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
-```
-
----
-
-### Customization Strategy
-
-**Design Tokens (Variables CSS):**
-
-Definir en `app/globals.css`:
+**1.3 Configuración de Design Tokens**
 
 ```css
+/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Spacing */
-    --radius: 0.5rem;
+    /* Colores según PRD Design System */
+    --background: 0 0% 100%; /* Blanco */
+    --foreground: 222.2 84% 4.9%; /* Negro suave */
 
-    /* Card */
-    --card-background: 0 0 0 1px rgba(0, 0, 0, 0.02), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --primary: 221.2 83.2% 53.3%; /* Azul Hiansa */
+    --primary-foreground: 210 40% 98%;
 
-    /* Typography */
-    --font-sans: 'Inter', system-ui, sans-serif;
+    --secondary: 210 40% 96.1%; /* Gris claro */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%; /* Gris muy claro */
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%; /* Acento sutil */
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%; /* Rojo error */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%; /* Borde sutil */
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    --radius: 0.5rem; /* 8px border radius */
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+    /* ... modo oscuro si es necesario */
   }
 }
 
@@ -1833,3476 +1731,1834 @@ Definir en `app/globals.css`:
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 ```
 
-**Component Patterns:**
-
-1. **Buttons:**
-   - Primary: `bg-primary text-primary-foreground h-11 px-8 py-2`
-   - Secondary: `border border-input bg-background hover:bg-accent`
-   - Danger: `bg-danger text-white h-11 px-8 py-2`
-
-2. **Cards:**
-   - `rounded-lg border bg-card text-card-foreground shadow-sm`
-   - Padding: `p-6` (desktop), `p-4` (móvil)
-
-3. **Inputs:**
-   - `flex h-11 w-full rounded-md border border-input bg-background px-3 py-2`
-   - Touch target: 44px altura (WCAG AA)
-
-4. **OT Cards (Kanban):**
-   - Background por tipo de OT (usando `bg-ot-correctivo-propio`, etc.)
-   - Badge de urgencia (rojo, amarillo, verde)
-   - Content mínimo: 120px altura
-
 ---
 
-**Responsive Breakpoints:**
+**Fase 2: Componentes Base (3-5 días)**
 
-```javascript
-// Tailwind breakpoints (ya incluidos)
-sm:   '640px',   // Móvil grande
-md:   '768px',   // Tablet
-lg:   '1024px',  // Desktop
-xl:   '1280px',  // Desktop grande
-'2xl': '1536px', // TV 4K
+**2.1 Instalar Componentes shadcn/ui Necesarios**
+
+```bash
+# Componentes core
+npx shadcn-ui@latest add button
+npx shadcn-ui@latest add input
+npx shadcn-ui@latest add card
+npx shadcn-ui@latest add dialog
+npx shadcn-ui@latest add dropdown-menu
+npx shadcn-ui@latest add select
+npx shadcn-ui@latest add table
+npx shadcn-ui@latest add badge
+npx shadcn-ui@latest add avatar
+npx shadcn-ui@latest add tooltip
+npx shadcn-ui@latest add toast
+npx shadcn-ui@latest add form
 ```
 
-**Layout Strategy:**
+**2.2 Estructura de Componentes**
 
-- **Desktop (>1200px):** Kanban 8 columnas, dashboard completo
-- **Tablet (768-1200px):** Kanban 2 columnas, dashboard adaptado
-- **Móvil (<768px):** 1 columna, navegación hamburguesa
-
----
-
-**Accessibility (WCAG AA):**
-
-1. **Contraste:** Todos los colores cumplen 4.5:1 mínimo
-2. **Text Resize:** Layout soporta 200% zoom
-3. **Touch Targets:** 44x44px mínimo
-4. **Keyboard Navigation:** Tab order lógico, focus indicators visibles
-5. **Screen Reader:** ARIA labels en elementos interactivos
-
----
-
-**Performance Optimization:**
-
-1. **Tree-shaking:** Tailwind purge CSS no usado
-2. **Code Splitting:** Next.js automatic code splitting
-3. **Image Optimization:** Next.js Image component
-4. **Font Optimization:** `next/font` para Inter
-5. **Bundle Size:** <200KB initial bundle (goal)
-
----
-
-**Next Steps:**
-
-1. **Setup Foundation:** Instalar Tailwind + Shadcn/ui (Semana 1)
-2. **Build Core Components:** Button, Input, Card, Modal (Semana 2-3)
-3. **Build Specialized Components:** Kanban Board, KPIs Dashboard (Semana 4-8)
-4. **PWA + Responsive:** Service worker, manifest, breakpoints (Semana 9-12)
+```
+src/
+├── components/
+│   ├── ui/                    # Componentes shadcn/ui (copiados)
+│   │   ├── button.tsx
+│   │   ├── input.tsx
+│   │   ├── card.tsx
+│   │   ├── dialog.tsx
+│   │   └── ...
+│   ├── kanban/               # Componentes custom de Kanban
+│   │   ├── kanban-board.tsx
+│   │   ├── kanban-column.tsx
+│   │   ├── kanban-card.tsx
+│   │   └── kanban-drag-drop.tsx
+│   ├── search/               # Componentes de búsqueda predictiva
+│   │   ├── search-predictive.tsx
+│   │   ├── search-suggestions.tsx
+│   │   └── search-highlighting.tsx
+│   ├── dashboard/            # Componentes de dashboard KPIs
+│   │   ├── dashboard-kpi-card.tsx
+│   │   ├── dashboard-chart.tsx
+│   │   └── dashboard-drill-down.tsx
+│   └── layout/               # Componentes de layout
+│       ├── app-header.tsx
+│       ├── bottom-nav.tsx    # Móvil
+│       ├── sidebar.tsx       # Desktop
+│       └── main-content.tsx
+```
 
 ---
 
-## Core User Experience
+**Fase 3: Custom Components (5-10 días)**
 
-### Defining Experience
+**3.1 Kanban Board Custom**
 
-**La Experiencia Defining de gmao-hiansa:**
+- **Basado en:** @dnd-kit/core (drag-and-drop)
+- **Componentes shadcn/ui utilizados:** Card, Button, Badge, Avatar, Dialog
+- **Customización:**
+  - 8 columnas responsive (Desktop 8, Tablet 2, Móvil 1)
+  - Drag-and-drop con visual feedback
+  - Swipe gestures para móvil
+  - Código de colores según tipo de OT
 
-> **"Reportar avería en 30 segundos y recibir notificaciones push en cada paso"**
+**3.2 Search Predictive Custom**
 
-Esta es la interacción core que, si la hacemos perfecta, todo lo demás sigue.
+- **Basado en:** CMDK (command palette) + Debounce
+- **Componentes shadcn/ui utilizados:** Input, Popover, Command
+- **Customización:**
+  - Autocomplete jerárquico (Planta → Línea → Equipo)
+  - Highlighting de término buscado
+  - Suggestions con contexto (ubicación, estado, historial)
+  - Debouncing 300ms + caché
 
-**Analogía con Productos Exitosos:**
+**3.3 Dashboard KPIs Custom**
 
-- **Tinder:** "Swipe para hacer match con personas"
-- **Snapchat:** "Comparte fotos que desaparecen"
-- **gmao-hiansa:** "Reportar avería y recibir feedback transparencia en cada paso"
-
-**¿Por qué es esta la experiencia defining?**
-
-1. **Es la acción que los usuarios describirán a sus amigos:**
-   - > "¡Es increíble! Reporto una avería y en 5 minutos me notifican que ya están trabajando en ella."
-
-2. **Es la interacción que hace que los usuarios se sientan exitosos:**
-   - Carlos piensa: "¡Qué rápido! 2 minutos y ya está reportado"
-   - María piensa: "Sé exactamente qué tengo que hacer hoy"
-   - Javier piensa: "Tengo control total de mi equipo"
-
-3. **Si acertamos en UNA cosa, esta debería ser:**
-   - **Feedback loop de transparencia:** Reportar → Recibir confirmación → Recibir notificaciones en cada transición → Validar solución
-
-**Impacto de acertar vs fallar:**
-
-| Si acertamos ✅ | Si fallamos ❌ |
-|-----------------|---------------|
-| Carlos usa app sistemáticamente | Carlos vuelve a WhatsApp |
-| Departamento tiene datos | Departamento sigue a ciegas |
-| Transformación cultural ocurre | Transformación cultural no ocurre |
-| Técnicos preguntan "¿cómo hacíamos antes sin esto?" | Sistema subutilizado, abandono |
+- **Basado en:** Recharts (gráficos) + TanStack Table (tablas)
+- **Componentes shadcn/ui utilizados:** Card, Button, Select, Badge
+- **Customización:**
+  - KPIs con trending icons (⬆️ verde, ⬇️ rojo)
+  - Drill-down interactivo (Global → Planta → Línea → Equipo)
+  - Exportar a Excel
+  - Actualización real-time (WebSockets)
 
 ---
 
-### User Mental Model
+### Customization Strategy
 
-**Mental Model que traen los usuarios (basado en su experiencia actual):**
+**1. Customización de Colores (Según PRD Design System)**
 
-#### Carlos (Operario)
+**Colores Semánticos:**
+- 🟢 Verde (#16a34a) - OT completada, stock OK
+- 🟠 Naranja (#ea580c) - OT en progreso, stock bajo
+- 🔴 Rojo (#dc2626) - OT vencida, stock crítico, error
+- 🔵 Azul (#2563eb) - Accent principal (Hiansa blue)
+- 🟣 Púrpura (#9333ea) - Mantenimiento reglamentario (Phase 1.5)
 
-**Estado Actual - Método Actual:**
-- Reporta por WhatsApp: "La perfiladora P-201 falló"
-- Nunca sabe si alguien leyó el mensaje
-- Pregunta 2 horas después: "¿Alguien vino a ver la perfiladora?"
-- Javier responde: "Sí, ya la asigné a María"
-- Carlos piensa: "Podrías haberme dicho..."
+**Implementación en Tailwind:**
 
-**Mental Model:**
-- **Espera:** Respuesta inmediata (como WhatsApp)
-- **Frustración:** "¿Para qué reporto si nadie hace caso?"
-- **Necesita:** Feedback inmediato y visibilidad de estado
-
-**Qué esperan sobre cómo debería funcionar:**
-- **Confirmación inmediata:** Como WhatsApp "✓ Visto" o "✓✓ Entregado"
-- **Notificaciones push:** Saber cuando hay actualización sin preguntar
-- **Simplicidad:** Un input, un botón de enviar
-
-**Dónde se confunden o frustren:**
-- Si reporta y no recibe confirmación → "¿Se envió o no?"
-- Si no recibe notificaciones → "Igual que WhatsApp, nadie hace caso"
-
----
-
-#### María (Técnica)
-
-**Estado Actual - Método Actual:**
-- Javier le llama: "María, ve a la perfiladora P-201, falló"
-- Busca en Excel: "¿Qué repuestos necesita?"
-- Llama a Pedro: "¿Tenemos el rodamiento SKF-6208?"
-- Pedro: "Sí, está en el estante A3"
-- Completa OT: "Listo"
-- Nadie confirma con Carlos si funciona
-
-**Mental Model:**
-- **Espera:** Lista clara de trabajo (como su agenda personal)
-- **Frustración:** "No sé qué tengo que hacer hoy"
-- **Necesita:** Organización y contexto completo
-
-**Dónde se confunden o frustran:**
-- Si lista de OTs es confusa → "Voy a preguntar a Javier como siempre"
-- Si falta información → "Necesito llamar a Pedro para stock"
+```javascript
+// tailwind.config.js - extend colors
+colors: {
+  ot: {
+    completed: '#16a34a',    // Verde
+    inProgress: '#ea580c',   // Naranja
+    overdue: '#dc2626',      // Rojo
+    preventive: '#22c55e',   // Verde claro
+    corrective: '#dc2626',   // Rojo oscuro
+    external: '#2563eb',     // Azul
+    internal: '#f97316',     // Naranja oscuro
+    reglamentary: '#9333ea', // Púrpura
+  }
+}
+```
 
 ---
 
-#### Javier (Supervisor)
+**2. Customización de Tipografía**
 
-**Estado Actual - Método Actual:**
-- Recibe 10+ WhatsApps con info desordenada
-- Llama a cada técnico para asignar: "¿Estás libre?"
-- Busca en pizarra Kanban física (puede estar desactualizada)
-- No sabe carga de trabajo real de cada técnico
+**Tipografía Base (según PRD):**
+- Font family: Inter (Google Fonts)
+- Font size base: 16px (desktop), 14px (tablet), 16px (móvil)
+- Line height: 1.5 (WCAG AA compliance)
+- Font weights: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
 
-**Mental Model:**
-- **Espera:** Control visual de carga de trabajo (como Kanban físico)
-- **Frustración:** "Voy apagando fuegos todo el día"
-- **Necesita:** Visibilidad total y asignación rápida
+**Implementación en Tailwind:**
 
-**Dónde se confunden o frustran:**
-- Si asignación requiere 5+ clicks → "Voy a llamarle, es más rápido"
-- Si no ve carga de trabajo → "No sé quién está libre u ocupado"
-
----
-
-#### Elena (Admin)
-
-**Estado Actual - Método Actual:**
-- Busca en 3 Excels diferentes para datos
-- No tiene indicadores reales
-- No puede fundamentar decisiones
-
-**Mental Model:**
-- **Espera:** Datos para tomar decisiones (como dashboard financiero)
-- **Frustración:** "No tengo indicadores reales"
-- **Necesita:** KPIs claros y drill-down
-
-**Dónde se confunden o frustran:**
-- Si dashboard es confuso → "Voy a buscar en los Excels como siempre"
-- Si requiere análisis complejo → "No entiendo estos datos"
+```javascript
+// tailwind.config.js - extend fontFamily
+fontFamily: {
+  sans: ['Inter', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'], // Para datos técnicos
+}
+```
 
 ---
 
-### Success Criteria
+**3. Customización de Espaciado**
 
-**¿Qué hace que los usuarios digan "esto simplemente funciona"?**
+**Espaciado Base (8px grid system):**
+- 4px = 0.25rem (muy pequeño)
+- 8px = 0.5rem (pequeño)
+- 12px = 0.75rem (medio-pequeño)
+- 16px = 1rem (medio - default)
+- 24px = 1.5rem (grande)
+- 32px = 2rem (muy grande)
 
-#### Para Carlos (Operario)
-
-1. **Rapidez:** Reporte completo en <30 segundos
-   - Búsqueda predictiva <200ms
-   - Descripción problema: 10 segundos
-   - Seleccionar urgencia: 2 segundos
-   - Enviar: 1 segundo
-   - Total: ~30 segundos
-
-2. **Confirmación inmediata:** "✓ Aviso #AV-234 recibido - Evaluando"
-   - Feedback visual en <500ms después de tocar "Enviar"
-   - Toast notification con ✓ verde
-
-3. **Notificaciones push:** Recibe actualización en cada transición
-   - "Tu aviso fue autorizado - OT asignada a María" (minutos después)
-   - "OT en progreso - María está trabajando" (horas después)
-   - "OT completada - ¿Confirma que funciona bien?" (al final)
-
-4. **Cierre de ciclo:** Validación del operario
-   - "OT completada - ¿Confirma que su perfiladora funciona bien?"
-   - Carlos toca "Sí, funciona bien"
-   - Sistema: "Gracias por tu reporte #AV-234"
-
-**Indicadores de Éxito:**
-- ✅ Carlos reporta en <30 segundos
-- ✅ Carlos recibe confirmación visual inmediata
-- ✅ Carlos recibe notificación en cada transición
-- ✅ Carlos valida solución al final
-- ✅ Carlos piensa: "¡Me escucharon! Mi voz importa."
+**Implementación:**
+- Tailwind ya incluye spacing scale basado en 4px
+- No requiere customización
 
 ---
 
-#### Para María (Técnica)
+**4. Customización de Componentes Shadcn/UI**
 
-1. **Lista clara:** Al abrir app, ve sus OTs priorizadas
-   - 5 OTs del día con prioridad (urgente primero)
-   - 2 rutinas de mantenimiento
-   - Cada OT muestra: equipo, ubicación, problema, repuestos necesarios
+**Estrategia:**
+- No modificar componentes `src/components/ui/*` directamente
+- Crear wrapper components con variantes específicas de gmao-hiansa
+- Ejemplo: `Button` de shadcn/ui → `PrimaryButton`, `SecondaryButton`, `DestructiveButton`
 
-2. **Contexto completo:** Toda la información relevante
-   - Modal ℹ️ con historial completo del equipo
-   - Stock visible al seleccionar repuesto
-   - Click-to-call desde modal
+**Ejemplo de Wrapper:**
 
-3. **Actualización simple:** Un botón ▶️ "Iniciar"
-   - Botón táctil 44x44px mínimo
-   - Feedback visual inmediato
-   - Tarjeta cambia a "En Progreso"
+```tsx
+// components/button-variants.tsx
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-**Indicadores de Éxito:**
-- ✅ María ve lista clara al abrir app
-- ✅ María tiene toda la información necesaria
-- ✅ María actualiza OT sin preguntar
-- ✅ María piensa: "Trabajo de forma profesional y organizada."
+export function PrimaryButton({ children, className, ...props }) {
+  return (
+    <Button
+      className={cn("bg-blue-600 hover:bg-blue-700", className)}
+      {...props}
+    >
+      {children}
+    </Button>
+  )
+}
 
----
-
-#### Para Javier (Supervisor)
-
-1. **Visibilidad total:** Ve carga de trabajo de todos los técnicos
-   - Kanban con columnas por técnico
-   - Contador de OTs: "María: 3 OTs, Ana: 5 OTs, Pedro: 2 OTs"
-   - Código de colores por tipo de OT
-
-2. **Asignación en 2 segundos:** Drag-and-drop fluido
-   - Arrastrar tarjeta OT sobre "María" → assigned
-   - Confirmación visual inmediata
-   - No requiere llamar al técnico
-
-3. **Alertas de balanceo:** Distribución eficiente
-   - "María tiene 8 OTs, Laura solo 2" (toast warning)
-   - Javier reasigna equitativamente
-
-**Indicadores de Éxito:**
-- ✅ Javier ve carga de trabajo completa
-- ✅ Javier asigna en <2 segundos sin llamar
-- ✅ Javier distribuye trabajo eficientemente
-- ✅ Javier piensa: "Tengo control total de mi equipo."
+export function DestructiveButton({ children, className, ...props }) {
+  return (
+    <Button
+      variant="destructive"
+      className={cn("bg-red-600 hover:bg-red-700", className)}
+      {...props}
+    >
+      {children}
+    </Button>
+  )
+}
+```
 
 ---
 
-#### Para Elena (Admin)
+**5. Componentes 100% Custom (No en shadcn/ui)**
 
-1. **KPIs claros:** Métricas ejecutivas visibles
-   - MTTR: 4.2h (↓15% vs mes anterior) - verde
-   - MTBF: 127h (↑8% vs mes anterior) - verde
-   - OTs Abiertas: 23 (↓5 vs mes anterior)
-   - Técnicos Activos: 5 (de 8 totales)
+**5.1 Kanban Board**
+- Razón: Requerimiento crítico de gmao-hiansa, no existe en shadcn/ui
+- Stack: @dnd-kit/core + shadcn/ui Card + Badge + Avatar
+- Customización: 8 columnas, código de colores, drag-and-drop, swipe gestures
 
-2. **Drill-down simple:** Un toque para profundizar
-   - Toca MTTR → Global → Planta → Línea → Equipo
-   - Identifica equipo problemático (Prensa PH-500 con MTTR 12h)
+**5.2 Search Predictive**
+- Razón: Búsqueda <200ms con autocomplete jerárquico es crítico
+- Stack: CMDK + Debounce + shadcn/ui Input + Popover
+- Customización: Suggestions con contexto, highlighting, caché
 
-3. **Exportar Excel:** Un botón para reporte
-   - Datos listos para presentación a dirección
+**5.3 Timeline de OT**
+- Razón: Componente específico de gmao-hiansa para modal ℹ️
+- Stack: shadcn/ui Card + Badge + Avatar
+- Customización: Timeline vertical con iconos de estado, fechas, usuarios
 
-**Indicadores de Éxito:**
-- ✅ Elena ve KPIs claros al abrir dashboard
-- ✅ Elena profundiza al equipo problemático
-- ✅ Elena exporta datos sin esfuerzo
-- ✅ Elena piensa: "Por primera vez tengo datos para fundamentar decisiones."
-
----
-
-### Novel UX Patterns
-
-**Análisis: ¿Usamos patrones establecidos o innovamos?**
-
-**Veredicto: Combinación de Patrones Establecidos + Innovación en Contexto**
+**5.4 Bottom Navigation (Móvil)**
+- Razón: shadcn/ui tiene Navigation Menu pero no Bottom Nav específico
+- Stack: shadcn/ui Button + Badge
+- Customización: 5 items, touch targets 44x44px, badges de notificaciones
 
 ---
 
-#### Patrones Establecidos que Adoptamos
+**6. Responsiveness Strategy**
 
-**1. Transparencia de Estado (WhatsApp)**
+**Breakpoints (según PRD):**
+- Móvil: <768px (1 columna Kanban, bottom nav)
+- Tablet: 768-1200px (2 columnas Kanban, nav simplificada)
+- Desktop: >1200px (8 columnas Kanban, nav lateral)
 
-- ✓ Confirmación visual: "Aviso recibido" ✓
-- ✓ Notificaciones push en cada transición
-- ✓ Código de estados (enviado, entregado, visto)
-- **Por qué adoptarlo:** Usuarios ya conocen este patrón, curva de aprendizaje cero
+**Implementación en Tailwind:**
 
-**2. Kanban Visual (Trello)**
-
-- ✓ Columnas con tarjetas
-- ✓ Drag-and-drop para mover tarjetas
-- ✓ Código de colores para categorización
-- **Por qué adoptarlo:** Javier ya usa Kanban físico, transición natural
-
-**3. Búsqueda Predictiva (Spotify)**
-
-- ✓ Autocompletado mientras escribes
-- ✓ Resultados contextuales con información relevante
-- ✓ Un toque/selección para acción principal
-- **Por qué adoptarlo:** Carlos usa Spotify, Netflix, conoce búsqueda instantánea
+```tsx
+// Ejemplo de componente responsive
+<div className="
+  grid grid-cols-1                    /* Móvil: 1 columna */
+  md:grid-cols-2                     /* Tablet: 2 columnas */
+  lg:grid-cols-4 xl:grid-cols-8      /* Desktop: 8 columnas */
+  gap-4                              /* Espaciado entre columnas */
+">
+  {/* Kanban columns */}
+</div>
+```
 
 ---
 
-#### Innovación en Contexto (Nuestro Twist Único)
+**7. Accessibility Strategy**
 
-**1. Feedback Loop Completo con Operario**
+**WCAG AA Compliance (no-negotiable):**
 
-**Qué lo hace diferente:**
-- La mayoría de GMAOs no incluyen validación del operario
-- Sistemas enterprise típicamente son opacos (solo técnicos/supervisores participan)
+- **Contraste mínimo 4.5:1** (texto normal sobre fondo)
+  - Shadcn/ui + Radix UI = Cumple por defecto
+  - Validar con: axe DevTools + Lighthouse
 
-**Cómo lo enseñamos:**
-- "OT completada - ¿Confirma que su perfiladora funciona bien?"
-- Metáfora familiar: Como WhatsApp "visto", tenemos "confirmación del operario"
+- **Touch targets mínimos 44x44px** (WCAG AA)
+  - Shadcn/ui Button = Cumple por defecto
+  - Custom components = Aplicar `min-h-[44px] min-w-[44px]`
 
-**Por qué es innovador:**
-- Operario participa en validación de calidad
-- Genera sentido de pertenencia: "mi voz importa"
-- Feedback loop → detectar reparaciones incompletas → mejora MTBF
+- **Keyboard navigation (Tab, Enter, Esc)**
+  - Shadcn/ui + Radix UI = Cumple por defecto
+  - Testing: Navegar toda la app sin mouse
 
----
-
-**2. Stock Visible al Seleccionar Repuesto**
-
-**Qué lo hace diferente:**
-- Sistemas típicos requieren navegar a página de inventario separada
-- Usuario debe ir a módulo "Stock", buscar repuesto, ver stock
-
-**Cómo lo enseñamos:**
-- Tooltip contextual al seleccionar repuesto
-- Muestra: "Rodamiento SKF-6208 (Stock: 12, 📍 Estante A3, Cajón 3)"
-- Metáfora familiar: Como Spotify muestra artista/álbum al buscar canción
-
-**Por qué es innovador:**
-- Contexto sobre navegación (no perder lugar en formulario)
-- María no llama a Pedro 10+ veces al día
-- Stock visible donde se necesita (al usar, no al buscar)
+- **Semantic HTML**
+  - Shadcn/ui usa elementos semánticos (`<button>`, `<input>`, etc.)
+  - Validar con: WAVE browser extension
 
 ---
 
-**3. KPIs con Drill-down Jerárquico Industrial**
+**8. Performance Optimization**
 
-**Qué lo hace diferente:**
-- Sistemas enterprise tienen dashboards complejos que abruman
-- Elena no es experta en datos, necesita simplicidad
+**Estrategia:**
 
-**Cómo lo enseñamos:**
-- Un toque para profundizar (Global → Planta → Línea → Equipo)
-- Metáfora familiar: Como folders en explorador de archivos
+- **PurgeCSS automático** (Tailwind CSS)
+  - Solo CSS usado en producción
+  - Bundle size reducido de 200KB+ a ~10KB
 
-**Por qué es innovador:**
-- KPIs accesibles para no-expertos (Elena)
-- Drill-down simple sin navegación profunda
-- Flechas ↑↓ vs mes anterior (visual, no numérico)
+- **Tree-shaking** (shadcn/ui)
+  - Solo componentes utilizados en bundle
+  - No overhead de librería completa
 
----
+- **Code splitting**
+  - Carga de componentes bajo demanda (React.lazy)
+  - Ejemplo: Dashboard KPIs solo se carga cuando se accede
 
-**4. Asignación Visual con Balanceo de Carga**
-
-**Qué lo hace diferente:**
-- Sistemas típicos requieren listados y cálculos manuales
-- Supervisor debe sumar OTs mentalmente o en Excel
-
-**Cómo lo enseñamos:**
-- Alerta "María tiene 8 OTs, Laura solo 2" al arrastrar tarjeta
-- Metáfora familiar: Como juegos donde ves niveles de carga
-
-**Por qué es innovador:**
-- Balanceo de carga visible sin cálculos manuales
-- Supervisor distribuye trabajo eficientemente
-- Equipo balanceado → técnicos no sobrecargados → mayor moral
+- **Lazy loading de imágenes**
+  - `next/image` (si Next.js) o `lqip` (low quality image placeholder)
+  - Placeholder borroso → Imagen completa
 
 ---
 
-### Experience Mechanics
+**9. Maintenance Strategy**
 
-**Mecánicas Detalladas de la Experiencia Defining**
+**Actualizaciones:**
 
----
+- **Shadcn/ui:** Copiar nuevos componentes cuando se necesiten
+- **Tailwind CSS:** Actualizar vía npm (breaking changes raros)
+- **Custom components:** Mantener en `src/components/` con tests
 
-#### Flujo 1: Carlos Reporta Avería
+**Documentación:**
 
-**1. Iniciación**
-
-- **Trigger:** Perfiladora P-201 falla a las 09:00
-- **Invitación:** Carlos saca móvil, abre app, ve botón grande "Reportar Avería"
-- **Motivación:** "Necesito que esto se arregle para seguir produciendo"
-
-**UI Elements:**
-- Botón: `bg-danger text-white h-14 w-full rounded-lg font-semibold` (touch target 56px)
-- Icono: ⚠️ (warning icon)
-- Texto: "Reportar Avería"
+- Storybook para documentar componentes custom (Kanban, Search, Timeline)
+- Componentes shadcn/ui = Documentación oficial
+- Tailwind CSS = Documentación oficial
 
 ---
 
-**2. Interacción**
+**10. Timeline Estimado**
 
-**Paso 1: Búsqueda de Equipo (<200ms)**
+- **Fase 1: Setup Inicial:** 1-2 días
+- **Fase 2: Componentes Base:** 3-5 días
+- **Fase 3: Custom Components:** 5-10 días
+- **Fase 4: Testing y Refinamiento:** 3-5 días
 
-- Carlos toca input "Buscar Equipo"
-- Placeholder: "Escribe nombre del equipo..."
-- Carlos escribe "perfi"
-- Sistema responde con autocompletado:
-  - "Perfiladora P-201 (Stock: 12, 📍 Estante A3, Cajón 3)"
-  - "Perfiladora P-202 (Stock: 8, 📍 Estante A3, Cajón 5)"
-- Carlos toca "Perfiladora P-201" → seleccionado
-
-**UI Elements:**
-- Input: `h-12 w-full px-4 border rounded-lg`
-- Dropdown: `absolute w-full bg-white border rounded-lg shadow-lg mt-1`
-- Debouncing: 300ms
+**Total:** 12-22 días (3-4 semanas) para sistema de diseño completo + componentes MVP
 
 ---
 
-**Paso 2: Descripción del Problema**
+**Conclusión:**
 
-- Input: "¿Qué falla?" (textarea multiline)
-- Carlos escribe: "No arranca, hace raro click-click"
-- Optional: Botón "📷 Adjuntar Foto" (si quiere tomar foto)
+shadcn/ui + Tailwind CSS proporciona el balance perfecto entre **velocidad de desarrollo** y **profesionalismo visual** para gmao-hiansa.
 
-**UI Elements:**
-- Textarea: `h-24 w-full px-4 py-2 border rounded-lg resize-none`
-- Foto button: `bg-neutral-200 text-neutral-700 h-10 px-4 rounded-lg`
+**Ventajas clave:**
+- WCAG AA compliance out-of-the-box (crítico para ambiente industrial)
+- Customización total (no look genérico)
+- Comunidad activa (soporte garantizado)
+- Performance optimizado (carga <2s en dashboard KPIs)
 
----
+**Próximo paso:**
+Definir la experiencia core (user flows, información arquitectura, wireframes)
 
-**Paso 3: Selección de Urgencia**
+## 2. Core User Experience
 
-- Radio buttons: 🔴 Crítica, 🔴 Urgente, 🟡 Media, 🟢 Baja
-- Default: "Media" (seleccionado)
-- Carlos cambia a "Urgente" (máquina parada)
+### 2.1 Defining Experience
 
-**UI Elements:**
-- Radio group: `flex gap-2 flex-wrap`
-- Buttons: `h-11 px-6 rounded-full border-2`
+**La Experiencia Definitoria: "Reportar Avería en 30 Segundos"**
 
----
+La interacción core que define **gmao-hiansa** es **"Reportar avería en 30 segundos y recibir confirmación inmediata que mi voz fue escuchada"**.
 
-**Paso 4: Enviar Aviso**
+Esta experiencia es el make-or-break del sistema:
+- Si Carlos reporta rápido → Sistema tiene datos → KPIs funcionan → Departamento se profesionaliza
+- Si Carlos NO reporta → Sistema sin datos → KPIs vacíos → Proyecto falla
 
-- Botón: "Enviar Aviso" (`bg-danger text-white h-14 w-full`)
-- Carlos toca → **Confirmación visual inmediata**
+**Analogías con productos famosos:**
+- Tinder: "Swipe para matchear" → gmao-hiansa: "Reportar en 30s"
+- Spotify: "Play música instantánea" → gmao-hiansa: "Confirmación instantánea"
+- WhatsApp: "Check azul ✓" → gmao-hiansa: "Aviso #456 recibido"
 
-**UI Elements:**
-- Button: `bg-danger text-white h-14 w-full rounded-lg font-semibold touch-manipulation`
-- Loading state (si tarda): Spinner + "Enviando..."
+**Por qué esta experiencia es definitoria:**
+1. Es el punto de entrada de todos los datos del sistema
+2. Es la interacción más frecuente (múltiples reportes por turno)
+3. Determina si los usuarios adoptan o resisten el sistema
+4. Genera el "momento ¡Aha!" que crea lealtad: "¡Me escucharon!"
 
----
+### 2.2 User Mental Model
 
-**3. Feedback**
+**Mental Model Actual (Proceso Manual):**
 
-**Confirmación Inmediata (Toast + In-App):**
+Carlos piensa: "Reportar avería = perdida de tiempo, nadie hace caso"
 
-- Icono: ✓ verde + Texto: "✓ Aviso #AV-234 recibido - Evaluando"
-- Duración: 5 segundos (desaparece automáticamente)
-- Posición: Top-center o Bottom-center
+**Proceso actual:**
+1. Detecta falla → Siente resistencia
+2. Busca a Javier o manda WhatsApp
+3. No recibe confirmación → "Igual que siempre"
+4. No sabe qué pasó → "¿Valió la pena?"
 
-**UI Elements:**
-- Toast: `fixed top-4 left-1/2 transform -translate-x-1/2 bg-success text-white px-6 py-3 rounded-lg shadow-lg`
-
----
-
-**Notificación Push #1 (minutos después):**
-
-- "Tu aviso #AV-234 fue autorizado - OT #OT-567 asignada a María"
-- Carlos toca notificación → abre app → ve detalles de OT
-
-**UI Elements:**
-- Push notification (PWA)
-- Deep link: Abre app en pantalla de detalles de OT #OT-567
+**Creencias actuales:**
+- "Nadie hace caso de todos modos"
+- "Es más fácil decirle a Javier en persona"
+- "WhatsApp es más rápido que cualquier sistema"
 
 ---
 
-**Notificación Push #2 (horas después):**
+**Mental Model Deseado (gmao-hiansa):**
 
-- "OT #OT-567 en progreso - María está trabajando"
-- Carlos piensa: "¡Genial! Ya están arreglándolo."
+Carlos piensa: "Reportar avería = 30 segundos, rápido y fácil, mi voz importa"
 
----
+**Proceso deseado:**
+1. Detecta falla → Abre app
+2. Búsqueda predictiva sugiere equipo en <200ms
+3. Describe + envía en <30 segundos
+4. Recibe confirmación <3s: "✓ Aviso #456 recibido"
+5. 10 min después: "Tu aviso fue autorizado. OT asignada a María"
+6. Piensa: "¡Me escucharon! Vale la pena reportar"
 
-**Notificación Push #3 (al completar):**
+**Creencias deseadas:**
+- "El sistema me escucha y me da feedback"
+- "Es más rápido que WhatsApp"
+- "Vale la pena reportar"
+- "Mi voz importa"
 
-- "OT #OT-567 completada - ¿Confirma que su perfiladora funciona bien?"
-- Carlos toca notificación → abre app → dialog modal
+**Cambio de comportamiento:**
+- De: Resistencia → "¿Para qué reportar?"
+- A: Entusiasmo → "¡Reporto en 30 segundos y me escuchan!"
 
----
+### 2.3 Success Criteria
 
-**4. Completion**
+**Criterios de Éxito de la Experiencia Core:**
 
-**Validación Final del Operario:**
+**1. Confirmación Visual Inmediata**
 
-- Dialog modal: "¿Su perfiladora P-201 funciona bien ahora?"
-- Botones: "Sí, funciona bien" / "No, todavía falla"
-- Carlos toca "Sí, funciona bien"
-- Sistema responde: "Gracias por tu reporte #AV-234"
+**Qué dicen los usuarios:** "¡Wow! Esto es rápido. Mejor que WhatsApp."
 
-**UI Elements:**
-- Dialog (Shadcn): `Dialog` + `DialogHeader` + `DialogContent` + `DialogFooter`
-- Buttons: `bg-success text-white` / `bg-neutral-200 text-neutral-700`
+**Feedback de éxito:**
+- <3 segundos recibe: "✓ Aviso #456 recibido. Gracias por tu reporte."
+- Número de aviso personalizado → "¡Funcionó!"
+- Sistema responde → "Confío en esto"
 
----
+**Velocidad objetivo:** <3 segundos (instantáneo)
 
-**Próxima Acción:**
-
-- Carlos puede:
-  - Reportar otra avería (botón "Reportar Otra Avería")
-  - Ver historial de sus avisos (tab "Mis Avisos")
-
----
-
-#### Flujo 2: Javier Asigna OT
-
-**1. Iniciación**
-
-- **Trigger:** Javier abre tablero Kanban a las 07:00
-- **Invitación:** Ve tarjeta rosa (Aviso Carlos) en columna "Pendientes Triage"
-- **Motivación:** "Necesito evaluar y asignar esta avería rápidamente"
-
-**UI Elements:**
-- Kanban board: 8 columnas horizontales
-- Cards: Tarjetas con código de colores
-- Badge: "Pendientes Triage: 3" (contador)
+**Automático:**
+- Sistema busca equipo predictivamente
+- Sistema genera número de aviso único
+- Sistema envía confirmación push
 
 ---
 
-**2. Interacción**
+**2. Notificaciones Push de Progreso**
 
-**Paso 1: Triage (Modal ℹ️)**
+**Qué dicen los usuarios:** "¡Me escucharon! Mi voz importa."
 
-- Javier toca tarjeta rosa → Modal ℹ️ se abre
-- Muestra:
-  - Código #AV-234
-  - Origen: "Carlos"
-  - Fecha/Hora: "2026-02-27 09:03"
-  - Equipo: "Perfiladora P-201"
-  - Problema: "No arranca, hace raro click-click"
-  - Foto adjunta (si Carlos tomó foto)
-  - Urgencia: "Urgente" (seleccionado por Carlos)
+**Feedback de éxito:**
+- 10 min: "Tu aviso #456 fue autorizado. OT asignada a María"
+- 30 min: "María inició tu OT"
+- 2 horas: "OT completada. ¿Confirma que funciona?"
 
-- Javier evalúa: "Es urgente, la máquina está parada"
+**Velocidad objetivo:** <30 segundos desde evento
 
-**UI Elements:**
-- Modal (Shadcn): `Dialog` + `DialogContent`
-- Typography: `text-foreground`, `text-muted-foreground`
-- Badge: `bg-danger text-white` (urgencia)
+**Automático:**
+- Sistema detecta cambio de estado
+- Sistema envía notificación push
+- Sistema actualiza dashboard KPIs
 
 ---
 
-**Paso 2: Convertir en OT**
+**3. Búsqueda Predictiva con Contexto**
 
-- Javier toca botón "Convertir en OT"
-- Modal de confirmación: "¿Convertir Aviso #AV-234 en OT?"
-- Javier selecciona técnico: Dropdown con lista
-  - Sistema muestra carga actual: "María: 3 OTs, Ana: 5 OTs, Pedro: 2 OTs"
-  - Javier selecciona "María" (menos carga)
-- Javier toca "Confirmar"
+**Qué dicen los usuarios:** "Encontré el equipo en 5 segundos. Increíble."
 
-**UI Elements:**
-- Button: "Convertir en OT" (`bg-primary text-white`)
-- Select (Shadcn): `Select` + `SelectTrigger` + `SelectContent`
-- Option items: Muestran nombre técnico + contador OTs
+**Feedback de éxito:**
+- Escribe "pren" → "Prensa PH-500 (Panel Sandwich, Línea 2)"
+- Highlighting: "**Pren**sa PH-500"
+- Contexto: Ubicación, estado actual, última avería
 
----
+**Velocidad objetivo:** <200ms respuestas
 
-**Paso 3: Asignación Alternativa (Drag-and-Drop)**
+**Automático:**
+- Sistema busca en jerarquía de 5 niveles
+- Sistema cachea búsquedas frecuentes
+- Sistema prioriza equipos recientes del usuario
 
-- Javier arrastra tarjeta OT sobre "María" (columna o tarjeta de técnico)
-- Sistema confirma visualmente: Tarjeta aparece en columna de María
-- Sistema alerta si desbalance: "María tiene 8 OTs, Laura solo 2" (toast warning)
+### 2.4 Novel UX Patterns
 
-**UI Elements:**
-- Drag-and-drop: `@dnd-kit/core` + `@dnd-kit/sortable`
-- Droppable areas: Columnas o tarjetas de técnicos
-- Visual feedback: Tarjeta con sombra mientras arrastra
+**Análisis: Combinación de Patrones Establecidos + Innovación**
 
----
+**gmao-hiansa combina patrones establecidos de forma innovadora:**
 
-**3. Feedback**
+**Patrones Establecidos (que usuarios ya conocen):**
 
-**Confirmación Visual Inmediata:**
+**1. Search Predictive (Google Maps, Amazon)**
+- **Lo que conocen:** Autocomplete con suggestions
+- **gmao-hiansa innova:** Añade contexto jerárquico (ubicación en planta, estado actual, historial)
+- **Resultado:** Búsqueda <200ms con más contexto que Google Maps/Amazon
 
-- Tarjeta cambia de rosa 🌸 a rojizo 🔴 (Avería → Correctivo Propio)
-- Tarjeta se mueve a columna "En Progreso" o a "María"
-- Animación suave de transición
+**2. Push Notifications (WhatsApp, Telegram)**
+- **Lo que conocen:** Notificaciones con preview
+- **gmao-hiansa innova:** Añade contexto de mantenimiento (número de OT, estado, técnicos)
+- **Resultado:** Notificaciones más informativas que WhatsApp
 
-**UI Elements:**
-- Background color: `bg-ot-averia-triage` → `bg-ot-correctivo-propio`
-- Transition: `transition-all duration-300 ease-in-out`
+**3. Confirmación Visual (Check Azul ✓ de WhatsApp)**
+- **Lo que conocen:** Confirmación inmediata
+- **gmao-hiansa innova:** Añade número de referencia + mensaje de gratitude
+- **Resultado:** Confirmación más personal que WhatsApp
 
 ---
 
-**Notificación Push a Carlos:**
+**Patrones Novedosos (que requieren educación mínima):**
 
-- "Tu aviso #AV-234 fue autorizado - OT #OT-567 asignada a María"
-- Carlos recibe feedback sin preguntar
+**1. Modal ℹ️ con Timeline Visual**
+- **Es diferente:** Modal con timeline vertical de toda la historia de la OT
+- **Cómo enseñamos:** Tooltip "ℹ️ Ver detalles" + primer uso con walkthrough
+- **Metáforas familiares:** Timeline de redes sociales (Twitter, Instagram)
+- **Resultado:** Javier tiene toda la info en 1 clic (vs navegar 3-4 pantallas en ERPs)
 
----
+**2. Kanban de 8 Columnas con Código de Colores**
+- **Es diferente:** 8 columnas vs 3-5 en Trello/Asana
+- **Cómo enseñamos:** Tutorial de 30 segundos + filtros para simplificar vista
+- **Metáforas familiares:** Kanban de Trello + Código de colores de GitHub
+- **Resultado:** Control visual de carga de equipo sin llamar técnicos
 
-**Notificación Push a María:**
+### 2.5 Experience Mechanics
 
-- "Nueva OT #OT-567 asignada - Perfiladora P-201, urgencia Urgente"
-- María ve notificación → abre app → ve lista de OTs actualizada
+**Flujo Paso a Paso: "Reportar Avería en 30 Segundos"**
 
----
+**1. Iniciación (0-5 segundos)**
 
-**4. Completion**
+**Cómo empieza el usuario:**
+- Carlos abre app → ve botón prominente "+ Nueva Avería" (bottom center, FAB style)
+- **Alternativa:** Carlos arrastra hacia abajo (pull-to-refresh) → "Reportar avería"
 
-**Próxima Acción:**
+**Triggers que inician:**
+- Push notification: "Buenos días, Carlos. ¿Necesitas reportar alguna avería?"
+- Time-based: "¿Funciona todo bien con tus equipos asignados?"
+- Location-based: "Estás cerca de Perfiladora P-201. ¿Algún problema?"
 
-- Javier ve siguiente tarjeta en "Pendientes Triage"
-- O ve dashboard con KPIs actualizados
-
----
-
-#### Flujo 3: Elena Ve KPIs y Drill-Down
-
-**1. Iniciación**
-
-- **Trigger:** Elena abre dashboard a las 08:00
-- **Invitación:** Ve 4 KPIs grandes con números y flechas ↑↓
-- **Motivación:** "Necesito datos para reportar a dirección"
-
-**UI Elements:**
-- Dashboard: Grid layout con 4 cards
-- KPI cards: Números grandes + flechas + colores semánticos
+**Design rationale:** Múltiples puntos de entrada para maximizar adopción
 
 ---
 
-**2. Interacción**
+**2. Interacción (5-25 segundos)**
 
-**Paso 1: Ver KPIs**
+**Paso 1: Tocar "+ Nueva Avería" (5 segundos)**
+- Botón FAB (Floating Action Button) bottom center
+- Azul Hiansa (#2563eb) con icono ➕
+- Touch target 48x48px (WCAG AA compliance)
 
-Elena ve dashboard con 4 KPIs:
+**Paso 2: Seleccionar Equipo con Búsqueda Predictiva (10 segundos)**
+- Input: "Buscar equipo (ej: prensa, perfiladora)"
+- Escribe "pren" → sistema sugiere en <200ms:
+  - **Prensa PH-500** (Panel Sandwich, Línea 2)
+  - Prensa PH-600 (Panel Sandwich, Línea 3)
+- Highlighting de término: "**Pren**sa PH-500"
+- Toca suggestion → autocompleta campo
 
-- **MTTR:** 4.2h (↓15% vs mes anterior) - verde ✓
-- **MTBF:** 127h (↑8% vs mes anterior) - verde ✓
-- **OTs Abiertas:** 23 (↓5 vs mes anterior)
-- **Técnicos Activos:** 5 (de 8 totales)
+**Paso 3: Describir Falla (10 segundos, opcional)**
+- Textarea: "Describe brevemente la falla (opcional)"
+- Placeholder: "Ej: No arranca, hace ruido raro, sobretemperatura..."
+- Opcional: Botón "Adjuntar foto" (1 toque)
 
-**UI Elements:**
-- Card (Shadcn): `Card` + `CardContent`
-- Typography: `text-4xl font-bold` (números grandes)
-- Badge: `bg-success text-white` (flechas ↓↑)
-
----
-
-**Paso 2: Drill-down (MTTR)**
-
-- Elena toca "MTTR: 4.2h"
-- Sistema abre modal con drill-down jerárquico:
-  - **Global:** MTTR 4.2h (todas las plantas)
-  - **Planta Acero:** MTTR 3.8h
-  - **Planta Panel:** MTTR 4.9h (🔴 más alto) - Elena toca
-  - **Línea 2:** MTTR 6.2h (🔴 más alto) - Elena toca
-  - **Equipo Prensa PH-500:** MTTR 12h, 3 fallos (🔴 problemático)
-
-**UI Elements:**
-- Modal: `Dialog` + `DialogContent` (scrollable)
-- List items: Clickable con hover state
-- Breadcrumbs: "Global > Planta Panel > Línea 2 > Prensa PH-500"
-- Badges: `bg-danger text-white` (problemático)
+**Paso 4: Enviar (5 segundos)**
+- Botón primario "Enviar" (azul Hiansa, derecha)
+- Botón secundario "Cancelar" (gris, izquierda)
 
 ---
 
-**Paso 3: Ver Detalles (Equipo)**
+**3. Feedback (<3 segundos)**
 
-- Elena toca "Prensa PH-500"
-- Sistema abre modal ℹ️ con historial:
-  - Fechas de fallos: 2026-01-15, 2026-02-03, 2026-02-20
-  - OTs asociadas: #OT-123, #OT-456, #OT-567
-  - Técnico asignado: María en los 3 casos
-  - Repuestos usados: Rodamiento SKF-6208 (3 veces)
+**Qué indica éxito:**
+- Toast notification aparece: "✓ Aviso #456 recibido. Gracias por tu reporte."
+- Toast desaparece después de 5 segundos
+- Botón "+ Nueva Avería" → reemplazado por "¡Reportado! #456"
 
-**UI Elements:**
-- Modal: `Dialog` + `DialogContent`
-- Table: `Table` + `TableBody` + `TableRow` + `TableCell`
-- Chip badges: `bg-neutral-100 text-neutral-700`
+**Cómo saben que funciona:**
+- Número de aviso único → "¡Funcionó!"
+- Toast con icono ✓ verde
+- Dashboard actualiza "Mis Avisos Recientes"
 
----
-
-**3. Feedback**
-
-**Feedback Visual Inmediato:**
-
-- Cada toque responde en <500ms (animación suave)
-- Colores semánticos: Verde = mejora, Rojo = problema
-
-**UI Elements:**
-- Transition: `transition-all duration-200 ease-in-out`
-- Active state: `bg-accent` al hacer clic en item
+**Errores y recovery:**
+- Sin equipo seleccionado → "Selecciona un equipo antes de enviar"
+- Sin conexión → "Sin conexión. Reintentando..." + reintenta automáticamente
+- Timeout >10s → "Error al enviar. Reintentar?" + botón "Reintentar"
 
 ---
 
-**Indicadores Visuales:**
+**4. Completación (30+ segundos)**
 
-- Flechas ↑↓ vs mes anterior
-- Badges 🔴 en KPIs problemáticos
-- Breadcrumbs: "Global > Planta Panel > Línea 2 > Prensa PH-500"
+**Cómo saben que terminaron:**
+- Toast desaparece → Dashboard muestra nuevo aviso #456 en lista
+- Opción: "¿Necesitas reportar otra avería?" (no intrusivo)
 
-**UI Elements:**
-- Arrow icons: `ArrowUpIcon`, `ArrowDownIcon`
-- Badges: `bg-danger text-white` (problemático), `bg-success text-white` (mejora)
+**Resultado exitoso:**
+- Carlos piensa: "¡Listo! 30 segundos y mi reporte está en el sistema."
+- Carlos siente: "Siento que mi voz importa."
+- Carlos ve: Número de aviso #456 + Toast con confirmación
 
----
-
-**4. Completion**
-
-**Acción Tomada:**
-
-- Elena identifica equipo problemático (Prensa PH-500)
-- Decide acción: "Programar mantenimiento preventivo para Prensa PH-500"
-
-**Próxima Acción:**
-
-- Elena exporta datos a Excel (botón "Exportar Excel")
-- O reporta a dirección con dashboard proyectado
-
-**UI Elements:**
-- Button: "Exportar Excel" (`bg-primary text-white`)
-- Export: Genera archivo .xlsx con datos filtrados
-
----
+**Qué sigue:**
+- **Default:** Volver al dashboard
+- **Opción A:** Reportar otra avería (botón secundario)
+- **Opción B:** Ver detalles del aviso (toca tarjeta en dashboard)
 
 ## Visual Design Foundation
 
 ### Color System
 
-**Brand Guidelines Assessment:**
+**Paleta de Colores de la Marca:**
 
-No existen guías de marca previas para **gmao-hiansa**. Basándome en la personalidad del proyecto y los objetivos emocionales definidos, he diseñado un sistema de colores que transmite profesionalismo industrial, confianza y control.
+**Colores Principales:**
+- **Rojo Burdeos**: `#A51C30` - Color principal de la marca (header del sitio web, fondo del logo)
+- **Fondo Blanco**: `#FFFFFF` - Fondo principal de la aplicación
+- **Texto Negro**: `#000000` - Texto sobre fondo blanco
+- **Texto Blanco**: `#FFFFFF` - Texto sobre fondo rojo burdeos
 
-**Personalidad del Proyecto:**
-- Profesional e industrial (sector metal)
-- Confiable y estable (transparencia radical)
-- Moderno pero no "tech startup" (GMAO enterprise)
+**Regla de Uso de Colores:**
+- **Sobre fondo blanco**: Texto negro `#000000`
+- **Sobre fondo rojo burdeos**: Texto blanco `#FFFFFF`
 
-**Diferenciación de Competidores:**
-- IBM Maximo/SAP PM: Colores corporativos genéricos (azules, grises)
-- Infraspeak/Fracttal: Colores "tech startup" (vibrantes, modernos)
-- **gmao-hiansa:** Profesional industrial con identidad única
+**Colores de División:**
+- **HiRock**: `#FFD700` (Amarillo/Dorado) - Para elementos de la división HiRock
+- **Ultra**: `#8FBC8F` (Verde Salvia) - Para elementos de la división Ultra
 
----
+**Colores Semánticos (Estados de OT):**
 
-**Primary Colors (Colores Primarios):**
+Estos colores se usan para los 8 estados de las Órdenes de Trabajo en el Kanban:
 
-**#722F37 Velvet Red (Rojo Burdeos) - Elegancia Industrial**
+- `pending-review`: `#6B7280` (Gris) - "Por Revisar"
+- `pending-approval`: `#F59E0B` (Ámbar) - "Por Aprobar"
+- `approved`: `#3B82F6` (Azul) - "Aprobada"
+- `in-progress`: `#8B5CF6` (Púrpura) - "En Progreso"
+- `paused`: `#EC4899` (Rosa) - "Pausada"
+- `completed`: `#10B981` (Verde) - "Completada"
+- `closed`: `#6B7280` (Gris) - "Cerrada"
+- `cancelled`: `#EF4444` (Rojo) - "Cancelada"
 
-- **Uso:** Acciones principales (botones "Enviar", "Asignar", "Guardar")
-- **Por qué rojo burdeos:** Color elegante, profesional, transmita fuerza y decisión
-- **Contraste WCAG AA:** 8.2:1 con texto blanco ✅ (excelente)
-- **Variaciones:**
-  - `#722F37` (Velvet Red) - Botones primarios, links, headers
-  - `#5A1A21` (Dark Velvet) - Hover states, elementos activos, elementos seleccionados
-  - `#3A1215` (Darker Velvet) - Footers, elementos de bajo contraste
+**Colores de Feedback UI:**
+- **Éxito**: `#10B981` (Verde) - Confirmaciones, acciones exitosas
+- **Advertencia**: `#F59E0B` (Ámbar) - Requieren atención
+- **Error**: `#EF4444` (Rojo) - Errores, acciones destructivas
+- **Info**: `#3B82F6` (Azul) - Mensajes informativos
 
----
-
-**Semantic Colors (Colores Semánticos):**
-
-**Success #212529 - Negro (Completado, Stock OK, Confirmación)**
-
-- **Uso:**
-  - OT completada ✓
-  - Stock OK (badge negro)
-  - Confirmación de acción (botón "Sí", "Confirmar")
-  - Texto primary (headings, contenido)
-- **Contraste:** Con fondo blanco: 16.1:1 ✅ (excelente)
-- **Notas:** Negro se usa para "finalización" y "completado" (estilo minimalista)
-
-**Warning #6C757D - Gris Medio (En Progreso, Stock Bajo, Atención)**
-
-- **Uso:**
-  - OT en progreso (badge gris)
-  - Stock bajo (alerta de stock mínimo)
-  - Atención requerida (toast warning)
-  - Texto secondary (labels, metadata)
-- **Contraste:** Con fondo blanco: 5.7:1 ✅ (WCAG AA compliance)
-- **Notas:** Gris medio indica "pendiente" o "en progreso"
-
-**Danger #000000 - Negro Puro (Crítico, Error, Eliminar)**
-
-- **Uso:**
-  - OT avería (tipo de OT) - máxima urgencia
-  - Urgencia crítica (producción detenida)
-  - Stock crítico (alerta negra)
-  - Empeoramiento KPIs (MTTR ↑15%, MTBF ↓8%)
-  - Botón "Cancelar", "No", "Eliminar"
-- **Contraste:** Con fondo blanco: 21.1:1 ✅ (excelente)
-- **Notas:** Negro puro para máxima atención y contraste
-
-**Info #495057 - Gris Oscuro (Información General)**
-
-- **Uso:**
-  - Notificaciones informativas
-  - Tooltips
-  - Badges de información
-  - Bordes, separadores, dividers
-- **Contraste:** Con texto blanco: 10.4:1 ✅ (WCAG AA compliance)
-
----
-
-**OT Type Colors (Código de Colores Kanban):**
-
-Estos colores son específicos para los tipos de OT en el tablero Kanban. Cada color tiene un significado semántico y se usa consistentemente en toda la aplicación.
-
-| Código de Color | HEX | Emoji | Tipo de OT | Descripción |
-|----------------|-----|-------|------------|-------------|
-| **ot-averia-triage** | #E57373 | 🌸 Rosa Claro | Avería Triage | Avisos de avería pendientes de triage |
-| **ot-reparacion-triage** | #F5F5F5 | ⚪ Blanco Grisáceo | Reparación Triage | Reparaciones pendientes de triage |
-| **ot-correctivo-propio** | #722F37 | 🔴 Velvet Red | Correctivo Propio | Correctivos realizados por taller propio (PRIMARY COLOR) |
-| **ot-correctivo-externo** | #5A1A21 | 🔴📏 Dark Velvet | Correctivo Externo | Correctivos enviados a proveedor externo (línea diagonal) |
-| **ot-taller-propio** | #FFA726 | 🟡 Naranja | Taller Propio | Equipos en taller propio para reparación |
-| **ot-enviado-proveedor** | #546E7A | 🔵 Azul Grisáceo | Enviado Proveedor | Equipos enviados a proveedor externo |
-
-**Accesibilidad de OT Type Colors:**
-- **#722F37 (Velvet Red)** con texto blanco: 8.2:1 ✅ (WCAG AA compliance)
-- **#E57373 (Rosa Claro)** con texto blanco: 4.5:1 ✅ (WCAG AA compliance)
-- **#F5F5F5 (Blanco Grisáceo)** usa texto negro #212529: 16.1:1 ✅ (WCAG AA compliance)
-- **#FFA726 (Naranja)** con texto blanco: 4.5:1 ✅ (WCAG AA compliance)
-- **#546E7A (Azul Grisáceo)** con texto blanco: 4.5:1 ✅ (WCAG AA compliance)
-- Código de colores siempre acompañado de iconos/labels (no solo color)
-
----
-
-**Priority Colors (Colores de Urgencia):**
-
-Estos colores se usan en badges y etiquetas para indicar urgencia de una OT.
-
-| Prioridad | HEX | Emoji | Uso |
-|-----------|-----|-------|-----|
-| **Crítica** | #000000 | 🔴 Negro | Máxima urgencia, producción detenida, seguridad |
-| **Alta** | #6C757D | 🟡 Gris Medio | Alta urgencia, afecta producción |
-| **Media** | #ADB5BD | 🟢 Gris Claro | Urgencia media, no afecta producción críticamente |
-| **Baja** | #E9ECEF | 🟢 Gris Muy Claro | Baja urgencia, puede programarse |
-
----
-
-**Neutral Colors (Colores Neutros):**
-
-**Text Colors (Colores de Texto):**
-
-| Token | HEX | Usage | Contraste |
-|-------|-----|-------|----------|
-| **text-primary** | #212529 | Texto principal, headings, contenido | 16.1:1 (con blanco) ✅ Excelente |
-| **text-secondary** | #6C757D | Labels, metadata, descripciones, timestamps | 5.7:1 (con blanco) ✅ Bueno |
-| **text-tertiary** | #ADB5BD | Captions, placeholders, texto deshabilitado | 3.0:1 (con blanco) ⚠️ Solo para decorativo |
-
-**Background Colors (Colores de Fondo):**
-
-| Token | HEX | Usage |
-|-------|-----|-------|
-| **background-primary** | #FFFFFF | Background principal de páginas, cards, modals (blanco puro) |
-| **background-secondary** | #F8F9FA | Backgrounds secundarios, secciones alternadas, dashboard (gris muy claro) |
-| **background-tertiary** | #E9ECEF | Backgrounds terciarios (gris claro) |
-
-**Borders (Bordes):**
-
-| Token | HEX | Usage |
-|-------|-----|-------|
-| **border-default** | #212529 | Bordes de inputs, cards, separadores (negro) |
-| **border-focus** | #722F37 | Borde de input en focus (rojo burdeos - primary) |
-| **border-error** | #000000 | Borde de input con error (negro puro) |
-
----
+**Guías de Uso:**
+- **Rojo Burdeos** se usa para: Header, botones principales, estados activos, fondo del logo
+- **Blanco** se usa para: Fondo de la aplicación, tarjetas, modales
+- **Negro** se usa para: Texto sobre fondo blanco, bordes, iconos
+- **Blanco** se usa para: Texto sobre fondo rojo burdeos
+- Colores de división (Amarillo/Verde) se usan para: Etiquetas de activos, indicadores de ubicación
+- Colores semánticos se usan para: Badges de estado, notificaciones, validación de formularios
 
 ### Typography System
 
-**Font Family: Inter**
+**Fuente:**
+- **Principal**: `Inter` (stack de fuentes del sistema: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`)
+  - Elección: Excelente legibilidad, aspecto industrial profesional, soporte completo de español
 
-**Por qué Inter:**
-- Moderno pero no "startup trendy"
-- Altamente legible en pantallas (optimizado para UI)
-- Variable font (light, regular, medium, semibold, bold)
-- System UI font fallback (San Francisco, Segoe UI, Roboto)
-- Excelente para números y símbolos (importante para KPIs, OT codes)
+**Escala de Tamaños:**
 
-**CSS Declaration:**
 ```css
-font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-size-xs: 0.75rem;    /* 12px - Rótulos, etiquetas */
+--font-size-sm: 0.875rem;   /* 14px - Texto secundario, metadatos */
+--font-size-base: 1rem;     /* 16px - Texto de cuerpo, inputs */
+--font-size-lg: 1.125rem;   /* 18px - Subtítulos */
+--font-size-xl: 1.25rem;    /* 20px - Títulos de tarjetas */
+--font-size-2xl: 1.5rem;    /* 24px - Títulos de sección */
+--font-size-3xl: 1.875rem;  /* 30px - Títulos de página */
+--font-size-4xl: 2.25rem;   /* 36px - Hero/landing */
 ```
 
----
+**Pesos de Fuente:**
+- **Regular (400)**: Texto de cuerpo, descripciones
+- **Medium (500)**: Subtítulos, texto enfatizado
+- **Semibold (600)**: Títulos, botones, enlaces
+- **Bold (700)**: Títulos de página, CTAs importantes
 
-**Type Scale (Escala Tipográfica):**
+**Altura de Línea:**
+- **Texto de cuerpo**: 1.5 (24px de leading para 16px de fuente) - Legibilidad óptima para contenido en español
+- **Títulos**: 1.2 - Espaciado más ajustado para jerarquía visual
+- **Elementos UI**: 1.25 - Botones, etiquetas, navegación
 
-| Size | Weight | Line Height | Letter Spacing | Usage |
-|------|--------|-------------|----------------|-------|
-| **32px** | 700 (Bold) | 1.2 (38px) | -0.02em | **H1** - Dashboard títulos, page headers |
-| **24px** | 600 (Semibold) | 1.3 (31px) | -0.01em | **H2** - KPIs grandes, section headers |
-| **20px** | 600 (Semibold) | 1.4 (28px) | 0em | **H3** - Subtítulos, OT títulos, card headers |
-| **18px** | 500 (Medium) | 1.5 (27px) | 0em | **Lead** - Lead paragraphs, introducciones |
-| **16px** | 400 (Regular) | 1.5 (24px) | 0em | **Body** - Contenido principal, descripciones |
-| **14px** | 400 (Regular) | 1.4 (20px) | 0em | **Small** - Labels, metadata, captions |
-| **12px** | 400 (Regular) | 1.3 (16px) | 0.01em | **XSmall** - Timestamps, badges pequeños |
+**Jerarquía Tipográfica:**
 
-**Principios de Jerarquía Tipográfica:**
-1. **H1 (32px):** Solo una vez por página (page title)
-2. **H2 (24px):** KPIs grandes, section headers (2-3 por página)
-3. **H3 (20px):** Subtítulos, OT titles (múltiples por página)
-4. **Body (16px):** Contenido principal, descripciones
-5. **Small (14px):** Labels, metadata (información secundaria)
-6. **XSmall (12px):** Solo para captions no-críticos (timestamps)
-
----
-
-**Font Weights (Pesos de Fuente):**
-
-| Weight | Value | Usage |
-|--------|-------|-------|
-| **Light** | 300 | Decorativo, no usado en UI (evitar) |
-| **Regular** | 400 | Body text, descripciones, labels |
-| **Medium** | 500 | Lead paragraphs, emphasis en texto |
-| **Semibold** | 600 | H3, subtítulos, elementos interactivos (botones, links) |
-| **Bold** | 700 | H1, H2, page headers, énfasis fuerte |
-
----
-
-**Line Heights (Interlineados):**
-
-| Context | Line Height | Valor |
-|---------|-------------|-------|
-| **Headings (H1-H3)** | 1.2 - 1.4 | Más compacto para énfasis visual |
-| **Body text** | 1.5 | Óptimo para legibilidad (WCAG recomendación) |
-| **Captions** | 1.3 | Compacto pero legible |
-
-**Por qué 1.5 para body:**
-- WCAG recomendación para legibilidad
-- Mejor lectura en pantallas (evita fatiga visual)
-- Suficiente espacio para descenders (g, j, p, q, y)
-
----
-
-**Letter Spacing (Espaciado entre letras):**
-
-| Context | Letter Spacing | Rationale |
-|---------|----------------|-----------|
-| **Headings (MAYÚSCULAS)** | -0.02em a -0.01em | Más compacto para MAYÚSCULAS (mejor legibilidad) |
-| **Headings (Title Case)** | -0.01em a 0em | Normal, Inter ya tiene spacing óptimo |
-| **Body text** | 0em | Normal, Inter ya tiene spacing óptimo |
-| **Small/Captions** | 0.01em | Más aireado para legibilidad en texto pequeño |
-
----
+```
+H1: 30px / Semibold / 1.2 line-height - Títulos de página
+H2: 24px / Semibold / 1.2 line-height - Títulos de sección
+H3: 20px / Medium / 1.3 line-height - Títulos de tarjetas
+H4: 18px / Medium / 1.3 line-height - Subtítulos
+Body: 16px / Regular / 1.5 line-height - Párrafos, contenido
+Small: 14px / Regular / 1.5 line-height - Metadatos, captions
+```
 
 ### Spacing & Layout Foundation
 
-**Spacing Unit (Unidad de Espaciado):**
+**Sistema de Espaciado (Grid de 8px):**
 
-**Base: 4px** (Tailwind default)
+Usando la unidad base de 8px de Tailwind para espaciado consistente:
 
-Todos los espaciados son múltiplos de 4px: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96px
+```css
+--spacing-1: 0.25rem;  /* 4px - Espaciado compacto */
+--spacing-2: 0.5rem;   /* 8px - Unidad base */
+--spacing-3: 0.75rem;  /* 12px - Compacto */
+--spacing-4: 1rem;     /* 16px - Por defecto */
+--spacing-5: 1.25rem;  /* 20px - Cómodo */
+--spacing-6: 1.5rem;   /* 24px - Secciones */
+--spacing-8: 2rem;     /* 32px - Secciones grandes */
+--spacing-10: 2.5rem;  /* 40px - Divisiones mayores */
+--spacing-12: 3rem;    /* 48px - Márgenes de página */
+```
 
-**Rationale:**
-- Sistema consistente (múltiplos de 4)
-- Flexibilidad suficiente (desde 4px hasta 96px)
-- Algoritmo mental simple (4 × n)
+**Guías de Uso de Espaciado:**
+- **4px**: Padding de iconos, bordes compactos
+- **8px**: Elementos relacionados (checkbox + label, icono + texto)
+- **12px**: Grupos de formularios compactos, espaciado interno de tarjetas
+- **16px**: Inputs de formulario por defecto, padding de botones, items de lista
+- **24px**: Espaciado de secciones, márgenes de tarjetas
+- **32px**: Secciones mayores, secciones de página
+- **48px**: Márgenes superior/inferior de página
 
----
+**Principios de Layout:**
 
-**Spacing Scale (Escala de Spacing):**
+1. **Jerarquía de Contenido**: Separación visual clara entre header, contenido principal, sidebar
+2. **Espacio en Blanco**: Espaciado generoso para "respirar" (profesional, no saturado)
+3. **Alineación**: Texto alineado a izquierda, canales de 24px consistentes para columnas
+4. **Sistema de Grid**: Grid de 12 columnas para layouts complejos
 
-| Token | Value | CSS | Usage |
-|-------|-------|-----|-------|
-| **0.5** | 2px | `gap-0.5` | Spacing mínimo (icon padding) |
-| **1** | 4px | `gap-1` | Small gaps, icon padding |
-| **2** | 8px | `gap-2` | Button padding, small spacing |
-| **3** | 12px | `gap-3` | Form fields vertical spacing |
-| **4** | 16px | `gap-4` | Card padding (móvil), form fields |
-| **6** | 24px | `gap-6` | Gutters entre cards, secciones |
-| **8** | 32px | `gap-8` | Section spacing |
-| **10** | 40px | `gap-10` | Major sections |
-| **12** | 48px | `gap-12` | Page margins (desktop) |
-| **16** | 64px | `gap-16` | Large spacing (hero sections) |
-| **20** | 80px | `gap-20` | Extra large spacing |
-| **24** | 96px | `gap-24` | Hero sections, page headers |
+**Breakpoints Responsivos:**
 
----
+```css
+--breakpoint-sm: 640px;   /* Móvil landscape */
+--breakpoint-md: 768px;   /* Tablet portrait */
+--breakpoint-lg: 1024px;  /* Tablet landscape / Desktop pequeño */
+--breakpoint-xl: 1200px;  /* Desktop */
+--breakpoint-2xl: 1536px; /* Desktop grande */
+```
 
-**Component Spacing (Espaciado de Componentes):**
+**Estrategia de Contenedor:**
+- **Móvil (<768px)**: 100% de ancho, 16px de padding lateral
+- **Tablet (768-1200px)**: 90% de ancho máximo, centrado
+- **Desktop (>1200px)**: 1280px de ancho máximo, centrado
 
-| Component | Padding | Margin (Horizontal) | Margin (Vertical) |
-|-----------|---------|---------------------|-------------------|
-| **Card (Desktop)** | 24px | 0 | 0 |
-| **Card (Móvil)** | 16px | 0 | 0 |
-| **Button** | 12px 24px | 8px | 8px |
-| **Input** | 12px (vertical) | 0 | 8px |
-| **Modal** | 24px | 0 | 0 |
-| **Badge** | 4px 12px | 4px | 4px |
-| **Table Cell** | 12px 16px | 0 | 0 |
+**Estándares de Espaciado de Componentes:**
+- **Inputs de formulario**: 16px de espaciado vertical entre campos
+- **Tarjetas**: 16px de padding interno, 24px de márgenes
+- **Botones**: 16px de padding (8px arriba/abajo, 16px izquierda/derecha)
+- **Modal**: 24px de padding, 32px de espaciado entre secciones
+- **Columnas Kanban**: 16px de espacio entre columnas
 
----
-
-**Grid System:**
-
-**Desktop (>1200px):**
-- **Columnas:** 12-column grid
-- **Column width:** calc((100% - 264px) / 12)
-- **Gutters:** 24px entre columnas
-- **Max-width:** 1440px (contenedor centrado)
-- **Margins:** Auto (centrado)
-
-**Tablet (768-1200px):**
-- **Columnas:** 6-column grid
-- **Column width:** calc((100% - 120px) / 6)
-- **Gutters:** 16px entre columnas
-- **Max-width:** 100% (ancho completo)
-
-**Móvil (<768px):**
-- **Columnas:** 4-column grid
-- **Column width:** calc((100% - 48px) / 4)
-- **Gutters:** 12px entre columnas
-- **Max-width:** 100% (ancho completo)
-
----
-
-**Layout Principles (Principios de Layout):**
-
-1. **Visual Hierarchy (Jerarquía Visual):**
-   - KPIs grandes → Top (dashboard)
-   - OTs Kanban → Middle (espacio principal)
-   - Detalles → Bottom (modal ℹ️)
-
-2. **Proximity (Proximidad):**
-   - Elementos relacionados cerca
-   - Código de colores + leyenda en misma sección
-   - Botón "Convertir en OT" + Modal ℹ️ adyacentes
-
-3. **Alignment (Alineación):**
-   - Left-aligned para texto LTR (left-to-right)
-   - Center para elementos interactivos (botones, cards)
-   - Consistencia en margins/paddings
-
-4. **Consistency (Consistencia):**
-   - Múltiplos de 4px para spacing
-   - Grid consistente (12-column desktop, 6 tablet, 4 móvil)
-   - Componentes con padding consistente (24px desktop, 16px móvil)
-
----
-
-**Responsive Breakpoints (Puntos de Quiebre):**
-
-| Breakpoint | Min Width | Max Width | Layout | Device |
-|------------|-----------|-----------|--------|--------|
-| **xs** | 0px | 639px | 4-column grid, 1 columna Kanban | Móvil pequeño |
-| **sm** | 640px | 767px | 4-column grid, 2 columnas Kanban | Móvil grande |
-| **md** | 768px | 1023px | 6-column grid, 2 columnas Kanban | Tablet |
-| **lg** | 1024px | 1279px | 12-column grid, 4 columnas Kanban | Desktop |
-| **xl** | 1280px | 1535px | 12-column grid, 6 columnas Kanban | Desktop grande |
-| **2xl** | 1536px | ∞ | 12-column grid, 8 columnas Kanban | TV 4K |
-
----
-
-**Content Density (Densidad de Contenido):**
-
-**Desktop (>1200px):**
-- **Kanban:** 8 columnas visibles simultáneamente
-- **KPIs:** 4 cards por fila (grid 2x2)
-- **Listas:** Table con 15-20 filas visibles sin scroll
-
-**Tablet (768-1200px):**
-- **Kanban:** 2 columnas visibles (swipe para más)
-- **KPIs:** 2 cards por fila (grid 2x2 vertical)
-- **Listas:** Table con 10-15 filas visibles
-
-**Móvil (<768px):**
-- **Kanban:** 1 columna visible (swipe para más)
-- **KPIs:** 1 card por fila (stacked vertical)
-- **Listas:** List con 5-8 filas visibles
-
----
+**Densidad de Layout:**
+- **Espacioso y aireado** (vs denso y eficiente)
+- Espacio en blanco generoso soporta el objetivo emocional "Qué Paz"
+- Estética industrial profesional - no saturado como herramientas legacy
 
 ### Accessibility Considerations
 
-**WCAG AA Compliance (Cumplimiento WCAG AA):**
+**Contraste de Color:**
+- Todo el texto cumple con WCAG AA 4.5:1 de contraste mínimo
+- Texto grande (18px+) cumple con 3:1 de contraste
+- Rojo burdeos #A51C30 sobre blanco = 6.3:1 ✅
+- Texto blanco sobre rojo burdeos = 6.3:1 ✅
+- Texto negro sobre blanco = 21:1 ✅
 
-**1. Color Contrast (Contraste de Color):**
+**Objetivos Táctiles:**
+- Mínimo 44x44px para todos los elementos interactivos
+- Botones: 40px de altura mínimo, con padding para touch
+- Inputs de formulario: 44px de altura para tapping fácil en móvil
+- Items de navegación: Objetivos touch de altura completa
 
-| Elemento | Foreground | Background | Ratio | WCAG AA | Status |
-|----------|-----------|------------|-------|---------|--------|
-| Primary button | #FFFFFF | #0066CC | 7.4:1 | 4.5:1 | ✅ Excelente |
-| Success badge | #FFFFFF | #28A745 | 3.0:1 | 4.5:1 | ⚠️ Use texto blanco |
-| Warning badge | #000000 | #FFC107 | 4.5:1 | 4.5:1 | ✅ Compliance |
-| Danger badge | #FFFFFF | #DC3545 | 5.9:1 | 4.5:1 | ✅ Compliance |
-| Text primary | #212529 | #FFFFFF | 16.1:1 | 4.5:1 | ✅ Excelente |
-| Text secondary | #6C757D | #FFFFFF | 5.7:1 | 4.5:1 | ✅ Bueno |
+**Navegación por Teclado:**
+- Todos los elementos interactivos accesibles por teclado
+- Indicadores de foco visibles (2px sólido rojo burdeos #A51C30)
+- Orden de tab lógico (arriba a abajo, izquierda a derecha)
+- Skip links para contenido principal
 
-**Estrategia para colores con contraste <4.5:1:**
-- Success (#28A745): Usar texto blanco sobre fondo verde (badge, botón)
-- No usar texto verde sobre blanco (fallo WCAG AA)
+**Soporte de Screen Reader:**
+- Elementos HTML5 semánticos
+- Labels ARIA para botones solo-icono
+- Alt text para todas las imágenes
+- Regiones live para actualizaciones dinámicas (notificaciones, KPIs)
+- Jerarquía de headings apropiada (h1 → h2 → h3)
 
----
+**Claridad Visual:**
+- Nunca usar color solo (icono + color + texto redundante)
+- Mensajes de error mostrados inline con iconos
+- Confirmaciones de éxito con texto claro + icono
+- Badges de estado siempre incluyen etiqueta de texto
 
-**2. Font Size (Tamaño de Fuente):**
+**Movimiento y Animación:**
+- Respetar configuración `prefers-reduced-motion`
+- No contenido parpadeante (>3Hz)
+- Transiciones suaves (200-300ms) para cambios de estado
+- Indicadores de carga para operaciones asíncronas
 
-| Elemento | Size | WCAG AA (14px) | WCAG AA (16px) | Status |
-|----------|------|----------------|----------------|--------|
-| Body text | 16px | ✅ | ✅ | ✅ Compliance |
-| Small text | 14px | ✅ | ✅ | ✅ Compliance |
-| XSmall text | 12px | ⚠️ | ✅ | ⚠️ Solo captions no-críticos |
-
-**Estrategia:**
-- Mínimo 16px para body text
-- 12px solo para captions no-críticos (timestamps, badges)
-- 14px para labels, metadata
-
----
-
-**3. Touch Targets (Targets Táctiles):**
-
-| Elemento | Size | WCAG AA (44x44px) | Status |
-|----------|------|-------------------|--------|
-| Buttons | 56px altura × width variable | ✅ | ✅ Compliance |
-| Links | 44px altura × width variable | ✅ | ✅ Compliance |
-| Inputs | 44px altura × width variable | ✅ | ✅ Compliance |
-| Checkboxes/Radios | 44×44px (incluyendo label) | ✅ | ✅ Compliance |
-
-**Estrategia:**
-- Mínimo 44×44px para elementos interactivos
-- 56px para botones primarios (mejor tapability)
-- Padding adicional para mobile (tablets, móviles)
-
----
-
-**4. Text Resize (Redimensión de Texto):**
-
-- **Requisito WCAG:** Layout soporta 200% zoom
-- **Estrategia:** Usar unidades relativas (rem, em) para spacing
-- **Fixed units:** Solo para borders (px)
-- **Test:** Zoom 200% en browser → layout no se rompe
-
----
-
-**5. Keyboard Navigation (Navegación por Teclado):**
-
-- **Tab order:** Orden lógico (left-to-right, top-to-bottom)
-- **Focus indicators:** Ring azul #0066CC (2px outline)
-- **Skip links:** Si hay navegación principal, añadir "Skip to content"
-- **Shortcuts:**
-  - `Tab`: Navegar elementos interactivos
-  - `Shift+Tab`: Navegar hacia atrás
-  - `Enter`: Activar botón, link
-  - `Escape`: Cerrar modal, cancelar acción
-
----
-
-**6. Screen Reader (Lector de Pantalla):**
-
-- **ARIA labels:** En elementos interactivos sin texto visible
-  - Ejemplo: `<button aria-label="Cerrar modal">×</button>`
-- **Alt text:** En imágenes
-  - Ejemplo: `<img src="equipo.jpg" alt="Perfiladora P-201" />`
-- **Semantic HTML:** Usar elementos semánticos
-  - `<button>` vs `<div>` (screen reader reconoce botón)
-  - `<h1>` vs `<div class="title">` (screen reader reconoce heading)
-- **Roles:**
-  - `role="dialog"` para modales
-  - `role="alert"` para notificaciones críticas
-  - `role="status"` para notificaciones informativas
-
----
-
-**7. Color Blindness (Daltonismo):**
-
-- **Estrategia:** No depender solo de color para comunicar información
-- **Implementación:**
-  - Iconos + color (✓ verde + icono de check, no solo verde)
-  - Texto + color ("Completada" en verde, no solo verde)
-  - Patrones (línea diagonal en rojo para correctivo externo)
-- **Test:** Simular daltonismo en browser (DevTools → Rendering → Emulate vision deficiencies)
-
----
-
-**Accessibility Checklist (Lista de Verificación):**
-
-✅ Todos los colores cumplen contraste WCAG AA (4.5:1 mínimo)
-✅ Tamaño mínimo de texto: 16px body, 14px small
-✅ Touch targets mínimos: 44×44px
-✅ Layout soporta 200% zoom
-✅ Tab order lógico
-✅ Focus indicators visibles
-✅ ARIA labels en elementos interactivos
-✅ Alt text en imágenes
-✅ Semantic HTML (button, input, h1-h6)
-✅ Color + iconos/texto (no solo color)
-✅ Keyboard shortcuts documentados
-✅ Skip links (si hay navegación principal)
-
----
+**Escalado de Fuente:**
+- Soporte de 200% de zoom de texto sin scroll horizontal
+- Layouts responsivos adaptan a texto más grande
+- No contenedores de ancho fijo que rompan el escalado de texto
 
 ## Design Direction Decision
 
 ### Design Directions Explored
 
-He generado **6 direcciones de diseño** que exploran diferentes enfoques visuales y de interacción para **gmao-hiansa**:
+Se generaron y evaluaron 6 direcciones de diseño en el showcase HTML interactivo (`ux-design-directions.html`):
 
-| Dirección | Concepto | Densidad | Ideal Para | Key Feature |
-|----------|----------|----------|------------|-------------|
-| **1. Dashboard KPIs First** | KPIs prominentes en top | Media | Elena (Admin) | Datos ejecutivos al abrir app |
-| **2. Kanban First** | Kanban prominente, KPIs widget lateral | Alta | Javier (Supervisor) | Visibilidad total de carga de trabajo |
-| **3. List View** | Lista de OTs con filtros y detalles inline | Muy Alta | Elena (Admin) | Máximo detalle en pantalla |
-| **4. Card Grid** | Grid de cards minimalista | Media-Aira | María (Técnica) | Organización visual |
-| **5. Mobile First** | Optimizado para touch | Media | Carlos (Operario) | Touch targets grandes, swipe gestures |
-| **6. Split View** | Split view lista + detalles | Alta | María/Javier | Productividad con lista + detalles simultáneos |
+**Dirección 1: Dashboard Clásico**
+- Layout tradicional con sidebar fijo
+- KPIs prominentes en dashboard principal
+- Acceso rápido a funcionalidades principales
+- **Contexto óptimo**: Desktop de Elena/Javier en oficina
 
----
+**Dirección 2: Kanban First**
+- El Kanban de 8 columnas es el protagonista central
+- Panel lateral colapsable con KPIs
+- Drag & drop visible
+- **Contexto óptimo**: Desktop/tablet de Javier para control visual inmediato
+
+**Dirección 3: Mobile First**
+- Elementos táctiles grandes (44x44px)
+- Navegación por gestos y vistas simplificadas
+- Optimizado para tablets/móviles
+- **Contexto óptimo**: Móvil de Carlos y tablet de María en piso de fábrica
+
+**Dirección 4: Data Heavy**
+- Múltiples gráficos y tablas densas
+- Drill-down capabilities
+- Métricas detalladas
+- **Contexto óptimo**: Desktop de Elena para análisis y reportes a dirección
+
+**Dirección 5: Minimal**
+- Mucho whitespace, elementos reducidos
+- Focus total en tarea actual
+- Apoya objetivo emocional "Qué Paz"
+- **Contexto óptimo**: Reducir sobrecarga cognitiva en tareas focales
+
+**Dirección 6: Action Oriented**
+- CTAs prominentes
+- Flujos simplificados
+- Shortcuts visibles
+- **Contexto óptimo**: Core experience "Reportar avería en 30 segundos"
 
 ### Chosen Direction
 
-**Dirección Recomendada: Híbrida Enfocada por Rol (Role-Based Adaptive Layout)**
+**Decisión: Enfoque Multi-Direction por Contexto**
 
-Basándome en el análisis de los 5 usuarios primarios (Carlos, María, Javier, Elena, Pedro) y sus necesidades específicas, recomiendo una **dirección híbrida que adapta el layout según el rol del usuario**.
+En lugar de elegir una única dirección de diseño, se adopta un enfoque adaptativo donde **cada dirección sirve a un contexto específico de usuario y dispositivo**.
 
-**Concepto Core:**
+**Justificación:**
 
-> **"La interfaz se adapta al rol del usuario, presentando la información más relevante de manera prominente mientras mantiene consistencia visual en toda la aplicación."**
+Los 5 usuarios principales (Carlos, María, Javier, Elena, Pedro) tienen:
+- **Dispositivos diferentes**: Móvil, tablet, desktop
+- **Necesidades diferentes**: Reportar rápido, controlar OTs, analizar datos, gestionar stock
+- **Contextos diferentes**: Piso de fábrica, oficina, taller
+- **Niveles de expertise diferentes**: Operarios, técnicos, supervisores, administradores
 
-**Layout por Rol:**
-
-#### Para Carlos (Operario) - Mobile First Approach
-
-**Layout:**
-- **Top:** Botón grande "Reportar Avería" (CTA primario, 56px altura)
-- **Middle:** Lista de "Mis Avisos" (solo sus averías, scrollable)
-- **Bottom:** Tab bar (Home, Mis Avisos, Notificaciones, Perfil)
-
-**Características:**
-- **Densidad:** Media (optimizado para touch 44x44px)
-- **Peso Visual:** Botón "Reportar" prominente (rojo #DC3545)
-- **Interacción:** Touch-first, swipe gestures (left = ver detalles, right = archivar)
-- **Notificaciones Push:** Prominentes (icono + badge contador)
-
-**Cuando reporta avería:**
-- Flujo simplificado de 3 pasos
-- Búsqueda predictiva <200ms
-- Confirmación inmediata + notificaciones en cada transición
-
----
-
-#### Para María (Técnica) - Split View Approach
-
-**Layout:**
-- **Top:** Breadcrumb + Filtros (Estado, Urgencia) + Botón "Mis OTs"
-- **Left (40%):** Lista de sus OTs (scrollable, selección resaltada)
-- **Right (60%):** Detalles de OT seleccionada (fijo, no dismissible)
-
-**Características:**
-- **Densidad:** Alta (máxima información sin scroll)
-- **Peso Visual:** Lista left con badges, detalles right con modal ℹ️
-- **Interacción:** Click en lista → detalles right actualizan in-place
-- **Colores:** Código de colores OT en lista, azul primario para selección
-
-**Detalles Right Panel:**
-- Código OT, equipo, ubicación, problema
-- Historial de equipo (intervenciones previas)
-- Repuestos usados (stock visible inline)
-- Botones "▶️ Iniciar", "⏸️ Pausar", "✓ Completar"
-
----
-
-#### Para Javier (Supervisor) - Kanban First Approach
-
-**Layout:**
-- **Top:** Breadcrumb + Filtros (Técnico, Tipo OT, Urgencia) + Botón "Triage"
-- **Left (70%):** Tablero Kanban con 8 columnas (scroll horizontal)
-- **Right (30%):** Widget KPIs compacto + Lista de Técnicos (carga de trabajo)
-
-**Características:**
-- **Densidad:** Alta (máxima información en pantalla)
-- **Peso Visual:** Kanban con código de colores predominante
-- **Interacción:** Drag-and-drop fluido, click en tarjeta → modal ℹ️
-- **Alertas:** Toast warning si desbalance de carga
-
-**Kanban 8 Columnas:**
-1. Pendientes Triage (tarjetas 🌸 rosa)
-2. Asignaciones (tarjetas divididas por técnico)
-3. En Progreso (tarjetas 🔴/🟡/🔵 según tipo)
-4. Pendiente Repuesto (tarjetas ⚪ blanco)
-5. Pendiente Parada (tarjetas ⚪ blanco)
-6. Reparación Externa (tarjetas 🔴📏 rojo línea)
-7. Completadas (tarjetas 🟢 verdes)
-8. Descartadas (tarjetas 🪵 gris)
-
-**Widget KPIs Compacto:**
-- MTTR 4.2h (↓15%) - click → drill-down
-- MTBF 127h (↑8%) - click → drill-down
-- OTs Abiertas: 23
-- Técnicos Activos: 5/8
-
-**Lista de Técnicos:**
-- María: 3 OTs (badge verde si balanceado)
-- Ana: 5 OTs (badge amarillo si cargado)
-- Pedro: 2 OTs (badge verde si balanceado)
-- Laura: 2 OTs (badge verde si balanceado)
-
----
-
-#### Para Elena (Admin) - Dashboard KPIs First Approach
-
-**Layout:**
-- **Top:** 4 KPIs grandes con números y flechas ↑↓
-- **Middle Left (60%):** Kanban resumido (8 columnas, tarjetas compactas)
-- **Middle Right (40%):** Gráficos (MTTR/MTBF trends) + Filtros avanzados
-
-**Características:**
-- **Densidad:** Media (suficiente espacio para KPIs grandes)
-- **Peso Visual:** KPIs con énfasis (números 32px bold)
-- **Interacción:** Click en KPI → drill-down modal, click en gráfico → expand
-- **Exportar:** Botón "Exportar Excel" prominent
-
-**KPIs Top Row:**
-| KPI | Valor | Tendencia | Click Action |
-|-----|-------|-----------|--------------|
-| MTTR | 4.2h | ↓15% (verde) | Modal drill-down: Global → Planta → Línea → Equipo |
-| MTBF | 127h | ↑8% (verde) | Modal drill-down: Global → Planta → Línea → Equipo |
-| OTs Abiertas | 23 | ↓5 (verde) | Lista de OTs abiertas (filtrar por urgencia) |
-| Técnicos Activos | 5/8 | - | Lista de técnicos con carga de trabajo |
-
-**Gráficos Middle Right:**
-- MTTR Trend: Gráfico de línea (últimos 6 meses)
-- MTBF by Equipo: Gráfico de barras (top 10 equipos problemáticos)
-- OTs by Type: Pie chart (avería vs rutina vs preventivo)
-
-**Filtros Avanzados:**
-- Planta (Acero/Panel/Todas)
-- Línea (All / Línea 1-6)
-- Período (Hoy / Esta semana / Este mes / Últimos 3 meses)
-- Técnico (All / María / Ana / Pedro / Laura)
-
----
-
-#### Para Pedro (Stock) - Inventory Focus Approach
-
-**Layout:**
-- **Top:** Search bar + Filtros (Categoría, Stock Mínimo, Ubicación)
-- **Middle:** Tabla de repuestos (columnas: Código, Nombre, Stock, Mínimo, Ubicación, Último Uso)
-- **Bottom:** Botón "Generar Pedido" + Alertas Stock Mínimo
-
-**Características:**
-- **Densidad:** Alta (máxima información en tabla)
-- **Peso Visual:** Badges de stock (rojo crítico, amarillo bajo, verde OK)
-- **Interacción:** Click en repuesto → modal ℹ️ (historial de uso)
-- **Notificaciones:** Solo alertas stock mínimo (NO spam por cada uso)
-
-**Tabla Columnas:**
-- Código: SKF-6208 (click → modal ℹ️)
-- Nombre: Rodamiento SKF-6208
-- Stock: 3 unidades 🔴 (crítico si <5)
-- Mínimo: 5 unidades
-- Ubicación: Estante A3, Cajón 3
-- Último Uso: 2026-02-20 (hace 7 días)
-- Acciones: "Ajustar Stock", "Ver Historial"
-
----
+Una sola dirección de diseño no puede optimizar la experiencia para todos estos contextos. Por lo tanto, **el sistema adaptará su layout y UX según el dispositivo y rol del usuario**.
 
 ### Design Rationale
 
-**Por qué una dirección híbrida adaptada por rol:**
+**Principio de "Cada uno a su pantalla":**
 
-1. **Diferentes necesidades por usuario:**
-   - Carlos necesita simplicidad y rapidez (Mobile First)
-   - María necesita organización y contexto (Split View)
-   - Javier necesita visibilidad total (Kanban First)
-   - Elena necesita datos ejecutivos (Dashboard KPIs First)
-   - Pedro necesita control de inventario (Inventory Focus)
+1. **Responsive + Adaptive Design**: El layout se adapta no solo al tamaño de pantalla (responsive), sino también al contexto de uso y rol del usuario (adaptive)
 
-2. **Experiencia core soportada:**
-   - Cada rol tiene layout optimizado para su tarea principal
-   - Consistencia visual (colores, tipografía, componentes) mantiene identidad de marca
-   - Usuario puede cambiar entre "vistas" si necesita (ej: Javier puede ver Dashboard KPIs si lo desea)
+2. **Componentes Compartidos**: Todas las direcciones usan el mismo sistema de diseño (shadcn/ui + Tailwind) con colores y tipografía consistentes, asegurando coherencia visual
 
-3. **Escalabilidad:**
-   - Nuevos roles pueden ser añadidos con layouts específicos
-   - Componentes reutilizables (Kanban, KPIs, Lista) usados en múltiples vistas
-   - Sistema de permisos controla qué vistas accessibles para cada rol
+3. **Experiencias Optimizadas por Contexto**:
+   - **Móvil (<768px)**: Dirección 3 (Mobile First) para Carlos y María
+   - **Tablet (768-1200px)**: Híbrido Dirección 2 + 3 (Kanban mobile-optimized)
+   - **Desktop (>1200px)**: Dirección 1, 2, 4 o 6 según el rol y tarea actual
 
-4. **Mantenibilidad:**
-   - Base de código consistente (Tailwind + Shadcn/ui)
-   - Componentes modulares (KanbanBoard, KPIDashboard, OTList)
-   - Layouts adaptados vía conditional rendering basado en rol de usuario
-
-**Trade-offs:**
-
-- **Complejidad:** Mayor complejidad inicial (múltiples layouts)
-- **Beneficio:** Mejor UX para cada rol, mayor adopción
-- **MVP:** Empezar con 2-3 layouts core (Mobile First para Carlos, Kanban First para Javier, Dashboard KPIs First para Elena)
-
----
+4. **User Personas Drive Layout**:
+   - **Carlos (Operario)**: Siempre ve versión Mobile First + Action Oriented
+   - **María (Técnica)**: Tablet = Kanban First, Móvil = Mobile First
+   - **Javier (Supervisor)**: Desktop = Kanban First, Tablet = Dirección 1
+   - **Elena (Administrador)**: Desktop = Data Heavy (por defecto), puede cambiar a Minimal
+   - **Pedro (Stock)**: Desktop = Dirección 1 con foco en módulo Stock
 
 ### Implementation Approach
 
-**Fase 1: Layout Core (Semana 1-2)**
+**Fase 1: Base Responsive (MVP)**
 
-**1. Setup Role-Based Routing:**
+Implementar breakpoints responsivos que mapeen a las direcciones:
 
-```typescript
-// app/layout.tsx
-import { currentUser } from '@/lib/auth'
+```css
+/* Mobile: Carlos, María en piso de fábrica */
+@media (max-width: 767px) {
+  /* Dirección 3: Mobile First + elementos de Action Oriented */
+  - Navegación inferior (bottom tabs)
+  - Elementos táctiles 44x44px mínimo
+  - Formularios simplificados
+  - CTAs prominentes para acciones críticas
+}
 
-export default function RootLayout({ children }) {
-  const user = currentUser()
-  const role = user.role // 'operario', 'tecnico', 'supervisor', 'admin', 'stock'
+/* Tablet: María en campo, Javier en piso de fábrica */
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* Híbrido Dirección 2 + 3: Kanban mobile-optimized */
+  - Kanban de 8 columnas (2 visibles, swipe horizontal)
+  - KPIs en panel lateral colapsable
+  - Touch targets grandes
+  - Sidebar simplificado
+}
 
-  return (
-    <html lang="es">
-      <body>
-        <RoleBasedLayout role={role}>
-          {children}
-        </RoleBasedLayout>
-      </body>
-    </html>
-  )
+/* Desktop: Javier, Elena en oficina */
+@media (min-width: 1200px) {
+  /* Dirección 1 (default), puede cambiar según rol */
+  - Sidebar completo
+  - Dashboard con KPIs
+  - Kanban de 8 columnas completo
+  - Tablas densas con pagination
 }
 ```
 
-**2. Componente RoleBasedLayout:**
+**Fase 2: Adaptive por Rol (Post-MVP)**
 
-```typescript
-// components/layouts/RoleBasedLayout.tsx
-interface RoleBasedLayoutProps {
-  role: 'operario' | 'tecnico' | 'supervisor' | 'admin' | 'stock'
-  children: React.ReactNode
-}
+Detectar rol del usuario y aplicar layout por defecto:
 
-export function RoleBasedLayout({ role, children }: RoleBasedLayoutProps) {
-  switch (role) {
-    case 'operario':
-      return <MobileFirstLayout>{children}</MobileFirstLayout>
-    case 'tecnico':
-      return <SplitViewLayout>{children}</SplitViewLayout>
-    case 'supervisor':
-      return <KanbanFirstLayout>{children}</KanbanFirstLayout>
-    case 'admin':
-      return <DashboardKPIsFirstLayout>{children}</DashboardKPIsFirstLayout>
-    case 'stock':
-      return <InventoryFocusLayout>{children}</InventoryFocusLayout>
-    default:
-      return <DefaultLayout>{children}</DefaultLayout>
-  }
-}
+```javascript
+const layoutByRole = {
+  'operario': 'mobile-first', // Carlos
+  'tecnico': 'kanban-first', // María
+  'supervisor': 'kanban-first', // Javier
+  'admin': 'data-heavy', // Elena
+  'stock': 'classic' // Pedro
+};
+
+// Permitir al usuario cambiar layout si lo prefiere
+// Guardar preferencia en user settings
 ```
 
----
+**Fase 3: Adaptive por Tarea (Opcional)**
 
-**Fase 2: Componentes Específicos por Vista (Semana 3-8)**
+Detectar contexto de tarea actual y ajustar UI:
 
-**1. MobileFirstLayout (Para Carlos):**
+```javascript
+const layoutByTask = {
+  'reportar-averia': 'action-oriented',
+  'ver-kanban': 'kanban-first',
+  'analizar-kpis': 'data-heavy',
+  'gestionar-stock': 'classic'
+};
+```
 
-- **Top Bar:** Botón "Reportar Avería" + Tab bar navigation
-- **Mis Avisos List:** Lista de averías del usuario (scrollable)
-- **Tab Bar:** Home, Mis Avisos, Notificaciones (badge contador), Perfil
+**Componentes Compartidos:**
 
-**Componentes:**
-- `ReportarAveriaButton` (CTA primario, 56px altura)
-- `MisAvisosList` (Scrollable list con cards)
-- `TabBarNavigation` (Bottom tab bar con iconos)
+Todas las direcciones usan:
+- **Color**: Rojo burdeos `#7D1220`, blanco `#FFFFFF`, negro `#000000`
+- **Tipografía**: Inter font family con escala consistente
+- **Espaciado**: 8px grid system
+- **Componentes**: shadcn/ui + Tailwind CSS
+- **Accesibilidad**: WCAG AA compliance en todas las direcciones
 
----
+**Showcase HTML de Referencia:**
 
-**2. SplitViewLayout (Para María):**
+El archivo `ux-design-directions.html` contiene mockups visuales de las 6 direcciones que sirven como referencia durante la implementación. Los desarrolladores pueden consultar cada dirección para entender el layout esperado para cada contexto.
 
-- **Top:** Breadcrumb + Filtros + "Mis OTs"
-- **Left Panel:** Lista de OTs (40% width)
-- **Right Panel:** Detalles de OT seleccionada (60% width, fixed)
 
-**Componentes:**
-- `OTListPanel` (Left panel, scrollable)
-- `OTDetailPanel` (Right panel, fixed, modal ℹ️ trigger)
-- `OTFilters` (Estado, Urgencia, Técnico)
+## User Journey Flows
 
----
+### Journey 1: Reportar Avería en 30 Segundos (Carlos)
 
-**3. KanbanFirstLayout (Para Javier):**
+**User Persona:** Carlos - Operario de Línea (25 años)
+**Contexto:** Piso de fábrica, móvil en mano, necesita reportar rápido
+**Meta:** Reportar avería y recibir confirmación en <30 segundos
 
-- **Top:** Breadcrumb + Filtros + "Triage"
-- **Left Panel (70%):** KanbanBoard con 8 columnas
-- **Right Panel (30%):** KPIs Widget + Lista de Técnicos
+Los detalles completos del flow con diagramas Mermaid están documentados en el archivo de diseño. Este journey es el **core experience** que hace que Carlos sienta "¡Mi voz importa".
 
-**Componentes:**
-- `KanbanBoard` (8 columnas, drag-and-drop)
-- `KPIsWidget` (Compact KPIs con click-to-drill-down)
-- `TechniciansList` (Lista con carga de trabajo)
+**Optimizaciones clave:**
+- Autocomplete predictivo con debouncing de 300ms
+- QR code scanning para pre-completar equipo
+- Campo descripción opcional
+- Toast notification con número único de aviso
+- Reintento automático en caso de error
 
----
+### Journey 2: Ver y Actualizar OTs Asignadas (María)
 
-**4. DashboardKPIsFirstLayout (Para Elena):**
+**User Persona:** María - Técnica de Mantenimiento (28 años)
+**Contexto:** Abre app cada mañana en tablet, ve OTs del día
+**Meta:** Trabajar en sus OTs asignadas, actualizar estados, ver repuestos
 
-- **Top Row:** 4 KPIs grandes con números y flechas ↑↓
-- **Middle Left (60%):** Kanban resumido
-- **Middle Right (40%):** Gráficos + Filtros avanzados
+**Optimizaciones clave:**
+- Dashboard con "Mis OTs de Hoy" al abrir
+- Modal ℹ️ con historia completa de OT
+- Actualización de estado en 2 taps
+- Stock de repuestos con ubicación visible
+- Real-time sync via WebSockets
 
-**Componentes:**
-- `KPIsCardsRow` (4 KPIs con drill-down)
-- `KanbanResumido` (8 columnas, tarjetas compactas)
-- `ChartsPanel` (Recharts con MTTR/MTBF trends)
+### Journey 3: Gestionar Kanban de OTs (Javier)
 
----
+**User Persona:** Javier - Supervisor de Mantenimiento (32 años)
+**Contexto:** Desktop en oficina, necesita control visual de carga de equipo
+**Meta:** Ver todas las OTs, asignar técnicos, drag-and-drop
 
-**5. InventoryFocusLayout (Para Pedro):**
+**Optimizaciones clave:**
+- Kanban de 8 columnas con OT cards
+- Drag & drop entre columnas
+- Asignar técnico en 2 taps
+- Push notifications a técnicos afectados
+- Panel lateral con KPIs del día
 
-- **Top:** Search bar + Filtros
-- **Middle:** Tabla de repuestos (columnas: Código, Nombre, Stock, Mínimo, Ubicación)
-- **Bottom:** Botón "Generar Pedido" + Alertas Stock Mínimo
+### Journey 4: Ver KPIs y Drill-Down (Elena)
 
-**Componentes:**
-- `RepuestosTable` (Tabla con badges de stock)
-- `StockAlerts` (Lista de repuestos con stock mínimo)
-- `GenerarPedidoButton` (Botón para generar pedido a proveedor)
+**User Persona:** Elena - Administrador / Jefa de Mantenimiento (38 años)
+**Contexto:** Desktop en oficina, necesita datos para decisiones
+**Meta:** Ver KPIs, hacer drill-down, exportar reportes
 
----
+**Optimizaciones clave:**
+- KPIs principales con tendencias
+- Drill-down en 3 niveles (División → Equipo → Historia)
+- Comparar períodos
+- Exportar a PDF/Excel/CSV
+- Configurar alertas automáticas
 
-**Fase 3: Consistencia Visual (Semana 9-10)**
+### Journey 5: Gestionar Stock y Alertas Críticas (Pedro)
 
-**Elementos Consistentes Across All Layouts:**
+**User Persona:** Pedro - Usuario con Capacidad de Gestión de Stock (35 años)
+**Contexto:** Desktop, necesita ver stock y alertas críticas
+**Meta:** Gestionar repuestos, alertas de stock crítico, reposición
 
-1. **Colores:** Primary azul #0066CC, Success verde #28A745, Danger rojo #DC3545
-2. **Tipografía:** Inter font, type scale consistente (H1 32px, H2 24px, Body 16px)
-3. **Spacing:** Múltiplos de 4px, padding consistente (24px desktop, 16px móvil)
-4. **Componentes:** Button, Input, Card, Badge, Dialog (Shadcn/ui)
-5. **Iconos:** Lucide React icons (consistent style)
-6. **Rounded corners:** 4px (border-radius)
-7. **Shadows:** `shadow-card` para cards, `shadow-modal` para modals
+**Optimizaciones clave:**
+- Panel de alertas con ítems críticos
+- Solicitar reposición con cantidad sugerida
+- Buscar repuestos por nombre/SKU/proveedor
+- Ajustar stock con razones
+- Ver stock por ubicación
 
----
+### Journey Patterns
 
-**Fase 4: Responsive Adaptation (Semana 11-12)**
+**Navigation Patterns:**
+1. Dashboard como hub: Todos los journeys inician desde dashboard contextual
+2. Modal ℹ️ para detalles: Detalles completos sin perder contexto
+3. Breadcrumb o Back button: Navegación clara hacia atrás
+4. Filtros contextuales: Específicos según pantalla actual
 
-**Responsive Strategy:**
+**Decision Patterns:**
+1. Confirmación antes de acciones destructivas
+2. Autocomplete con sugerencias
+3. Smart defaults según contexto
+4. Undo/Redo cuando aplica
 
-- **Desktop (>1200px):** Layouts específicos por rol como se describe arriba
-- **Tablet (768-1200px):** Layouts adaptados (2 columnas en lugar de 8, panels stackeados)
-- **Móvil (<768px):** Todos los layouts convierten a Mobile First (1 columna, tab bar navigation)
+**Feedback Patterns:**
+1. Toast notifications (✓/✗)
+2. Push notifications en tiempo real
+3. Inline validation
+4. Loading states con spinners
+5. Progressive disclosure
 
-**Ejemplo: KanbanFirstLayout en móvil:**
-- Desktop: 8 columnas horizontales
-- Tablet: 2 columnas (swipe para ver más)
-- Móvil: 1 columna (swipe para ver más, OT card expandida)
+**Error Recovery Patterns:**
+1. Reintentar automáticamente (sin conexión/timeout)
+2. Guardar draft local
+3. Modo offline con sync posterior
+4. Mensajes claros de qué pasó y qué hacer
 
----
+### Flow Optimization Principles
 
-**Next Steps:**
+**Minimizar Steps to Value:**
+- Reportar avería: 3 pasos máximo (<30s)
+- Ver OTs: 1 tap desde dashboard
+- Actualizar estado: 2 taps
+- Asignar técnico: 2 taps
 
-1. **Setup Role-Based Routing:** Implementar routing basado en rol de usuario
-2. **Build Core Layouts:** Crear 5 layouts específicos (MobileFirst, SplitView, KanbanFirst, DashboardKPIsFirst, InventoryFocus)
-3. **Build Specific Components:** Crear componentes específicos por vista (KanbanBoard, KPIsWidget, OTList, etc.)
-4. **Ensure Visual Consistency:** Validar que colores, tipografía, spacing son consistentes
-5. **Responsive Testing:** Testear en desktop, tablet, móvil para cada layout
+**Reducir Cognitive Load:**
+- Progressive disclosure
+- Smart defaults
+- Autocomplete
+- Redundancia semántica (icono + color + texto)
 
----
+**Clear Feedback & Progress:**
+- Toast notifications
+- Push notifications
+- Loading states
+- Progress indicators
+
+**Moments of Delight:**
+- Aviso #XXX: Número único genera "¡Funcionó!"
+- Real-time sync via WebSockets
+- Micro-interacciones (200-300ms)
+
+**Graceful Error Handling:**
+- Reintentar automáticamente
+- Modo offline
+- Mensajes claros
+- No data loss
+
 
 ## Component Strategy
 
-### Design System Components
+### Design System Components (shadcn/ui)
 
-**Foundation from Shadcn/ui:**
+**Componentes Disponibles de shadcn/ui:**
 
-Based on our design system choice (Tailwind CSS + Shadcn/ui from Step 6), we have access to comprehensive component primitives that require no custom development:
+shadcn/ui provee componentes accesibles basados en Radix UI y Tailwind CSS. Para gmao-hiansa utilizaremos:
 
-**Form & Input Components:**
-- Button, Input, Textarea, Select, Checkbox, Radio Group
-- Form labels with validation states
-- Search input with debouncing capability
+**Foundation Components:**
+- Button, Input, Textarea, Select: Para formularios (reportar avería, actualizaciones)
+- Checkbox, Radio, Switch: Para filtros y configuraciones
+- Label: Para accesibilidad en formularios
 
-**Layout & Containers:**
-- Card - For information containers (OT details, dashboards)
-- Dialog/Modal - For OT detail views
-- Separator - For visual hierarchy in cards
-- Scroll Area - For vertical scrolling within columns
-- Tabs - For Kanban ↔ List view toggle
+**Layout Components:**
+- Card: Para agrupar contenido (KPIs, alertas)
+- Separator: Para separación visual
+- Tabs: Para navegación dentro de páginas
+- Collapsible, Accordion: Para contenido expansible
 
-**Feedback & Communication:**
-- Toast - Success/error notifications
-- Alert - Warning and information messages
-- Tooltip - Contextual information
-- Badge - Priority indicators and status labels
-- Avatar - Technician initials and profile pictures
+**Navigation Components:**
+- Navigation Menu: Para navegación principal
+- Sidebar: Para navegación lateral (desktop)
+- Breadcrumb: Para navegación jerárquica
 
-**Navigation & Interaction:**
-- Dropdown Menu - Quick action menus
-- Popover - Contextual actions
-- Command Palette - Future universal search (Phase 2)
+**Feedback Components:**
+- Toast: Para confirmaciones de acciones (✓/✗)
+- Alert: Para alertas de stock crítico, errores
+- Dialog/Modal: Para modales y confirmaciones
+- Tooltip: Para información contextual
+- Progress: Para loading states
 
-**Data Display:**
-- Table - Alternative list view for OTs
-- Progress - Time tracking and completion status
+**Data Display Components:**
+- Table, Data Table: Para listas de OTs, stock, activos
+- Badge: Para etiquetas de estado
+- Avatar: Para usuarios con iniciales
+- Calendar: Para fechas (rutinas, reportes)
 
-**Strategy:** Use Shadcn/ui components as building blocks. All custom components will compose these primitives for consistency and maintainability.
+**Form Components:**
+- Form: Manejo de formularios con validación
+- FormField: Para inputs con labels y errores
 
 ---
 
 ### Custom Components
 
-Based on user journey analysis and gap assessment, the following custom components require specialized design:
+#### 1. OTCard (Tarjeta de Orden de Trabajo)
 
-#### 1. Kanban Board
+**Purpose:** Tarjeta compacta que muestra información esencial de una OT en el Kanban, permitiendo identificación rápida y acceso a detalles.
 
-**Purpose:** Central control dashboard for maintenance department workflow visualization. Enables supervisors to perform triage, assign work, and monitor real-time status across 8 workflow stages.
-
-**Usage:**
-- Default view for Supervisors and Technicians on login
-- Continuous supervision throughout shift
-- Morning assignment planning (15-20 min sessions)
-- Used on desktop, tablet, and 4K TV displays
-
-**Anatomy:**
-```
-Header (60px fixed)
-├─ Logo + Title "Tablero Kanban"
-├─ Search bar (global equipment/OT search)
-├─ Filters (State | Technician | Urgency)
-└─ View toggle (Kanban | List) | New OT button
-
-Board (calc(100vh - 60px))
-└─ 8 Columns (min 320px width, 16px gap)
-   ├─ 1. Pendientes Triage
-   ├─ 2. Asignaciones (SPLIT COLUMN)
-   │  ├─ Top: Pendiente de Asignar (unassigned)
-   │  └─ Bottom: Programada (assigned)
-   ├─ 3. En Progreso
-   ├─ 4. Pendiente Repuesto
-   ├─ 5. Pendiente Parada
-   ├─ 6. Reparación Externa
-   ├─ 7. Completadas
-   └─ 8. Descartadas
-```
-
-**Column "Asignaciones" Split Design:**
-- Horizontal divider (2px solid #722F37)
-- Top section: "🔴 PENDIENTE DE ASIGNAR (N)" - unassigned OTs
-- Bottom section: "📋 PROGRAMADA (N)" - assigned OTs
-- When technician assigned: Card animates down (slide 200ms)
+**Usage:** Kanban board de 8 columnas, dashboard de OTs asignadas
 
 **States:**
-1. **Loading:** Skeleton screens for columns
-2. **Default:** Full board with OTs in current states
-3. **Empty Column:** "No hay OTs en este estado" message
-4. **Filtering:** Badge showing "3 de 12 OTs visibles"
-5. **Dragging:** Source card opacity 60%, elevated +8px
-6. **Drop Target:** Valid column shows red burgundy border + subtle highlight
-7. **Error:** Retry button + error message
+- Default: Estado normal de la tarjeta
+- Hover: Elevation shadow + cursor pointer
+- Dragging: Opacidad reducida + shadow elevation
+- Selected: Borde rojo burdeos sólido 2px
+- Disabled: Opacidad 50% + cursor not-allowed
 
 **Variants:**
-- **Full Desktop (>1400px):** All 8 columns visible
-- **Tablet (768-1400px):** 4-6 columns + horizontal scroll
-- **Mobile (<768px):** 1 column + swipe lateral + dots indicator
-- **Personalized View:** Filtered by user (e.g., "Solo mis OTs" for technicians)
-- **Technician View:** Only shows assigned OTs (other technicians' cards semi-transparent)
+- Compact: Para mobile (altura 80px)
+- Default: Para tablet/desktop (altura 120px)
+- Detailed: Para view de lista (altura 160px con más info)
 
-**Accessibility (WCAG AA):**
-- **Contrast:** All text 4.5:1 minimum (met by burgundy/white palette)
-- **Touch Targets:** Cards 44x44px minimum (actual: 296x140px)
-- **Keyboard Navigation:**
-  - Tab: Navigate between cards in visual order
-  - Enter/Space: Open OT detail modal
-  - Arrow keys: Navigate between columns and cards
-  - Escape: Close modal
-  - Home/End: First/last card in column
-- **ARIA Labels:** Full card information announced on focus
-- **Focus Indicators:** 3px solid #722F37 border + 2px outline
+**Accessibility:**
+- role="button" + tabindex="0" para keyboard navigation
+- aria-label: "OT #789: Prensa PH-500 no arranca, estado: En Progreso"
+- Enter/Space para activar
 
 **Interaction Behavior:**
-
-**Drag & Drop Permissions:**
-- **Javier (Supervisor):** Can drag any card between columns
-- **María (Technician):** Can drag HER cards only (Asignada→En Progreso, En Progreso→Completada, En Progreso→Pendiente Repuesto)
-- **Elena (Admin):** Read-only (no drag)
-- **Carlos (Operator):** Does not use Kanban
-
-**Valid State Transitions:**
-```
-Pendientes Triage (1)
-    ↓ [Convertir en OT + Assign technician]
-Asignaciones - Pendiente de Asignar (2a)
-    ↓ [Assign technician]
-Asignaciones - Programada (2b)
-    ↓ [▶️ Start]
-En Progreso (3)
-    ├─→ [Complete] → Completadas (7)
-    ├─→ [Need parts] → Pendiente Repuesto (4)
-    └─→ [Pause] → Pendiente Parada (5)
-Pendiente Repuesto (4) ← [Parts arrived]
-    ↓
-En Progreso (3)
-Pendiente Parada (5) ← [Resume]
-    ↓
-En Progreso (3) or Asignaciones (2)
-```
-
-**Click Behavior:**
-1. Click card → Opens Modal ℹ️ with full OT details
-2. Quick actions in modal (role-dependent):
-   - Technician: [▶️ Start], [✅ Complete], [📦 Need parts], [📎 Add part], [💬 Note], [📷 Photo]
-   - Supervisor: [▶️ Start], [✅ Complete], [👤 Reassign], [✏️ Edit], [📎 Add part], [💬 Note], [📷 Photo]
-   - Admin: Read-only view
-
-**Real-time Updates (WebSockets):**
-
-**Scenario 1: María completes OT**
-- T=0ms: María clicks [✅ Complete]
-- T=50ms: Local card fades out from "En Progreso" (200ms)
-- T=250ms: Card fades in to "Completadas" (200ms)
-- T=300ms: WebSocket broadcasts update
-- T=400ms: All clients see card move with animation
-- T=600ms: Carlos (operator) receives push notification
-
-**Scenario 2: New alert reported**
-- T=0ms: Carlos submits failure report from mobile
-- T=200ms: New pink card appears in Javier's "Pendientes Triage" (fade in + slide up 200ms)
-- T=300ms: "NUEVA" badge pulses on card
-- T=400ms: Javier receives push: "Nueva avería reportada: MA-001"
-
-**Performance Optimizations:**
-- **Virtual Scrolling:** Render only visible cards + 10 buffer (for columns with 50+ cards)
-- **Lazy Loading:** Modal ℹ️ loads details on-demand (skeleton 200ms)
-- **Debouncing:** 300ms debounce on search/filters
-- **WebSocket Heartbeat:** Ping/pong every 30 seconds
-- **Cache:** LocalStorage cache of last Kanban state (5-minute TTL)
-- **Optimized Renders:** React.memo on cards, only re-render changed columns/cards
+- Click/tap: Abrir Modal ℹ️ con detalles completos
+- Drag: Mover a otra columna (desktop)
+- Long press: Mostrar menú de acciones rápidas (mobile)
 
 ---
 
-#### 2. OT Card
+#### 2. KanbanBoard (Tablero Kanban)
 
-**Purpose:** Rich information display component for maintenance work orders within Kanban columns.
+**Purpose:** Tablero de 8 columnas para visualizar y gestionar OTs por estado con drag & drop.
 
-**Usage:** Used exclusively within Kanban Board columns. Each card represents one OT with critical information at a glance.
-
-**Anatomy:**
-```
-┌────────────────────────────────────────────┐
-│ OT-2026-0001           ┌──────────┐        │ Header Row
-│ Motor principal no     │ 🔴 CRÍTICA│       │ ID + Title + Priority Badge
-│ arranca                └──────────┘        │
-├────────────────────────────────────────────┤
-│ 🏭 MA-001 │ Planta A │ Línea 1            │ Machine Row (Code + Location)
-├────────────────────────────────────────────┤
-│ 👤 Carlos García                            │ Assignment (or "Sin asignar")
-├────────────────────────────────────────────┤
-│ ⏱️ Hace 2 horas en este estado             │ Time in State
-│                                              │
-│ ┌──────────────────────────────────────┐  │ Conditional Alert (if parts missing)
-│ │ 📦 Faltan 2 repuestos               │  │
-│ └──────────────────────────────────────┘  │
-└────────────────────────────────────────────┘
-```
-
-**Dimensions:**
-- Width: 100% of column (~296px with 12px padding)
-- Min Height: 140px
-- Max Height: None (grows with content)
-- Border Radius: 8px
-- Padding: 12px
-- Element Gap: 8px
-
-**Mandatory Information:**
-1. **OT Number:** OT-2026-0001 (format: OT-YYYY-NNNN)
-2. **Priority:** Badge (Crítica/Alta/Media/Baja) with color code
-3. **Title:** Motor principal no arranca (max 2 lines, truncate with "...")
-4. **Machine:** MA-001 (code) + Planta A + Línea 1 (location)
-5. **Assignment:**
-   - Assigned technician: "Carlos García" + avatar (CG initials)
-   - Unassigned: "👤 Sin asignar" in gray
-6. **Time in State:** "Hace 2 horas" / "Hace 45 min" / "Hace 3 días"
-
-**Conditional Information:**
-
-| Condition | Display | Visualization |
-|-----------|---------|---------------|
-| Missing parts | 📦 Faltan X repuestos | Alert badge in footer |
-| External repair | 🔵 Enviada a proveedor | Blue border + icon |
-| Internal workshop | 🟡 Taller propio | Yellow border + icon |
-| Regulatory maintenance | 🟣 Mant. Reglamentario | Purple border + icon |
-| Time >24h | ⚠️ Más de 24h | Warning badge |
-| New OT (<5min) | NUEVA | Pulsing badge |
-
-**Color Coding (adapted to burgundy/white/black palette):**
-
-| OT Type | Background | Border | Text |
-|---------|------------|--------|------|
-| Aviso avería triage | #F8B4C4 (light pink) | #F8B4C4 | #212529 |
-| Aviso reparación triage | #FFFFFF (white) | #DEE2E6 | #212529 |
-| Correctivo propio | #FFFFFF (white) | #722F37 (burgundy) | #212529 |
-| Correctivo externo | #FFFFFF (white) | #722F37 + white line inner | #212529 |
-| Reparación interna (taller) | #FFF8DC (cream) | #F4C430 (yellow) | #212529 |
-| Reparación externa | #F0F8FF (alice blue) | #4A90E2 (blue) | #212529 |
-| Mantenimiento Reglamentario | #F3E5F5 (lavender) | #9B59B6 (purple) | #212529 |
-| Rutina Preventiva | #F0FFF0 (honeydew) | #90EE90 (green) | #212529 |
-
-**Priority Badges:**
-
-| Priority | Background | Text | Icon |
-|----------|------------|------|------|
-| Crítica | #DC3545 (red) | #FFFFFF | ⚠️ |
-| Alta | #FFC107 (yellow) | #212529 | 🔴 |
-| Media | #6C757D (gray) | #FFFFFF | 🟡 |
-| Baja | #28A745 (green) | #FFFFFF | 🟢 |
+**Usage:** Vista principal de Javier (supervisor), dashboard de María (técnica)
 
 **States:**
-1. **Default:** Normal visualization in column
-2. **Hover:** Subtle elevation (`box-shadow: 0 4px 12px rgba(0,0,0,0.15)`)
-3. **Dragging:** Opacity 60%, strong elevation, 2deg rotation
-4. **Selected:** 3px solid burgundy border + subtle highlight
-5. **New (temporal badge):** "NUEVA" badge disappears after 5 min
-6. **Disabled:** Opacity 50%, cursor not-allowed
+- Default: Columnas visibles con OT cards
+- Dragging: Columna destino destacada con borde punteado
+- Filtered: Solo OTs que coinciden con filtros visibles
+- Loading: Skeleton loaders en columnas
+
+**Variants:**
+- Desktop: 8 columnas completas
+- Tablet: 2-3 columnas visibles con swipe horizontal
+- Mobile: 1 columna con swipe + indicador "1/8"
+
+**Accessibility:**
+- role="region" + aria-label="Kanban de Órdenes de Trabajo"
+- Columnas: role="listbox" + aria-label="[Estado]: [N] OTs"
+- Keyboard: Arrow keys para navegar, Enter para seleccionar
+
+**Interaction Behavior:**
+- Drag & drop: Arrastrar OT card entre columnas
+- Click columna: Filtrar para ver solo esa columna
+- Click OT card: Abrir Modal ℹ️
 
 ---
 
-#### 3. Machine Status Indicator
+#### 3. AssetSearch (Búsqueda Predictiva de Activos)
 
-**Purpose:** Visual indicator showing current operational state of production equipment.
+**Purpose:** Autocomplete jerárquico para buscar activos con suggest inteligente y debouncing.
 
-**Usage:**
-- Asset inventory dashboard
-- Equipment detail views
-- Historical OT views per machine
-- Maintenance compliance dashboards
+**Usage:** Reportar avería (Paso 1), buscar activos en gestión
 
 **States:**
+- Idle: Input vacío, placeholder visible
+- Typing: Usuario escribe, spinner de loading
+- Results: Lista de suggestions desplegada
+- NoResults: "No se encontraron equipos"
+- Selected: Suggestion seleccionada con highlight
 
-| State | Color | Icon | Meaning |
-|-------|-------|------|---------|
-| Operativo | #28A745 (green) | ✅ | Machine running normally |
-| Averiado | #DC3545 (red) | ❌ | Machine down, OT open |
-| En Reparación | #FFC107 (yellow) | 🔧 | Being repaired |
-| Retirado | #6C757D (gray) | 📦 | Removed from service |
-| Bloqueado | #212529 (black) | 🚫 | Blocked (regulatory failure) |
-
-**Visual Design:**
-- **Inline version:** Small badge (24px height) for tables/lists
-- **Card version:** Large indicator (48px height) for equipment cards
-- **Interactive version:** Clickable to show OTs affecting this machine
+**Variants:**
+- Default: Con jerarquía completa
+- Compact: Sin jerarquía (para mobile)
 
 **Accessibility:**
-- **ARIA Label:** "Estado de máquina: Operativo" (or current state)
-- **Color Blind Support:** Icon + text, never color alone
-- **Contrast:** All states meet WCAG AA 4.5:1
+- role="combobox" + aria-expanded
+- aria-autocomplete="list"
+- Arrow keys para navegar suggestions
+- Enter para seleccionar, Esc para cerrar
+
+**Interaction Behavior:**
+- Debouncing: 300ms después del último keystroke
+- Click suggestion: Autocompletar input + cerrar dropdown
+- Enter: Seleccionar primera suggestion
 
 ---
 
-#### 4. Parts Inventory Picker
+#### 4. KPICard (Tarjeta de KPI)
 
-**Purpose:** Specialized autocomplete for selecting replacement parts during OT completion, showing real-time stock and physical warehouse location.
+**Purpose:** Tarjeta compacta para mostrar KPI principal con trend indicator comparativo.
 
-**Usage:**
-- Technician completing OT: "Rodamiento SKF-6208" usage
-- Shows current stock: "Stock: 12"
-- Shows location: "📍 Estante A3, Cajón 3"
-- Updates stock automatically on selection
-
-**Anatomy:**
-```
-┌────────────────────────────────────────┐
-│ 📎 Agregar Repuesto                   │
-├────────────────────────────────────────┤
-│ 🔍 Search: [rodamiento......]         │
-│         ┌────────────────────────────┐ │
-│         │ Rodamiento SKF-6208        │ │
-│         │ Stock: 12 │ 📍 A3-C3       │ │
-│         └────────────────────────────┘ │
-│         ┌────────────────────────────┐ │
-│         │ Rodamiento SKF-6209        │ │
-│         │ Stock: 3  │ 📍 A3-C4       │ │
-│         └────────────────────────────┘ │
-├────────────────────────────────────────┤
-│ Cantidad: [1] │ Stock actual: 12       │
-│         [✓ Cancelar]  [Agregar +]     │
-└────────────────────────────────────────┘
-```
-
-**Features:**
-- **Predictive Search:** <200ms response, debounced 300ms
-- **Stock Display:** Real-time stock quantity visible in autocomplete
-- **Location Display:** Physical warehouse location (Estante A3, Cajón 3)
-- **Low Stock Warning:** "⚠️ Stock bajo (3 unidades, mínimo: 5)" in red if below minimum
-- **Auto-update:** Stock decrements immediately on confirmation
-- **Undo:** 5-second window to undo stock deduction
-
-**Interaction Flow:**
-1. María clicks "📎 Agregar Repuesto" in OT completion form
-2. Dialog opens with search input
-3. María types "rodamiento" (300ms debounce)
-4. Autocomplete shows matching parts with stock + location
-5. María selects "Rodamiento SKF-6208 (Stock: 12, 📍 A3-C3)"
-6. Quantity field appears: [1] (default)
-7. María adjusts quantity if needed: [2]
-8. System confirms: "✓ Agregado. Stock actualizado: 12 → 10"
-9. Part appears in OT's "Repuestos Usados" list
-
-**Accessibility:**
-- **Keyboard Navigation:** Arrow keys navigate autocomplete results
-- **ARIA Live:** Stock quantity announced on selection
-- **Error Prevention:** Cannot select more parts than available stock
-
----
-
-#### 5. Photo Upload Component
-
-**Purpose:** Multi-photo upload with preview for failure reports and OT documentation.
-
-**Usage:**
-- Carlos reporting failure: "Motor no arranca" + photo
-- María documenting repair: Before/after photos
-- Regulatory inspections: Certificate attachments
-
-**Features:**
-- **Multi-upload:** Up to 5 photos per report
-- **Preview:** Thumbnail grid (100x100px)
-- **Compression:** Auto-compress to <500KB per photo
-- **Progress:** Upload progress bar per photo
-- **Validation:** File type (JPG/PNG), max size 10MB uncompressed
-- **Reorder:** Drag to reorder photos before upload
-- **Delete:** X button on each thumbnail to remove
+**Usage:** Dashboards de Elena (admin), Javier (supervisor)
 
 **States:**
-1. **Empty:** Show upload button only
-2. **Selected:** Show thumbnails preview
-3. **Uploading:** Progress bars per photo
-4. **Completed:** Green checkmarks on thumbnails
-5. **Error:** Red X on failed photo, retry button
+- Positive: Trend verde (mejora)
+- Negative: Trend rojo (empeora)
+- Neutral: Trend gris (sin cambio)
+- Loading: Skeleton loader
+
+**Variants:**
+- Default: Con trend + meta
+- Compact: Solo valor + trend (mobile)
+- Detailed: Con sparkline mini-gráfico
 
 **Accessibility:**
-- **Alt Text:** Auto-generated "Foto 1 de motor averiado"
-- **Keyboard:** Tab navigates thumbnails, Delete removes selected
-- **Error Announcements:** ARIA live for upload failures
+- role="figure" + aria-label="Mean Time To Repair: 4.2 horas, 15% mejor que el mes anterior"
+- Trend icon con aria-label: "Disminución del 15%"
 
 ---
 
-#### 6. Time Tracking Widget
+#### 5. StatusBadge (Badge de Estado)
 
-**Purpose:** Displays relative time since OT entered current state, with automatic updates every minute.
+**Purpose:** Badge redundante con icono + color + texto para identificar estado de OT (WCAG AA compliance).
 
-**Usage:**
-- In OT Card footer: "⏱️ Hace 2 horas en este estado"
-- In Modal ℹ️: Detailed timestamp with relative time
-- KPIs: MTTR calculation (time from report to completion)
+**Usage:** OT cards, listas de OTs, detalles de OT
 
-**Visual Design:**
-- **Compact version:** "⏱️ Hace 2 horas" (card footer)
-- **Detailed version:** "En este estado desde: 09:30 AM (hace 2 horas 15 min)" (modal)
+**States (8 estados OT):**
+- Por Revisar: Gray + icono ojo
+- Por Aprobar: Amber + icono reloj
+- Aprobada: Blue + icono check
+- En Progreso: Purple + icono wrench
+- Pausada: Pink + icono pause
+- Completada: Green + icono check-double
+- Cerrada: Gray + icono archive
+- Cancelada: Red + icono x
 
-**Features:**
-- **Auto-update:** Refreshes every 60 seconds (client-side)
-- **Relative Time:** Human-readable format
-  - < 1 hour: "Hace 45 min"
-  - 1-24 hours: "Hace 2 horas"
-  - 1-7 days: "Hace 3 días"
-  - > 7 days: "14 Ene 2026" (absolute date)
-- **Warning Threshold:** "⚠️ Más de 24h" badge if stuck >24h
-- **Timezone:** Displays in user's local timezone
+**Variants:**
+- Default: Icono + color + texto completo
+- Compact: Icono + primera palabra (mobile)
+- Dot: Solo círculo de color (para indicadores visuales)
 
-**Implementation:**
-- **Client-side calculation:** No server calls (performance)
-- **Efficient:** `setInterval` every 60s, not every second
-- **Cleanup:** Clear interval on component unmount
+**Accessibility:**
+- role="status" + aria-label="Estado: En Progreso"
+- Icono decorativo: aria-hidden="true"
+- Contraste WCAG AA: 4.5:1 mínimo
 
 ---
 
-#### 7. KPI Dashboard Charts
+#### 6. ModalInfo (Modal ℹ️ de Detalles)
 
-**Purpose:** Visual analytics for maintenance performance metrics (MTTR, MTBF, trends).
+**Purpose:** Modal con detalles completos de OT sin perder contexto de la vista principal.
 
-**Usage:**
-- Elena's dashboard (admin view)
-- Drilling down from global → plant → line → machine
-- Executive reports for management
+**Usage:** Kanban, listas de OTs, dashboard
 
-**Charts:**
-
-**1. MTTR (Mean Time To Repair):**
-- **Type:** Line chart
-- **X-axis:** Time (weeks/months)
-- **Y-axis:** Hours (target: decreasing trend)
-- **Goal Line:** Horizontal line showing target MTTR
-
-**2. MTBF (Mean Time Between Failures):**
-- **Type:** Line chart
-- **X-axis:** Time (weeks/months)
-- **Y-axis:** Days (target: increasing trend)
-
-**3. OTs by Week:**
-- **Type:** Bar chart
-- **Stacked:** Completed vs. Open vs. Overdue
-
-**4. Top 5 Recurrent Failures:**
-- **Type:** Horizontal bar chart
-- **Y-axis:** Machine/Component
-- **Drill-down:** Click bar → OTs for that machine
-
-**5. Technician Productivity:**
-- **Type:** Bar chart (horizontal)
-- **Y-axis:** Technician name
-- **Benchmark:** Average line across chart
-
-**Drill-down Behavior:**
-1. Elena clicks "MTTR" chart → February week 3
-2. Modal opens: "MTTR detallado - Semana 3"
-3. Shows breakdown: Planta A: 3.2h, Planta B: 5.1h
-4. Elena clicks "Planta A → Línea 1"
-5. Shows: Línea 1 breakdown by machine
-6. Elena clicks "MA-001"
-7. Shows: OT history for MA-001
-
-**Real-time Updates:**
-- Charts refresh every 30-60 seconds (polling or WebSocket)
-- Smooth transitions (300ms fade) when data changes
+**States:**
+- Opening: Animation fade-in + scale
+- Open: Contenido visible
+- Loading: Skeleton loader mientras carga data
+- Closing: Animation fade-out
 
 **Accessibility:**
-- **Data Tables:** Every chart has "View as table" alternative
-- **Screen Reader:** ARIA describes chart data in text format
+- role="dialog" + aria-modal="true"
+- aria-labelledby: Título del modal
+- Focus trap: Tab permanece dentro del modal
+- Escape para cerrar
 
-**Export:**
-- Button "📊 Exportar Excel"
-- Generates .xlsx with multiple sheets (MTTR, MTBF, OTs, etc.)
-- Compatible with Excel 2016+
+**Interaction Behavior:**
+- Click fuera: Cerrar modal
+- Escape: Cerrar modal
+- Click [X]: Cerrar modal
+- Click actions: Ejecutar acción sin cerrar
+
+---
+
+#### 7. StockAlert (Alerta de Stock Crítico)
+
+**Purpose:** Alerta prominente para ítems de stock por debajo del mínimo.
+
+**Usage:** Dashboard de Pedro, notificaciones push
+
+**States:**
+- Critical: 🔴 Rojo (stock < mínimo)
+- Warning: 🟡 Amarillo (stock cercano al mínimo, < 120%)
+- Resolved: 🟢 Verde (reposición solicitada)
+
+**Variants:**
+- Card: Para dashboard
+- Toast: Para notificación temporal
+- Banner: Para alerta persistente en header
+
+**Accessibility:**
+- role="alert" + aria-live="polite"
+- Icono con aria-label: "Alerta de stock crítico"
+
+---
+
+#### 8. DivisionTag (Tag de División)
+
+**Purpose:** Tag con color específico para identificar división (HiRock / Ultra).
+
+**Usage:** OT cards, búsqueda de activos, listas
+
+**States:**
+- HiRock: Fondo amarillo/dorado (#FFD700), texto negro
+- Ultra: Fondo verde salvia (#8FBC8F), texto negro
+- Unknown: Fondo gris, texto negro
+
+**Variants:**
+- Default: Texto completo
+- Compact: Iniciales (HR / UL)
+
+**Accessibility:**
+- role="status" + aria-label="División HiRock"
+- Contraste WCAG AA: 4.5:1 mínimo
 
 ---
 
 ### Component Implementation Strategy
 
-**Hybrid Approach:**
+**Foundation Components (from shadcn/ui):**
 
-Our component strategy balances using proven design system primitives with custom domain-specific components:
+Utilizamos componentes de shadcn/ui como base:
+- Button, Input, Textarea, Select
+- Card, Dialog, Toast, Alert
+- Table, Badge, Avatar, Tabs
+- Navigation Menu, Sidebar
 
-**1. Foundation Components (Shadcn/ui):**
-- Use Shadcn/ui primitives for consistency (buttons, inputs, cards, dialogs, badges)
-- Leverage built-in accessibility (ARIA, keyboard navigation)
-- Benefit from community-tested components
+**Custom Components Strategy:**
 
-**2. Custom Components (Domain-Specific):**
-- Build specialized components for maintenance workflows
-- Compose Shadcn/ui primitives internally
-- Maintain design consistency through shared tokens (colors, spacing, typography)
-
-**3. Compositional Example:**
-
-```tsx
-// Kanban Board (custom) uses Shadcn/ui internally:
-<KanbanBoard>
-  <KanbanColumn>
-    <OTCard>
-      <Card>              {/* ← Shadcn/ui Card */}
-      <Badge>             {/* ← Shadcn/ui Badge */}
-      <Avatar>            {/* ← Shadcn/ui Avatar */}
-      <Button>            {/* ← Shadcn/ui Button */}
-      <Separator>         {/* ← Shadcn/ui Separator */}
-    </OTCard>
-  </KanbanColumn>
-</KanbanBoard>
-```
-
-**4. Design Tokens:**
-All custom components use design tokens defined in Visual Foundation (Step 8):
-- Colors: Primary #722F37 (burgundy), Background #FFFFFF, etc.
-- Typography: Inter font family, 16px base
-- Spacing: 4px base unit (8, 12, 16, 24, 32, 48px)
-- Border Radius: 4px, 8px
-
-**5. Accessibility Strategy:**
-- Shadcn/ui primitives provide ARIA foundation
-- Custom components extend with domain-specific ARIA labels
-- All components meet WCAG AA (4.5:1 contrast, 44x44px targets)
-- Keyboard navigation support throughout
-
-**6. State Management:**
-- Real-time updates via WebSockets (Kanban, OT states)
-- Optimistic UI updates (immediate feedback, rollback on error)
-- Offline fallback (show cached state, disable actions)
-
-**7. Performance Strategy:**
-- Virtual scrolling for large lists (50+ items)
-- Lazy loading of detail views (on-demand)
-- Debouncing on search inputs (300ms)
-- Memoization to prevent unnecessary re-renders
+1. **Build on shadcn/ui primitives**: Usar Radix UI primitives como base
+2. **Use design tokens**: Colores, tipografía, espaciado del sistema de diseño
+3. **Follow shadcn/ui patterns**: Estructura de componentes, props, naming conventions
+4. **Ensure accessibility**: ARIA labels, keyboard navigation, screen reader support
+5. **Create reusable patterns**: Patrones consistentes para variantes, states, sizes
 
 ---
 
 ### Implementation Roadmap
 
-**Prioritized by User Journey Criticality (MVP → Post-MVP):**
+**Phase 1 - Core Components (MVP Sprint 1-2):**
 
-#### Phase 1 - Core Components (MVP - Month 1)
+Componentes críticos para journeys más importantes:
 
-**Goal:** Enable critical user journeys (Report → Assign → Execute → Complete)
+1. **StatusBadge** - Necesario para todos los listados de OTs
+2. **OTCard (Compact)** - Necesario para Kanban de 8 columnas
+3. **AssetSearch** - Necesario para "Reportar avería en 30 segundos"
+4. **KPICard (Default)** - Necesario para dashboards de Elena/Javier
 
-**1. Kanban Board** ⭐ **HIGHEST PRIORITY**
-- **Why first:** Central view for entire system
-- **Dependencies:** None (can be built in parallel with backend)
-- **Enables:** Javier triage, María sees assigned OTs, Elena supervision
-- **Effort:** 2 weeks (drag & drop complexity, real-time sync)
-
-**2. OT Card**
-- **Why:** Required for Kanban Board
-- **Dependencies:** Kanban Board
-- **Enables:** Visual OT representation in columns
-- **Effort:** 3 days (states, interactions, accessibility)
-
-**3. Parts Inventory Picker**
-- **Why:** María needs to register parts used when completing OTs
-- **Dependencies:** Parts module (backend), Stock data
-- **Enables:** Complete OT workflow, stock tracking
-- **Effort:** 1 week (predictive search + stock + location)
-
-**4. Photo Upload Component**
-- **Why:** Carlos reports failures with photos, María documents repairs
-- **Dependencies:** Storage service (backend)
-- **Enables:** Rich failure reports, repair documentation
-- **Effort:** 3 days (upload, preview, compression)
-
-**Phase 1 Success Metrics:**
-- ✅ Supervisors can perform triage in Kanban
-- ✅ Technicians can see and update their OTs
-- ✅ OTs can be completed with parts + photos
-- ✅ Real-time updates work across devices
+**Target**: Soportar journeys de Carlos (reportar avería) y Javier (ver Kanban)
 
 ---
 
-#### Phase 2 - Supporting Components (MVP+ - Month 2)
+**Phase 2 - Supporting Components (MVP Sprint 3-4):**
 
-**Goal:** Enhance UX with specialized views and analytics
+Componentes que mejoran la experiencia:
 
-**5. Machine Status Indicator**
-- **Why:** Asset dashboard, equipment history views
-- **Dependencies:** Assets module (backend)
-- **Enables:** Quick visual equipment state
-- **Effort:** 2 days (5 states, color coding, icons)
+5. **KanbanBoard (Desktop + Tablet)** - Necesario para control visual de Javier
+6. **ModalInfo** - Necesario para detalles de OTs
+7. **DivisionTag** - Necesario para identificación visual de activos
+8. **StockAlert (Card + Toast)** - Necesario para gestión de stock de Pedro
 
-**6. Time Tracking Widget**
-- **Why:** OT cards show "Hace 2 horas en este estado"
-- **Dependencies:** None (client-side calculation)
-- **Enables:** Time-in-state visibility, MTTR calculation
-- **Effort:** 1 day (relative time formatting, auto-update)
-
-**7. KPI Dashboard Charts**
-- **Why:** Elena needs MTTR, MTBF, trends for decision-making
-- **Dependencies:** KPI module (backend), analytics data
-- **Enables:** Data-driven decisions, executive reports
-- **Effort:** 2 weeks (charts library integration, drill-down, export)
-
-**Phase 2 Success Metrics:**
-- ✅ Admin dashboard shows actionable KPIs
-- ✅ Charts support drill-down (Global → Plant → Line → Machine)
-- ✅ KPIs export to Excel for management
-- ✅ Equipment status visible at a glance
+**Target**: Soportar journeys completos de María, Javier, Pedro
 
 ---
 
-#### Phase 3 - Enhancement Components (Post-MVP - Month 3+)
+**Phase 3 - Enhancement Components (Post-MVP):**
 
-**Goal:** Advanced features for scalability and optimization
+Componentes que optimizan UX:
 
-**8. Advanced Search Filters**
-- **Why:** Universal search across all fields (Phase 2 of PRD)
-- **Dependencies:** Search engine (Elasticsearch/PostgreSQL full-text)
-- **Enables:** "Find all OTs for MA-001 with 'rodamiento' in description"
-- **Effort:** 1 week (multi-field search, debouncing, caching)
+9. **KPICard (Detailed with sparkline)** - Para análisis avanzado de Elena
+10. **OTCard (Detailed variant)** - Para view de lista
+11. **KanbanBoard (Mobile)** - Versión mobile-optimized con swipe
+12. **AssetSearch (Compact)** - Para mobile
 
-**9. QR Code Scanner**
-- **Why:** Track equipment with QR codes (Phase 3 of PRD)
-- **Dependencies:** Mobile camera, QR labels on equipment
-- **Enables:** Instant equipment identification, chain of custody
-- **Effort:** 1 week (scanner library, integration, camera permissions)
+**Target**: Optimizar experiencias para todos los usuarios
 
-**Phase 3 Success Metrics:**
-- ✅ Universal search finds anything in <200ms
-- ✅ QR scanning works on mobile (Android/iOS)
-- ✅ Equipment tracking enables physical location traceability
-
----
-
-#### Summary Timeline
-
-| Phase | Duration | Components | Key Outcome |
-|-------|----------|------------|-------------|
-| **Phase 1** | Month 1 | Kanban Board, OT Card, Parts Picker, Photo Upload | Core workflows functional |
-| **Phase 2** | Month 2 | Machine Status, Time Widget, KPI Charts | Analytics + enhanced UX |
-| **Phase 3** | Month 3+ | Advanced Search, QR Scanner | Scalability + optimization |
-
-**Total Estimated Effort:**
-- **Phase 1:** ~4 weeks (1 developer)
-- **Phase 2:** ~3 weeks (1 developer)
-- **Phase 3:** ~2 weeks (1 developer)
-
-**Parallel Development Opportunities:**
-- Week 1-2: Kanban Board (frontend) + Backend APIs (parallel)
-- Week 3: OT Card + Parts Picker (frontend) + Stock module (backend)
-- Week 4: Photo Upload + Integration testing
-- Week 5-6: KPI Charts (frontend) + Analytics backend
-- Week 7-8: Advanced features + Performance optimization
-
----
 
 ## UX Consistency Patterns
 
 ### Button Hierarchy
 
-**Purpose:** Clear visual hierarchy guides users to primary actions while preventing accidental destructive actions.
-
 **When to Use:**
-- **Primary Buttons:** Main action on a page/screen (e.g., "Reportar Avería", "Completar OT")
-- **Secondary Buttons:** Alternative or less important actions (e.g., "Cancelar", "Guardar como borrador")
-- **Tertiary Buttons:** Low-emphasis actions (e.g., "Ver más", "Editar")
-- **Danger Buttons:** Destructive actions requiring confirmation (e.g., "Eliminar OT", "Descartar aviso")
+- **Primary Buttons**: Acciones principales y destructivas (ej: "Reportar Avería", "Eliminar")
+- **Secondary Buttons**: Acciones alternativas (ej: "Cancelar", "Ver más")
+- **Ghost Buttons**: Acciones terciarias y links (ej: "Cerrar", "Omitir")
 
 **Visual Design:**
 
-| Button Type | Background | Text | Border | Height | Use Case |
-|-------------|------------|------|--------|--------|----------|
-| **Primary** | #722F37 (burgundy) | #FFFFFF (white) | None | 44px | Main CTAs: "Reportar Avería", "Crear OT", "Guardar" |
-| **Secondary** | Transparent | #722F37 | #722F37 (2px) | 44px | Alternative: "Cancelar", "Volver" |
-| **Tertiary** | Transparent | #212529 (black) | None | 40px | Low-emphasis: "Ver detalles", "Editar" |
-| **Danger** | #212529 (black) | #FFFFFF | None | 44px | Destructive: "Eliminar", "Descartar" |
-| **Disabled** | #F8F9FA (light gray) | #6C757D | None | 44px | Unavailable actions |
+Primary (Rojo Burdeos #7D1220):
+- Text: White, 16px Semibold
+- Padding: 12px (top/bottom), 16px (left/right)
+- Height: 44px minimum (touch target)
+- Radius: 8px (rounded-lg)
 
-**Spacing:**
-- **Gap between buttons:** 12px (desktop), 8px (mobile)
-- **Button groups:** Related actions grouped visually
-- **Alignment:** Left-aligned for forms, right-aligned for modal actions
+Secondary (Outline Gris):
+- Text: Gray-900, 16px Semibold
+- Border: 2px solid Gray-300
+- Background: White
+- Height: 44px minimum
+
+Ghost (Sin fondo):
+- Text: Maroon #7D1220, 16px Medium
+- Hover: Subrayado
 
 **Behavior:**
-- **Hover:** Darken background by 10% (Primary: #5A1A21)
-- **Active:** Scale to 98% (tactile feedback)
-- **Focus:** 2px solid #722F37 outline + 4px offset
-- **Loading:** Show spinner inside button, disable interaction
-- **Success:** Change to green (#28A745) with checkmark icon (2s, then reverts)
+- **Primary**: Click → Ejecuta acción, muestra loading state si es async
+- **Secondary**: Click → Acción alternativa o cancelar operación
+- **Ghost**: Click → Navegación o acción no-destructiva
 
 **Accessibility:**
-- **Touch Targets:** Minimum 44x44px (WCAG AA)
-- **Contrast:** All combinations meet 4.5:1 minimum
-- **Keyboard:** Full keyboard navigation (Tab, Enter, Space)
-- **ARIA:** `aria-label` for icon-only buttons, `aria-disabled` for disabled state
-- **Screen Reader:** Button purpose clearly announced
+- `role="button"` + `tabindex="0"` para elementos no-button
+- Focus visible: 2px solid #7D1220, offset 2px
+- ARIA labels si el texto no es descriptivo
+- Enter/Space para activar
 
 **Mobile Considerations:**
-- **Full-width buttons:** On mobile <768px, primary buttons expand to 100% width
-- **Stack vertically:** Button groups stack on mobile (gap: 8px)
-- **Thumb-friendly:** 44px minimum height maintained
+- Mínimo 44x44px para touch targets
+- Mayor padding en mobile (16px top/bottom)
+- Botones full-width en formularios móviles
 
 **Variants:**
-
-**1. Action Confirmation (Critical Actions):**
-```
-Scenario: Javier clicks "Eliminar OT"
-→ Button changes to "¿Confirmar?" (2s window)
-→ If clicked again: Deletes OT
-→ If not clicked: Reverts to "Eliminar OT"
-```
-
-**2. Loading State (Async Actions):**
-```
-Scenario: María clicks "Completar OT"
-→ Button shows: [⏳ Guardando...] + spinner
-→ Button disabled during save
-→ On success: Button shows [✓ ¡Guardado!] (green, 2s)
-→ On error: Button shows [❌ Error. Reintentar] (red)
-```
+- **Primary Disabled**: Opacidad 50%, cursor not-allowed
+- **Primary Loading**: Spinner reemplaza texto o se muestra a la derecha
+- **Danger**: Primary button con rojo #EF4444 para acciones destructivas
+- **Icon Button**: Solo icono para acciones comunes (ej: ℹ️, ⋯, ✕)
 
 ---
 
 ### Feedback Patterns
 
-**Purpose:** Keep users informed about system state, action results, and important events through clear, timely feedback.
-
 **When to Use:**
-- **Success Feedback:** After completing important actions (OT assigned, OT completed)
-- **Error Feedback:** When actions fail (network error, validation error)
-- **Warning Feedback:** For potentially problematic situations (low stock, OT stuck >24h)
-- **Info Feedback:** For informational updates (new OT assigned, system maintenance)
-
-#### 1. Toast Notifications (Non-intrusive)
+- **Success**: Confirmación de acción completada exitosamente
+- **Error**: Acción falló
+- **Warning**: Requiere atención pero no bloquea
+- **Info**: Información contextual
 
 **Visual Design:**
-```
-┌────────────────────────────────────────┐
-│ ✓ OT completada exitosamente    [X]    │ ← Success toast
-├────────────────────────────────────────┤
-│ ⚠️ Stock bajo: Rodamiento SKF-6208  [X]│ ← Warning toast
-├────────────────────────────────────────┤
-│ ❌ Error al guardar. Reintentar.  [X]  │ ← Error toast
-├────────────────────────────────────────┤
-│ ℹ️ Nueva versión disponible          [X] │ ← Info toast
-└────────────────────────────────────────┘
-```
 
-**Timing:**
-- **Success:** 3s auto-dismiss (user can extend with hover)
-- **Error:** Persistent (no auto-dismiss, requires user action)
-- **Warning:** 5s auto-dismiss
-- **Info:** 2s auto-dismiss
+**Toast (Temporal, 5 segundos):**
 
-**Position:**
-- **Desktop:** Top-right corner (24px from edges)
-- **Mobile:** Top center (full width)
+Success (Verde):
+- Background: Green-50
+- Border-left: 4px solid Green-500
+- Icon: ✓ Green-600
+- Text: Green-900
 
-**Behavior:**
-- **Stacking:** Multiple toasts stack vertically (max 3 visible)
-- **Priority:** Error toasts always appear on top
-- **Animation:** Slide in from right (desktop) / top (mobile), fade out on dismiss
+Error (Rojo):
+- Background: Red-50
+- Border-left: 4px solid Red-500
+- Icon: ✗ Red-600
+- Text: Red-900
 
-**Accessibility:**
-- **ARIA Live:** `role="status"` for toasts, `aria-live="polite"`
-- **Screen Reader:** Full toast text announced
-- **Keyboard:** Esc to dismiss, Tab to next toast
-- **Focus:** Focus does NOT move to toast (non-modal)
+Warning (Ámbar):
+- Background: Amber-50
+- Border-left: 4px solid Amber-500
+- Icon: ⚠️ Amber-600
+- Text: Amber-900
 
-**Use Cases:**
-- ✅ "✓ OT-2026-0001 completada exitosamente"
-- ⚠️ "⚠️ Stock bajo: SKF-6208 (3 unidades, mínimo: 5)"
-- ❌ "❌ Error de conexión. Reintentando..."
-- ℹ️ "ℹ️ Nueva OT asignada: OT-2026-0002"
-
----
-
-#### 2. Inline Validation (Forms)
-
-**Visual Design:**
-```
-┌─────────────────────────────────────┐
-│ Equipo: [Perfiladora P-201    ✓]    │ ← Success state
-│         ──────────────────────────   │
-│ Equipo: [                ⚠️]         │ ← Warning state
-│         Este equipo tiene 3 OTs abiertas│
-│         ──────────────────────────   │
-│ Equipo: [                ❌]         │ ← Error state
-│         Campo requerido             │
-└─────────────────────────────────────┘
-```
-
-**Timing:**
-- **Real-time:** Validate on blur (field loses focus)
-- **Debounced:** For search inputs, validate 300ms after last keystroke
+**Alert (Persistente hasta dismiss):**
+- Full-width banner
+- Background: Red-100
+- Dismissible con botón
 
 **Behavior:**
-- **Success:** Green checkmark + "¡Válido!" message
-- **Warning:** Yellow warning + helpful message
-- **Error:** Red X + error message below input
-- **Disabled:** Gray + "Omitido" message
+- **Toast**: Auto-dismiss después de 5 segundos, click en ✕ para cerrar manual
+- **Alert**: Persistente hasta que usuario toma acción o descarta
+- **Stacking**: Múltiples toasts se apilan verticalmente (máximo 3 visibles)
 
 **Accessibility:**
-- **ARIA:** `aria-invalid="true"`, `aria-describedby` for error message
-- **Color + Icon:** Never rely on color alone (always use icon + text)
-- **Screen Reader:** Error message announced on field focus
+- Toast: `role="status"` + `aria-live="polite"`
+- Alert: `role="alert"` + `aria-live="assertive"`
+- Iconos decorativos: `aria-hidden="true"`
+- Focus management: Toast no roba focus
 
----
-
-#### 3. Confirmation Dialogs (Destructive Actions)
-
-**Visual Design:**
-```
-┌────────────────────────────────────────┐
-│ ¿Eliminar esta OT?           [X]       │ ← Dialog title
-├────────────────────────────────────────┤
-│ Esta acción no se puede deshacer.     │
-│                                        │
-│ OT-2026-0001: Motor principal no      │
-│ arranca                                │
-│                                        │
-│ ¿Estás seguro de que deseas eliminarla?│
-├────────────────────────────────────────┤
-│         [Cancelar]  [Eliminar]         │ ← Actions
-└────────────────────────────────────────┘
-```
-
-**When to Use:**
-- **Destructive actions:** Delete OT, discard alert, remove equipment
-- **Irreversible actions:** Complete OT, change technician assignment
-- **Mass actions:** Bulk delete, bulk reassign
-
-**Behavior:**
-- **Focus trap:** Keyboard focus cannot leave dialog
-- **Backdrop:** Dark semi-transparent overlay (click outside to cancel)
-- **Escape key:** Closes dialog and cancels action
-- **Enter key:** Activates primary action button
-
-**Accessibility:**
-- **ARIA:** `role="dialog"`, `aria-labelledby` for title, `aria-modal="true"`
-- **Focus:** Moves to dialog on open, returns to trigger on close
-- **Screen Reader:** Full dialog content announced
-
----
-
-#### 4. Push Notifications (Mobile/Real-time)
-
-**Visual Design (Mobile):**
-```
-┌────────────────────────────────────────┐
-│ 📱 gmao-hiansa          Ahora  hace 2m│
-├────────────────────────────────────────┤
-│ OT-2026-0001 completada                │
-│                                        │
-│ ¿Confirma que funciona correctamente?  │
-│                                        │
-│          [Sí, funciona]  [Reportar    │
-│                          problema]     │
-└────────────────────────────────────────┘
-```
-
-**When to Use:**
-- **OT assigned:** "Nueva OT asignada: OT-2026-0002"
-- **OT in progress:** "OT en progreso - María está trabajando"
-- **OT completed:** "OT completada - ¿Confirma que funciona?"
-- **Stock critical:** "⚠️ Stock crítico: SKF-6208 alcanzó mínimo"
-
-**Behavior:**
-- **Actionable:** Some notifications have quick actions (Yes/No buttons)
-- **Deep links:** Tapping notification opens relevant screen (OT details)
-- **Grouping:** Multiple similar notifications group (e.g., "3 OTs asignadas")
-- **Quiet hours:** No notifications 10pm-6am (except critical alerts)
-
----
-
-#### 5. Empty States (No Data)
-
-**Visual Design:**
-```
-┌────────────────────────────────────────┐
-│                                        │
-│             📭                         │
-│                                        │
-│     No hay OTs en este estado          │
-│                                        │
-│ Las OTs aparecerán aquí cuando se      │
-│ creen o asignen.                       │
-│                                        │
-│         [Crear nueva OT]               │
-│                                        │
-└────────────────────────────────────────┘
-```
-
-**When to Use:**
-- **Kanban column empty:** "No hay OTs en este estado"
-- **Search no results:** "No se encontraron OTs que coincidan con 'X'"
-- **Zero notifications:** "No tienes notificaciones pendientes"
-- **No equipment:** "No hay equipos registrados aún"
-
-**Elements:**
-1. **Icon:** Relevant illustration or emoji (📭, 🔍, 📊)
-2. **Title:** Clear, friendly message
-3. **Description:** Helpful context (why is this empty?)
-4. **Action:** Primary CTA to resolve empty state (optional)
-
-**Tone:**
-- **Friendly:** "Aún no tienes OTs asignadas" (not "ERROR: No data found")
-- **Helpful:** "Las OTs aparecerán aquí cuando tu supervisor te asigne trabajo"
-- **Action-oriented:** "Crear primera OT" or "Solicitar acceso"
-
----
-
-#### 6. Loading States
-
-**Skeleton Screens (Preferred):**
-```
-┌────────────────────────────────────────┐
-│ ┌──────────┐ ┌──────────┐ ┌───────┐  │
-│ │ ▓▓▓▓▓▓▓▓  │ │ ▓▓▓▓▓▓▓▓  │ │ ▓▓▓▓▓  │  │ ← Skeleton cards
-│ └──────────┘ └──────────┘ └───────┘  │
-│ ┌──────────┐ ┌──────────┐             │
-│ │ ▓▓▓▓▓▓▓▓  │ │ ▓▓▓▓▓▓▓▓  │             │
-│ └──────────┘ └──────────┘             │
-└────────────────────────────────────────┘
-```
-
-**When to Use:**
-- **Initial page load:** Skeleton of expected content
-- **Data fetching:** Skeleton rows while loading table/Kanban
-- **Image upload:** Progress bar + thumbnail
-
-**Progress Indicators:**
-- **Spinner:** For actions <3s (e.g., form submission)
-- **Progress bar:** For multi-step actions >3s (e.g., photo upload)
-- **Percentage:** For long-running operations (e.g., "Cargando... 67%")
-
-**Animation:**
-- **Skeleton pulse:** Subtle shimmer animation (opacity 0.5 → 1)
-- **Spinner:** 60fps rotation (smooth, not distracting)
-- **Progress bar:** Smooth transition (300ms ease)
-
-**Accessibility:**
-- **ARIA:** `aria-busy="true"`, `aria-live="polite"` for status updates
-- **Screen Reader:** "Cargando..." or percentage announced
-- **Focus:** Focus stays on trigger, not stolen by loading state
+**Mobile Considerations:**
+- Toast: Full-width en mobile con padding reducido
+- Alert: Stack horizontal si son múltiples (swipeable)
+- Touch target mínimo 44x44px para botones de acción
 
 ---
 
 ### Form Patterns
 
-**Purpose:** Consistent, accessible form design optimized for industrial environment (factory floor, tablet use).
-
 **When to Use:**
-- **Reportar Avería:** Operator creates failure report
-- **Completar OT:** Technician completes work order
-- **Crear OT Manual:** Supervisor creates OT directly
-- **Editar Perfil:** User updates personal information
+- **Crear/Editar**: Formularios para crear/editar entidades
+- **Buscar**: Inputs de búsqueda con autocomplete
+- **Filtrar**: Controles de filtro en listas
 
-#### 1. Form Layout
+**Visual Design:**
 
-**Visual Design (Desktop >768px):**
-```
-┌────────────────────────────────────────────┐
-│ Reportar Avería                     [X]     │ ← Modal title
-├────────────────────────────────────────────┤
-│ * Equipo:                                │
-│ ┌──────────────────────────────────────┐ │
-│ │ 🔍 Buscar equipo o código...        │ │ ← Search input
-│ └──────────────────────────────────────┘ │
-│         ┌─────────────────────────────┐  │
-│         │ Perfiladora P-201 (MA-001)  │  │ ← Autocomplete
-│         │ Planta A - Línea 1          │  │
-│         └─────────────────────────────┘  │
-│                                        │
-│ * Tipo de Avería:                      │
-│ ○ Eléctrica  ○ Mecánica  ○ Neumática  │ ← Radio buttons
-│               ○ Otra                   │
-│                                        │
-│ * Urgencia:                            │
-│ ○ Baja  ○ Media  ● Alta  ○ Crítica    │ ← Radio buttons
-│                                        │
-│ * Descripción:                         │
-│ ┌──────────────────────────────────────┐ │
-│ │ Describe el problema observado...   │ │ ← Textarea
-│ │                                      │ │
-│ └──────────────────────────────────────┘ │
-│ Mínimo 20 caracteres                   │
-│                                        │
-│ Adjuntar Fotos (opcional):             │
-│ ┌────┐ ┌────┐ ┌────┐                  │
-│ │📷  │ │IMG │ │IMG │   [+ Add more]  │ ← Photo upload
-│ └────┘ └────┘ └────┘                  │
-│                                        │
-├────────────────────────────────────────────┤
-│                [Cancelar]  [Enviar ↵]     │ ← Actions
-└────────────────────────────────────────────┘
-```
-
-**Mobile (<768px):**
-- **Single column:** All fields stacked vertically
-- **Full-width inputs:** Inputs expand to 100% width
-- **Larger touch targets:** 44px minimum height maintained
-- **Sticky submit:** "Enviar" button sticks to bottom when scrolling long forms
-
-**Spacing:**
-- **Field gap:** 16px vertical spacing between fields
-- **Label gap:** 8px between label and input
-- **Section gap:** 24px between form sections
-
-#### 2. Form Validation
-
-**Validation Timing:**
-- **On blur:** Validate field when user leaves it (desktop)
-- **On submit:** Validate all fields on form submission
-- **Real-time:** For search fields, validate 300ms after last keystroke
+**Form Layout:**
+- Title: "Reportar Avería"
+- Separator: Divisor visual
+- Required fields: Asterisco (*)
 
 **Validation States:**
 
-**1. Default (Pristine):**
-```
-Equipo: [Buscar equipo...]        ← No validation yet
-```
+Valid (Default):
+- Border: Gray-300
+- ✓ Icon right (optional)
 
-**2. Success (Valid):**
-```
-Equipo: [Perfiladora P-201  ✓]    ← Green checkmark
-```
+Invalid:
+- Border: Red-500
+- Error message below
+- ✗ Icon
 
-**3. Warning (Valid with issues):**
-```
-Equipo: [Perfiladora P-201  ⚠️]    ← Yellow warning
-         Este equipo tiene 3 OTs abiertas
-```
+Validating:
+- Spinner icon
+- Border: Blue-500
 
-**4. Error (Invalid):**
-```
-Equipo: [                  ❌]     ← Red X
-         Campo requerido
-```
+**Behavior:**
+- **Validation On Blur**: Validar cuando usuario sale del campo
+- **Inline Errors**: Mostrar errores debajo del campo afectado
+- **Success Indicators**: ✓ opcional cuando campo es válido
+- **Required Fields**: Asterisco (*) + mensaje "Todos los campos con * son obligatorios"
 
-**5. Disabled:**
-```
-Equipo: [Perfiladora P-201  🔒]    ← Gray + lock icon
-         (solo lectura)
-```
+**Accessibility:**
+- `aria-required="true"` para campos requeridos
+- `aria-invalid="true"` + `aria-describedby` para errores
+- Labels asociados con `for` attribute
+- Error messages: `role="alert"`
+- Focus en primer campo al cargar formulario
 
-**Error Message Placement:**
-- **Below input:** Error messages appear immediately below the invalid field
-- **Red text:** Error messages in #DC3545 (red)
-- **Icon prefix:** ❌ or ⚠️ icon for quick scanning
-
-**Required Fields:**
-- **Asterisk (*):** Mark required fields with red asterisk
-- **Legend:** "Los campos marcados con * son obligatorios" at top of form
-
-#### 3. Form Actions
-
-**Button Placement:**
-- **Desktop:** Right-aligned (primary action most prominent)
-- **Mobile:** Stacked vertically, full-width buttons
-
-**Button Order:**
-- **Left:** Secondary action ("Cancelar")
-- **Right:** Primary action ("Enviar", "Guardar")
-
-**Submit Behavior:**
-```
-1. User clicks [Enviar]
-2. Form validates all fields
-   → If errors: Show error messages, focus first error
-   → If valid: Proceed to step 3
-3. Button shows: [⏳ Enviando...] (disabled)
-4. On success:
-   → Button shows: [✓ ¡Enviado!] (green, 2s)
-   → Toast: "✓ Avería reportada exitosamente"
-   → Form closes (modal) or redirects
-5. On error:
-   → Button shows: [❌ Error. Reintentar]
-   → Toast: "❌ Error de conexión. Inténtalo de nuevo."
-```
-
-#### 4. Accessibility
-
-**Form Labels:**
-- **Visible labels:** All inputs have visible labels (never placeholder-only)
-- **Association:** `for` attribute links label to input (`<label for="equipo">`)
-- **Required indication:** Asterisk (*) in label, `aria-required="true"`
-
-**Focus Management:**
-- **Focus order:** Logical tab order (top to bottom, left to right)
-- **Focus visible:** 2px solid #722F37 outline + 4px offset
-- **First error focus:** On validation failure, focus moves to first invalid field
-- **Error announcements:** `aria-live="polite"` for error messages
-
-**Instructions:**
-- **Helper text:** Additional context below input (e.g., "Mínimo 20 caracteres")
-- **Examples:** Show format example (e.g., "MA-001" for machine codes)
-- **Error prevention:** Validate before submit (real-time when possible)
-
-**Keyboard:**
-- **Tab/Shift+Tab:** Navigate between fields
-- **Enter:** Submit form (if in text field) or activate focused button
-- **Escape:** Cancel form (close modal or confirm before discarding)
-- **Arrow keys:** Navigate radio button groups, select dropdowns
+**Mobile Considerations:**
+- Inputs con height 44px mínimo
+- Labels encima de inputs (no a la izquierda)
+- Numeric inputs con tipo="tel"
+- Select con native pickers
 
 ---
 
 ### Navigation Patterns
 
-**Purpose:** Consistent navigation patterns help users move through the application intuitively.
-
-#### 1. Primary Navigation (Desktop/Tablet)
+**When to Use:**
+- **Principal (Desktop)**: Sidebar con navegación principal
+- **Principal (Mobile)**: Bottom tabs para acceso rápido
+- **Contextual**: Breadcrumbs para navegación jerárquica
+- **Filters**: Tabs para filtros en listas
 
 **Visual Design:**
-```
-┌────────────────────────────────────────────────────────┐
-│ gmao-hiansa        [Kanban ▼] [Activos] [Repuestos]  │ ← Top nav
-│                    [KPIs]      [Configuración] [👤]  │
-├────────────────────────────────────────────────────────┤
-│                                                         │
-│  (Content area)                                         │
-│                                                         │
-└────────────────────────────────────────────────────────┘
-```
+
+**Desktop Sidebar:**
+- Logo + title en header
+- Active item: Maroon bg, white text
+- Icons + labels para cada item
+
+**Mobile Bottom Tabs:**
+- 4 tabs máximo, icons + labels
+- Active: Maroon text
+- Fixed position bottom
+
+**Breadcrumbs:**
+- Format: "Dashboard > Kanban > OT #789"
+- Click en cualquier breadcrumb → Navegar a ese nivel
 
 **Behavior:**
-- **Active state:** Current section highlighted with burgundy background
-- **Hover:** Subtle background change (#F8F9FA)
-- **Dropdown:** "Kanban" dropdown shows sub-options (if applicable)
-- **Responsive:** On tablet, collapses to "☰" hamburger menu
+- **Active State**: Item actual destacado visualmente
+- **Collapse**: Sidebar colapsable a icon-only
+- **Hamburger**: Menú hamburguesa en mobile
 
 **Accessibility:**
-- **Landmark:** `<nav>` element with `aria-label="Navegación principal"`
-- **Current page:** `aria-current="page"` on active link
-- **Keyboard:** Arrow keys navigate menu items
+- `role="navigation"` + `aria-label="Navegación principal"`
+- Links: `aria-current="page"` para página actual
+- Toggle button con `aria-expanded`
 
-#### 2. Mobile Navigation (<768px)
+**Mobile Considerations:**
+- Bottom tabs: 4 tabs máximo
+- Hamburger menu: Para secondary navigation
+- Back button: Navigation bar para back
+
+---
+
+### Modal and Overlay Patterns
+
+**When to Use:**
+- **Modal ℹ️**: Detalles de OT sin perder contexto
+- **Confirm Dialog**: Confirmar acciones destructivas
+- **Form Modal**: Formularios contextuales
 
 **Visual Design:**
-```
-┌────────────────────────────────────────┐
-│ gmao-hiansa                            │
-├────────────────────────────────────────┤
-│                                        │
-│  (Content area with scroll)            │
-│                                        │
-│                                        │
-├────────────────────────────────────────┤
-│ [Kanban] [Activos] [Repuestos] [KPIs] │ ← Bottom tab bar
-│          [👤]                          │
-└────────────────────────────────────────┘
-```
+
+**Modal ℹ️ (Detalles de OT):**
+- Header: [✕] + título + [⋯] (actions)
+- Content: Scrollable con timeline, info equipo, repuestos
+- Footer: Actions (opcional)
+- Backdrop overlay (click outside → close)
+
+**Confirm Dialog:**
+- Warning icon + título claro
+- Mensaje explicativo
+- Warning text (opcional)
+- Secondary + Danger buttons
 
 **Behavior:**
-- **Fixed bottom:** Tab bar fixed at bottom of screen
-- **Active tab:** Burgundy icon + label
-- **3-5 tabs max:** Limit to 5 tabs (iOS/Android convention)
-- **Badge indicators:** Show notification count (e.g., "3" on Kanban for pending OTs)
+- **Open**: Animation fade-in + scale (200-300ms)
+- **Close**: Animation fade-out (200-300ms)
+- **Focus Trap**: Tab permanece dentro del modal
+- **Escape Key**: Cierra modal (no confirm dialogs)
+- **Click Outside**: Cierra modal (excepto confirm dialogs)
 
 **Accessibility:**
-- **Touch targets:** Minimum 44x44px per tab
-- **Labels:** Both icon + text label (never icon-only)
+- `role="dialog"` + `aria-modal="true"`
+- `aria-labelledby`: ID del título
+- Focus en primer elemento al abrir
+- Return focus al trigger al cerrar
+- `aria-hidden="true"` en backdrop
 
-#### 3. Breadcrumb Navigation
-
-**Visual Design:**
-```
-Kanban > Planta A > Línea 1 > MA-001 > Historial OTs
-```
-
-**When to Use:**
-- **Deep navigation:** More than 2 levels deep
-- **Drill-down:** Global → Planta → Línea → Equipo
-
-**Behavior:**
-- **Clickable:** All breadcrumb segments are clickable links
-- **Current page:** Last segment is plain text (not a link)
-- **Separator:** ">" or "/" between segments
-- **Truncation:** Long paths truncate middle: "Kanban > ... > Línea 1 > MA-001"
+**Mobile Considerations:**
+- Modal width: 95% en mobile (vs 600px max-width desktop)
+- Bottom sheet: Slide-up para formularios
+- Full-screen: Modales complejos en mobile
 
 ---
 
-### Modal & Overlay Patterns
+### Empty States and Loading States
 
-**Purpose:** Focused user attention for critical tasks or information without leaving context.
-
-#### 1. Modal Dialog (OT Details)
+**When to Use:**
+- **Empty State**: Lista o dashboard sin contenido
+- **Loading State**: Cargando contenido asíncrono
+- **Error State**: Error al cargar contenido
 
 **Visual Design:**
-```
-┌───────────────────────────────────────────────┐
-│ OT-2026-0001                        [X]      │ ← Modal header
-├───────────────────────────────────────────────┤
-│                                               │
-│ **Información General**                       │
-│ - Título: Motor principal no arranca         │
-│ - Equipo: MA-001 (Perfiladora P-201)        │
-│ - Ubicación: Planta A, Línea 1               │
-│ - Prioridad: 🔴 Crítica                      │
-│                                               │
-│ **Asignación**                                │
-│ - Técnico: Carlos García                     │
-│ - Asignada: 27 Feb 2026, 09:15 AM            │
-│                                               │
-│ **Historial de Estados**                      │
-│ 1. Reportada (Carlos García) - 09:03 AM      │
-│ 2. Asignada (Javier) - 09:10 AM              │
-│ 3. En Progreso (Carlos García) - 09:15 AM    │
-│                                               │
-├───────────────────────────────────────────────┤
-│ [▶️ Iniciar]  [✅ Completar]  [👤 Reasignar]  │ ← Actions
-├───────────────────────────────────────────────┤
-│ [💬 Nota]  [📷 Foto]  [📎 Agregar Repuesto]  │ ← Secondary
-└───────────────────────────────────────────────┘
-```
 
-**Dimensions:**
-- **Width:** min(600px, 90vw) - responsive
-- **Max height:** 80vh - scrollable if content overflows
-- **Padding:** 24px
+**Empty State:**
+- Large icon (64px)
+- Headline claro
+- Description explicativa
+- Action button (opcional)
+
+**Loading State (Skeleton):**
+- Skeleton cards con shimmer animation
+- Minimum 500ms para evitar flicker
+
+**Error State:**
+- Error icon
+- Headline descriptivo
+- Explanation del error
+- Action buttons (Reintentar, Volver)
 
 **Behavior:**
-- **Backdrop:** Dark semi-transparent overlay (#212529 with 50% opacity)
-- **Click outside:** Closes modal (unless form has unsaved changes)
-- **Escape key:** Closes modal
-- **Focus trap:** Keyboard focus cannot leave modal
-- **Scroll locking:** Body scroll locks when modal is open
+- **Empty State**: Mostrar cuando lista está vacía
+- **Loading State**: Mostrar skeleton mientras carga
+- **Error State**: Mostrar cuando load falla
 
 **Accessibility:**
-- **ARIA:** `role="dialog"`, `aria-modal="true"`, `aria-labelledby` for title
-- **Focus:** Moves to modal on open, returns to trigger on close
-- **Escape:** Announces "Modal cerrado" to screen reader
+- `role="status"` para empty/loading states
+- `aria-live="polite"` para error states
+- `aria-busy="true"` para loading containers
 
-#### 2. Drawer (Side Panel)
+**Mobile Considerations:**
+- Empty state: Icon más pequeño (48px) en mobile
+- Error state: Botones full-width en mobile
 
-**Visual Design:**
-```
-┌─────────────┬───────────────────────────────────┐
-│             │ OT-2026-0001                [X]  │ ← Panel
-│   (Main     ├───────────────────────────────────┤
-│   content   │ Panel slides in from right       │
-│   dimmed)   │ Width: 400px (desktop)           │
-│             │ Or: 100% (mobile)                │
-└─────────────┴───────────────────────────────────┘
-```
+---
+
+### Search and Filtering Patterns
 
 **When to Use:**
-- **Supplementary information:** Details that complement main view
-- **Mobile:** Alternative to modal (better for mobile UX)
-- **Complex workflows:** Multi-step processes
-
-**Behavior:**
-- **Slide animation:** 300ms ease-in-out from right
-- **Backdrop:** Click backdrop to close
-- **Responsive:** 100% width on mobile, 400px on desktop
-
-#### 3. Bottom Sheet (Mobile)
+- **Search**: Búsqueda global o en lista específica
+- **Filter**: Filtrar resultados por atributos
+- **Sort**: Ordenar resultados
 
 **Visual Design:**
-```
-┌────────────────────────────────────────┐
-│                                        │
-│         (Main content                  │
-│          scrolled up)                  │
-│                                        │
-├────────────────────────────────────────┤
-│ ┌──────────────────────────────────┐  │ ← Bottom sheet
-│ │ Agregar Repuesto          [X]    │  │ (slides up)
-│ ├──────────────────────────────────┤  │
-│ │ 🔍 Search: [rodamiento...]      │  │
-│ │                                  │  │
-│ │ [Rodamiento SKF-6208]            │  │
-│ │ [Rodamiento SKF-6209]            │  │
-│ │                                  │  │
-│ │             [Cancelar] [Agregar] │  │
-│ └──────────────────────────────────┘  │
-└────────────────────────────────────────┘
-```
 
-**When to Use:**
-- **Mobile forms:** Quick input forms on mobile
-- **Action sheets:** Choose from list of actions
-- **Selection:** Select from list (e.g., choose technician)
+**Search Bar:**
+- Icon + input con placeholder
+- Autocomplete dropdown con suggestions
+
+**Filter Bar:**
+- Select dropdowns para filtros
+- "Limpiar" button para reset
+- Count de resultados
+
+**Active Filters (Chips):**
+- Chips horizontales con [✕] para remover
+- "Limpiar todo" button
 
 **Behavior:**
-- **Slide up:** From bottom, 300ms animation
-- **Drag handle:** User can drag down to dismiss
-- **Backdrop:** Tap backdrop to close
+- **Search**: Debouncing de 300ms
+- **Autocomplete**: Mostrar después de 2 caracteres
+- **Filter**: Aplicar en tiempo real
+- **Sort**: Selector dropdown
 
----
+**Accessibility:**
+- Search: `role="search"` + `aria-label`
+- Filters: `aria-label="Filtrar por [atributo]"`
+- Active filters: `aria-label="[Filtro] - Click para remover"`
 
-### Additional Patterns
+**Mobile Considerations:**
+- Search: Input siempre visible
+- Filters: Bottom sheet con swipe-up
+- Active filters: Chips horizontal scrollable
 
-#### 1. Search & Filtering
-
-**Predictive Search:**
-- **Debounce:** 300ms after last keystroke
-- **Min characters:** 2 characters minimum before search
-- **Response time:** <200ms target
-- **Max results:** 10 results shown, "Ver todos..." link for more
-
-**Filter Chips:**
-```
-[Filtros activos: Planta A ×] [Crítica ×] [Asignada a Carlos ×]
-                                                      [+ Añadir filtro]
-```
-
-**Clear filters:** "Limpiar filtros" button when filters active
-
-#### 2. Data Display
-
-**Tables (Alternative to Kanban):**
-- **Sortable columns:** Click header to sort, indicator shows sort direction
-- **Row actions:** Three-dot menu (...) for row-specific actions
-- **Selection:** Checkbox column for bulk actions
-- **Pagination:** 50 rows per page (configurable: 25, 50, 100)
-
-**Cards (Mobile List View):**
-- **One card per row:** Tables convert to cards on mobile
-- **Expandable:** Tap card to expand details
-
-#### 3. Progress Indication
-
-**Step Progress (Multi-step forms):**
-```
-Reportar Avería
-┌─────┬─────┬─────┬─────┐
-│  1  │  2  │  3  │  4  │
-│Datos│Detal│Fotos│Conf.│
-│  ✓  │  →  │     │     │
-└─────┴─────┴─────┴─────┘
-```
-
-**Progress Bar (File Upload):**
-```
-Subiendo foto_1.jpg...
-[████████████░░] 67% (2.3 MB de 3.4 MB)
-```
-
----
-
-### Pattern Implementation Guidelines
-
-**Consistency Rules:**
-
-1. **Always use Shadcn/ui primitives first:** Button, Input, Dialog, Toast, etc.
-2. **Custom patterns must align:** Visual hierarchy, spacing, typography match design system
-3. **Accessibility first:** Every pattern meets WCAG AA minimum
-4. **Mobile-responsive:** All patterns work on mobile, tablet, desktop
-5. **User feedback:** Every action provides feedback (success, error, loading)
-
-**When to Create Custom Pattern:**
-
-- **Domain-specific needs:** GMAO workflows don't fit standard patterns
-- **Industrial context:** Factory floor use cases (tablets, gloves, bright lighting)
-- **Performance requirements:** Real-time updates, <200ms search
-- **Shadcn/ui insufficient:** Component doesn't exist or doesn't meet requirements
-
-**Custom Pattern Examples:**
-- ✅ Kanban Board (not in Shadcn/ui, domain-specific)
-- ✅ Parts Inventory Picker (Shadcn Select insufficient for stock + location)
-- ✅ OT Card (custom card for Kanban)
-- ❌ Standard Button (use Shadcn Button)
-- ❌ Standard Form Input (use Shadcn Input)
-
-**Developer Handoff:**
-
-For each pattern, provide:
-1. **When to use:** Clear usage guidelines
-2. **Visual specs:** Colors, spacing, typography, states
-3. **Behavior:** Interactions, animations, transitions
-4. **Accessibility:** ARIA attributes, keyboard navigation, screen reader support
-5. **Code examples:** React/TypeScript snippets using Shadcn/ui components
-6. **Responsive:** Mobile, tablet, desktop behavior
-
----
 
 ## Responsive Design & Accessibility
 
 ### Responsive Strategy
 
-**Purpose:** Ensure gmao-hiansa provides optimal user experience across all devices used in maintenance operations: desktop workstations, industrial tablets, mobile phones, and 4K TVs in common areas.
+**Mobile-First + Adaptive by Context:**
 
-**Device Context:**
+gmao-hiansa adopta un enfoque **mobile-first** con layouts **adaptativos** según el dispositivo y rol del usuario.
 
-Based on PRD requirements and User Journeys, gmao-hiansa operates in diverse environments:
+**Mobile Strategy (<768px):**
+- **Core experience**: "Reportar avería en 30 segundos" es la prioridad #1
+- **Touch-first**: Todos los elementos son 44x44px minimum
+- **Single column layouts**: Una columna para better readability
+- **Bottom navigation**: 4 tabs máx para acceso rápido
+- **Kanban**: 1 columna visible con swipe horizontal + indicador "1/8"
+- **Formularios**: Labels encima de inputs, botones full-width
+- **Modals**: Full-screen para contenido complejo
 
-| Device Type | Use Case | Environment | Usage Pattern |
-|-------------|----------|-------------|---------------|
-| **Desktop (>1400px)** | Supervisors (Javier), Admin (Elena) | Office, well-lit | Planning, KPIs analysis, reporting |
-| **Tablet (768-1400px)** | Technicians (María), Supervisors | Factory floor, variable lighting | Mobile access to Kanban, OT updates |
-| **Mobile (<768px)** | Operators (Carlos) for alerts, Technicians on-the-go | Pocket, quick checks | Failure reporting, push notifications |
-| **TV 4K (>2160px)** | Common area dashboard | Factory floor, bright lighting | Real-time status display, transparency |
+**Tablet Strategy (768px - 1200px):**
+- **Híbrido Mobile-Desktop**: Combinación de patrones mobile y desktop
+- **Touch-optimized**: Touch targets grandes + gestures soportados
+- **Sidebar**: Icon-only, colapsable
+- **Kanban**: 2-3 columnas visibles con swipe horizontal
+- **Split views**: Content principal + detalles lado a lado
 
-**Responsive Design Philosophy:**
-
-**Mobile-First Approach:**
-- Design for mobile constraints first, then enhance for larger screens
-- Progressive enhancement: Start with essential features, add complexity as screen real estate increases
-- Touch-friendly baseline: All interactions work with touch, enhance with mouse hover on desktop
-
-**Content Priority Strategy:**
-
-**Mobile (<768px) - Critical Only:**
-- Single column layouts
-- One primary action per screen
-- Bottom navigation (5 tabs max)
-- Essential information only (reports, assigned OTs, critical alerts)
-- Simplified Kanban: 1 column visible + swipe
-
-**Tablet (768-1400px) - Optimized for Touch:**
-- 2-4 column layouts
-- Side-by-side content (when valuable)
-- Touch-optimized targets (44x44px minimum)
-- Simplified Kanban: 4-6 columns + horizontal scroll
-- Balance between information density and touch usability
-
-**Desktop (>1400px) - Information Rich:**
-- Multi-column layouts (8-column Kanban)
-- Side navigation + breadcrumbs
-- Hover states and keyboard shortcuts
-- Information density: Dashboard widgets, detailed tables
-- Power user features: Advanced filters, bulk actions
-
-**TV 4K (>2160px) - Supervision Mode:**
-- Read-optimized view (large text, high contrast)
-- Automatic refresh (no interaction expected)
-- Real-time Kanban with 8 columns
-- KPIs dashboard with charts
-- No navigation (users don't interact, just monitor)
-
-**Responsive Behavior by Component:**
-
-**1. Kanban Board:**
-
-| Screen Size | Layout | Interaction |
-|-------------|--------|-------------|
-| <768px (Mobile) | 1 column visible, swipe lateral, dots indicator | Tap to open modal, pull-to-refresh |
-| 768-1024px (Tablet) | 4 columns visible, horizontal scroll | Touch drag & drop (long press) |
-| 1024-1400px (Tablet/Desktop) | 6 columns visible, horizontal scroll | Mouse/touch drag & drop |
-| >1400px (Desktop) | All 8 columns visible | Mouse drag & drop, hover effects |
-| >2160px (TV 4K) | All 8 columns visible, 120% scale | Read-only (monitoring mode) |
-
-**2. Navigation:**
-
-| Screen Size | Navigation Pattern |
-|-------------|-------------------|
-| <768px (Mobile) | Bottom tab bar (5 tabs max), hamburger menu for secondary |
-| 768-1400px (Tablet/Desktop) | Top horizontal navigation, dropdowns for sub-items |
-| >1400px (Desktop) | Top nav + sidebar (collapsible), breadcrumbs |
-
-**3. Forms:**
-
-| Screen Size | Layout |
-|-------------|--------|
-| <768px (Mobile) | Single column, full-width inputs, sticky submit button |
-| 768-1400px (Tablet/Desktop) | 2-column grid (when appropriate), standard width inputs |
-| >1400px (Desktop) | Multi-column, side-by-side related fields |
-
-**4. Modals:**
-
-| Screen Size | Dimensions |
-|-------------|------------|
-| <768px (Mobile) | 100% width, 90vh height, bottom sheet (slides up) |
-| 768-1400px (Tablet) | 600px width, 80vh height, centered |
-| >1400px (Desktop) | 600px width, 80vh height, centered |
-
-**5. Tables (Alternative to Kanban):**
-
-| Screen Size | Behavior |
-|-------------|----------|
-| <768px (Mobile) | Convert to cards (one card per row) |
-| 768-1400px (Tablet/Desktop) | Standard table with horizontal scroll if needed |
-| >1400px (Desktop) | Full table visible, sortable columns, bulk actions |
+**Desktop Strategy (>1200px):**
+- **Productivity**: Máxima información visible
+- **Multi-column layouts**: Aprovechar screen real estate
+- **Kanban**: 8 columnas completas visibles
+- **Sidebar**: Full-width con icons + labels
+- **Keyboard shortcuts**: Atajos para power users
 
 ---
 
 ### Breakpoint Strategy
 
-**Tailwind CSS Default Breakpoints:**
+**Breakpoints de Tailwind CSS (integrados en shadcn/ui):**
 
-We use Tailwind's responsive utility classes with standard breakpoints:
+- **Mobile (<640px)**: Default styles (no media query)
+- **Mobile Landscape (640px - 767px)**: sm breakpoint
+- **Tablet Portrait (768px - 1023px)**: md breakpoint - 2-column layouts
+- **Tablet Landscape / Small Desktop (1024px - 1279px)**: lg breakpoint
+- **Desktop (1280px+)**: xl breakpoint - 4-column layouts, max-width 1280px
+- **Large Desktop (1536px+)**: 2xl breakpoint - no max-width constraint
 
-| Breakpoint | Min Width | Max Width | Target Devices |
-|------------|-----------|-----------|----------------|
-| **sm** | 640px | 767px | Large phones (landscape), small tablets |
-| **md** | 768px | 1023px | Tablets (iPad, Android tablets) |
-| **lg** | 1024px | 1279px | Small laptops, large tablets |
-| **xl** | 1400px | 1919px | Desktops, laptops |
-| **2xl** | 1536px+ | None | Large desktops, 4K TVs (scaled) |
-
-**Additional Custom Breakpoints:**
-
-For gmao-hiansa specific needs:
-
-| Breakpoint | Min Width | Target Use Case |
-|------------|-----------|-----------------|
-| **xs** | 320px | Minimum mobile (small phones) |
-| **tv** | 2160px | 4K TVs (factory common areas) |
-
-**Tailwind Configuration (tailwind.config.js):**
-
-```javascript
-module.exports = {
-  theme: {
-    screens: {
-      'xs': '320px',    // Small phones
-      'sm': '640px',    // Large phones landscape
-      'md': '768px',    // Tablets
-      'lg': '1024px',   // Laptops
-      'xl': '1400px',   // Desktops
-      '2xl': '1536px',  // Large desktops
-      'tv': '2160px',   // 4K TVs
-    },
-  },
-}
-```
-
-**Media Query Strategy:**
-
-**Mobile-First (Recommended):**
-
-```tsx
-// Default: Mobile styles (no breakpoint)
-<div className="flex flex-col gap-4">
-  {/* Mobile: Single column */}
-</div>
-
-// Tablet+: Enhance layout
-<div className="md:grid md:grid-cols-2 md:gap-6">
-  {/* Tablet: 2 columns */}
-</div>
-
-// Desktop+: Further enhance
-<div className="lg:grid lg:grid-cols-4 lg:gap-8">
-  {/* Desktop: 4 columns */}
-</div>
-```
-
-**Responsive Utilities Examples:**
-
-```tsx
-// Navigation
-<nav className="md:flex md:items-center md:gap-6">
-  {/* Mobile: Stacked, Tablet+: Horizontal */}
-</nav>
-
-// Kanban columns
-<div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8">
-  {/* Mobile: 1 col, Tablet: 4 cols, Desktop: 8 cols */}
-</div>
-
-// Buttons
-<button className="w-full md:w-auto md:px-8">
-  {/* Mobile: Full-width, Desktop+: Auto-width */}
-</button>
-
-// Text sizes
-<h1 className="text-2xl md:text-3xl lg:text-4xl">
-  {/* Mobile: 24px, Tablet: 30px, Desktop: 48px */}
-</h1>
-```
-
-**Critical Breakpoint Transitions:**
-
-**1. Mobile → Tablet (768px):**
-- Stacked → Side-by-side layouts
-- Bottom tab bar → Top navigation
-- Full-width buttons → Standard width
-- Single-column Kanban → 4-column Kanban
-
-**2. Tablet → Desktop (1024px):**
-- 4-column Kanban → 6-column Kanban
-- Simplified dashboards → Full dashboards with widgets
-- Touch-optimized → Mouse/touch hybrid
-
-**3. Desktop → Large Desktop (1400px):**
-- 6-column Kanban → 8-column Kanban (full)
-- Side navigation appears
-- Information density increases
-
-**4. Desktop → TV 4K (2160px):**
-- Read-optimized mode (120% scale)
-- Hover states disabled
-- Auto-refresh (no interaction expected)
+Usamos **breakpoints estándar de Tailwind** porque ya están integrados en shadcn/ui y cubren todos los use cases de los 5 user personas.
 
 ---
 
 ### Accessibility Strategy
 
-**Accessibility Goal: WCAG 2.1 Level AA Compliance**
+**WCAG AA Compliance:**
 
-**Rationale for WCAG AA:**
+gmao-hiansa cumple con **WCAG 2.1 Level AA** (industry standard).
 
-- **Legal compliance:** Meets accessibility requirements in most jurisdictions
-- **Industry standard:** Considered baseline for professional web applications
-- **Achievable:** Balances user needs with development constraints
-- **Impact:** Benefits users with disabilities without excessive complexity
-
-**Note:** WCAG AAA is not targeted due to implementation complexity and diminishing returns for industrial web application context.
-
-**Accessibility Principles (POUR):**
+**WCAG AA Requirements:**
 
 **1. Perceivable:**
-
-**Color Contrast:**
-
-| Element Type | Contrast Ratio | Our Colors | Compliance |
-|--------------|----------------|-------------|------------|
-| Normal text (<18px) | 4.5:1 minimum | #212529 on #FFFFFF = 16.1:1 ✅ | WCAG AA |
-| Large text (18px+) | 3:1 minimum | #212529 on #FFFFFF = 16.1:1 ✅ | WCAG AA |
-| UI components | 3:1 minimum | #722F37 on #FFFFFF = 8.2:1 ✅ | WCAG AA |
-| Graphic objects | 3:1 minimum | Icons on backgrounds | WCAG AA |
-
-**Our palette exceeds WCAG AA requirements:**
-- ✅ Primary (#722F37) on white: 8.2:1
-- ✅ Black (#212529) on white: 16.1:1
-- ✅ Pure black (#000000) on white: 21:1
-
-**Text Alternatives:**
-- **Images:** All images have `alt` text
-- **Icons:** Icon-only buttons have `aria-label`
-- **Charts:** Data tables provided as alternatives
-- **Emojis:** Used as supplement, not replacement for text
+- **Color Contrast (4.5:1 minimum)**: Rojo burdeos #7D1220 sobre blanco = 7.8:1 ✅
+- **Text Alternatives**: Alt text para imágenes, aria-label para iconos
+- **Adaptable**: Layouts adaptan a zoom de texto 200%
 
 **2. Operable:**
-
-**Keyboard Accessibility:**
-
-**Full Keyboard Navigation:**
-- **Tab:** Logical navigation order (left-to-right, top-to-bottom)
-- **Enter/Space:** Activate buttons, links, form controls
-- **Escape:** Close modals, cancel operations
-- **Arrow keys:** Navigate menus, radio groups, grids (Kanban)
-- **Home/End:** First/last item in list/grid
-- **Page Up/Down:** Scroll by page
-
-**Focus Management:**
-- **Visible focus:** 2px solid #722F37 outline + 4px offset
-- **Focus trap:** Modals trap focus (cannot Tab outside)
-- **Focus restoration:** When modal closes, focus returns to trigger
-- **Skip links:** "Saltar al contenido" link at top of page
-- **No keyboard traps:** All functionality accessible via keyboard
+- **Keyboard Navigation**: Tab order lógico, focus indicators visibles
+- **Skip Links**: "Saltar al contenido" para screen readers
+- **No Keyboard Traps**: Tab no trapa al usuario
+- **No Time Limits**: Reintentos automáticos sin intervención
 
 **3. Understandable:**
-
-**Language:**
-- **Default language:** `lang="es"` on HTML element (Spanish)
-- **Consistent terminology:** Same words for same concepts
-- **Simple language:** Plain Spanish, avoiding technical jargon where possible
-
-**Error Identification:**
-- **Clear error messages:** Specific, actionable error messages
-- **Inline validation:** Errors appear near invalid fields
-- **Error explanation:** Explain what went wrong and how to fix it
-- **Error prevention:** Validate before submit (real-time when possible)
+- **Language**: Español (`lang="es"`), términos consistentes
+- **Predictable**: CTAs descriptivos, focus visible
+- **Input Assistance**: Labels, instrucciones, error messages específicos
 
 **4. Robust:**
-
-**Compatibility:**
-- **Assistive technologies:** Compatible with screen readers (NVDA, JAWS, VoiceOver)
-- **Browser compatibility:** Works with Chrome, Edge (Chromium-based only per PRD)
-- **Future-proof:** Semantic HTML, graceful degradation
-
-**ARIA Implementation:**
-
-**Landmarks:**
-```html
-<nav aria-label="Navegación principal">
-<main aria-label="Tablero Kanban">
-<aside aria-label="Filtros">
-```
-
-**Roles:**
-```html
-<button role="button" aria-label="Cerrar modal">
-<div role="dialog" aria-modal="true" aria-labelledby="modal-title">
-<div role="status" aria-live="polite">
-<div role="alert" aria-live="assertive">
-```
-
-**Color Blindness:**
-
-**Never Rely on Color Alone:**
-- **Status indicators:** Always use icon + color
-- **Priority badges:** Text label + color
-- **Links:** Underlined + color
-- **Charts:** Patterns + colors
-
-**Touch Target Accessibility:**
-
-**Minimum Sizing:**
-- **All interactive elements:** 44x44px minimum (WCAG AAA)
-- **Critical actions:** 48x48px recommended
-- **Spacing:** 8px minimum gap between touch targets
-
-**Industrial Environment Considerations:**
-
-**Factory Floor Accessibility:**
-- **Bright lighting:** High contrast (our palette: 16.1:1)
-- **Noise:** Visual indicators + text (never audio-only)
-- **Gloves:** Large touch targets (44x44px), avoid precision gestures
-- **Tablets:** Touch-optimized, no reliance on hover
+- **Semantic HTML**: Elementos HTML5 semánticos
+- **ARIA**: Roles, labels, states cuando HTML no es suficiente
+- **Screen Readers**: Compatibilidad con VoiceOver, NVDA, JAWS
 
 ---
 
 ### Testing Strategy
 
-**Purpose:** Comprehensive testing ensures responsive design and accessibility requirements are met.
-
 **Responsive Testing:**
-
-**1. Device Testing Matrix:**
-
-| Device Category | Test Devices | Screen Sizes | Test Priority |
-|-----------------|--------------|--------------|---------------|
-| **Mobile** | iPhone SE, Android (small) | 320px - 375px | Critical |
-| **Tablet** | iPad Mini, Android tablet | 768px - 820px | Critical |
-| **Desktop** | Windows laptop (1366x768) | 1366px+ | Critical |
-| **Desktop** | Windows desktop (1920x1080) | 1920px+ | High |
-| **TV 4K** | 4K TV display | 2160px+ | Medium |
-
-**2. Browser Testing:**
-
-Per PRD requirements, **Chrome and Edge only** (Chromium-based):
-- ✅ Chrome (latest 2 versions)
-- ✅ Edge (latest 2 versions, Chromium)
-- ❌ Firefox, Safari: NOT supported
-
-**3. Responsive Testing Checklist:**
-
-**Layout Testing:**
-- ✅ No horizontal scroll at minimum width (320px)
-- ✅ Content fits viewport without zooming
-- ✅ Text reflows without loss of content
-- ✅ Images scale appropriately
-- ✅ Tables/cards switch appropriately on mobile
-- ✅ Navigation works on all screen sizes
-
-**Component Testing:**
-- ✅ Kanban Board: All 8 columns accessible on desktop, swipe on mobile
-- ✅ Forms: Single column on mobile, multi-column on desktop
-- ✅ Modals: Full-screen on mobile, centered on desktop
-- ✅ Buttons: Full-width on mobile, auto-width on desktop
-- ✅ Tables: Convert to cards on mobile
-
-**Touch Interaction Testing:**
-- ✅ All interactive elements reachable
-- ✅ Touch targets ≥44x44px
-- ✅ Drag & drop works via long-press + drag
-- ✅ Swipe gestures work (Kanban columns)
-- ✅ Pull-to-refresh works (mobile)
+- **Real Devices**: iPhone, Samsung Galaxy, iPad, Samsung Galaxy Tab
+- **Browsers**: Chrome, Firefox, Safari, Edge (últimas 2 versiones)
+- **Network**: Test en 3G/4G para simular condiciones reales
+- **Performance**: Load time <3s en 3G, Lighthouse score >90
 
 **Accessibility Testing:**
-
-**1. Automated Accessibility Testing:**
-
-**Tools:**
-- **axe DevTools** (Chrome extension)
-- **Lighthouse** (Chrome built-in)
-- **WAVE** (browser extension)
-- **pa11y** (CLI tool)
-
-**2. Manual Accessibility Testing:**
-
-**Keyboard-Only Navigation:**
-- ✅ Tab through entire application (logical order)
-- ✅ All interactive elements reachable via keyboard
-- ✅ Focus visible on all elements
-- ✅ Escape key closes modals/menus
-- ✅ Arrow keys navigate menus, dropdowns, grids
-
-**Screen Reader Testing:**
-
-**Screen Readers to Test:**
-- **NVDA** (Windows, free) - Primary target
-- **JAWS** (Windows, paid) - Secondary target
-- **VoiceOver** (macOS/iOS) - iOS testing
-- **TalkBack** (Android) - Android testing
-
-**3. User Testing with Disabilities:**
-
-**Test Tasks:**
-- Report failure from mobile (motor impairment)
-- Navigate Kanban using keyboard only
-- Complete OT using screen reader
-- Find specific OT using search
-- View KPIs with low vision settings
+- **Automated**: axe DevTools, Lighthouse, WAVE
+- **Manual**: Screen readers (VoiceOver, NVDA, JAWS), keyboard-only testing
+- **Color Blindness**: Protanopia, Deuteranopia, Tritanopia simulation
+- **Focus Group**: Incluir usuarios con discapacidades en user testing
 
 ---
 
 ### Implementation Guidelines
 
-**Purpose:** Provide developers with clear, actionable guidelines.
+**Responsive Development:**
+- Use relative units (rem, %, vw, vh) over fixed pixels
+- Mobile-first media queries
+- Touch targets minimum 44x44px
+- Optimize images con srcset y loading="lazy"
 
-**Responsive Development Guidelines:**
+**Accessibility Development:**
+- Semantic HTML structure (header, main, nav, footer)
+- ARIA labels y roles
+- Keyboard navigation implementation
+- Focus management (trap focus en modals, return focus)
+- Skip links para saltar al contenido
+- High contrast mode support
 
-**1. Use Relative Units:**
-```css
-/* ✅ GOOD: Relative units */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  padding: 1.5rem; /* 24px */
-  font-size: 1rem; /* 16px */
-  gap: 1rem; /* 16px */
-}
-```
+---
 
-**2. Mobile-First Media Queries:**
-```css
-/* ✅ GOOD: Mobile-first */
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+## Workflow Completion
 
-@media (min-width: 768px) {
-  .card {
-    flex-direction: row;
-    gap: 2rem;
-  }
-}
-```
+**Status:** ✅ COMPLETE (2026-03-07)
 
-**3. Tailwind Responsive Utilities:**
-```tsx
-<div className="
-  flex flex-col gap-4          /* Mobile: Column */
-  md:flex-row md:gap-6        /* Tablet+: Row */
-  lg:gap-8                    /* Desktop+: Larger gap */
-">
-```
+**All Steps Completed:**
+1. ✅ Init - Document foundation established
+2. ✅ Discovery - Project analysis and user insights
+3. ✅ Core Experience - "Reportar avería en 30 segundos" defined
+4. ✅ Emotional Response - 5 emotional pillars mapped
+5. ✅ Inspiration - UX patterns analyzed
+6. ✅ Design System - shadcn/ui + Tailwind CSS selected
+7. ✅ Defining Experience - Core interaction mechanics
+8. ✅ Visual Foundation - Colors (#7D1220), typography, spacing
+9. ✅ Design Directions - 6 mockup variations created
+10. ✅ User Journeys - 5 flows with Mermaid diagrams
+11. ✅ Component Strategy - 8 custom components specified
+12. ✅ UX Patterns - 7 consistency categories defined
+13. ✅ Responsive & Accessibility - Mobile-first + WCAG AA
+14. ✅ Complete - Workflow finalized
 
-**Accessibility Development Guidelines:**
+**Ready for Next Phase:**
 
-**1. Semantic HTML:**
-```tsx
-<header>
-  <nav aria-label="Navegación principal">
-    <ul>
-      <li><a href="/kanban">Kanban</a></li>
-    </ul>
-  </nav>
-</header>
+This UX Design Specification is now ready to guide:
+- Visual design implementation (Figma, wireframes)
+- Technical architecture decisions
+- Epic and story creation for development
+- User validation testing with prototypes
 
-<main>
-  <h1>Tablero Kanban</h1>
-  <KanbanBoard />
-</main>
-```
+**Next Steps Recommended:**
 
-**2. ARIA Attributes:**
-```tsx
-<button aria-label="Cerrar modal">
-  <Icon name="x" />
-</button>
+1. **Wireframes**: Create low-fidelity layouts based on UX spec
+2. **Interactive Prototype**: Build clickable prototype for user testing
+3. **Solution Architecture**: Technical design with UX context
+4. **Epic Creation**: Break down requirements for development sprints
 
-<input
-  id="password"
-  aria-describedby="password-requirements"
-  type="password"
-/>
-```
+---
 
-**3. Keyboard Navigation:**
-```tsx
-useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  };
-
-  document.addEventListener('keydown', handleKeyDown);
-  return () => document.removeEventListener('keydown', handleKeyDown);
-}, [isModalOpen]);
-```
-
-**4. Focus Management:**
-```tsx
-const buttonFocused = 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#722F37]';
-
-<button className={buttonFocused}>
-  Click me
-</button>
-```
-
-**Developer Checklist:**
-
-**Before Pull Request:**
-- ✅ Test on mobile (320px width)
-- ✅ Test on tablet (768px width)
-- ✅ Test on desktop (1400px width)
-- ✅ Keyboard navigation works
-- ✅ Color contrast meets WCAG AA
-- ✅ All images have alt text
-- ✅ All form inputs have labels
-- ✅ Run automated accessibility tests
+**🎉 Congratulations on completing the UX Design Specification for gmao-hiansa!**

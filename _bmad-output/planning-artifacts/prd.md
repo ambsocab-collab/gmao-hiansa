@@ -1,5 +1,5 @@
 ---
-stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-e-01-discovery', 'step-e-02-review', 'step-e-03-edit', 'step-e-04-correcciones-roles', 'step-e-05-eliminacion-can-regulatory-inspection']
+stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-v-01-discovery', 'step-v-02-format-detection', 'step-v-03-density-validation', 'step-v-04-brief-coverage-validation', 'step-v-05-measurability-validation', 'step-v-06-traceability-validation', 'step-v-07-implementation-leakage-validation', 'step-v-08-domain-compliance-validation', 'step-v-09-project-type-validation', 'step-v-10-smart-validation', 'step-v-11-holistic-quality-validation', 'step-v-12-completeness-validation', 'step-v-13-report-complete', 'step-e-01-discovery', 'step-e-02-review', 'step-e-03-edit']
 inputDocuments: [
   'product-brief-gmao-hiansa-2026-02-26.md',
   'brainstorming-session-2026-02-25.md',
@@ -16,9 +16,69 @@ classification:
   complexity: medium
   projectContext: greenfield
 workflowType: 'prd'
-date: '2026-02-26'
+date: '2026-03-07'
+lastValidated: '2026-03-07'
+validationRating: 4.5/5 EXCELLENT
+validationStatus: PASS
 author: Bernardo
 project_name: gmao-hiansa
+---
+
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+  - [What Makes This Special](#what-makes-this-special)
+- [Success Criteria](#success-criteria)
+  - [User Success](#user-success)
+  - [Business Success](#business-success)
+  - [Technical Success](#technical-success)
+  - [Measurable Outcomes](#measurable-outcomes)
+- [User Journeys](#user-journeys)
+  - [Journey de Carlos - Operario de Línea](#journey-de-carlos---operario-de-línea-25-años)
+  - [Journey de María - Técnica de Mantenimiento](#journey-de-maría---técnica-de-mantenimiento-28-años)
+  - [Journey de Javier - Supervisor de Mantenimiento](#journey-de-javier---supervisor-de-mantenimiento-32-años)
+  - [Journey de Elena - Administrador / Jefa de Mantenimiento](#journey-de-elena---administrador--jefa-de-mantenimiento-38-años)
+  - [Journey de Pedro - Usuario con Capacidad de Gestión de Stock](#journey-de-pedro---usuario-con-capacidad-de-gestión-de-stock-35-años)
+- [Visual Specifications](#visual-specifications)
+  - [Design System](#design-system)
+  - [Key Screen Specifications](#key-screen-specifications)
+  - [Iconography](#iconography)
+  - [Accessibility Notes](#accessibility-notes)
+- [Domain-Specific Requirements](#domain-specific-requirements)
+  - [Mantenimiento Reglamentario y Certificaciones Obligatorias](#mantenimiento-reglamentario-y-certificaciones-obligatorias)
+- [Web App Specific Requirements](#web-app-specific-requirements)
+  - [Project-Type Overview](#project-type-overview)
+  - [Responsive Design](#responsive-design)
+  - [Performance Targets](#performance-targets)
+  - [Browser Support](#browser-support)
+  - [SEO Strategy](#seo-strategy)
+  - [Accessibility Level](#accessibility-level)
+  - [Implementation Considerations](#implementation-considerations)
+- [Project Scoping & Phased Development](#project-scoping--phased-development)
+  - [MVP Strategy & Philosophy](#mvp-strategy--philosophy)
+  - [MVP Feature Set (Phase 1)](#mvp-feature-set-phase-1)
+  - [Post-MVP Features](#post-mvp-features)
+  - [Risk Mitigation Strategy](#risk-mitigation-strategy)
+  - [Phased Development Summary](#phased-development-summary)
+- [Functional Requirements](#functional-requirements)
+  - [1. Gestión de Averías](#1-gestión-de-averías)
+  - [2. Gestión de Órdenes de Trabajo](#2-gestión-de-órdenes-de-trabajo)
+  - [3. Gestión de Activos](#3-gestión-de-activos)
+  - [4. Gestión de Repuestos](#4-gestión-de-repuestos)
+  - [5. Gestión de Usuarios, Roles y Capacidades](#5-gestión-de-usuarios-roles-y-capacidades)
+  - [6. Gestión de Proveedores](#6-gestión-de-proveedores)
+  - [7. Gestión de Rutinas de Mantenimiento](#7-gestión-de-rutinas-de-mantenimiento)
+  - [8. Análisis y Reportes](#8-análisis-y-reportes)
+  - [9. Sincronización y Acceso Multi-Dispositivo](#9-sincronización-y-acceso-multi-dispositivo)
+  - [10. Funcionalidades Adicionales](#10-funcionalidades-adicionales)
+- [Non-Functional Requirements](#non-functional-requirements)
+  - [Performance](#performance)
+  - [Security](#security)
+  - [Scalability](#scalability)
+  - [Accessibility](#accessibility)
+  - [Reliability](#reliability)
+  - [Integration](#integration)
+
 ---
 
 # Product Requirements Document - gmao-hiansa
@@ -891,16 +951,17 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 - **FR13:** Los usuarios con capability `can_update_own_ot` pueden agregar repuestos usados y requisitos durante el cumplimiento de una orden de trabajo asignada
 - **FR14:** Los usuarios con capability `can_complete_ot` pueden completar (validar) una orden de trabajo
 - **FR15:** Los usuarios con capability `can_update_own_ot` pueden agregar notas internas a una orden de trabajo asignada
-- **FR16:** El stock de repuestos se actualiza en tiempo real (dentro de 1 segundo) al registrar uso
+- **FR16:** El stock de repuestos se actualiza en tiempo real (dentro de 1 segundo) al registrar uso. Las actualizaciones de stock son silenciosas (sin enviar notificaciones a usuarios con `can_manage_stock`) para evitar spam de notificaciones por actualizaciones masivas
 - **FR17:** Los usuarios con capability `can_assign_technicians` pueden asignar de 1 a 3 técnicos internos a cada orden de trabajo, todos deben tener la capability `can_update_own_ot`
 - **FR18:** Los usuarios con capability `can_assign_technicians` pueden asignar órdenes de trabajo a proveedores externos
 - **FR19:** Los usuarios con capability `can_assign_technicians` pueden seleccionar de 1 a 3 técnicos (que tengan `can_update_own_ot`) o proveedores según el tipo de orden de trabajo, filtrando técnicos disponibles por habilidades y ubicación. Todos los usuarios asignados reciben notificaciones de la OT
 - **FR19-A:** Cuando una orden de trabajo tiene múltiples usuarios asignados, cualquiera de ellos puede agregar repuestos usados, actualizar estado o completar la OT. Todos los usuarios asignados reciben notificaciones de cambios de estado y actualizaciones de la OT
 - **FR20:** Los usuarios con capability `can_update_own_ot` pueden ver todas las órdenes de trabajo donde están asignados en su dashboard personal
-- **FR21:** Los usuarios con capability `can_view_all_ots` pueden ver todas las órdenes de trabajo de la organización
+- **FR21:** Los usuarios con capability `can_view_all_ots` pueden ver todas las órdenes de trabajo de la organización. La vista de listado incluye una columna "Asignaciones" que muestra la distribución de usuarios asignados (ej: "2 técnicos / 1 proveedor" cuando hay múltiples asignados)
 - **FR22:** Se pueden distinguir visualmente entre órdenes de preventivo (color verde #28A745), correctivo propio (color rojizo #DC3545) y correctivo externo (color rojo con línea blanca #DC3545 con borde #FFFFFF)
 - **FR23:** Se pueden distinguir visualmente entre órdenes de reparación interna (taller propio, color naranja #FD7E14) y reparación enviada a proveedor (color azul #17A2B8). Las órdenes de preventivo usan color verde #28A745
 - **FR24:** Se pueden ver detalles completos de una orden de trabajo (fechas, origen, técnico, repuestos) en modal informativo
+- **FR24-A:** Cuando un proveedor marca una orden de reparación como completada, los usuarios con capability `can_assign_technicians` pueden confirmar la recepción del equipo reparado antes de marcar la OT como completada. La confirmación requiere verificación visual del estado del reparado
 - **FR25:** Los usuarios con capacidad `can_create_manual_ot` pueden crear órdenes de trabajo manuales sin partir de un aviso
 
 #### Vista de Listado
@@ -1035,7 +1096,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 - **FR78:** Los usuarios con capability `can_manage_providers` pueden gestionar el catálogo de proveedores de repuestos (crear, editar, desactivar)
 - **FR78-A:** El formulario de proveedores es único para ambos tipos (mantenimiento y repuestos), con un campo de selección "Tipo de proveedor" que permite clasificarlos como "Mantenimiento" o "Repuestos". Un mismo proveedor puede ofrecer ambos tipos de servicio.
 - **FR79:** Los usuarios con capability `can_manage_providers` pueden ver datos de contacto de cada proveedor
-- **FR80:** Los usuarios con capability `can_manage_providers` pueden asociar proveedores con tipos de servicio que ofrecen
+- **FR80:** Los usuarios con capability `can_manage_providers` pueden asociar proveedores con tipos de servicio que ofrecen. El catálogo de servicios incluye 6 tipos predefinidos: Mantenimiento Correctivo, Mantenimiento Preventivo, Mantenimiento Reglamentario, Suministro de Repuestos, Mantenimiento de Equipos Específicos (soldadura, corte, etc.), y Servicios de Emergencia
 
 ### 7. Gestión de Rutinas de Mantenimiento
 
@@ -1044,7 +1105,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 - **FR81-B:** Cada rutina de mantenimiento configura: tareas a realizar, técnico responsable, repuestos necesarios y duración estimada. Estos campos aplican tanto a rutinas por equipo como customizables.
 - **FR82:** Las órdenes de trabajo de mantenimiento preventivo se generan automáticamente 24 horas antes del vencimiento de rutina, con estado "Pendiente" y etiqueta "Preventivo"
 - **FR83:** Los usuarios con capability `can_view_all_ots` pueden ver el porcentaje de rutinas completadas en el dashboard, incluyendo sus propias rutinas asignadas
-- **FR84:** El usuario asignado a una rutina recibe alertas cuando la rutina no se completa en el plazo previsto
+- **FR84:** El usuario asignado a una rutina recibe alertas cuando la rutina no se completa en el plazo previsto. Las alertas se envían en 3 momentos: 1 hora antes del vencimiento, en el momento del vencimiento, y 24 horas después del vencimiento si permanece incompleta
 
 ### 8. Análisis y Reportes
 
@@ -1054,7 +1115,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 - **FR86:** Los usuarios con capability `can_view_kpis` pueden ver el KPI MTBF (Mean Time Between Failures) calculado con datos actualizados cada 30 segundos
 - **FR87:** Los usuarios con capability `can_view_kpis` pueden navegar drill-down de KPIs (Global → Planta → Línea → Equipo)
 - **FR88:** Los usuarios con capability `can_view_kpis` pueden ver métricas adicionales (OTs abiertas, OTs completadas, técnicos activos, stock crítico)
-- **FR89:** Los usuarios con capability `can_view_kpis` reciben alertas de 3 tipos: stock mínimo (requiere `can_manage_stock`), MTFR alto, rutinas no completadas
+- **FR89:** Los usuarios con capability `can_view_kpis` reciben alertas de 3 tipos: stock mínimo (requiere `can_manage_stock`), MTFR alto (definido como 150% del promedio de los últimos 30 días), rutinas no completadas
 - **FR90:** Los usuarios con capability `can_view_kpis` pueden exportar reportes de KPIs a Excel en formato .xlsx compatible con Microsoft Excel 2016+, con hojas separadas por KPI (MTTR, MTBF, OTs Abiertas, Stock Crítico)
 - **FR90-A:** Los usuarios con capability `can_receive_reports` pueden configurar la recepción de reportes automáticos en PDF enviados por email, incluyendo selección de KPIs (MTTR, MTBF, OTs abiertas, OTs completadas, stock crítico, técnicos activos, porcentaje de rutinas completadas, número de usuarios asignados por OT) y frecuencia (diario, semanal, mensual)
 - **FR90-B:** Los reportes diarios se generan automáticamente todos los días a las 8:00 AM con datos del día anterior, en formato PDF adjunto enviado por email a los usuarios con capability `can_receive_reports` que lo hayan configurado
@@ -1080,7 +1141,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 
 - **FR96:** El sistema sincroniza datos entre múltiples dispositivos: <1 segundo para OTs, <30 segundos para KPIs
 - **FR97:** Los usuarios pueden acceder desde dispositivos desktop, tablet y móvil
-- **FR98:** La interfaz se adapta responsivamente al tamaño de pantalla del dispositivo
+- **FR98:** La interfaz se adapta responsivamente al tamaño de pantalla del dispositivo con 3 breakpoints definidos: >1200px (layout desktop con navegación lateral completa), 768-1200px (layout tablet con navegación simplificada), <768px (layout móvil con navegación inferior y componentes apilados)
 - **FR99:** Los usuarios pueden instalar la aplicación en dispositivos móviles como aplicación nativa (PWA)
 - **FR100:** Los usuarios reciben notificaciones push en sus dispositivos
 
@@ -1099,63 +1160,9 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 
 **Total: 123 Requerimientos Funcionales** organizados en 10 áreas de capacidad
 
-**NOTA:** Actualizado tras Sprint Change Proposal y Edit Workflow - Corrección de anti-patrones BMAD, agregación de métricas y FRs faltantes
-- **Última edición (2026-03-07):** ELIMINADA capacidad `can_regulatory_inspection` del Domain-Specific Requirements. El mantenimiento reglamentario se cubre con capacidades existentes: `can_view_all_ots` (ver OTs reglamentarias), `can_create_manual_ot` (crear OTs reglamentarias), `can_manage_providers` (gestionar proveedores certificados con nº certificación), `can_manage_assets` (bloquear/desbloquear equipos), `can_assign_technicians` (asignar técnicos/proveedores a OTs reglamentarias). El sistema mantiene las 15 capacidades oficiales.
-- **Última edición (2026-03-07):** ELIMINADAS todas las menciones de "roles" como entidades funcionales del sistema. Ahora solo existen "etiquetas de clasificación" que son puramente visuales y NO otorgan capacidades. Corregidos Executive Summary, FR59, FR61, FR62, FR64, FR65, FR67-A, FR67-B, FR68, FR68-UI, y User Journey de Elena. Aclarado que `can_manage_users` gestiona usuarios y sus capacidades individuales, no roles.
-- **Última edición (2026-03-07):** CORREGIDA numeración del MVP Feature Set (PWA de 11 a 13, Reparación Dual de 12 a 14, Reportes Automáticos de 13 a 15). Ahora el MVP tiene 14 funcionalidades base correctamente numeradas.
-- **Última edición (2026-03-07):** ELIMINADO FR103 por duplicidad con FR91 (dashboard común). Total actualizado de 124 a 123 FRs.
-- **Última edición (2026-03-07):** CORREGIDAS 47 INCONSISTENCIAS (12 críticas, 18 altas, 12 medias, 5 bajas):
-  - **CRÍTICAS:** Fecha actualizada (2026-03-07), Executive Summary con sistema PBAC, Success Criteria con lenguaje basado en capacidades, User Journeys actualizados (Elena, Javier, María, Carlos, Pedro), FR90 con capability can_view_kpis, FR103 eliminado, FR108 aclarado (MVP base, tracking avanzado Phase 3), MVP con 15 capacidades, FR68-C aclarado, color amarillo cambiado a naranja #FD7E14 para WCAG AA
-  - **ALTAS:** FR36, FR44-46, FR53 con capabilities, FR72-C corregido, FR73 módulo Usuarios con can_manage_users, MVP con can_receive_reports, Success Criteria con can_receive_reports, Journey Elena con can_receive_reports, FR85-89 con capabilities, FR79-80 con can_manage_providers, NFR-S5 actualizado, MVP con 13 funcionalidades, Executive Summary actualizado
-  - **MEDIAS:** Phase 1.5 aclarado, frontmatter actualizado, Success Criteria con can_manage_assets, Journey Elena con can_manage_assets, NFR-P1 aclarado, MVP con can_view_repair_history, FR91-FR91-A aclarados
-  - **BAJAS:** NFR-A5 con touch targets
-- **Última edición (2026-03-07):** Actualizados FR17, FR19, FR20 para soportar entre 1 y 3 usuarios asignados por OT. Agregado FR19-A: Todos los usuarios asignados pueden colaborar, reciben notificaciones. Actualizado FR90-A para incluir KPI de usuarios asignados por OT.
-- **Última edición (2026-03-07):** Actualizados FR33, FR34, FR38, FR39, FR42, FR43 en Gestión de Activos para requerir capability can_manage_assets.
-- FRs eliminados: FR60, FR63, FR92, FR93, FR94, FR95, FR103 (7 FRs eliminados)
-- FRs modificados: FR1, FR4, FR5, FR11, FR16, FR19, FR32, FR34, FR35, FR37, FR38, FR40, FR51, FR59, FR66, FR67, FR67-A, FR68, FR73, FR77, FR78, FR82, FR85, FR86, FR91 (26 FRs modificados)
-- FRs nuevos: FR67-A, FR67-B, FR68-UI, FR68-A, FR68-B, FR68-C, FR72-A, FR72-B, FR78-A, FR91-A, FR101-FR108 (16 FRs nuevos)
-- Net change: +6 FR (de 105 a 111)
-- **Última edición (2026-03-07):** Reorganizada capabilities: can_manage_users absorbe gestión de roles, capabilities e historiales. can_assign_technicians reducida a solo asignar técnicos a OTs. Actualizados FR59, FR61, FR64, FR65, FR66, FR67, FR72, FR72-C. Edición previa: Agregada capability can_manage_users como 14ª capability. FR58, FR69-A, FR70-A, FR72-B usan can_manage_users. FR59, FR61, FR64, FR65, FR67, FR72 mantienen can_assign_technicians. Actualizados FR12-FR23 para requerir capabilities específicas (can_update_own_ot, can_complete_ot, can_assign_technicians). Agregado color verde #28A745 para OTs preventivas. Eliminada mención de roles en FR21. Agregado FR72-C: Usuarios con can_assign_technicians pueden ver historial de trabajos completo por usuario con filtro de rango de fechas. Corregidos FR48, FR50, FR51, FR52, FR54: Reemplazado 'usuarios con permisos' por capability específica 'can_manage_stock' para todas las operaciones de gestión de stock. Actualizados FR1-FR9 para requerir capabilities específicas: FR1, FR2, FR3, FR6 requieren can_create_failure_report. FR7, FR8, FR9 requieren can_view_all_ots.
-  - **Última edición (2026-03-07):** Actualizados FR101-FR107 en Funcionalidades Adicionales: FR101 (can_create_failure_report), FR106-FR107 (can_update_own_ot), FR104 (cualquiera + can_manage_users), FR105 (cualquier usuario), FR102 (búsqueda universal), FR103 (dashboard inicio sin TVs).
-- **Última edición (2026-03-07):** Reorganizada capabilities: can_manage_users absorbe gestión de roles, capabilities e historiales. can_assign_technicians reducida a solo asignar técnicos a OTs. Actualizados FR59, FR61, FR64, FR65, FR66, FR67, FR72, FR72-C. Edición previa: Agregada capability can_manage_users como 14ª capability. FR58, FR69-A, FR70-A, FR72-B usan can_manage_users. FR59, FR61, FR64, FR65, FR67, FR72 mantienen can_assign_technicians. Actualizados FR12-FR23 para requerir capabilities específicas (can_update_own_ot, can_complete_ot, can_assign_technicians). Agregado color verde #28A745 para OTs preventivas. Eliminada mención de roles en FR21. Agregado FR72-C: Usuarios con can_assign_technicians pueden ver historial de trabajos completo por usuario con filtro de rango de fechas. Corregidos FR48, FR50, FR51, FR52, FR54: Reemplazado 'usuarios con permisos' por capability específica 'can_manage_stock' para todas las operaciones de gestión de stock. Actualizados FR1-FR9 para requerir capabilities específicas: FR1, FR2, FR3, FR6 requieren can_create_failure_report. FR7, FR8, FR9 requieren can_view_all_ots.
-  - Actualizado FR12: Requiere can_update_own_ot para iniciar OTs
-  - Actualizado FR13: Requiere can_update_own_ot para agregar repuestos y requisitos
-  - Actualizado FR14: Requiere can_complete_ot para completar OTs
-  - Actualizado FR15: Requiere can_update_own_ot para agregar notas internas
-  - Actualizado FR17: Requiere can_assign_technicians y técnico debe tener can_update_own_ot
-  - Actualizado FR18: Requiere can_assign_technicians para asignar a proveedores
-  - Actualizado FR19: Requiere can_assign_technicians para seleccionar técnicos/proveedores
-  - Actualizado FR20: Requiere can_update_own_ot para ver OTs asignadas
-  - Actualizado FR21: Eliminada mención de roles específicos (Supervisor, Administrador, Director)
-  - Actualizado FR22: Agregado color verde #28A745 para OTs preventivas
-  - Actualizado FR23: Agregada referencia a color verde #28A745 para preventivas
-  - Agregado FR72-C: Usuarios con can_assign_technicians pueden ver historial de trabajos completo por usuario con filtro de rango de fechas
-  - Actualizado FR48: Requiere can_manage_stock para ajustes manuales de stock
-  - Actualizado FR50: Requiere can_manage_stock para recibir alertas de stock mínimo
-  - Actualizado FR51: Requiere can_manage_stock para generar pedidos a proveedores
-  - Actualizado FR52: Requiere can_manage_stock para gestionar stock de repuestos
-  - Actualizado FR54: Requiere can_manage_stock para importar repuestos masivamente
-  - Ediciones previas: Actualización de sección "Gestión de Usuarios, Roles y Capacidades" (FR58-FR76) y "Gestión de Proveedores" (FR77-FR80) y "Gestión de Rutinas de Mantenimiento" (FR81-FR84)
-  - Ediciones previas: Agregados FR11-A y FR11-B para distinguir OTs preventivas vs correctivas con etiquetas visibles en Kanban y listado
-  - Ediciones previas: Actualizado FR11: Mención de ambos tipos de OT (preventivas y correctivas)
-  - Ediciones previas: Actualizado FR82: OTs preventivas generadas con etiqueta "Preventivo"
-  - Ediciones previas: Agregada capability can_manage_routines como 13ª capability
-  - Ediciones previas: Agregados FR81-A, FR81-B: Modalidades de rutinas (por equipo/customizables) y campos configurables
-  - Ediciones previas: Actualizados FR66: Referencia a 12 capabilities (antes 11)
-  - Ediciones previas: Actualizado FR68: Lista de 13 capabilities con can_manage_routines
-  - Ediciones previas: Actualizado FR68-C: Administrador inicial tiene 13 capabilities (antes 12)
-  - Ediciones previas: Actualizado FR68-UI: Tabla con can_manage_routines
-  - Ediciones previas: Actualizado FR81: Requiere capability can_manage_routines
-  - Ediciones previas: Actualizado FR83: Requiere capability can_view_all_ots para ver KPIs de rutinas
-  - Ediciones previas: Actualizado FR84: Alertas solo al usuario asignado a la rutina
-  - Ediciones previas: Actualizado FR73: Agregado módulo Rutinas con can_view_all_ots y can_manage_routines
-  - Ediciones previas: Agregada capability can_manage_providers como 12ª capability
-  - Ediciones previas: Agregado FR78-A: Formulario unificado de proveedores con campo "Tipo de proveedor"
-  - Ediciones previas: Agregadas capabilities can_manage_assets, can_view_repair_history - Total 13 capabilities
-  - Ediciones previas: Agregado FR68-UI: Presentación de capabilities en castellano en UI
-  - Ediciones previas: Agregados FR68-A, FR68-B: Restricciones de acceso sin capabilities específicas
-  - Ediciones previas: Actualizados FR59, FR66, FR67, FR67-A: Clarificaciones sobre roles vs capabilities
-  - Ediciones previas: Actualizados FR35, FR37, FR40: Requieren capabilities específicas
+**NOTA:** El historial completo de ediciones se encuentra en `prd-changelog.md`
+
+**Última edición (2026-03-07):** Validación PRD completada - Rating 4.5/5 EXCELLENT. Aplicando 10 mejoras identificadas en validación.
 
 ---
 

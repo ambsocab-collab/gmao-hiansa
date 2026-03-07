@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMAO Hiansa - Design Directions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .maroon-bg { background-color: #7D1220; }
+        .maroon-text { color: #7D1220; }
+        .hirock { background-color: #FFD700; }
+        .ultra { background-color: #8FBC8F; }
+        .kanban-column { min-width: 200px; }
+        .mockup-container { aspect-ratio: 16/10; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        .direction-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .direction-card { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="maroon-bg text-white py-6 px-8 shadow-lg">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-3xl font-bold">GMAO Hiansa - Design Directions</h1>
+            <p class="mt-2 opacity-90">6 direcciones de diseño explorando diferentes enfoques visuales</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex space-x-2 overflow-x-auto">
+                <button onclick="showDirection(1)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="1">Dirección 1: Dashboard Clásico</button>
+                <button onclick="showDirection(2)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="2">Dirección 2: Kanban First</button>
+                <button onclick="showDirection(3)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="3">Dirección 3: Mobile First</button>
+                <button onclick="showDirection(4)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="4">Dirección 4: Data Heavy</button>
+                <button onclick="showDirection(5)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="5">Dirección 5: Minimal</button>
+                <button onclick="showDirection(6)" class="direction-btn px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" data-direction="6">Dirección 6: Action Oriented</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Direction 1: Classic Dashboard -->
+        <div id="direction-1" class="direction-content fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 1: Dashboard Clásico</h2>
+                <p class="text-gray-600">Layout tradicional con sidebar fijo, dashboard principal con KPIs y acceso rápido a funcionalidades principales. Ideal para usuarios que esperan una interfaz enterprise familiar.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Layout tradicional</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Sidebar fijo</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">KPIs prominentes</span>
+                </div>
+            </div>
+
+            <!-- Mockup -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-gray-50">
+                    <!-- Top Bar -->
+                    <div class="maroon-bg text-white px-4 py-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                                <span class="maroon-text font-bold text-sm">H</span>
+                            </div>
+                            <span class="font-semibold">GMAO Hiansa</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm">Javier Martínez</span>
+                            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                                <span class="maroon-text text-sm font-bold">JM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex h-[calc(100%-60px)]">
+                        <!-- Sidebar -->
+                        <div class="w-56 bg-white border-r border-gray-200 p-4">
+                            <nav class="space-y-2">
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg maroon-bg text-white">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                    <span class="text-sm font-medium">Dashboard</span>
+                                </a>
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                                    <span class="text-sm">Kanban OTs</span>
+                                </a>
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    <span class="text-sm">Reportar Avería</span>
+                                </a>
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                    <span class="text-sm">KPIs</span>
+                                </a>
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                    <span class="text-sm">Activos</span>
+                                </a>
+                                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    <span class="text-sm">Stock</span>
+                                </a>
+                            </nav>
+                        </div>
+
+                        <!-- Main Content -->
+                        <div class="flex-1 p-6 overflow-auto">
+                            <!-- KPI Cards -->
+                            <div class="grid grid-cols-4 gap-4 mb-6">
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <p class="text-xs text-gray-500 uppercase">MTTR</p>
+                                    <p class="text-2xl font-bold text-gray-900">4.2h</p>
+                                    <p class="text-xs text-green-600">↓ 15% vs mes anterior</p>
+                                </div>
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <p class="text-xs text-gray-500 uppercase">MTBF</p>
+                                    <p class="text-2xl font-bold text-gray-900">127h</p>
+                                    <p class="text-xs text-green-600">↑ 8% vs mes anterior</p>
+                                </div>
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <p class="text-xs text-gray-500 uppercase">OTs Abiertas</p>
+                                    <p class="text-2xl font-bold text-gray-900">23</p>
+                                    <p class="text-xs text-yellow-600">5 críticas</p>
+                                </div>
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <p class="text-xs text-gray-500 uppercase">Disponibilidad</p>
+                                    <p class="text-2xl font-bold text-gray-900">94.2%</p>
+                                    <p class="text-xs text-green-600">Meta: 95%</p>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions & Recent Activity -->
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <h3 class="font-semibold text-gray-900 mb-3">Acciones Rápidas</h3>
+                                    <div class="space-y-2">
+                                        <button class="w-full maroon-bg text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition">+ Reportar Avería</button>
+                                        <button class="w-full border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition">Ver Kanban</button>
+                                        <button class="w-full border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition">Buscar Activo</button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                    <h3 class="font-semibold text-gray-900 mb-3">Actividad Reciente</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full mt-1.5"></div>
+                                            <div>
+                                                <p class="text-sm text-gray-900">OT #456 completada</p>
+                                                <p class="text-xs text-gray-500">Hace 5 min - María G.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-1.5"></div>
+                                            <div>
+                                                <p class="text-sm text-gray-900">Avería #789 aprobada</p>
+                                                <p class="text-xs text-gray-500">Hace 12 min - Javier M.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-2 h-2 bg-yellow-500 rounded-full mt-1.5"></div>
+                                            <div>
+                                                <p class="text-sm text-gray-900">Stock crítico: Rodamiento SKF-6205</p>
+                                                <p class="text-xs text-gray-500">Hace 25 min - Sistema</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 2: Kanban First -->
+        <div id="direction-2" class="direction-content hidden">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 2: Kanban First</h2>
+                <p class="text-gray-600">El Kanban de 8 columnas es el protagonista central. Los KPIs se muestran en un panel lateral colapsable. Optimizado para Javier que necesita control visual inmediato de todas las OTs.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Kanban prominente</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Panel lateral colapsable</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Drag & drop visible</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-gray-50">
+                    <!-- Top Bar -->
+                    <div class="maroon-bg text-white px-4 py-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                                <span class="maroon-text font-bold text-sm">H</span>
+                            </div>
+                            <span class="font-semibold">Kanban de Órdenes de Trabajo</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="px-3 py-1 bg-white/20 rounded text-sm hover:bg-white/30 transition">Filtros</button>
+                            <button class="px-3 py-1 bg-white rounded text-sm maroon-text font-medium">+ Nueva OT</button>
+                        </div>
+                    </div>
+
+                    <div class="flex h-[calc(100%-60px)]">
+                        <!-- Kanban Board -->
+                        <div class="flex-1 p-4 overflow-x-auto">
+                            <div class="flex space-x-3 h-full">
+                                <!-- Column: Por Revisar -->
+                                <div class="kanban-column bg-gray-100 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-gray-700">Por Revisar</h4>
+                                        <span class="bg-gray-300 text-gray-700 text-xs px-2 py-0.5 rounded-full">3</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-gray-500">
+                                            <p class="text-xs text-gray-500">#789</p>
+                                            <p class="text-sm font-medium text-gray-900">Prensa PH-500 no arranca</p>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                <span class="px-2 py-0.5 hirock text-xs rounded">HiRock</span>
+                                                <span class="text-xs text-gray-500">Carlos R.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Column: Por Aprobar -->
+                                <div class="kanban-column bg-amber-50 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-amber-700">Por Aprobar</h4>
+                                        <span class="bg-amber-200 text-amber-800 text-xs px-2 py-0.5 rounded-full">2</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-amber-500">
+                                            <p class="text-xs text-gray-500">#788</p>
+                                            <p class="text-sm font-medium text-gray-900">Sobretemperatura motor Línea 2</p>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                <span class="px-2 py-0.5 ultra text-xs rounded">Ultra</span>
+                                                <span class="text-xs text-gray-500">María G.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Column: Aprobada -->
+                                <div class="kanban-column bg-blue-50 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-blue-700">Aprobada</h4>
+                                        <span class="bg-blue-200 text-blue-800 text-xs px-2 py-0.5 rounded-full">5</span>
+                                    </div>
+                                </div>
+
+                                <!-- Column: En Progreso -->
+                                <div class="kanban-column bg-purple-50 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-purple-700">En Progreso</h4>
+                                        <span class="bg-purple-200 text-purple-800 text-xs px-2 py-0.5 rounded-full">8</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-purple-500">
+                                            <p class="text-xs text-gray-500">#785</p>
+                                            <p class="text-sm font-medium text-gray-900">Cambio filtro hidráulico</p>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                <span class="px-2 py-0.5 hirock text-xs rounded">HiRock</span>
+                                                <span class="text-xs text-gray-500">María G.</span>
+                                            </div>
+                                            <div class="mt-2 bg-purple-100 rounded px-2 py-1">
+                                                <p class="text-xs text-purple-700">🔧 En trabajo</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Column: Pausada -->
+                                <div class="kanban-column bg-pink-50 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-pink-700">Pausada</h4>
+                                        <span class="bg-pink-200 text-pink-800 text-xs px-2 py-0.5 rounded-full">1</span>
+                                    </div>
+                                </div>
+
+                                <!-- Column: Completada -->
+                                <div class="kanban-column bg-green-50 rounded-lg p-3 flex-shrink-0">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-semibold text-sm text-green-700">Completada</h4>
+                                        <span class="bg-green-200 text-green-800 text-xs px-2 py-0.5 rounded-full">4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Collapsible KPI Panel -->
+                        <div class="w-64 bg-white border-l border-gray-200 p-4">
+                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                KPIs del Día
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">MTTR</p>
+                                    <p class="text-xl font-bold text-gray-900">4.2h</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">OTs Abiertas</p>
+                                    <p class="text-xl font-bold text-gray-900">23</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">Por Completar</p>
+                                    <p class="text-xl font-bold text-gray-900">8</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 3: Mobile First -->
+        <div id="direction-3" class="direction-content hidden">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 3: Mobile First</h2>
+                <p class="text-gray-600">Diseño optimizado para móviles con elementos táctiles grandes, navegación por gestos y vistas simplificadas. Perfecto para Carlos y María que trabajan principalmente desde tablets/móviles en el piso de fábrica.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Touch-first</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Gestos swipe</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Vistas simplificadas</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-gray-50 flex items-center justify-center p-8">
+                    <div class="flex space-x-4">
+                        <!-- Mobile Frame 1: Dashboard -->
+                        <div class="w-72 h-[580px] bg-black rounded-[2.5rem] p-3 shadow-2xl">
+                            <div class="w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                                <!-- Status Bar -->
+                                <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-xs">
+                                    <span class="font-medium">9:41</span>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Header -->
+                                <div class="maroon-bg text-white px-4 py-3">
+                                    <p class="text-xs opacity-80">Hola, Carlos</p>
+                                    <p class="font-semibold">Dashboard</p>
+                                </div>
+
+                                <!-- Quick Action Button -->
+                                <div class="p-4">
+                                    <button class="w-full maroon-bg text-white py-4 rounded-xl font-semibold text-lg shadow-lg">
+                                        + Reportar Avería
+                                    </button>
+                                </div>
+
+                                <!-- Stats -->
+                                <div class="px-4 grid grid-cols-2 gap-3">
+                                    <div class="bg-green-50 p-3 rounded-xl text-center">
+                                        <p class="text-2xl font-bold text-green-600">5</p>
+                                        <p class="text-xs text-green-700">Mis Reportes Hoy</p>
+                                    </div>
+                                    <div class="bg-blue-50 p-3 rounded-xl text-center">
+                                        <p class="text-2xl font-bold text-blue-600">2</p>
+                                        <p class="text-xs text-blue-700">En Progreso</p>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Activity -->
+                                <div class="px-4 mt-4">
+                                    <h3 class="font-semibold text-sm text-gray-900 mb-2">Mis Reportes</h3>
+                                    <div class="space-y-2">
+                                        <div class="bg-gray-50 p-3 rounded-lg">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900">#789</p>
+                                                    <p class="text-xs text-gray-500">Prensa PH-500</p>
+                                                </div>
+                                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">En Progreso</span>
+                                            </div>
+                                        </div>
+                                        <div class="bg-gray-50 p-3 rounded-lg">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900">#788</p>
+                                                    <p class="text-xs text-gray-500">Motor Línea 2</p>
+                                                </div>
+                                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Completado</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bottom Nav -->
+                                <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-around">
+                                    <button class="flex flex-col items-center maroon-text">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                                        <span class="text-xs mt-1">Inicio</span>
+                                    </button>
+                                    <button class="flex flex-col items-center text-gray-400">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                                        <span class="text-xs mt-1">OTs</span>
+                                    </button>
+                                    <button class="flex flex-col items-center text-gray-400">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z"></path></svg>
+                                        <span class="text-xs mt-1">Más</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Frame 2: Report Form -->
+                        <div class="w-72 h-[580px] bg-black rounded-[2.5rem] p-3 shadow-2xl">
+                            <div class="w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                                <!-- Status Bar -->
+                                <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-xs">
+                                    <span class="font-medium">9:41</span>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Header -->
+                                <div class="maroon-bg text-white px-4 py-3 flex items-center">
+                                    <button class="mr-3">←</button>
+                                    <p class="font-semibold">Reportar Avería</p>
+                                </div>
+
+                                <!-- Form -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Search Input -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Equipo</label>
+                                        <div class="relative">
+                                            <input type="text" placeholder="Buscar equipo..." class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-maroon focus:border-maroon">
+                                            <svg class="w-5 h-5 absolute right-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Autocomplete Suggestions -->
+                                    <div class="bg-gray-50 rounded-lg p-2 space-y-1">
+                                        <div class="bg-white px-3 py-2 rounded-lg shadow-sm border-l-4 border-maroon">
+                                            <p class="text-sm font-medium text-gray-900">Prensa PH-500</p>
+                                            <p class="text-xs text-gray-500">HiRock → Línea 1 → Prensas</p>
+                                        </div>
+                                        <div class="px-3 py-2 rounded-lg hover:bg-gray-100">
+                                            <p class="text-sm text-gray-900">Prensa PH-600</p>
+                                            <p class="text-xs text-gray-500">HiRock → Línea 3 → Prensas</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Description -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción (opcional)</label>
+                                        <textarea placeholder="Describe brevemente la falla..." class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm resize-none h-20"></textarea>
+                                    </div>
+
+                                    <!-- Photo Button -->
+                                    <button class="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 flex items-center justify-center text-gray-600">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        Adjuntar foto
+                                    </button>
+
+                                    <!-- Submit Button -->
+                                    <button class="w-full maroon-bg text-white py-4 rounded-xl font-semibold text-lg shadow-lg">
+                                        Enviar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 4: Data Heavy -->
+        <div id="direction-4" class="direction-content hidden">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 4: Data Heavy</h2>
+                <p class="text-gray-600">Dashboard orientado a datos con múltiples gráficos, tablas densas y métricas detalladas. Optimizado para Elena que necesita "datos concretos" para toma de decisiones y reportes a dirección.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Múltiples gráficos</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Tablas densas</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Drill-down capabilities</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-gray-50">
+                    <!-- Top Bar -->
+                    <div class="maroon-bg text-white px-4 py-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                                <span class="maroon-text font-bold text-sm">H</span>
+                            </div>
+                            <span class="font-semibold">Analytics Dashboard</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <select class="bg-white/20 border-0 rounded text-sm text-white px-3 py-1">
+                                <option>Últimos 30 días</option>
+                                <option>Últimos 7 días</option>
+                                <option>Este mes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-6 h-[calc(100%-60px)] overflow-auto">
+                        <!-- KPIs Row -->
+                        <div class="grid grid-cols-6 gap-3 mb-4">
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">MTTR</p>
+                                <p class="text-lg font-bold text-gray-900">4.2h</p>
+                                <span class="text-xs text-green-600">↓ 15%</span>
+                            </div>
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">MTBF</p>
+                                <p class="text-lg font-bold text-gray-900">127h</p>
+                                <span class="text-xs text-green-600">↑ 8%</span>
+                            </div>
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">Disponibilidad</p>
+                                <p class="text-lg font-bold text-gray-900">94.2%</p>
+                                <span class="text-xs text-red-600">↓ 0.8%</span>
+                            </div>
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">OTs Abiertas</p>
+                                <p class="text-lg font-bold text-gray-900">23</p>
+                                <span class="text-xs text-gray-500">5 críticas</span>
+                            </div>
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">Completadas Mes</p>
+                                <p class="text-lg font-bold text-gray-900">156</p>
+                                <span class="text-xs text-green-600">↑ 12%</span>
+                            </div>
+                            <div class="bg-white border rounded-lg p-3 shadow-sm">
+                                <p class="text-xs text-gray-500">Costo Mantenimiento</p>
+                                <p class="text-lg font-bold text-gray-900">$45.2K</p>
+                                <span class="text-xs text-green-600">↓ 5%</span>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <!-- MTTR Trend Chart -->
+                            <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                <h3 class="font-semibold text-sm text-gray-900 mb-3">MTTR - Tendencia Últimos 30 Días</h3>
+                                <div class="h-40 flex items-end justify-between space-x-1">
+                                    <div class="flex-1 bg-blue-200 rounded-t" style="height: 70%"></div>
+                                    <div class="flex-1 bg-blue-300 rounded-t" style="height: 65%"></div>
+                                    <div class="flex-1 bg-blue-400 rounded-t" style="height: 60%"></div>
+                                    <div class="flex-1 bg-blue-500 rounded-t" style="height: 55%"></div>
+                                    <div class="flex-1 bg-blue-400 rounded-t" style="height: 50%"></div>
+                                    <div class="flex-1 bg-blue-300 rounded-t" style="height: 45%"></div>
+                                    <div class="flex-1 bg-maroon rounded-t" style="height: 42%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                    <span>Sem 1</span>
+                                    <span>Sem 2</span>
+                                    <span>Sem 3</span>
+                                    <span>Sem 4</span>
+                                </div>
+                            </div>
+
+                            <!-- OTs by Status -->
+                            <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                <h3 class="font-semibold text-sm text-gray-900 mb-3">OTs por Estado</h3>
+                                <div class="flex items-center justify-center h-40">
+                                    <div class="relative w-32 h-32">
+                                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#E5E7EB" stroke-width="20"/>
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#10B981" stroke-width="20" stroke-dasharray="75 176" stroke-dashoffset="0"/>
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#8B5CF6" stroke-width="20" stroke-dasharray="50 201" stroke-dashoffset="-75"/>
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#F59E0B" stroke-width="20" stroke-dasharray="38 213" stroke-dashoffset="-125"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <div class="text-center">
+                                                <p class="text-2xl font-bold text-gray-900">23</p>
+                                                <p class="text-xs text-gray-500">Total</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-xs mt-2">
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>Compl. (4)</div>
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-purple-500 rounded-full mr-1"></span>Progreso (8)</div>
+                                    <div class="flex items-center"><span class="w-2 h-2 bg-amber-500 rounded-full mr-1"></span>Otras (11)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+                            <div class="px-4 py-3 border-b flex justify-between items-center">
+                                <h3 class="font-semibold text-sm text-gray-900">Top 10 Equipos con Más Fallas</h3>
+                                <button class="text-xs maroon-text hover:underline">Exportar CSV</button>
+                            </div>
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left font-medium text-gray-700">Equipo</th>
+                                        <th class="px-4 py-2 text-left font-medium text-gray-700">División</th>
+                                        <th class="px-4 py-2 text-right font-medium text-gray-700">Fallar</th>
+                                        <th class="px-4 py-2 text-right font-medium text-gray-700">MTTR</th>
+                                        <th class="px-4 py-2 text-right font-medium text-gray-700">Costo</th>
+                                        <th class="px-4 py-2 text-center font-medium text-gray-700">Tendencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 font-medium text-gray-900">Prensa PH-500</td>
+                                        <td class="px-4 py-2"><span class="px-2 py-0.5 hirock text-xs rounded">HiRock</span></td>
+                                        <td class="px-4 py-2 text-right">12</td>
+                                        <td class="px-4 py-2 text-right">5.2h</td>
+                                        <td class="px-4 py-2 text-right">$8,450</td>
+                                        <td class="px-4 py-2 text-center text-red-600">↑</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 font-medium text-gray-900">Motor Línea 2</td>
+                                        <td class="px-4 py-2"><span class="px-2 py-0.5 ultra text-xs rounded">Ultra</span></td>
+                                        <td class="px-4 py-2 text-right">8</td>
+                                        <td class="px-4 py-2 text-right">3.8h</td>
+                                        <td class="px-4 py-2 text-right">$5,200</td>
+                                        <td class="px-4 py-2 text-center text-green-600">↓</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 font-medium text-gray-900">Soldadora SW-300</td>
+                                        <td class="px-4 py-2"><span class="px-2 py-0.5 ultra text-xs rounded">Ultra</span></td>
+                                        <td class="px-4 py-2 text-right">7</td>
+                                        <td class="px-4 py-2 text-right">4.1h</td>
+                                        <td class="px-4 py-2 text-right">$3,900</td>
+                                        <td class="px-4 py-2 text-center text-gray-500">→</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 5: Minimal -->
+        <div id="direction-5" class="direction-content hidden">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 5: Minimal</h2>
+                <p class="text-gray-600">Diseño minimalista con máximo espacio en blanco, elementos reducidos y focus total en la tarea actual. Apoya el objetivo emocional "Qué Paz" - reducir sobrecarga cognitiva.</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Mucho whitespace</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Elementos reducidos</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Focus en tarea actual</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-white">
+                    <!-- Minimal Header -->
+                    <div class="px-8 py-6 flex items-center justify-between border-b border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 maroon-bg rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">H</span>
+                            </div>
+                            <span class="text-xl font-semibold text-gray-900">GMAO</span>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                <span class="text-gray-600 font-medium">JM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-12">
+                        <!-- Empty State Hero -->
+                        <div class="text-center mb-16">
+                            <h1 class="text-3xl font-light text-gray-900 mb-2">Buenas tardes, Javier</h1>
+                            <p class="text-gray-500">¿Qué necesitas hacer hoy?</p>
+                        </div>
+
+                        <!-- Minimal Actions Grid -->
+                        <div class="max-w-3xl mx-auto grid grid-cols-3 gap-8">
+                            <button class="group text-center p-8 rounded-2xl border-2 border-gray-100 hover:border-maroon transition-all">
+                                <div class="w-16 h-16 mx-auto mb-4 maroon-bg rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-1">Reportar</h3>
+                                <p class="text-sm text-gray-500">Avería</p>
+                            </button>
+
+                            <button class="group text-center p-8 rounded-2xl border-2 border-gray-100 hover:border-maroon transition-all">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center group-hover:bg-maroon transition-colors">
+                                    <svg class="w-8 h-8 text-gray-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-1">Ver Kanban</h3>
+                                <p class="text-sm text-gray-500">8 columnas</p>
+                            </button>
+
+                            <button class="group text-center p-8 rounded-2xl border-2 border-gray-100 hover:border-maroon transition-all">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center group-hover:bg-maroon transition-colors">
+                                    <svg class="w-8 h-8 text-gray-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <h3 class="font-medium text-gray-900 mb-1">Ver KPIs</h3>
+                                <p class="text-sm text-gray-500">Métricas</p>
+                            </button>
+                        </div>
+
+                        <!-- Minimal Stats -->
+                        <div class="max-w-2xl mx-auto mt-16 grid grid-cols-3 gap-8">
+                            <div class="text-center">
+                                <p class="text-4xl font-light text-gray-900">23</p>
+                                <p class="text-sm text-gray-500 mt-1">OTs Abiertas</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-4xl font-light text-gray-900">4.2h</p>
+                                <p class="text-sm text-gray-500 mt-1">MTTR</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-4xl font-light text-gray-900">94%</p>
+                                <p class="text-sm text-gray-500 mt-1">Disponibilidad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 6: Action Oriented -->
+        <div id="direction-6" class="direction-content hidden">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Dirección 6: Action Oriented</h2>
+                <p class="text-gray-600">Interfaz optimizada para acción rápida con CTAs prominentes, flujos simplificados y shortcuts. Perfecto para el core experience "Reportar avería en 30 segundos".</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">CTAs prominentes</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Flujos simplificados</span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Shortcuts visibles</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="mockup-container bg-gray-50">
+                    <!-- Action Header -->
+                    <div class="maroon-bg text-white px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                                    <span class="maroon-text font-bold text-lg">H</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-lg">GMAO Hiansa</p>
+                                    <p class="text-xs opacity-80">Acciones Rápidas</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm">Javier Martínez</span>
+                                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                                    <span class="font-bold">JM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <!-- Primary Action Banner -->
+                        <div class="maroon-bg rounded-2xl p-8 text-white mb-6 relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h2 class="text-2xl font-bold mb-2">¿Necesitas reportar una avería?</h2>
+                                <p class="opacity-90 mb-4">Hazlo en menos de 30 segundos</p>
+                                <button class="bg-white text-maroon px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-100 transition shadow-lg">
+                                    + Reportar Avería Ahora
+                                </button>
+                            </div>
+                            <div class="absolute right-0 top-0 opacity-10">
+                                <svg class="w-48 h-48" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+
+                        <!-- Quick Action Grid -->
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <button class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center border-2 border-transparent hover:border-maroon">
+                                <div class="w-14 h-14 mx-auto mb-3 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Mis OTs</h3>
+                                <p class="text-xs text-gray-500 mt-1">8 asignadas</p>
+                            </button>
+
+                            <button class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center border-2 border-transparent hover:border-maroon">
+                                <div class="w-14 h-14 mx-auto mb-3 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Ver Kanban</h3>
+                                <p class="text-xs text-gray-500 mt-1">23 OTs</p>
+                            </button>
+
+                            <button class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center border-2 border-transparent hover:border-maroon">
+                                <div class="w-14 h-14 mx-auto mb-3 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Activos</h3>
+                                <p class="text-xs text-gray-500 mt-1">Buscar equipo</p>
+                            </button>
+
+                            <button class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center border-2 border-transparent hover:border-maroon">
+                                <div class="w-14 h-14 mx-auto mb-3 bg-amber-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                </div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Stock</h3>
+                                <p class="text-xs text-gray-500 mt-1">2 críticos</p>
+                            </button>
+                        </div>
+
+                        <!-- Pending Actions -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
+                                Requiere tu atención
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-4 bg-amber-50 rounded-lg border border-amber-200">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-2xl">⚠️</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Avería #789 pendiente de aprobación</p>
+                                            <p class="text-sm text-gray-500">Reportada por Carlos R. - Hace 15 min</p>
+                                        </div>
+                                    </div>
+                                    <button class="maroon-bg text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition">
+                                        Revisar →
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-2xl">📉</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Stock crítico: Rodamiento SKF-6205</p>
+                                            <p class="text-sm text-gray-500">Unidades: 2 (Mínimo: 5)</p>
+                                        </div>
+                                    </div>
+                                    <button class="maroon-bg text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition">
+                                        Reponer →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm opacity-80">GMAO Hiansa - Design Directions Showcase</p>
+            <p class="text-xs opacity-60 mt-1">Selecciona una dirección para explorar en detalle</p>
+        </div>
+    </footer>
+
+    <script>
+        function showDirection(num) {
+            // Hide all directions
+            document.querySelectorAll('.direction-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show selected direction
+            const selected = document.getElementById(`direction-${num}`);
+            selected.classList.remove('hidden');
+            selected.classList.add('fade-in');
+
+            // Update button states
+            document.querySelectorAll('.direction-btn').forEach(btn => {
+                btn.classList.remove('maroon-bg', 'text-white');
+                if (btn.dataset.direction == num) {
+                    btn.classList.add('maroon-bg', 'text-white');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize with direction 1
+        showDirection(1);
+    </script>
+</body>
+</html>
