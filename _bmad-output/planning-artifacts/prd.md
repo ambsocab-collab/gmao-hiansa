@@ -711,7 +711,7 @@ Con la plataforma técnica definida, pasamos a establecer el scope del proyecto 
 
 **Resource Requirements:**
 - **Team size mínimo:** 1 developer full-stack (web app moderna)
-- **Skills requeridos:** Frontend (interfaz web interactiva), Backend (API REST/GraphQL), WebSockets, UI/UX básico
+- **Skills requeridos:** Frontend (interfaz web interactiva), Backend (API REST/GraphQL), Server-Sent Events (SSE), UI/UX básico
 - **Timeline estimado MVP:** 3-4 meses
 
 ### MVP Feature Set (Phase 1)
@@ -805,7 +805,7 @@ Con la plataforma técnica definida, pasamos a establecer el scope del proyecto 
 - Responsive design (desktop/tablet/móvil)
 - Instalable en dispositivos
 - Notificaciones push
-- Sincronización multi-dispositivo real-time (WebSockets)
+- Sincronización multi-dispositivo real-time (Server-Sent Events - SSE) con heartbeat de 30 segundos
 
 **14. Reportes Automáticos por Email:**
 - Reportes diarios (8:00 AM), semanales (lunes 8:00 AM), mensuales (primer lunes 9:00 AM)
@@ -881,9 +881,9 @@ NOTA: Las funcionalidades 1-14 constituyen el MVP completo con 15 capacidades PB
 
 #### Technical Risks
 
-**Riesgo 1: WebSockets no escalan a 10,000+ activos**
-- **Mitigación:** Implementar heartbeat optimizado (30s), usar sistema de mensajería pub/sub para múltiples servidores, empezar con polling para KPIs (30-60s) y migrar a WebSockets solo cuando sea necesario
-- **Simplificación inicial:** Dashboard con polling + WebSockets solo para OTs críticas
+**Riesgo 1: Escalabilidad de tiempo real a 10,000+ activos**
+- **Mitigación:** Implementar heartbeat optimizado (30s) usando Server-Sent Events (SSE), más simple y compatible con Vercel serverless. SSE es suficiente para actualizaciones cada 30 segundos (cumple NFR del producto).
+- **Simplificación inicial:** Actualizaciones cada 30s para OTs y KPIs via SSE (compatible con hosting serverless, sin necesidad de infraestructura compleja de WebSockets)
 
 **Riesgo 2: Búsqueda predictiva <200ms con muchos datos**
 - **Mitigación:** Implementar debouncing (300ms), usar índices de base de datos optimizados, caché de búsquedas frecuentes, empezar con búsqueda simple y optimizar después
@@ -1178,7 +1178,7 @@ Solo se documentan NFRs relevantes para este producto específico. Cada requerim
 
 - **NFR-P1:** La búsqueda predictiva de equipos (principal criterio de búsqueda) debe devolver resultados en menos de 200ms. La búsqueda universal (equipos, componentes, repuestos, OTs, técnicos, usuarios) puede extenderse hasta 500ms para consultas complejas multi-campo.
 - **NFR-P2:** La carga inicial (first paint) de la aplicación debe completarse en menos de 3 segundos en conexión WiFi industrial estándar
-- **NFR-P3:** Las actualizaciones en tiempo real via WebSockets deben reflejarse en todos los clientes conectados en menos de 1 segundo
+- **NFR-P3:** Las actualizaciones en tiempo real via Server-Sent Events (SSE) deben reflejarse en todos los clientes conectados cada 30 segundos (heartbeat). Nota: SSE es más simple y compatible con Vercel serverless que WebSockets, y cumple los requisitos del producto con actualizaciones cada 30 segundos.
 - **NFR-P4:** El dashboard de KPIs debe cargar y mostrar datos en menos de 2 segundos
 - **NFR-P5:** Las transiciones entre vistas (p.ej. Kanban ↔ Listado) deben completarse en menos de 100ms
 - **NFR-P6:** El sistema debe soportar 50 usuarios concurrentes sin degradación de performance (>10% en tiempos de respuesta)
@@ -1226,7 +1226,7 @@ Solo se documentan NFRs relevantes para este producto específico. Cada requerim
 - **NFR-R1:** El sistema debe tener un uptime objetivo del 99% durante horarios de operación de fábrica (día laboral)
 - **NFR-R2:** El sistema debe realizar backups automáticos diarios de la base de datos
 - **NFR-R3:** El sistema debe tener un proceso de restore validado con recovery time objetivo (RTO) de 4 horas
-- **NFR-R4:** Las conexiones WebSocket deben reconectarse automáticamente si se pierde conexión temporal (<30 segundos)
+- **NFR-R4:** Las conexiones SSE (Server-Sent Events) deben reconectarse automáticamente si se pierde conexión temporal (<30 segundos)
 - **NFR-R5:** El sistema debe mostrar mensajes claros de error cuando un servicio no está disponible
 - **NFR-R6:** Las operaciones críticas (completar OT, ajustes de stock) deben tener confirmación de éxito antes de considerarlas completadas
 
