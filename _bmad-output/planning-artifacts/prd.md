@@ -1,5 +1,5 @@
 ---
-stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-e-01-discovery', 'step-e-02-review', 'step-e-03-edit']
+stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-e-01-discovery', 'step-e-02-review', 'step-e-03-edit', 'step-e-04-correcciones-roles', 'step-e-05-eliminacion-can-regulatory-inspection']
 inputDocuments: [
   'product-brief-gmao-hiansa-2026-02-26.md',
   'brainstorming-session-2026-02-25.md',
@@ -24,7 +24,7 @@ project_name: gmao-hiansa
 # Product Requirements Document - gmao-hiansa
 
 **Author:** Bernardo
-**Date:** 2026-03-07
+**Date:** 2026-03-07 (última edición: eliminación de can_regulatory_inspection, corrección de roles y numeración MVP)
 
 ---
 
@@ -38,7 +38,7 @@ project_name: gmao-hiansa
 
 **Solución:** MVP con 13 funcionalidades base (aviso de averías, control de activos, generación de OT, control de repuestos, Kanban digital, KPIs, gestión de usuarios con 15 capacidades PBAC, proveedores, componentes multi-equipos, rutinas, PWA, reparación dual, reportes automáticos por email) sobre arquitectura diseñada para crecimiento progresivo. El sistema integra las 35 funcionalidades innovadoras del brainstorming en fases posteriores según necesidad evolutiva.
 
-**Modelo de Autorización:** Sistema PBAC (Permission-Based Access Control) con 15 capacidades granulares que permiten flexibilidad completa en la asignación de permisos. Las capacidades se asignan individualmente a usuarios, independientemente de roles clasificatorios (Operario, Técnico, Supervisor, Administrador). El sistema permite gestión dinámica de permisos sin necesidad de reestructuración de roles.
+**Modelo de Autorización:** Sistema PBAC (Permission-Based Access Control) con 15 capacidades granulares que permiten flexibilidad completa en la asignación de permisos. Las capacidades se asignan individualmente a usuarios. El sistema permite gestión dinámica de permisos sin necesidad de roles o estructuras predefinidas.
 
 **Visión de éxito:** Departamento transformado de "caótico" a "profesional" con cultura de datos establecida. Operarios sienten "mi voz importa" al reportar y recibir confirmación. Técnicos preguntan "¿cómo hacíamos antes sin esto?". Dashboard público genera transparencia total. Decisión de mantenimiento fundamentada en MTTR/MTBF, no intuición.
 
@@ -283,7 +283,7 @@ Con esta visión clara, pasamos a definir los criterios de éxito que validarán
 - Tutorial de dashboard y gestión de usuarios con 15 capacidades
 - Aprende que `can_create_failure_report` es PREDETERMINADA (todos los usuarios nuevos la tienen marcada)
 - Aprende que las 15 capacidades son: `can_create_failure_report`, `can_create_manual_ot`, `can_update_own_ot`, `can_view_own_ots`, `can_view_all_ots`, `can_complete_ot`, `can_manage_stock`, `can_assign_technicians`, `can_view_kpis`, `can_manage_assets`, `can_view_repair_history`, `can_manage_providers`, `can_manage_routines`, `can_manage_users`, `can_receive_reports`
-- Aprende que puede cambiar capacidades en cualquier momento
+- Aprende que `can_manage_users` le permite gestionar usuarios y asignar capacidades individualmente (no hay roles predefinidos, cada usuario tiene sus propias capacidades)
 
 **Core Usage - Día típico:**
 - **08:00** - Dashboard: MTTR 4.2h (↓15%), MTBF 127h (↑8%)
@@ -561,8 +561,14 @@ Si inspección es desfavorable:
 
 **Gestión de Proveedores Certificados:**
 
-- Capacidad: `can_regulatory_inspection`
-- Campos: Nº certificación, tipos autorizados, vigencia, archivo certificado
+- **Capacidad requerida:** `can_manage_providers` para gestionar proveedores certificados
+- **Campos adicionales para proveedores reglamentarios:** Nº certificación, tipos autorizados (PCI/Baja Tensión/Alta Tensión/Presión), vigencia de certificación, archivo de certificado (PDF)
+- **Acciones habilitadas con capacidades existentes:**
+  - `can_view_all_ots` - Ver todas las OTs reglamentarias en el sistema
+  - `can_create_manual_ot` - Crear OTs reglamentarias manualmente
+  - `can_manage_providers` - Gestionar proveedores certificados (crear, editar, desactivar)
+  - `can_manage_assets` - Bloquear/desbloquear equipos tras inspección desfavorable
+  - `can_assign_technicians` - Asignar técnicos o proveedores a OTs reglamentarias
 
 ---
 
@@ -731,23 +737,23 @@ Con la plataforma técnica definida, pasamos a establecer el scope del proyecto 
 - KPIs de rutinas (% completadas)
 - Capacidad requerida: `can_manage_routines` para gestionar
 
-**11. PWA (Progressive Web App):**
+**12. Reparación Dual:**
+- Reparación interna (taller propio) 🟠
+- Reparación externa (enviado a proveedor) 🔵
+
+**13. PWA (Progressive Web App):**
 - Responsive design (desktop/tablet/móvil)
 - Instalable en dispositivos
 - Notificaciones push
 - Sincronización multi-dispositivo real-time (WebSockets)
 
-**12. Reparación Dual:**
-- Reparación interna (taller propio) 🟠
-- Reparación externa (enviado a proveedor) 🔵
-
-**13. Reportes Automáticos por Email:**
+**14. Reportes Automáticos por Email:**
 - Reportes diarios (8:00 AM), semanales (lunes 8:00 AM), mensuales (primer lunes 9:00 AM)
 - Formato PDF enviado por email + descarga manual desde dashboard
 - KPIs configurables según usuario
 - Capacidad requerida: `can_receive_reports`
 
-NOTA: Las funcionalidades 1-13 constituyen el MVP completo con 15 capacidades PBAC
+NOTA: Las funcionalidades 1-14 constituyen el MVP completo con 15 capacidades PBAC
 
 **Criterios de Éxito MVP:**
 - 90% usuarios activos primer mes
@@ -942,17 +948,17 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 **MODELO DE AUTORIZACIÓN: PBAC (Permission-Based Access Control) con Roles como Etiquetas**
 
 - **FR58:** Los usuarios con capability `can_manage_users` pueden crear nuevos usuarios en el sistema
-- **FR59:** Los usuarios con capability `can_manage_users` pueden crear hasta 20 roles personalizados como ETIQUETAS de clasificación de usuarios (ej: Operario, Técnico, Supervisor). El rol "Administrador" es una de las 4 etiquetas del sistema y NO otorga capabilities automáticamente.
+- **FR59:** Los usuarios con capability `can_manage_users` pueden crear hasta 20 etiquetas de clasificación de usuarios (ej: Operario, Técnico, Supervisor). Estas etiquetas son solo para clasificación visual y NO otorgan capabilities ni afectan el acceso al sistema.
 - **FR60:** ❌ **ELIMINADO** (las capacidades ya NO se asignan a roles)
-- **FR61:** Los usuarios con capability `can_manage_users` pueden eliminar roles personalizados (no los 4 roles del sistema)
-- **FR62:** Los usuarios pueden tener asignado uno o más roles simultáneos como etiquetas de clasificación
+- **FR61:** Los usuarios con capability `can_manage_users` pueden eliminar etiquetas de clasificación personalizadas
+- **FR62:** Los usuarios pueden tener asignada una o más etiquetas de clasificación simultáneamente (ej: Operario, Técnico, Supervisor)
 - **FR63:** ❌ **ELIMINADO** (los usuarios NO heredan capacidades desde roles)
-- **FR64:** Los usuarios con capability `can_manage_users` pueden identificar/etiquetar usuarios con roles de clasificación (ej: Operario, Técnico, Supervisor)
-- **FR65:** Los usuarios con capability `can_manage_users` pueden quitar la etiqueta de rol de usuarios
+- **FR64:** Los usuarios con capability `can_manage_users` pueden asignar etiquetas de clasificación a usuarios para organización visual
+- **FR65:** Los usuarios con capability `can_manage_users` pueden quitar las etiquetas de clasificación de usuarios
 - **FR66:** Todo usuario nuevo (excepto el administrador inicial) tiene ÚNICAMENTE la capability `can_create_failure_report` asignada por defecto. Las otras 14 capabilities deben ser asignadas manualmente por un usuario con capability `can_manage_users`.
 - **FR67:** Durante el registro de usuarios, los usuarios con capability `can_manage_users` seleccionan las capabilities asignadas usando checkboxes con etiquetas en castellano legibles (ej: "✅ Reportar averías", "✅ Ver todas las OTs"). Los nombres internos del código permanecen en inglés.
-- **FR67-A:** Los roles son únicamente etiquetas de clasificación de usuarios (ej: Operario, Técnico, Supervisor) y NO tienen ninguna relación con las capabilities. Los roles NO otorgan, NO eliminan, NO modifican, NO afectan de ninguna manera las capabilities asignadas a un usuario. Roles y capabilities son completamente independientes.
-- **FR67-B:** Un mismo rol NO otorga las mismas capacidades a todos los usuarios que lo tienen asignado (las capacidades se asignan individualmente)
+- **FR67-A:** Las etiquetas de clasificación son únicamente para organizar visualmente a los usuarios (ej: Operario, Técnico, Supervisor) y NO tienen ninguna relación con las capabilities. Las etiquetas NO otorgan, NO eliminan, NO modifican, NO afectan de ninguna manera las capabilities asignadas a un usuario. Etiquetas y capabilities son completamente independientes.
+- **FR67-B:** Una misma etiqueta de clasificación NO otorga las mismas capacidades a todos los usuarios que la tienen asignada (las capacidades se asignan individualmente a cada usuario)
 - **FR68:** Las capacidades del sistema son 15 en total:
   1. `can_create_failure_report` - Reportar averías (PREDETERMINADA para todos)
   2. `can_create_manual_ot` - Crear OTs manuales sin aviso previo
@@ -967,7 +973,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
   11. `can_view_repair_history` - Consultar historial de reparaciones de equipos
   12. `can_manage_providers` - Gestionar proveedores (mantenimiento y repuestos)
   13. `can_manage_routines` - Gestionar rutinas de mantenimiento (crear, editar, desactivar)
-  14. `can_manage_users` - Gestionar usuarios y roles (crear, editar, eliminar, asignar capabilities, etiquetar con roles)
+  14. `can_manage_users` - Gestionar usuarios y sus capacidades (crear, editar, eliminar usuarios, asignar capabilities, etiquetar usuarios con clasificaciones)
   15. `can_receive_reports` - Recibir reportes automáticos por email
 - **FR68-UI:** Las capabilities se presentan en la interfaz de usuario en castellano con formato legible, sin usar notación técnica. Los nombres internos del código (en inglés) no son visibles para el usuario final.
 
@@ -988,7 +994,7 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 | `can_view_repair_history` | Ver historial de reparaciones |
 | `can_manage_providers` | Gestionar proveedores |
 | `can_manage_routines` | Gestionar rutinas de mantenimiento |
-| `can_manage_users` | Gestionar usuarios y roles (crear, editar, eliminar, asignar capabilities, etiquetar con roles) |
+| `can_manage_users` | Gestionar usuarios y sus capacidades (crear, editar, eliminar usuarios, asignar capabilities, etiquetar con clasificaciones) |
 | `can_receive_reports` | Recibir reportes automáticos |
 - **FR68-A:** Los usuarios sin la capability `can_manage_assets` solo pueden consultar activos en modo solo lectura (ver jerarquía, historial de OTs, estados), sin poder crear, modificar ni eliminar equipos
 - **FR68-B:** Los usuarios sin la capability `can_view_repair_history` no pueden acceder al historial de reparaciones de equipos (ver OTs completadas, patrones de fallas, métricas de confiabilidad por equipo)
@@ -1094,6 +1100,9 @@ Esta sección define **EL CONTRATO DE CAPACIDADES** para todo el producto. Los d
 **Total: 123 Requerimientos Funcionales** organizados en 10 áreas de capacidad
 
 **NOTA:** Actualizado tras Sprint Change Proposal y Edit Workflow - Corrección de anti-patrones BMAD, agregación de métricas y FRs faltantes
+- **Última edición (2026-03-07):** ELIMINADA capacidad `can_regulatory_inspection` del Domain-Specific Requirements. El mantenimiento reglamentario se cubre con capacidades existentes: `can_view_all_ots` (ver OTs reglamentarias), `can_create_manual_ot` (crear OTs reglamentarias), `can_manage_providers` (gestionar proveedores certificados con nº certificación), `can_manage_assets` (bloquear/desbloquear equipos), `can_assign_technicians` (asignar técnicos/proveedores a OTs reglamentarias). El sistema mantiene las 15 capacidades oficiales.
+- **Última edición (2026-03-07):** ELIMINADAS todas las menciones de "roles" como entidades funcionales del sistema. Ahora solo existen "etiquetas de clasificación" que son puramente visuales y NO otorgan capacidades. Corregidos Executive Summary, FR59, FR61, FR62, FR64, FR65, FR67-A, FR67-B, FR68, FR68-UI, y User Journey de Elena. Aclarado que `can_manage_users` gestiona usuarios y sus capacidades individuales, no roles.
+- **Última edición (2026-03-07):** CORREGIDA numeración del MVP Feature Set (PWA de 11 a 13, Reparación Dual de 12 a 14, Reportes Automáticos de 13 a 15). Ahora el MVP tiene 14 funcionalidades base correctamente numeradas.
 - **Última edición (2026-03-07):** ELIMINADO FR103 por duplicidad con FR91 (dashboard común). Total actualizado de 124 a 123 FRs.
 - **Última edición (2026-03-07):** CORREGIDAS 47 INCONSISTENCIAS (12 críticas, 18 altas, 12 medias, 5 bajas):
   - **CRÍTICAS:** Fecha actualizada (2026-03-07), Executive Summary con sistema PBAC, Success Criteria con lenguaje basado en capacidades, User Journeys actualizados (Elena, Javier, María, Carlos, Pedro), FR90 con capability can_view_kpis, FR103 eliminado, FR108 aclarado (MVP base, tracking avanzado Phase 3), MVP con 15 capacidades, FR68-C aclarado, color amarillo cambiado a naranja #FD7E14 para WCAG AA
