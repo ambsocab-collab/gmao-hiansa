@@ -26,11 +26,23 @@ export async function verifyPassword(
 
 /**
  * Obtiene la sesión actual desde el server
- * @deprecated Esta función se implementará completamente en Story 1.4
- * @returns null temporalmente
+ *
+ * ⚠️ TEMPORAL - Función Placeholder
+ *
+ * Esta función se implementará completamente en Story 1.4.
+ * Actualmente retorna null porque NextAuth no está configurado.
+ *
+ * Story 1.4 implementará:
+ * - ✅ Obtener sesión usando auth() de next-auth
+ * - ✅ Extraer user ID, email, name, capabilities
+ * - ✅ Retornar objeto de sesión type-safe
+ *
+ * @deprecated Usar hasta Story 1.4, luego reemplazar por implementación real
+ * @returns null temporalmente (sesión no disponible hasta Story 1.4)
  */
 export async function getSession() {
   // Helper para obtener sesión en server components
   // Se implementará completamente en Story 1.4
+  // TODO: Importar auth() de next-auth y retornar sesión real
   return null
 }
