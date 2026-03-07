@@ -41,8 +41,8 @@ story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
   # Epic 1: Autenticación y Gestión de Usuarios PBAC
-  epic-1: backlog
-  1-1-puesta-en-marcha-y-configuracion-inicial-del-proyecto: backlog
+  epic-1: in-progress
+  1-1-puesta-en-marcha-y-configuracion-inicial-del-proyecto: review
   1-2-modelo-de-datos-de-usuarios-y-capabilities-pbac: backlog
   1-3-registro-de-usuarios-por-administrador: backlog
   1-4-login-de-usuarios-con-nextauth: backlog
