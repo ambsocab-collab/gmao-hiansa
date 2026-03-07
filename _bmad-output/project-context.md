@@ -3,7 +3,7 @@ project_name: 'gmao-hiansa'
 user_name: 'Bernardo'
 date: '2026-03-07'
 sections_completed:
-  ['technology_stack', 'language_rules', 'framework_rules', 'testing_rules', 'code_quality_rules', 'workflow_rules', 'critical_rules']
+  ['technology_stack', 'documentation_references', 'language_rules', 'framework_rules', 'testing_rules', 'code_quality_rules', 'workflow_rules', 'critical_rules']
 status: 'complete'
 rule_count: 95
 optimized_for_llm: true
@@ -54,6 +54,90 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Deployment**: Optimized for Vercel serverless
 - **Scale**: 10,000 assets, 100 concurrent users (Phase 1)
 - **Hosting**: Single-tenant (NOT multi-tenant SaaS)
+
+---
+
+## 📚 Documentación Referencial
+
+**Importante:** Los documentos del proyecto han sido fragmentados en secciones manejables para optimizar el contexto de AI agents.
+
+### Rutas de Acceso a Documentos Fragmentados
+
+**Base Path:** `_bmad-output/planning-artifacts/`
+
+#### PRD (Product Requirements Document)
+- **Índice:** `prd/index.md`
+- **Secciones Principales:**
+  - `prd/executive-summary.md` - Visión, criterios de éxito
+  - `prd/functional-requirements.md` - 123 FRs (10 áreas de capacidad)
+  - `prd/non-functional-requirements.md` - 37 NFRs (performance, security, scalability)
+  - `prd/user-journeys.md` - 5 journeys de usuario (Carlos, María, Javier, Elena, Pedro)
+  - `prd/domain-specific-requirements.md` - Mantenimiento reglamentario, certificaciones
+  - `prd/web-app-specific-requirements.md` - Performance targets, browser support
+  - `prd/project-scoping-phased-development.md` - MVP strategy, fases (Phase 1-4)
+  - `prd/visual-specifications.md` - Design system, key screens, iconography
+
+#### Architecture Decision Document
+- **Índice:** `architecture/index.md`
+- **Secciones Principales:**
+  - `architecture/project-context-analysis.md` - Análisis de requisitos, restricciones técnicas
+  - `architecture/core-architectural-decisions.md` - Decisiones clave (data, auth, API, frontend, infra)
+  - `architecture/implementation-patterns-consistency-rules.md` - Patrones de naming, estructura, formato
+  - `architecture/project-structure-boundaries.md` - Estructura de directorios, boundaries
+  - `architecture/architecture-validation-results.md` - Coherence, coverage, readiness validation
+
+#### UX Design Specification
+- **Índice:** `ux-design-specification/index.md`
+- **Secciones Principales:**
+  - `ux-design-specification/executive-summary.md` - Visión, usuarios, challenges
+  - `ux-design-specification/core-user-experience.md` - Defining experience, mental model
+  - `ux-design-specification/desired-emotional-response.md` - Emotional goals, journey mapping
+  - `ux-design-specification/design-system-foundation.md` - shadcn/ui, customization strategy
+  - `ux-design-specification/visual-design-foundation.md` - Color system, typography, spacing
+  - `ux-design-specification/user-journey-flows.md` - 5 journeys con detalles
+  - `ux-design-specification/component-strategy.md` - 8 componentes custom (OTCard, KanbanBoard, etc.)
+  - `ux-design-specification/ux-consistency-patterns.md` - Buttons, feedback, forms, navigation
+  - `ux-design-specification/responsive-design-accessibility.md` - Breakpoints, accessibility strategy
+
+#### Epics & Stories
+- **Índice:** `epics/index.md`
+- **Secciones Principales:**
+  - `epics/overview.md` - Overview de epics
+  - `epics/requirements-inventory.md` - Inventario de requisitos (123 FRs, 37 NFRs)
+  - `epics/epic-list.md` - Lista de 10 epics con resúmenes
+  - `epics/epic-1-autenticacin-y-gestin-de-usuarios-pbac.md` - 11 stories
+  - `epics/epic-2-gestin-de-activos-y-jerarqua-de-5-niveles.md` - 9 stories
+  - `epics/epic-4-rdenes-de-trabajo-y-kanban-digital.md` - 9 stories
+  - `epics/epic-5-control-de-stock-y-repuestos.md` - 7 stories
+  - `epics/epic-6-gestin-de-proveedores.md` - 2 stories
+  - `epics/epic-7-rutinas-de-mantenimiento-y-generacin-automtica.md` - 4 stories
+  - `epics/epic-8-kpis-dashboard-y-reportes-automticos.md` - 6 stories
+  - `epics/epic-9-sincronizacin-multi-dispositivo-y-pwa.md` - 5 stories
+  - `epics/epic-10-funcionalidades-adicionales-y-ux-avanzada.md` - 7 stories
+  - `epics/resumen-final-de-todos-los-epics.md` - Resumen ejecutivo de todos los epics
+
+### Documentos Completos (Archivados)
+
+**Para referencia rápida, los documentos completos originales están archivados en:**
+- `archive/prd.md` - PRD completo (123 FRs + 37 NFRs + todas las secciones)
+- `archive/architecture.md` - Architecture completo (8 steps completados)
+- `archive/ux-design-specification.md` - UX Design completo (14 steps completados)
+- `archive/epics.md` - Epics completo (10 epics + 66 stories)
+
+### Uso Recomendado para AI Agents
+
+**Al implementar código:**
+1. Referenciar secciones específicas fragmentadas (mejor para contexto)
+2. Usar los índices para navegar a la sección relevante
+3. Consultar documentos completos solo cuando necesites visión general
+
+**Ejemplo de referencias:**
+- "Según `prd/functional-requirements.md#1-gestin-de-averas`..."
+- "De acuerdo con `architecture/core-architectural-decisions.md#data-architecture`..."
+- "Como se especifica en `ux-design-specification/component-strategy.md#1-otcard`..."
+- "Según `epics/epic-4-rdenes-de-trabajo-y-kanban-digital.md#story-43`..."
+
+---
 
 ## Critical Implementation Rules
 
