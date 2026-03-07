@@ -1,0 +1,50 @@
+{
+  "name": "gmao-hiansa",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:p0": "playwright test -g \"P0-\"",
+
+    "test:pact:consumer": "vitest --config vitest.config.pact.ts tests/contract/consumer",
+    "publish:pact": "node scripts/publish-pact.sh",
+    "can:i:deploy:consumer": "node scripts/can-i-deploy.sh",
+    "record:consumer:deployment": "node scripts/record-deployment.sh",
+
+    "test:all": "npm run test && npm run test:e2e",
+    "test:ci": "npm run test:e2e --workers=4 && npm run test:coverage"
+  },
+  "dependencies": {
+    "next": "^15.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
+    "@pact-foundation/pact": "^14.0.1",
+    "@playwright/test": "^1.48.0",
+    "@seontechnologies/playwright-utils": "^1.0.0",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-vitest": "^0.5.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0",
+    "vitest-ui": "^1.0.0"
+  }
+}
