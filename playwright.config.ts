@@ -12,8 +12,9 @@ import { defineConfig, devices } from '@playwright/test';
  * - API tests: Next.js API routes
  * - Visual regression: UI components
  *
- * Parallelism: 4-8 workers (CI-optimized)
+ * Parallelism: 4 workers (fixed)
  * Timeouts: Action 15s, Navigation 30s, Test 60s
+ * Browsers: Chromium only
  */
 export default defineConfig({
   // Test directory
@@ -28,14 +29,14 @@ export default defineConfig({
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
 
-  // Parallel workers (CI-optimized)
-  workers: process.env.CI ? 4 : 8,
+  // Parallel workers - Fixed to 4 workers
+  workers: 4,
 
   // Reporter configuration
   reporter: [
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
     ['junit', { outputFile: 'junit-results.xml' }],
-    ['console', { stderr: true, stdout: true }],
+    ['list'],
   ],
 
   // Shared settings for all tests
@@ -68,26 +69,15 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-
-    {
-      name: 'msedge',
-      use: { ...devices['Desktop Edge'] },
-    },
-
-    // Future: Add Firefox/Safari if requirements change
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
   ],
 
   // Run local dev server before starting tests
-  // webServer: {
-  //   command: 'npm run dev',
-  //   port: 3000,
-  //   timeout: 120 * 1000,
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: 'npm run dev',
+    port: 3000,
+    timeout: 120 * 1000,
+    reuseExistingServer: !process.env.CI,
+  },
 
   // Output directory
   outputDir: 'test-results',

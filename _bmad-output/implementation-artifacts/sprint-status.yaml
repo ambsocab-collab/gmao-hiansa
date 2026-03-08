@@ -1,8 +1,8 @@
-# generated: 2026-03-07
+# generated: 2026-03-08
 # project: gmao-hiansa
 # project_key: NOKEY
 # tracking_system: file-system
-# story_location: {project-root}/_bmad-output/implementation-artifacts
+# story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 # STATUS DEFINITIONS:
 # ==================
@@ -33,120 +33,74 @@
 # - SM typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
-generated: 2026-03-07
+generated: 2026-03-08
 project: gmao-hiansa
 project_key: NOKEY
 tracking_system: file-system
 story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
-  # Epic 1: Autenticación y Gestión de Usuarios PBAC
-  epic-1: in-progress
-  1-1-puesta-en-marcha-y-configuracion-inicial-del-proyecto: done
-  1-2-modelo-de-datos-de-usuarios-y-capabilities-pbac: backlog
-  1-3-registro-de-usuarios-por-administrador: backlog
-  1-4-login-de-usuarios-con-nextauth: backlog
-  1-5-cambio-de-contrasena-obligatorio-en-primer-acceso: backlog
-  1-6-gestion-de-capabilities-por-administrador: backlog
-  1-7-etiquetas-de-clasificacion-visual: backlog
-  1-8-perfil-de-usuario-y-gestion-de-credenciales: backlog
-  1-9-historial-de-actividad-de-usuarios: backlog
-  1-10-eliminacion-de-usuarios-por-administrador: backlog
-  1-11-control-de-acceso-por-modulos: backlog
+  # Epic 0: Setup e Infraestructura Base
+  epic-0: backlog
+  0-1-starter-template-y-stack-tecnico: backlog
+  0-2-database-schema-prisma-con-jerarquia-5-niveles: backlog
+  0-3-nextauth-js-con-credentials-provider: backlog
+  0-4-sse-infrastructure-con-heartbeat: backlog
+  0-5-error-handling-observability-y-ci-cd: backlog
+  epic-0-retrospective: optional
+
+  # Epic 1: Autenticación y Gestión de Usuarios (PBAC)
+  epic-1: backlog
+  1-1-login-registro-y-perfil-de-usuario: backlog
+  1-2-sistema-pbac-con-15-capacidades: backlog
+  1-3-etiquetas-de-clasificacion-y-organizacion: backlog
   epic-1-retrospective: optional
 
-  # Epic 2: Gestión de Activos y Jerarquía de 5 Niveles
+  # Epic 2: Gestión de Averías y Reportes Rápidos
   epic-2: backlog
-  2-1-modelo-de-datos-de-jerarquia-de-5-niveles: backlog
-  2-2-gestion-de-plantas-y-lineas: backlog
-  2-3-gestion-de-equipos-con-estados: backlog
-  2-4-gestion-de-componentes-con-relaciones-muchos-a-muchos: backlog
-  2-6-navegacion-jerarquica-de-activos: backlog
-  2-7-historial-de-reparaciones-por-equipo: backlog
-  2-8-importacion-masiva-csv-de-activos: backlog
-  2-9-codigos-qr-para-identificacion-de-equipos: backlog
+  2-1-busqueda-predictiva-de-equipos: backlog
+  2-2-formulario-reporte-de-averia-mobile-first: backlog
+  2-3-triage-de-averias-y-conversion-a-ots: backlog
   epic-2-retrospective: optional
 
-  # Epic 3: Reporte de Averías en Segundos
+  # Epic 3: Órdenes de Trabajo (Kanban Multi-Dispositivo)
   epic-3: backlog
-  3-1-modelo-de-datos-de-avisos-de-averia: backlog
-  3-2-reportar-averia-en-30-segundos-journey-core-de-carlos: backlog
-  3-3-busqueda-predictiva-universal-con-debouncing: backlog
-  3-4-notificaciones-push-en-tiempo-real-server-sent-events: backlog
-  3-5-vista-de-triage-de-avisos-para-javier: backlog
-  3-6-conversion-de-avisos-a-ordenes-de-trabajo: backlog
-  3-7-adjuntar-fotos-a-avisos-opcional: backlog
+  3-1-kanban-de-8-columnas-con-drag-drop: backlog
+  3-2-gestion-de-ots-asignadas-mis-ots: backlog
+  3-3-asignacion-de-tecnicos-y-proveedores: backlog
+  3-4-vista-de-listado-con-filtros-y-sync-real-time: backlog
   epic-3-retrospective: optional
 
-  # Epic 4: Órdenes de Trabajo y Kanban Digital
+  # Epic 4: Gestión de Activos y Jerarquía de 5 Niveles
   epic-4: backlog
-  4-1-modelo-de-datos-de-ordenes-de-trabajo: backlog
-  4-2-creacion-manual-de-ordenes-de-trabajo: backlog
-  4-3-kanban-digital-de-8-columnas: backlog
-  4-4-gestion-de-estados-por-tecnico-maria: backlog
-  4-5-uso-de-repuestos-durante-ejecucion-de-ot: backlog
-  4-6-asignacion-multiple-de-tecnicos-y-proveedores: backlog
-  4-7-vista-de-listado-con-filtros-avanzados: backlog
-  4-8-comentarios-con-timestamp-fotos-y-notas: backlog
-  4-9-sincronizacion-sse-y-toggle-entre-vistas: backlog
+  4-1-navegacion-jerarquica-de-5-niveles: backlog
+  4-2-historial-de-reparaciones-y-estados: backlog
+  4-3-importacion-masiva-de-activos-csv: backlog
   epic-4-retrospective: optional
 
-  # Epic 5: Control de Stock y Repuestos
+  # Epic 5: Gestión de Repuestos, Stock y Proveedores
   epic-5: backlog
-  5-1-modelo-de-datos-de-repuestos-y-control-de-stock: backlog
-  5-2-vista-de-stock-en-tiempo-real-para-todos-los-usuarios: backlog
-  5-3-actualizacion-silenciosa-de-stock-en-tiempo-real: backlog
-  5-4-alertas-de-stock-minimo-solo-cuando-es-necesario: backlog
-  5-5-gestion-de-stock-y-ajustes-manuales-con-motivo-obligatorio: backlog
-  5-6-generacion-de-pedidos-a-proveedores-desde-alertas: backlog
-  5-7-importacion-masiva-csv-de-repuestos-con-validacion: backlog
+  5-1-catalogo-de-repuestos-y-stock: backlog
+  5-2-gestion-de-proveedores: backlog
+  5-3-importacion-csv-de-repuestos-y-pedidos: backlog
   epic-5-retrospective: optional
 
-  # Epic 6: Gestión de Proveedores
+  # Epic 6: KPIs, Dashboard y Reportes Automáticos
   epic-6: backlog
-  6-1-modelo-de-datos-de-proveedores: backlog
-  6-2-crud-unificado-de-proveedores-con-tipo: backlog
-  6-3-asociacion-de-tipos-de-servicio-6-tipos-predefinidos: backlog
-  6-4-vista-de-catalogo-de-proveedores-con-filtros-y-busqueda: backlog
-  6-5-validacion-de-desactivacion-uso-en-ots-o-repuestos: backlog
+  6-1-dashboard-comun-con-kpis-en-tiempo-real: backlog
+  6-2-alertas-y-metricas-avanzadas: backlog
+  6-3-exportacion-y-reportes-automaticos: backlog
   epic-6-retrospective: optional
 
-  # Epic 7: Rutinas de Mantenimiento y Generación Automática
+  # Epic 7: Rutinas de Mantenimiento Preventivo
   epic-7: backlog
-  7-1-modelo-de-datos-de-rutinas-de-mantenimiento: backlog
-  7-2-crud-de-rutinas-por-equipo-y-customizables: backlog
-  7-3-cron-job-de-generacion-automatica-de-ots-preventivas: backlog
-  7-4-alertas-de-vencimiento-de-rutinas: backlog
-  7-5-dashboard-de-cumplimiento-de-rutinas: backlog
-  7-6-integracion-de-repuestos-en-ots-generadas-desde-rutinas: backlog
+  7-1-gestion-de-rutinas-preventivas: backlog
+  7-2-generacion-automatica-de-ots-y-alertas: backlog
   epic-7-retrospective: optional
 
-  # Epic 8: KPIs, Dashboard y Reportes Automáticos
+  # Epic 8: Multi-Dispositivo, PWA y Sincronización
   epic-8: backlog
-  8-1-dashboard-comun-para-todos-los-usuarios: backlog
-  8-2-drill-down-multi-nivel-de-kpis: backlog
-  8-3-alertas-accionables-en-tiempo-real: backlog
-  8-4-exportacion-de-kpis-a-excel: backlog
-  8-5-configuracion-de-reportes-automaticos-por-email: backlog
-  8-6-generacion-y-envio-automatico-de-reportes-pdf: backlog
-  8-7-historial-de-acciones-de-usuario: backlog
+  8-1-pwa-con-instalacion-y-navegacion-adaptativa: backlog
+  8-2-sincronizacion-sse-con-reconexion: backlog
+  8-3-notificaciones-push-y-preferencias: backlog
   epic-8-retrospective: optional
-
-  # Epic 9: Sincronización Multi-Dispositivo y PWA
-  epic-9: backlog
-  9-1-responsive-design-con-3-breakpoints: backlog
-  9-2-kanban-responsive-con-swipe: backlog
-  9-3-pwa-instalable-en-dispositivos-moviles: backlog
-  9-4-notificaciones-push: backlog
-  9-5-sse-para-sincronizacion-en-tiempo-real: backlog
-  epic-9-retrospective: optional
-
-  # Epic 10: Funcionalidades Adicionales y UX Avanzada
-  epic-10: backlog
-  10-1-rechazo-de-reparacion-por-carlos: backlog
-  10-2-busqueda-universal-predictiva: backlog
-  10-3-preferencias-de-notificacion-personalizables: backlog
-  10-4-comentarios-con-timestamp-en-ots: backlog
-  10-5-fotos-antes-despues-en-reparaciones: backlog
-  10-6-codigos-qr-para-equipos-funcionalidad-base: backlog
-  epic-10-retrospective: optional

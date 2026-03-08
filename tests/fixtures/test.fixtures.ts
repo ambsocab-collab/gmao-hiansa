@@ -1,5 +1,4 @@
 import { test as base } from '@playwright/test';
-import { mergeTests } from '@seontechnologies/playwright-utils/api-request/fixtures';
 import { expect } from '@playwright/test';
 
 /**
@@ -102,8 +101,5 @@ export const testWithCleanup = test.extend({
   },
 });
 
-// Merge tests with Playwright Utils fixtures (if available)
-const testWithUtils = mergeTests(test, base);
-
-export { testWithUtils as test };
+export { test };
 export const expect = expect;

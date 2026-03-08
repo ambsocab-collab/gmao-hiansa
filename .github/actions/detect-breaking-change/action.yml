@@ -1,0 +1,16 @@
+name: 'Detect Breaking Change'
+description: 'Detects if a PR introduces breaking changes in Pact contracts'
+inputs:
+  pr-number:
+    description: 'Pull request number'
+    required: true
+  repo-token:
+    description: 'GitHub token'
+    required: true
+  label-name:
+    description: 'Label name for breaking changes'
+    required: false
+    default: 'breaking-change'
+runs:
+  using: 'node20'
+  main: 'index.js'

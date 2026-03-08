@@ -1,7 +1,7 @@
 ---
-stepsCompleted: ['step-01-detect-mode', 'step-02-load-context', 'step-03-risk-and-testability', 'step-04-coverage-plan', 'step-05-generate-output']
-lastStep: 'step-05-generate-output'
-lastSaved: '2026-03-07'
+stepsCompleted: ['step-01-detect-mode', 'step-02-load-context', 'step-03-risk-and-testability', 'step-04-coverage-plan', 'step-05-generate-output', 'step-06-generate-handoff']
+lastStep: 'step-06-generate-handoff'
+lastSaved: '2026-03-08'
 workflowType: 'testarch-test-design'
 inputDocuments: ['prd.md', 'architecture.md', 'test-levels-framework.md', 'risk-governance.md', 'test-quality.md', 'adr-quality-readiness-checklist.md', 'playwright-cli.md', 'pactjs-utils-overview.md', 'pactjs-utils-consumer-helpers.md', 'pactjs-utils-provider-verifier.md', 'pactjs-utils-request-filter.md', 'pact-mcp.md']
 mode: 'system-level'
@@ -579,5 +579,97 @@ Successfully completed System-Level Test Design workflow for gmao-hiansa GMAO ap
 - Use `atdd` workflow to generate P0 tests (separate workflow, not auto-run)
 - Use `framework` workflow if Playwright setup not complete
 - Use `ci` workflow to configure pipeline stages
+
+---
+
+## Step 6: Generate Handoff Document - COMPLETED ✓ (2026-03-08)
+
+### Purpose
+
+Generate the TEA → BMAD handoff document that bridges test design outputs with epic/story decomposition workflow.
+
+### Output Generated
+
+**Handoff Document:** `test-design/gmao-hiansa-handoff.md`
+
+**Location:** `{test_artifacts}/test-design/gmao-hiansa-handoff.md`
+
+**Purpose:** Bridges TEA's test design outputs with BMAD's epic/story decomposition workflow (`create-epics-and-stories`)
+
+### Key Sections Generated
+
+1. **TEA Artifacts Inventory** - Table referencing the 3 TEA documents:
+   - Test Design Architecture (for Architecture/Dev teams)
+   - Test Design QA (for QA team)
+   - This Handoff (for BMAD integration)
+
+2. **Epic-Level Integration Guidance:**
+   - **Risk References:** P0/P1 risks that must appear as epic-level quality gates
+   - **Quality Gates:** Recommended quality gates per epic based on risk assessment
+   - Mapped 6 high-priority risks (score ≥6) to specific epics
+
+3. **Story-Level Integration Guidance:**
+   - **P0/P1 Test Scenarios → Story Acceptance Criteria:** Critical test scenarios converted to Given/When/Then format
+   - **Data-TestId Requirements:** Recommended data-testid attributes for testability across all modules
+
+4. **Risk-to-Story Mapping:** Complete table mapping all 20 risks to recommended epics/stories with test levels and priorities
+
+5. **Recommended BMAD → TEA Workflow Sequence:** 7-step workflow sequence:
+   1. ✅ TEA Test Design (System-Level) - COMPLETED
+   2. 🔄 BMAD Create Epics & Stories - NEXT
+   3. ⏭️ TEA ATDD - Failing acceptance tests
+   4. ⏭️ BMAD Implementation - Code that passes tests
+   5. ⏭️ TEA Automate - Full test suite
+   6. ⏭️ TEA Trace - Coverage validation
+   7. ⏭️ Release - Quality gate decision
+
+6. **Phase Transition Quality Gates:** 5 quality gates with PASS/CONCERNS/FAIL decision framework
+
+7. **Pre-Implementation Blockers:** 5 critical blockers that must be resolved before QA can write tests (BLK-001 through BLK-005)
+
+### Epic-Level Risk Integration
+
+**Critical Risks (Score = 9) - MUST appear as epic-level quality gates:**
+
+- **R-001:** Predictive Search Performance → Epic: Gestión de Activos
+- **R-002:** Multi-Device Sync Race Conditions → Epic: Sincronización Multi-Device
+
+**High-Priority Risks (Score ≥6) - SHOULD appear as epic-level quality gates:**
+
+- **R-005:** PBAC Implementation Security → Epic: Usuarios y PBAC
+- **R-006:** Concurrent User Performance → Epic: Todos los epics (scalability)
+
+### Story Acceptance Criteria Examples
+
+**Example P0 Story - "Operario reporta avería":**
+```
+GIVEN operario autenticado con capability can_create_failure_report
+WHEN navega a /averias/nuevo Y busca equipo "Perfiladora-P201"
+THEN resultados aparecen en <200ms (R-001)
+AND cuando completa descripción Y selecciona equipo
+THEN puede adjuntar foto opcional
+AND cuando envía reporte
+THEN notificación push recibida en <30s (R-002)
+```
+
+### Data-Testid Requirements
+
+Recommended data-testid attributes for all modules:
+- **Gestión de Averías:** `averia-nuevo-form`, `equipo-search`, `averia-descripcion`
+- **Órdenes de Trabajo:** `ot-kanban-board`, `ot-card-{id}`, `ot-iniciar-btn`
+- **Gestión de Activos:** `activo-jerarquia-nav`, `activo-busqueda`, `activo-estado-select`
+- **Dashboard KPIs:** `kpi-mttr-value`, `kpi-mtbf-value`, `kpi-drilldown-planta`
+- **Usuarios y PBAC:** `usuario-nuevo-form`, `capabilities-checkbox-group`, `capability-{name}`
+
+### Next Steps for BMAD Team
+
+**For Epic/Story Creation:**
+1. Review Risk References - Ensure all risks score ≥6 are referenced in epics
+2. Review Quality Gates - Include quality gate criteria in epic descriptions
+3. Use P0/P1 Test Scenarios - Convert critical scenarios to story acceptance criteria
+4. Include Data-Testids - Add testability section in stories with recommended attributes
+5. Plan the 5 Blockers - Include BLK-001 through BLK-005 as high-priority stories
+
+**Recommended Action:** Run `create-epics-and-stories` workflow and reference this handoff document
 
 ---

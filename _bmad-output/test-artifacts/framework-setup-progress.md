@@ -1,7 +1,7 @@
 ---
 stepsCompleted: ['step-01-preflight', 'step-02-select-framework', 'step-03-scaffold-framework', 'step-04-docs-and-scripts', 'step-05-validate-and-summary']
 lastStep: 'step-05-validate-and-summary'
-lastSaved: '2026-03-07'
+lastSaved: '2026-03-08'
 ---
 
 # Framework Setup Progress - gmao-hiansa
@@ -98,7 +98,7 @@ lastSaved: '2026-03-07'
 
 ## Step 2: Framework Selection - COMPLETED ✓
 
-### Selection Logic
+### Selección del Framework
 
 **Detected Stack:** `fullstack` (from Step 1)
 
@@ -107,64 +107,69 @@ lastSaved: '2026-03-07'
 **Frontend/E2E:** Playwright ⭐
 **Backend/Unit-Integration:** Vitest
 
-### Rationale
+### Justificación de la Selección
 
-#### Playwright for E2E and API Tests
+#### Por qué Playwright para E2E y API Tests
 
-**Why Playwright:**
-- ✅ **Large/Complex Repo** - 10 epics, 66 stories, 123 FRs
-- ✅ **Multi-browser Required** - Chrome/Edge (Chromium) required per requirements
-- ✅ **Heavy API + UI Integration** - SSE, tRPC, Next.js API Routes, real-time updates
-- ✅ **CI Speed/Parallelism** - Vercel CI/CD, 100 concurrent users, performance testing
-- ✅ **Next.js 15 App Router Compatible** - Excellent support
-- ✅ **Playwright Utils Available** - `tea_use_playwright_utils: true`
-- ✅ **Network-first Patterns** - Ideal for SSE, tRPC testing
-- ✅ **API Testing** - Can test Next.js API routes
-- ✅ **Performance Testing** - Supports k6 integration
+**Criterios que se cumplen:**
 
-**Pre-selected in project-context.md:**
-- "Testing Framework: Playwright (when critical flows are implemented)"
+| Criterio | Estado | Detalles |
+|----------|--------|----------|
+| ✅ Large/Complex Repo | **SÍ** | 10 epics, 66 stories, 123 FRs, 102 escenarios de test |
+| ✅ Multi-browser Required | **SÍ** | Chrome/Edge (Chromium) requerido por requisitos del proyecto |
+| ✅ Heavy API + UI Integration | **SÍ** | SSE (30s heartbeat), tRPC, Next.js API Routes, actualizaciones real-time |
+| ✅ CI Speed/Parallelism | **SÍ** | Vercel CI/CD, 100 usuarios concurrentes, testing de performance |
+| ✅ Next.js 15 App Router Compatible | **SÍ** | Soporte excelente para App Router |
+| ✅ Playwright Utils Available | **SÍ** | `tea_use_playwright_utils: true` en config |
+| ✅ Network-first Patterns | **SÍ** | Ideal para testing de SSE y tRPC |
+| ✅ API Testing | **SÍ** | Puede testear Next.js API Routes directamente |
+| ✅ Performance Testing | **SÍ** | Soporta integración con k6 |
 
-#### Vitest for Unit/Integration Tests
+**Pre-seleccionado en project-context.md:**
+> "Testing Framework: Playwright (when critical flows are implemented)"
 
-**Why Vitest:**
-- ✅ **Next.js 15 Compatible** - Works seamlessly with App Router
-- ✅ **TypeScript Strict Mode** - Native TS support
-- ✅ **Fast** - Critical for CI/CD pipeline speed
-- ✅ **Jest Ecosystem** - Drop-in replacement for Jest
-- ✅ **API Route Testing** - Can test Next.js Server Actions
-- ✅ **Coverage Reports** - Integrated coverage tracking
-- ✅ **Pre-selected in project-context.md** - "Unit/Integration: Vitest (configured for Next.js 15)"
+#### Por qué Vitest para Unit/Integration Tests
 
-### Framework Capabilities
+| Criterio | Estado | Detalles |
+|----------|--------|----------|
+| ✅ Next.js 15 Compatible | **SÍ** | Funciona perfectamente con App Router |
+| ✅ TypeScript Strict Mode | **SÍ** | Soporte nativo de TypeScript |
+| ✅ Fast | **SÍ** | Crítico para velocidad del pipeline CI/CD |
+| ✅ Jest Ecosystem | **SÍ** | Drop-in replacement para Jest |
+| ✅ API Route Testing | **SÍ** | Puede testear Next.js Server Actions |
+| ✅ Coverage Reports | **SÍ** | Reporting de coverage integrado |
+| ✅ Pre-seleccionado | **SÍ** | "Unit/Integration: Vitest (configured for Next.js 15)" |
 
-**Playwright Responsibilities:**
-- E2E test flows (critical user journeys)
-- API integration tests (Next.js API routes)
-- Visual regression tests (UI components)
-- Performance tests (with k6 integration)
-- 102 tests planned (73 P0, 26 P1, 3 P2)
+### Responsabilidades de Cada Framework
 
-**Vitest Responsibilities:**
-- Unit tests (pure functions, utilities, Zod schemas)
-- Integration tests (Server Actions, API routes)
-- Component tests (React components with Vitest)
-- Coverage tracking and reporting
+**Playwright:**
+- Tests E2E de flujos críticos de usuario
+- Tests de integración de API (Next.js API routes)
+- Tests de regresión visual (componentes UI)
+- Tests de performance (con integración k6)
+- **~60 tests** (de los 102 escenarios planificados)
 
-### Complementary Stack
+**Vitest:**
+- Tests unitarios (funciones puras, utilities, schemas Zod)
+- Tests de integración (Server Actions, API routes)
+- Tests de componentes (React components con Vitest)
+- Tracking de coverage y reporting
+- **~40 tests** (de los 102 escenarios planificados)
 
-**No Duplication:**
+### Configuración Complementaria
+
+**Sin Duplicación:**
 - Playwright: E2E + API + Performance
 - Vitest: Unit + Integration + Components
-- Clear boundaries between frameworks
+- Límites claros entre frameworks
 
-**Coverage Alignment:**
-- Test plan from `test-design-qa.md`: 102 tests total
-- Playwright handles ~60 tests (E2E, API)
-- Vitest handles ~40 tests (unit, integration, components)
-- P0 pass rate = 100% (both frameworks)
+**Alineación de Coverage:**
+- Test plan de `test-design-qa.md`: 102 tests total
+- Playwright maneja ~60 tests (E2E, API)
+- Vitest maneja ~40 tests (unit, integration, components)
+- P0 pass rate = 100% (ambos frameworks)
 
-### Configuration Notes
+### Notas de Configuración
 
 **Playwright Configuration:**
 - Config file: `playwright.config.ts`
@@ -177,16 +182,16 @@ lastSaved: '2026-03-07'
 - Config file: `vitest.config.ts`
 - Test directory: `tests/unit/`, `tests/integration/`
 - Coverage directory: `coverage/`
-- Environment: `jsdom` for components, `node` for API
+- Environment: `jsdom` para componentes, `node` para API
 
-### Next Steps
+### Próximos Pasos
 
-Proceed to scaffold framework structure with:
-- Playwright configuration
-- Vitest configuration
-- Directory structure
-- Example tests
-- Fixtures and helpers
+Proceder a scaffold del framework con:
+- Configuración de Playwright
+- Configuración de Vitest
+- Estructura de directorios
+- Tests de ejemplo
+- Fixtures y helpers
 
 ---
 
@@ -323,19 +328,37 @@ scripts/                    # Shell scripts for Pact.js (future)
 
 ### Files Created Summary
 
-**Total Files Created: 11**
+**Total Files Created/Updated: 20** (regenerated on 2026-03-08)
+
+**Configuration Files (5):**
 1. `playwright.config.ts` - Playwright configuration
 2. `vitest.config.ts` - Vitest configuration
-3. `.env.example` - Environment variables template
-4. `.nvmrc` - Node.js version
-5. `tests/fixtures/test.fixtures.ts` - Playwright fixtures
-6. `tests/factories/data.factories.ts` - Data factories (Faker.js)
-7. `tests/helpers/api.helpers.ts` - API helpers
-8. `tests/e2e/example-login.spec.ts` - Sample E2E test
-9. `tests/unit/example-utils.test.ts` - Sample unit test
+3. `vitest.config.pact.ts` - Vitest config for Pact tests
+4. `.env.example` - Environment variables template
+5. `.gitignore` - Git ignore with Pact exclusions
+
+**Test Infrastructure (7):**
+6. `tests/setup.ts` - Vitest setup file
+7. `tests/fixtures/test.fixtures.ts` - Playwright fixtures
+8. `tests/factories/data.factories.ts` - Data factories (Faker.js)
+9. `tests/helpers/api.helpers.ts` - API helpers
 10. `tests/contract/support/pact-config.ts` - Pact configuration
 11. `tests/contract/support/provider-states.ts` - Provider state factories
 12. `tests/contract/consumer/auth-api.pacttest.ts` - Sample Pact consumer test
+
+**Sample Tests (2):**
+13. `tests/e2e/example-login.spec.ts` - Sample E2E test
+14. `tests/unit/example-utils.test.ts` - Sample unit test
+
+**PowerShell Scripts for Pact (4):**
+15. `scripts/publish-pact.ps1` - Publish Pact contracts to broker
+16. `scripts/can-i-deploy.ps1` - Verify deployment safety
+17. `scripts/record-deployment.ps1` - Record consumer deployment
+18. `scripts/env-setup.ps1` - Pact environment setup
+
+**GitHub Actions (2):**
+19. `.github/workflows/contract-test-consumer.yml` - Pact CI workflow
+20. `.github/actions/detect-breaking-change/action.yml` - Breaking change detection
 
 ### Next Steps
 
@@ -398,8 +421,10 @@ Proceed to documentation and scripts generation (step 4)...
   "test:e2e:p0": "playwright test -g \"P0-\"",   // Run only P0 tests
 
   "test:pact:consumer": "vitest --config vitest.config.pact.ts tests/contract/consumer",
-  "publish:pact": "node scripts/publish-pact.sh",
-  "can:i:deploy:consumer": "node scripts/can-i-deploy.sh",
+  "publish:pact": "pwsh scripts/publish-pact.ps1",
+  "can:i:deploy:consumer": "pwsh scripts/can-i-deploy.ps1",
+  "record:consumer:deployment": "pwsh scripts/record-deployment.ps1",
+  "pact:setup": "pwsh scripts/env-setup.ps1",
 
   "test:all": "npm run test && npm run test:e2e",
   "test:ci": "npm run test:e2e --workers=4 && npm run test:coverage"
@@ -421,6 +446,8 @@ Proceed to documentation and scripts generation (step 4)...
 | `test:pact:consumer` | Run Pact consumer tests | Contract validation |
 | `publish:pact` | Publish pacts to broker | Contract sharing |
 | `can:i:deploy:consumer` | Verify can-i-deploy | Deployment safety |
+| `record:consumer:deployment` | Record deployment | Deployment tracking |
+| `pact:setup` | Setup Pact environment | Initial setup |
 | `test:all` | Run all tests (unit + E2E) | Full validation |
 | `test:ci` | CI-optimized test run | CI/CD pipeline |
 
@@ -554,34 +581,43 @@ Proceed to validation and summary (step 5)...
 
 ### 3. Artifacts Created Summary
 
-**Total Files Created: 16**
+**Total Files Created/Updated: 20** (regenerated on 2026-03-08)
 
 **Configuration Files (5):**
 1. `playwright.config.ts` - Playwright configuration (95 lines)
 2. `vitest.config.ts` - Vitest configuration (69 lines)
-3. `.env.example` - Environment variables template (30+ vars)
-4. `.nvmrc` - Node.js version 20
-5. `package.json.template` - Scripts template for Next.js initialization
+3. `vitest.config.pact.ts` - Vitest configuration for Pact tests
+4. `.env.example` - Environment variables template (30+ vars)
+5. `.gitignore` - Git ignore with Pact exclusions
 
-**Test Infrastructure (4):**
-6. `tests/fixtures/test.fixtures.ts` - Custom fixtures (login, cleanup)
-7. `tests/factories/data.factories.ts` - Data factories (Faker.js, 6 factories)
-8. `tests/helpers/api.helpers.ts` - API helpers (SSE, network, selectors)
+**Test Infrastructure (7):**
+6. `tests/setup.ts` - Vitest setup file
+7. `tests/fixtures/test.fixtures.ts` - Custom fixtures (login, cleanup)
+8. `tests/factories/data.factories.ts` - Data factories (Faker.js, 6 factories)
+9. `tests/helpers/api.helpers.ts` - API helpers (SSE, network, selectors)
+10. `tests/contract/support/pact-config.ts` - Pact configuration
+11. `tests/contract/support/provider-states.ts` - Provider state factories
+12. `tests/contract/consumer/auth-api.pacttest.ts` - Sample Pact consumer test
 
-**Sample Tests (3):**
-9. `tests/e2e/example-login.spec.ts` - Sample E2E test (auth, kanban)
-10. `tests/unit/example-utils.test.ts` - Sample unit test (utils, schemas)
-11. `tests/contract/consumer/auth-api.pacttest.ts` - Sample Pact test
+**Sample Tests (2):**
+13. `tests/e2e/example-login.spec.ts` - Sample E2E test (auth, kanban)
+14. `tests/unit/example-utils.test.ts` - Sample unit test (utils, schemas)
 
-**Contract Testing (2):**
-12. `tests/contract/support/pact-config.ts` - Pact configuration
-13. `tests/contract/support/provider-states.ts` - Provider state factories
+**PowerShell Scripts for Pact (4):**
+15. `scripts/publish-pact.ps1` - Publish Pact contracts to broker
+16. `scripts/can-i-deploy.ps1` - Verify deployment safety
+17. `scripts/record-deployment.ps1` - Record consumer deployment
+18. `scripts/env-setup.ps1` - Pact environment setup
+
+**GitHub Actions (2):**
+19. `.github/workflows/contract-test-consumer.yml` - Pact CI workflow
+20. `.github/actions/detect-breaking-change/action.yml` + `index.js` - Breaking change detection
 
 **Documentation (1):**
-14. `tests/README.md` - Complete testing guide (420+ lines)
+- `tests/README.md` - Complete testing guide (420+ lines, updated 2026-03-08)
 
 **Progress Tracking (1):**
-15. `_bmad-output/test-artifacts/framework-setup-progress.md` - Workflow progress
+- `_bmad-output/test-artifacts/framework-setup-progress.md` - Workflow progress
 
 ### 4. Test Distribution Contemplated
 
@@ -685,11 +721,13 @@ Proceed to validation and summary (step 5)...
 
 ### 8. Framework Ready for Use
 
-**Status:** ✅ COMPLETE
+**Status:** ✅ COMPLETE (REGENERATED 2026-03-08)
 
 All validation checks passed. Framework is ready for test development.
 
-**Last Updated:** 2026-03-07
+**Regenerated Files:** 20 files (Playwright, Vitest, Pact.js configs, fixtures, factories, helpers, sample tests, PowerShell scripts, GitHub Actions)
+
+**Last Updated:** 2026-03-08
 **Workflow:** Test Architect - Framework Initialization
 **Author:** Bernardo (BMad TEA Agent)
 **Project:** gmao-hiansa (GMAO - Gestión de Mantenimiento Asistido por Ordenador)

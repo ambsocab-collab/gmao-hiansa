@@ -1,0 +1,229 @@
+<testsuites id="" name="" tests="5" failures="5" skipped="0" errors="0" time="30.237029999999997">
+<testsuite name="example-login.spec.ts" timestamp="2026-03-08T22:21:22.544Z" hostname="chromium" tests="5" failures="5" skipped="0" time="14.848" errors="0">
+<testcase name="Autenticación › P0-001: Usuario inicia sesión correctamente" classname="example-login.spec.ts" time="2.931">
+<failure message="example-login.spec.ts:22:7 P0-001: Usuario inicia sesión correctamente" type="FAILURE">
+<![CDATA[  [chromium] › example-login.spec.ts:22:7 › Autenticación › P0-001: Usuario inicia sesión correctamente 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+    Call log:
+      - navigating to "http://localhost:3000/login", waiting until "load"
+
+
+      17 |   test.beforeEach(async ({ page }) => {
+      18 |     // Navigate to login page
+    > 19 |     await page.goto('/login');
+         |                ^
+      20 |   });
+      21 |
+      22 |   test('P0-001: Usuario inicia sesión correctamente', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:19:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Autenticación › P0-002: Usuario con credenciales inválidas recibe error" classname="example-login.spec.ts" time="3.032">
+<failure message="example-login.spec.ts:40:7 P0-002: Usuario con credenciales inválidas recibe error" type="FAILURE">
+<![CDATA[  [chromium] › example-login.spec.ts:40:7 › Autenticación › P0-002: Usuario con credenciales inválidas recibe error 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+    Call log:
+      - navigating to "http://localhost:3000/login", waiting until "load"
+
+
+      17 |   test.beforeEach(async ({ page }) => {
+      18 |     // Navigate to login page
+    > 19 |     await page.goto('/login');
+         |                ^
+      20 |   });
+      21 |
+      22 |   test('P0-001: Usuario inicia sesión correctamente', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:19:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Gestión de Averías › P0-003: Operario reporta avería con búsqueda predictiva" classname="example-login.spec.ts" time="3.041">
+<failure message="example-login.spec.ts:68:7 P0-003: Operario reporta avería con búsqueda predictiva" type="FAILURE">
+<![CDATA[  [chromium] › example-login.spec.ts:68:7 › Gestión de Averías › P0-003: Operario reporta avería con búsqueda predictiva 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+    Call log:
+      - navigating to "http://localhost:3000/login", waiting until "load"
+
+
+      59 |     });
+      60 |
+    > 61 |     await page.goto('/login');
+         |                ^
+      62 |     await page.fill(getByTestId('email-input'), testUser.email);
+      63 |     await page.fill(getByTestId('password-input'), 'password123');
+      64 |     await page.click(getByTestId('login-button'));
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:61:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Kanban de Órdenes de Trabajo › P0-004: Supervisor ve OTs en Kanban" classname="example-login.spec.ts" time="2.91">
+<failure message="example-login.spec.ts:118:7 P0-004: Supervisor ve OTs en Kanban" type="FAILURE">
+<![CDATA[  [chromium] › example-login.spec.ts:118:7 › Kanban de Órdenes de Trabajo › P0-004: Supervisor ve OTs en Kanban 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+    Call log:
+      - navigating to "http://localhost:3000/login", waiting until "load"
+
+
+      109 |     });
+      110 |
+    > 111 |     await page.goto('/login');
+          |                ^
+      112 |     await page.fill(getByTestId('email-input'), testUser.email);
+      113 |     await page.fill(getByTestId('password-input'), 'password123');
+      114 |     await page.click(getByTestId('login-button'));
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:111:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Kanban de Órdenes de Trabajo › P0-005: Supervisor asigna técnico a OT" classname="example-login.spec.ts" time="2.934">
+<failure message="example-login.spec.ts:134:7 P0-005: Supervisor asigna técnico a OT" type="FAILURE">
+<![CDATA[  [chromium] › example-login.spec.ts:134:7 › Kanban de Órdenes de Trabajo › P0-005: Supervisor asigna técnico a OT 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+    Call log:
+      - navigating to "http://localhost:3000/login", waiting until "load"
+
+
+      109 |     });
+      110 |
+    > 111 |     await page.goto('/login');
+          |                ^
+      112 |     await page.fill(getByTestId('email-input'), testUser.email);
+      113 |     await page.fill(getByTestId('password-input'), 'password123');
+      114 |     await page.click(getByTestId('login-button'));
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:111:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -20,9 +20,10 @@
     "test:e2e:p0": "playwright test -g \"P0-\"",
 
     "test:pact:consumer": "vitest --config vitest.config.pact.ts tests/contract/consumer",
-    "publish:pact": "node scripts/publish-pact.sh",
-    "can:i:deploy:consumer": "node scripts/can-i-deploy.sh",
-    "record:consumer:deployment": "node scripts/record-deployment.sh",
+    "publish:pact": "pwsh scripts/publish-pact.ps1",
+    "can:i:deploy:consumer": "pwsh scripts/can-i-deploy.ps1",
+    "record:consumer:deployment": "pwsh scripts/record-deployment.ps1",
+    "pact:setup": "pwsh scripts/env-setup.ps1",
 
     "test:all": "npm run test && npm run test:e2e",
     "test:ci": "npm run test:e2e --workers=4 && npm run test:coverage"
