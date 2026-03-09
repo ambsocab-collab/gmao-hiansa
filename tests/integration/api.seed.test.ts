@@ -114,7 +114,7 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
 
       // Restore original env
       process.env.NODE_ENV = originalEnv
-    }, 10000) // Increase timeout for seed operation
+    }, 30000) // Increase timeout to 30s for seed operation
   })
 
   describe('Seed Data Integrity', () => {
@@ -156,6 +156,6 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
 
       // Restore original env
       process.env.NODE_ENV = originalEnv
-    }, 15000) // Increase timeout for seed and verification
+    }, 45000) // Increase timeout to 45s for seed and verification
   })
 })

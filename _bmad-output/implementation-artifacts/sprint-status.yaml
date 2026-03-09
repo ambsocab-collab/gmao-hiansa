@@ -46,7 +46,7 @@ development_status:
   0-2-database-schema-prisma-con-jerarquia-5-niveles: done
   0-3-nextauth-js-con-credentials-provider: done
   0-4-sse-infrastructure-con-heartbeat: done
-  0-5-error-handling-observability-y-ci-cd: backlog
+  0-5-error-handling-observability-y-ci-cd: done
   epic-0-retrospective: optional
 
   # Epic 1: Autenticación y Gestión de Usuarios (PBAC)

@@ -11,7 +11,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
-import { userFactory, assetFactory, otFactory, generateTestId, generateSequence } from '../factories/data.factories';
+import { userFactory, assetFactory, generateTestId, generateSequence } from '../factories/data.factories';
 
 /**
  * Example: Pure function for formatting dates
@@ -65,7 +65,9 @@ const parseSSEEvent = (data: string): { type: string; payload: any } => {
     throw new Error('Invalid SSE data format');
   }
 
-  const payload = JSON.parse(dataLine.split(':')[1].trim());
+  // Use substring(5) to remove 'data:' prefix instead of split(':')
+  // This handles JSON objects that contain ':' within their values
+  const payload = JSON.parse(dataLine.substring(5).trim());
 
   return { type: eventType, payload };
 };
