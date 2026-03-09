@@ -1,17 +1,18 @@
 import * as React from "react"
 import { useFormContext, Controller, ControllerProps, FieldPath, FieldValues } from "react-hook-form"
-import { z } from "zod"
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 
-const Form = <T extends FieldValues>({
+const Form = ({
   children,
+  dataTestId,
   ...props
 }: React.ComponentProps<"form"> & {
   children: React.ReactNode
+  dataTestId?: string
 }) => {
-  return <form {...props}>{children}</form>
+  return <form data-testid={dataTestId} {...props}>{children}</form>
 }
 
 Form.displayName = "Form"
@@ -80,13 +81,13 @@ const FormItemContext = React.createContext<FormItemContextValue>(
 
 const FormItem = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & { dataTestId?: string }
+>(({ className, dataTestId, ...props }, ref) => {
   const id = React.useId()
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn("space-y-2", className)} data-testid={dataTestId} {...props} />
     </FormItemContext.Provider>
   )
 })
@@ -94,8 +95,8 @@ FormItem.displayName = "FormItem"
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof Label>,
-  React.ComponentPropsWithoutRef<typeof Label>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof Label> & { dataTestId?: string }
+>(({ className, dataTestId, ...props }, ref) => {
   const { formItemId } = useFormField()
 
   return (
@@ -103,6 +104,7 @@ const FormLabel = React.forwardRef<
       ref={ref}
       className={cn(className)}
       htmlFor={formItemId}
+      data-testid={dataTestId}
       {...props}
     />
   )
@@ -111,8 +113,8 @@ FormLabel.displayName = "FormLabel"
 
 const FormControl = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & { dataTestId?: string }
+>(({ dataTestId, ...props }, ref) => {
   const { formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
@@ -120,6 +122,7 @@ const FormControl = React.forwardRef<
       ref={ref}
       id={formItemId}
       aria-describedby={`${formDescriptionId} ${formMessageId}`}
+      data-testid={dataTestId}
       {...props}
     />
   )
@@ -128,8 +131,8 @@ FormControl.displayName = "FormControl"
 
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & { dataTestId?: string }
+>(({ className, dataTestId, ...props }, ref) => {
   const { formDescriptionId } = useFormField()
 
   return (
@@ -137,6 +140,7 @@ const FormDescription = React.forwardRef<
       ref={ref}
       id={formDescriptionId}
       className={cn("text-sm text-muted-foreground", className)}
+      data-testid={dataTestId}
       {...props}
     />
   )
@@ -145,8 +149,8 @@ FormDescription.displayName = "FormDescription"
 
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & { dataTestId?: string }
+>(({ className, children, dataTestId, ...props }, ref) => {
   const { formMessageId, error } = useFormField()
   const body = error ? String(error?.message) : children
 
@@ -159,6 +163,7 @@ const FormMessage = React.forwardRef<
       ref={ref}
       id={formMessageId}
       className={cn("text-sm font-medium text-destructive", className)}
+      data-testid={dataTestId}
       {...props}
     >
       {body}
