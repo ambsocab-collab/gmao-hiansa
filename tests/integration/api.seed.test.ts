@@ -63,26 +63,30 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       const originalEnv = process.env.NODE_ENV
 
       // Test in development
-      process.env.NODE_ENV = 'development' as any
+      ;(process.env as any).NODE_ENV = 'development'
       const devResponse = await GET()
       const devData = await devResponse.json()
       expect(devData.available).toBe(true)
 
       // Test in production (should not be available)
-      process.env.NODE_ENV = 'production' as any
+      ;(process.env as any).NODE_ENV = 'production'
       const prodResponse = await GET()
       const prodData = await prodResponse.json()
       expect(prodData.available).toBe(false)
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     })
   })
 
   describe('POST /api/v1/test-data/seed', () => {
     it('should block seed in production environment', async () => {
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'production' as any
+      ;(process.env as any).NODE_ENV = 'production'
 
       const response = await POST()
       const data = await response.json()
@@ -91,12 +95,16 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       expect(data).toHaveProperty('error', 'Seed endpoint not available in production')
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     })
 
     it('should allow seed in development environment', async () => {
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development' as any
+      ;(process.env as any).NODE_ENV = 'development'
 
       const response = await POST()
       const data = await response.json()
@@ -113,14 +121,18 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       }
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     }, 30000) // Increase timeout to 30s for seed operation
   })
 
   describe('Seed Data Integrity', () => {
     it('should create correct number of entities after seed', async () => {
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development' as any
+      ;(process.env as any).NODE_ENV = 'development'
 
       // Execute seed
       const seedResponse = await POST()
@@ -155,7 +167,11 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       }
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     }, 45000) // Increase timeout to 45s for seed and verification
   })
 })

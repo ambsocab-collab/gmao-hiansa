@@ -5,6 +5,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { logger, Logger, LogLevel } from '@/lib/observability/logger'
+import { AppError } from '@/lib/utils/errors'
 
 describe('Logger - Structured Logging', () => {
   let consoleDebugSpy: ReturnType<typeof vi.spyOn>
@@ -129,13 +130,12 @@ describe('Logger - Structured Logging', () => {
 
   describe('Logger.error()', () => {
     it('should log error with AppError details and stack in development', async () => {
-      const { AppError } = await import('@/lib/utils/errors')
       const error = new AppError('Test error', 400, 'TEST_ERROR', { detail: 'test' })
       const correlationId = 'test-error-123'
 
       // Set development mode
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      ;(process.env as any).NODE_ENV = 'development'
 
       logger.error(error, 'Test error action', correlationId, 'user-123')
 
@@ -155,17 +155,20 @@ describe('Logger - Structured Logging', () => {
       })
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     })
 
     it('should log error without stack trace in production', async () => {
-      const { AppError } = await import('@/lib/utils/errors')
       const error = new AppError('Test error', 400, 'TEST_ERROR')
       const correlationId = 'test-error-456'
 
       // Set production mode
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'production'
+      ;(process.env as any).NODE_ENV = 'production'
 
       logger.error(error, 'Test error action', correlationId)
 
@@ -179,7 +182,11 @@ describe('Logger - Structured Logging', () => {
       })
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     })
 
     it('should log generic error with UNKNOWN_ERROR code', () => {
@@ -188,7 +195,7 @@ describe('Logger - Structured Logging', () => {
 
       // Set development mode for consistent test behavior
       const originalEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+      ;(process.env as any).NODE_ENV = 'development'
 
       logger.error(error, 'Test generic error', correlationId)
 
@@ -202,11 +209,14 @@ describe('Logger - Structured Logging', () => {
       })
 
       // Restore original env
-      process.env.NODE_ENV = originalEnv
+      if (originalEnv) {
+        ;(process.env as any).NODE_ENV = originalEnv
+      } else {
+        delete (process.env as any).NODE_ENV
+      }
     })
 
     it('should handle error without userId', async () => {
-      const { AppError } = await import('@/lib/utils/errors')
       const error = new AppError('Test error', 500, 'INTERNAL_ERROR')
       const correlationId = 'test-error-000'
 

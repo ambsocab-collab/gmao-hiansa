@@ -11,6 +11,13 @@ import { logger } from '@/lib/observability/logger'
 import { AppError } from '@/lib/utils/errors'
 
 /**
+ * Type guard para verificar si un error es AppError
+ */
+function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError
+}
+
+/**
  * Error handler para API Routes
  * Captura todas las excepciones y retorna respuesta consistentemente formateada
  */
@@ -24,7 +31,7 @@ export function apiErrorHandler(
   logger.error(error as Error, action, correlationId, userId)
 
   // Si es AppError, usar sus datos pero usar el correlationId del request
-  if (error instanceof AppError) {
+  if (isAppError(error)) {
     return NextResponse.json(
       {
         error: {

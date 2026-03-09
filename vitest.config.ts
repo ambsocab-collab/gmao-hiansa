@@ -20,6 +20,9 @@ export default defineConfig({
   // Plugins
   plugins: [react()],
 
+  // TypeScript configuration for tests
+  tsconfig: './tsconfig.test.json',
+
   // Test directories - only unit and integration tests
   // e2e tests are run by Playwright, NOT Vitest
   include: [
