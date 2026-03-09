@@ -41,9 +41,9 @@ story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
   # Epic 0: Setup e Infraestructura Base
-  epic-0: backlog
-  0-1-starter-template-y-stack-tecnico: backlog
-  0-2-database-schema-prisma-con-jerarquia-5-niveles: backlog
+  epic-0: in-progress
+  0-1-starter-template-y-stack-tecnico: done
+  0-2-database-schema-prisma-con-jerarquia-5-niveles: done
   0-3-nextauth-js-con-credentials-provider: backlog
   0-4-sse-infrastructure-con-heartbeat: backlog
   0-5-error-handling-observability-y-ci-cd: backlog
