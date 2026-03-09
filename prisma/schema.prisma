@@ -1,4 +1,6 @@
 // prisma/schema.prisma
+// GMAO HiRock/Ultra - Database Schema
+// Story 0.2: Database Schema con Jerarquía 5 Niveles
 
 generator client {
   provider = "prisma-client-js"
@@ -9,14 +11,267 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  password     String   // bcrypt hash
-  isFirstLogin Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+// ============================================
+// MODELS CORE: User & Capability (PBAC)
+// ============================================
 
+model User {
+  id                   String   @id @default(cuid())
+  email                String   @unique
+  password_hash        String
+  name                 String
+  phone                String?
+  force_password_reset Boolean  @default(false)
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  // Relations
+  user_capabilities      UserCapability[]
+  work_order_assignments WorkOrderAssignment[]
+  failure_reports        FailureReport[] @relation("FailureReports")
+
+  @@index([email])
+  @@index([created_at])
   @@map("users")
+}
+
+model Capability {
+  id          String  @id @default(cuid())
+  name        String  @unique // enum inglés: can_create_failure_report, etc.
+  label       String // castellano: "Crear Reporte de Avería"
+  description String?
+
+  // Relations
+  user_capabilities UserCapability[]
+
+  @@map("capabilities")
+}
+
+model UserCapability {
+  user_id       String
+  capability_id String
+  created_at    DateTime @default(now())
+
+  // Relations
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  capability Capability @relation(fields: [capability_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, capability_id])
+  @@index([user_id]) // Para buscar capabilities de un usuario
+  @@map("user_capabilities")
+}
+
+// ============================================
+// JERARQUÍA DE 5 NIVELES
+// ============================================
+
+enum Division {
+  HIROCK
+  ULTRA
+}
+
+model Planta {
+  id         String   @id @default(cuid())
+  name       String
+  code       String   @unique
+  division   Division
+  created_at DateTime @default(now())
+
+  // Relations
+  lineas Linea[]
+
+  @@index([code])
+  @@map("plantas")
+}
+
+model Linea {
+  id         String   @id @default(cuid())
+  name       String
+  code       String
+  planta_id  String
+  created_at DateTime @default(now())
+
+  // Relations
+  planta  Planta   @relation(fields: [planta_id], references: [id], onDelete: Cascade)
+  equipos Equipo[]
+
+  @@unique([planta_id, code])
+  @@index([planta_id])
+  @@map("lineas")
+}
+
+enum EquipoEstado {
+  OPERATIVO
+  AVERIADO
+  EN_REPARACION
+  RETIRADO
+  BLOQUEADO
+}
+
+model Equipo {
+  id               String       @id @default(cuid())
+  name             String
+  code             String
+  linea_id         String
+  estado           EquipoEstado @default(OPERATIVO)
+  ubicacion_actual String?
+  created_at       DateTime     @default(now())
+
+  // Relations
+  linea             Linea              @relation(fields: [linea_id], references: [id], onDelete: Cascade)
+  equipo_components EquipoComponente[] // Muchos-a-muchos vía EquipoComponente
+  work_orders       WorkOrder[]
+  failure_reports   FailureReport[]
+
+  @@unique([linea_id, code])
+  @@index([linea_id])
+  @@index([name]) // Para búsqueda predictiva <200ms
+  @@index([linea_id, estado]) // Para filtrar por línea y estado (Kanban)
+  @@index([estado]) // Para filtrar todos los equipos por estado
+  @@map("equipos")
+}
+
+model Componente {
+  id         String   @id @default(cuid())
+  name       String
+  code       String
+  created_at DateTime @default(now())
+
+  // Relations
+  equipo_components EquipoComponente[] // Muchos-a-muchos vía EquipoComponente
+  repuestos         Repuesto[]
+
+  @@index([code])
+  @@map("componentes")
+}
+
+model EquipoComponente {
+  equipo_id     String
+  componente_id String
+  created_at    DateTime @default(now())
+
+  // Relations
+  equipo     Equipo     @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
+  componente Componente @relation(fields: [componente_id], references: [id], onDelete: Cascade)
+
+  @@id([equipo_id, componente_id])
+  @@map("equipo_componentes")
+}
+
+model Repuesto {
+  id               String   @id @default(cuid())
+  name             String
+  code             String
+  componente_id    String
+  stock            Int      @default(0)
+  stock_minimo     Int      @default(0)
+  ubicacion_fisica String?
+  created_at       DateTime @default(now())
+
+  // Relations
+  componente Componente @relation(fields: [componente_id], references: [id], onDelete: Cascade)
+
+  @@index([componente_id])
+  @@index([code])
+  @@map("repuestos")
+}
+
+// ============================================
+// MODELOS DE OPERACIONES
+// ============================================
+
+enum WorkOrderTipo {
+  PREVENTIVO
+  CORRECTIVO
+}
+
+enum WorkOrderEstado {
+  PENDIENTE
+  ASIGNADA
+  EN_PROGRESO
+  PENDIENTE_REPUESTO
+  PENDIENTE_PARADA
+  REPARACION_EXTERNA
+  COMPLETADA
+  DESCARTADA
+}
+
+model WorkOrder {
+  id           String          @id @default(cuid())
+  numero       String          @unique
+  tipo         WorkOrderTipo
+  estado       WorkOrderEstado @default(PENDIENTE)
+  descripcion  String
+  equipo_id    String
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
+  completed_at DateTime?
+
+  // Relations
+  equipo         Equipo                @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
+  assignments    WorkOrderAssignment[]
+  failure_report FailureReport?        @relation(fields: [failure_report_id], references: [id])
+
+  failure_report_id String? @unique
+
+  @@index([equipo_id])
+  @@index([numero]) // Para búsqueda rápida
+  @@index([estado]) // Para filtrar por estado (Kanban)
+  @@index([equipo_id, estado]) // Para joins con filtro de estado
+  @@index([created_at]) // Para ordenamiento temporal
+  @@map("work_orders")
+}
+
+enum AssignmentRole {
+  TECNICO
+  PROVEEDOR
+}
+
+model WorkOrderAssignment {
+  work_order_id String
+  user_id       String
+  role          AssignmentRole
+  created_at    DateTime       @default(now())
+
+  // Relations
+  work_order WorkOrder @relation(fields: [work_order_id], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([work_order_id, user_id])
+  @@index([user_id]) // Para buscar OTs asignadas a un usuario
+  @@index([work_order_id]) // Para buscar asignaciones de una OT
+  @@map("work_order_assignments")
+}
+
+enum FailureReportEstado {
+  RECIBIDO
+  AUTORIZADO
+  EN_PROGRESO
+  COMPLETADO
+  DESCARTADO
+}
+
+model FailureReport {
+  id            String              @id @default(cuid())
+  numero        String              @unique
+  descripcion   String
+  foto_url      String?
+  equipo_id     String
+  estado        FailureReportEstado @default(RECIBIDO)
+  reportado_por String
+  created_at    DateTime            @default(now())
+  updated_at    DateTime            @updatedAt
+
+  // Relations
+  equipo       Equipo     @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
+  reportadoPor User       @relation("FailureReports", fields: [reportado_por], references: [id], onDelete: Cascade)
+  work_order   WorkOrder?
+
+  @@index([equipo_id])
+  @@index([numero]) // Para búsqueda rápida
+  @@index([estado]) // Para filtrar por estado
+  @@index([equipo_id, estado]) // Para joins con filtro de estado
+  @@index([reportado_por]) // Para reportes de un usuario
+  @@index([created_at]) // Para ordenamiento temporal
+  @@map("failure_reports")
 }

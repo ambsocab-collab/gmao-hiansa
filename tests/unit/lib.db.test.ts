@@ -5,7 +5,7 @@
  * Testing PrismaClient singleton pattern
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { prisma } from '@/lib/db';
 
 describe('lib/db - PrismaClient Singleton', () => {
@@ -60,10 +60,10 @@ describe('lib/db - PrismaClient Singleton', () => {
         'id',
         'name',
         'email',
-        'password',
-        'isFirstLogin',
-        'createdAt',
-        'updatedAt'
+        'password_hash',
+        'force_password_reset',
+        'created_at',
+        'updated_at'
       ];
 
       // Verify fields exist in Prisma model (fields are in .fields property)
@@ -73,8 +73,8 @@ describe('lib/db - PrismaClient Singleton', () => {
     });
 
     it('should have timestamp fields', () => {
-      expect(prisma.user.fields.createdAt).toBeDefined();
-      expect(prisma.user.fields.updatedAt).toBeDefined();
+      expect(prisma.user.fields.created_at).toBeDefined();
+      expect(prisma.user.fields.updated_at).toBeDefined();
     });
 
     it('should have unique constraint on email', () => {

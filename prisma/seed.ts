@@ -1,0 +1,421 @@
+// prisma/seed.ts
+// GMAO HiRock/Ultra - Seed Data para Desarrollo
+// Story 0.2: Database Schema con Jerarquía 5 Niveles
+
+import { PrismaClient, Division, EquipoEstado } from '@prisma/client'
+import * as bcrypt from 'bcryptjs'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  console.log('🌱 Starting database seed...')
+
+  // Limpiar database existente (con cuidado en producción!)
+  console.log('🧹 Cleaning existing data...')
+  await prisma.workOrderAssignment.deleteMany()
+  await prisma.failureReport.deleteMany()
+  await prisma.workOrder.deleteMany()
+  await prisma.equipoComponente.deleteMany()
+  await prisma.repuesto.deleteMany()
+  await prisma.componente.deleteMany()
+  await prisma.equipo.deleteMany()
+  await prisma.linea.deleteMany()
+  await prisma.planta.deleteMany()
+  await prisma.userCapability.deleteMany()
+  await prisma.capability.deleteMany()
+  await prisma.user.deleteMany()
+
+  // ============================================
+  // 1. CREAR CAPABILITIES (15 capacidades PBAC)
+  // ============================================
+  console.log('📋 Creating capabilities...')
+
+  await prisma.capability.createMany({
+    data: [
+      { name: 'can_create_failure_report', label: 'Crear Reporte de Avería', description: 'Permite crear reportes de avería' },
+      { name: 'can_create_manual_ot', label: 'Crear OT Manual', description: 'Permite crear órdenes de trabajo manuales' },
+      { name: 'can_update_own_ot', label: 'Actualizar Mis OTs', description: 'Permite actualizar OTs asignadas' },
+      { name: 'can_view_own_ots', label: 'Ver Mis OTs', description: 'Permite ver OTs asignadas' },
+      { name: 'can_view_all_ots', label: 'Ver Todas las OTs', description: 'Permite ver todas las órdenes de trabajo' },
+      { name: 'can_complete_ot', label: 'Completar OTs', description: 'Permite completar órdenes de trabajo' },
+      { name: 'can_manage_stock', label: 'Gestionar Stock', description: 'Permite gestionar repuestos y stock' },
+      { name: 'can_assign_technicians', label: 'Asignar Técnicos', description: 'Permite asignar técnicos a OTs' },
+      { name: 'can_view_kpis', label: 'Ver KPIs', description: 'Permite ver indicadores de rendimiento' },
+      { name: 'can_manage_assets', label: 'Gestionar Activos', description: 'Permite gestionar equipos y componentes' },
+      { name: 'can_view_repair_history', label: 'Ver Historial', description: 'Permite ver historial de reparaciones' },
+      { name: 'can_manage_providers', label: 'Gestionar Proveedores', description: 'Permite gestionar proveedores externos' },
+      { name: 'can_manage_routines', label: 'Gestionar Rutinas', description: 'Permite gestionar rutinas preventivas' },
+      { name: 'can_manage_users', label: 'Gestionar Usuarios', description: 'Permite gestionar usuarios del sistema' },
+      { name: 'can_receive_reports', label: 'Recibir Reportes', description: 'Permite recibir notificaciones de averías' },
+    ],
+  })
+
+  console.log('✅ Created 15 capabilities')
+
+  // Obtener todas las capabilities para asignarlas al admin
+  const allCapabilities = await prisma.capability.findMany()
+
+  // ============================================
+  // 2. CREAR USUARIOS
+  // ============================================
+  console.log('👥 Creating users...')
+
+  // Admin con todas las capabilities
+  const adminPassword = await bcrypt.hash('admin123', 10)
+  const admin = await prisma.user.create({
+    data: {
+      email: 'admin@hiansa.com',
+      password_hash: adminPassword,
+      name: 'Administrador',
+      phone: '+34 600 000 001',
+      force_password_reset: false,
+    },
+  })
+
+  // Asignar todas las capabilities al admin
+  await prisma.userCapability.createMany({
+    data: allCapabilities.map((cap) => ({
+      user_id: admin.id,
+      capability_id: cap.id,
+    })),
+  })
+
+  // Usuario: Técnico con capacidades limitadas
+  const tecnicoPassword = await bcrypt.hash('tecnico123', 10)
+  const tecnico = await prisma.user.create({
+    data: {
+      email: 'tecnico@hiansa.com',
+      password_hash: tecnicoPassword,
+      name: 'Carlos Tecnico',
+      phone: '+34 600 000 002',
+      force_password_reset: false,
+    },
+  })
+
+  // Capabilities del técnico
+  const tecnicoCapabilities = allCapabilities.filter((cap) =>
+    ['can_create_failure_report', 'can_update_own_ot', 'can_view_own_ots', 'can_complete_ot'].includes(
+      cap.name
+    )
+  )
+  await prisma.userCapability.createMany({
+    data: tecnicoCapabilities.map((cap) => ({
+      user_id: tecnico.id,
+      capability_id: cap.id,
+    })),
+  })
+
+  // Usuario: Supervisor con capacidades de gestión
+  const supervisorPassword = await bcrypt.hash('supervisor123', 10)
+  const supervisor = await prisma.user.create({
+    data: {
+      email: 'supervisor@hiansa.com',
+      password_hash: supervisorPassword,
+      name: 'Maria Supervisor',
+      phone: '+34 600 000 003',
+      force_password_reset: false,
+    },
+  })
+
+  // Capabilities del supervisor
+  const supervisorCapabilities = allCapabilities.filter((cap) =>
+    [
+      'can_view_all_ots',
+      'can_assign_technicians',
+      'can_view_kpis',
+      'can_view_repair_history',
+      'can_receive_reports',
+    ].includes(cap.name)
+  )
+  await prisma.userCapability.createMany({
+    data: supervisorCapabilities.map((cap) => ({
+      user_id: supervisor.id,
+      capability_id: cap.id,
+    })),
+  })
+
+  console.log('✅ Created 3 users (admin, tecnico, supervisor)')
+
+  // ============================================
+  // 3. CREAR JERARQUÍA DE 5 NIVELES
+  // ============================================
+  console.log('🏭 Creating 5-level hierarchy...')
+
+  // Nivel 1: Plantas (2 plantas - 1 HiRock, 1 Ultra)
+  const plantaHiRock = await prisma.planta.create({
+    data: {
+      name: 'Planta HiRock Madrid',
+      code: 'HIROCK-MAD-01',
+      division: Division.HIROCK,
+    },
+  })
+
+  const plantaUltra = await prisma.planta.create({
+    data: {
+      name: 'Planta Ultra Barcelona',
+      code: 'ULTRA-BCN-01',
+      division: Division.ULTRA,
+    },
+  })
+
+  // Nivel 2: Lineas (5 lineas distribuidas)
+  await prisma.linea.createMany({
+    data: [
+      { name: 'Linea de Produccion A', code: 'LINEA-A', planta_id: plantaHiRock.id },
+      { name: 'Linea de Produccion B', code: 'LINEA-B', planta_id: plantaHiRock.id },
+      { name: 'Linea de Ensamblaje', code: 'LINEA-C', planta_id: plantaHiRock.id },
+      { name: 'Linea de Procesamiento X', code: 'LINEA-X', planta_id: plantaUltra.id },
+      { name: 'Linea de Procesamiento Y', code: 'LINEA-Y', planta_id: plantaUltra.id },
+    ],
+  })
+
+  const allLineas = await prisma.linea.findMany()
+
+  // Nivel 3: Equipos (10 equipos distribuidos)
+  await prisma.equipo.createMany({
+    data: [
+      // Planta HiRock - Línea A
+      {
+        name: 'Prensa Hidraulica PH-01',
+        code: 'EQ-PH-01',
+        linea_id: allLineas[0].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Norte - Linea A',
+      },
+      {
+        name: 'Torno CNC TC-01',
+        code: 'EQ-TC-01',
+        linea_id: allLineas[0].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Norte - Linea A',
+      },
+      // Planta HiRock - Línea B
+      {
+        name: 'Compresor CP-01',
+        code: 'EQ-CP-01',
+        linea_id: allLineas[1].id,
+        estado: EquipoEstado.AVERIADO,
+        ubicacion_actual: 'Zona Sur - Linea B',
+      },
+      {
+        name: 'Transportadora TR-01',
+        code: 'EQ-TR-01',
+        linea_id: allLineas[1].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Sur - Linea B',
+      },
+      // Planta HiRock - Línea C
+      {
+        name: 'Robot Industrial RB-01',
+        code: 'EQ-RB-01',
+        linea_id: allLineas[2].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Este - Linea C',
+      },
+      {
+        name: 'Brazo Mecanico BM-01',
+        code: 'EQ-BM-01',
+        linea_id: allLineas[2].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Este - Linea C',
+      },
+      // Planta Ultra - Línea X
+      {
+        name: 'Mezcladora MZ-01',
+        code: 'EQ-MZ-01',
+        linea_id: allLineas[3].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Oeste - Linea X',
+      },
+      {
+        name: 'Horno HR-01',
+        code: 'EQ-HR-01',
+        linea_id: allLineas[3].id,
+        estado: EquipoEstado.EN_REPARACION,
+        ubicacion_actual: 'Zona Oeste - Linea X',
+      },
+      // Planta Ultra - Línea Y
+      {
+        name: 'Empacadora EM-01',
+        code: 'EQ-EM-01',
+        linea_id: allLineas[4].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Centro - Linea Y',
+      },
+      {
+        name: 'Selladora SR-01',
+        code: 'EQ-SR-01',
+        linea_id: allLineas[4].id,
+        estado: EquipoEstado.OPERATIVO,
+        ubicacion_actual: 'Zona Centro - Linea Y',
+      },
+    ],
+  })
+
+  const allEquipos = await prisma.equipo.findMany()
+
+  // Nivel 4: Componentes (algunos componentes para equipos)
+  await prisma.componente.createMany({
+    data: [
+      { name: 'Motor Electrico 5HP', code: 'COMP-ME-5HP' },
+      { name: 'Bomba Hidraulica', code: 'COMP-BH-001' },
+      { name: 'Sensor de Temperatura', code: 'COMP-ST-001' },
+      { name: 'Rodamiento SKF-6002', code: 'COMP-RB-6002' },
+      { name: 'Correa de Transmision', code: 'COMP-CT-001' },
+      { name: 'Panel de Control PLC', code: 'COMP-PC-PLC' },
+      { name: 'Cilindro Neumatico', code: 'COMP-CN-001' },
+      { name: 'Filtro de Aire', code: 'COMP-FA-001' },
+    ],
+  })
+
+  const allComponentes = await prisma.componente.findMany()
+
+  // Relación muchos-a-muchos Equipo-Componente
+  await prisma.equipoComponente.createMany({
+    data: [
+      // Componentes para Prensa Hidraulica
+      { equipo_id: allEquipos[0].id, componente_id: allComponentes[1].id }, // Bomba Hidraulica
+      { equipo_id: allEquipos[0].id, componente_id: allComponentes[5].id }, // Panel de Control
+      // Componentes para Torno CNC
+      { equipo_id: allEquipos[1].id, componente_id: allComponentes[0].id }, // Motor Electrico
+      { equipo_id: allEquipos[1].id, componente_id: allComponentes[3].id }, // Rodamiento
+      // Componentes para Compresor
+      { equipo_id: allEquipos[2].id, componente_id: allComponentes[0].id }, // Motor Electrico
+      { equipo_id: allEquipos[2].id, componente_id: allComponentes[7].id }, // Filtro de Aire
+      // Componentes para Robot
+      { equipo_id: allEquipos[4].id, componente_id: allComponentes[5].id }, // Panel de Control
+      { equipo_id: allEquipos[4].id, componente_id: allComponentes[6].id }, // Cilindro Neumatico
+    ],
+  })
+
+  // Nivel 5: Repuestos (algunos repuestos para componentes)
+  await prisma.repuesto.createMany({
+    data: [
+      {
+        name: 'Motor Electrico 5HP (Repuesto)',
+        code: 'REP-ME-5HP-01',
+        componente_id: allComponentes[0].id,
+        stock: 3,
+        stock_minimo: 1,
+        ubicacion_fisica: 'Almacen A - Estante 1',
+      },
+      {
+        name: 'Bomba Hidraulica (Repuesto)',
+        code: 'REP-BH-001-01',
+        componente_id: allComponentes[1].id,
+        stock: 2,
+        stock_minimo: 1,
+        ubicacion_fisica: 'Almacen A - Estante 2',
+      },
+      {
+        name: 'Rodamiento SKF-6002 (Repuesto)',
+        code: 'REP-RB-6002-01',
+        componente_id: allComponentes[3].id,
+        stock: 10,
+        stock_minimo: 5,
+        ubicacion_fisica: 'Almacen B - Estante 3',
+      },
+      {
+        name: 'Correa de Transmision (Repuesto)',
+        code: 'REP-CT-001-01',
+        componente_id: allComponentes[4].id,
+        stock: 5,
+        stock_minimo: 2,
+        ubicacion_fisica: 'Almacen B - Estante 4',
+      },
+      {
+        name: 'Filtro de Aire (Repuesto)',
+        code: 'REP-FA-001-01',
+        componente_id: allComponentes[7].id,
+        stock: 8,
+        stock_minimo: 3,
+        ubicacion_fisica: 'Almacen A - Estante 5',
+      },
+    ],
+  })
+
+  console.log('✅ Created 5-level hierarchy:')
+  console.log('   - 2 Plantas (HiRock, Ultra)')
+  console.log('   - 5 Lineas distribuidas')
+  console.log('   - 10 Equipos de ejemplo')
+  console.log('   - 8 Componentes')
+  console.log('   - 5 Repuestos')
+
+  // ============================================
+  // 4. CREAR ALGUNOS EJEMPLOS DE OPERACIONES
+  // ============================================
+  console.log('📝 Creating sample operations...')
+
+  // Crear un WorkOrder de ejemplo
+  const workOrder = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-001',
+      tipo: 'CORRECTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Reparacion de Compresor CP-01 - Reemplazar rodamiento',
+      equipo_id: allEquipos[2].id, // Compresor averiado
+    },
+  })
+
+  // Asignar el técnico a la OT
+  await prisma.workOrderAssignment.create({
+    data: {
+      work_order_id: workOrder.id,
+      user_id: tecnico.id,
+      role: 'TECNICO',
+    },
+  })
+
+  // Crear un FailureReport de ejemplo
+  const failureReport = await prisma.failureReport.create({
+    data: {
+      numero: 'RA-2025-001',
+      descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
+      foto_url: null, // TODO: Agregar URL de foto cuando se implemente upload
+      equipo_id: allEquipos[2].id, // Compresor
+      estado: 'EN_PROGRESO',
+      reportado_por: tecnico.id,
+    },
+  })
+
+  // Vincular el FailureReport con la WorkOrder
+  await prisma.workOrder.update({
+    where: { id: workOrder.id },
+    data: { failure_report_id: failureReport.id },
+  })
+
+  console.log('✅ Created sample operations:')
+  console.log('   - 1 WorkOrder (OT-2025-001)')
+  console.log('   - 1 FailureReport (RA-2025-001)')
+  console.log('   - 1 Assignment (Tecnico asignado)')
+
+  // ============================================
+  // RESUMEN FINAL
+  // ============================================
+  console.log('\n🎉 Seed completed successfully!')
+  console.log('\n📊 Summary:')
+  console.log('   - Users: 3 (admin, tecnico, supervisor)')
+  console.log('   - Capabilities: 15')
+  console.log('   - Plantas: 2')
+  console.log('   - Lineas: 5')
+  console.log('   - Equipos: 10')
+  console.log('   - Componentes: 8')
+  console.log('   - Repuestos: 5')
+  console.log('   - WorkOrders: 1')
+  console.log('   - FailureReports: 1')
+  console.log('\n🔐 Default credentials:')
+  console.log('   Admin: admin@hiansa.com / admin123')
+  console.log('   Tecnico: tecnico@hiansa.com / tecnico123')
+  console.log('   Supervisor: supervisor@hiansa.com / supervisor123')
+  console.log('\n✅ Passwords hashed with bcrypt (10 rounds)')
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect()
+  })
+  .catch(async (e) => {
+    console.error('❌ Seed failed:', e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })

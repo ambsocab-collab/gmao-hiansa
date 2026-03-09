@@ -20,7 +20,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ### Core Framework
 - **Next.js 15.0.3** with App Router (NOT Pages Router)
-- **TypeScript 5.3.3** with strict mode enabled
+- **TypeScript 5.6.0** with strict mode enabled
 - **Node.js** (LTS version - check .nvmrc if exists)
 
 ### Database & ORM
