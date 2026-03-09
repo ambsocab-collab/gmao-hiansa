@@ -89,7 +89,12 @@ Vercel hará deploy automático a producción cuando:
 3. Configurar:
    - Production Branch: `main`
    - Automatic Deployments: ✅ Enabled
-   - GitHub Checks: ✅ Enabled (espera a que tests pasen)
+   - GitHub Checks: ⚠️ Optional (requiere GitHub Actions workflow separado)
+
+**Nota sobre GitHub Checks:**
+- Para usar GitHub Checks, necesitas configurar un GitHub Actions workflow que ejecute los tests
+- Esto es opcional y requiere configuración adicional en `.github/workflows/`
+- Si no configuras GitHub Actions, Vercel hará deploy sin esperar checks externos
 
 ## Step 6: Verificar Rollback Capability
 

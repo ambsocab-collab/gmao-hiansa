@@ -8,8 +8,26 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { POST, GET } from '@/app/api/v1/test-data/seed/route'
 import { PrismaClient } from '@prisma/client'
+import { NextRequest } from 'next/server'
 
 const prisma = new PrismaClient()
+
+/**
+ * Helper function to create a mock NextRequest object
+ * Story 0.5: Added correlation ID header support
+ */
+function createMockRequest(): NextRequest {
+  return {
+    headers: {
+      get: (name: string) => {
+        if (name === 'x-correlation-id') {
+          return 'test-correlation-id'
+        }
+        return null
+      }
+    }
+  } as unknown as NextRequest
+}
 
 describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
   beforeAll(async () => {
@@ -88,7 +106,8 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       const originalEnv = process.env.NODE_ENV
       ;(process.env as any).NODE_ENV = 'production'
 
-      const response = await POST()
+      const mockRequest = createMockRequest()
+      const response = await POST(mockRequest)
       const data = await response.json()
 
       expect(response.status).toBe(403)
@@ -106,7 +125,8 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       const originalEnv = process.env.NODE_ENV
       ;(process.env as any).NODE_ENV = 'development'
 
-      const response = await POST()
+      const mockRequest = createMockRequest()
+      const response = await POST(mockRequest)
       const data = await response.json()
 
       // Note: This test may fail if DATABASE_URL is not properly configured
@@ -115,6 +135,8 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
         expect(data).toHaveProperty('success', true)
         expect(data).toHaveProperty('message', 'Database seeded successfully')
         expect(data).toHaveProperty('timestamp')
+        // Story 0.5: Verify correlation ID is included
+        expect(data).toHaveProperty('correlationId')
       } else if (response.status === 500) {
         // Expected in test environment without database
         expect(data).toHaveProperty('error', 'Failed to seed database')
@@ -134,8 +156,9 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
       const originalEnv = process.env.NODE_ENV
       ;(process.env as any).NODE_ENV = 'development'
 
-      // Execute seed
-      const seedResponse = await POST()
+      // Execute seed with mock request
+      const mockRequest = createMockRequest()
+      const seedResponse = await POST(mockRequest)
 
       // Only verify if seed was successful (requires database)
       if (seedResponse.status === 200) {

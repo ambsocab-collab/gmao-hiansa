@@ -4,6 +4,7 @@
  *
  * Logger con structured logging para Vercel
  * Todos los logs se envían a stdout en formato JSON
+ * Story 0.5: Removed 'any' type usage by creating AppErrorLike interface
  */
 
 export enum LogLevel {
@@ -25,6 +26,30 @@ export interface LogContext {
   }
   correlationId: string
   metadata?: Record<string, unknown>
+}
+
+/**
+ * Interface for errors that have AppError-like properties
+ * Used for duck typing to avoid circular dependencies
+ * Exported for consumers who need to check error types
+ */
+export interface AppErrorLike extends Error {
+  code: string
+  statusCode: number
+  correlationId: string
+}
+
+/**
+ * Type guard to check if error has AppError properties
+ * Story 0.5: Improved type safety by replacing 'any' with proper type guard
+ */
+function isAppErrorLike(error: Error): error is AppErrorLike {
+  return (
+    'code' in error &&
+    'statusCode' in error &&
+    'correlationId' in error &&
+    typeof error.code === 'string'
+  )
 }
 
 /**
@@ -74,20 +99,15 @@ export class Logger {
   }
 
   error(error: Error, action: string, correlationId: string, userId?: string) {
-    // Check if error has AppError properties using duck typing
-    // This avoids circular dependency issues
-    const isAppError =
-      'code' in error &&
-      'statusCode' in error &&
-      'correlationId' in error &&
-      typeof error.code === 'string'
+    // Story 0.5: Use type guard instead of 'any' type
+    const errorCode = isAppErrorLike(error) ? error.code : 'UNKNOWN_ERROR'
 
     this.log(LogLevel.ERROR, {
       userId,
       action,
       correlationId,
       error: {
-        code: isAppError ? (error as any).code : 'UNKNOWN_ERROR',
+        code: errorCode,
         message: error.message,
         stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       }

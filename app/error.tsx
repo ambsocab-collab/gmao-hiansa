@@ -6,9 +6,11 @@
  *
  * Error boundary para Next.js App Router
  * Captura errores globales y muestra UI amigable
+ * Story 0.5: Updated to use structured logger via client-side logging utility
  */
 
 import { useEffect } from 'react'
+import { logErrorBoundary } from '@/lib/observability/client-logger'
 
 export default function Error({
   error,
@@ -18,12 +20,8 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log error al servidor
-    console.error('Error boundary caught error:', {
-      message: error.message,
-      digest: error.digest,
-      stack: error.stack
-    })
+    // Story 0.5: Log error al servidor usando structured logger
+    logErrorBoundary(error)
   }, [error])
 
   return (

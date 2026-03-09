@@ -1,6 +1,8 @@
 /**
  * Unit tests for custom error classes
  * Story 0.5: Error Handling, Observability y CI/CD
+ *
+ * Story 0.5: Added tests for AuthenticationError
  */
 
 import { describe, it, expect } from 'vitest'
@@ -9,7 +11,8 @@ import {
   ValidationError,
   AuthorizationError,
   InsufficientStockError,
-  InternalError
+  InternalError,
+  AuthenticationError
 } from '@/lib/utils/errors'
 
 describe('Custom Error Classes', () => {
@@ -210,6 +213,58 @@ describe('Custom Error Classes', () => {
         error: 'connection_timeout'
       })
       expect(error.correlationId).toBe(correlationId)
+    })
+  })
+
+  // Story 0.5: Added tests for AuthenticationError
+  describe('AuthenticationError', () => {
+    it('should extend AppError correctly', () => {
+      const error = new AuthenticationError()
+
+      expect(error).toBeInstanceOf(AppError)
+      expect(error).toBeInstanceOf(AuthenticationError)
+      expect(error.statusCode).toBe(401)
+      expect(error.code).toBe('AUTHENTICATION_ERROR')
+    })
+
+    it('should have default message in Spanish', () => {
+      const error = new AuthenticationError()
+
+      expect(error.message).toBe('Credenciales inválidas')
+    })
+
+    it('should accept custom message', () => {
+      const error = new AuthenticationError('Usuario o contraseña incorrectos')
+
+      expect(error.message).toBe('Usuario o contraseña incorrectos')
+    })
+
+    it('should accept details and correlation ID', () => {
+      const correlationId = 'test-auth-error-123'
+      const error = new AuthenticationError(
+        'Login failed',
+        { email: 'test@example.com' },
+        correlationId
+      )
+
+      expect(error.details).toEqual({ email: 'test@example.com' })
+      expect(error.correlationId).toBe(correlationId)
+    })
+
+    it('should convert to JSON correctly', () => {
+      const error = new AuthenticationError('Invalid credentials')
+
+      const json = error.toJSON()
+
+      expect(json).toEqual({
+        name: 'AuthenticationError',
+        code: 'AUTHENTICATION_ERROR',
+        message: 'Invalid credentials',
+        statusCode: 401,
+        details: undefined,
+        timestamp: error.timestamp.toISOString(),
+        correlationId: error.correlationId
+      })
     })
   })
 })

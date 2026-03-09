@@ -1,12 +1,14 @@
 /**
  * Tests para Middleware de Autorización PBAC
  * Story 0.3: NextAuth.js con Credentials Provider
+ * Story 0.5: Error Handling, Observability y CI/CD (Correlation ID tests)
  *
  * Tests para validar:
  * - Verificación de autenticación
  * - Verificación de capabilities por ruta
  * - Redirección a /unauthorized sin capability
  * - Log de auditoría de accesos denegados
+ * - Story 0.5: Correlation ID generation and propagation
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -127,10 +129,14 @@ describe('PBAC Middleware', () => {
       logAccessDenied('user-123', '/dashboard', ['can_view_kpis'])
 
       expect(mockLogs.length).toBe(1)
-      expect(mockLogs[0]).toContain('[AUDIT] Access Denied:')
-      expect(mockLogs[0]).toContain('user-123')
-      expect(mockLogs[0]).toContain('/dashboard')
-      expect(mockLogs[0]).toContain('can_view_kpis')
+      // Story 0.5: Updated to use structured format matching logger
+      const logEntry = JSON.parse(mockLogs[0])
+      expect(logEntry.level).toBe('warn')
+      expect(logEntry.userId).toBe('user-123')
+      expect(logEntry.action).toBe('ACCESS_DENIED')
+      expect(logEntry.metadata.path).toBe('/dashboard')
+      expect(logEntry.metadata.requiredCapabilities).toEqual(['can_view_kpis'])
+      expect(logEntry.metadata.reason).toBe('Insufficient capabilities')
     })
 
     it('should handle undefined userId', async () => {
@@ -139,7 +145,75 @@ describe('PBAC Middleware', () => {
       logAccessDenied(undefined, '/users', ['can_manage_users'])
 
       expect(mockLogs.length).toBe(1)
-      expect(mockLogs[0]).toContain('unknown')
+      const logEntry = JSON.parse(mockLogs[0])
+      expect(logEntry.userId).toBe('unknown')
+    })
+
+    // Story 0.5: Correlation ID tests
+    it('should include correlation ID in access denied logs', async () => {
+      const { logAccessDenied } = await import('@/middleware')
+
+      const correlationId = 'test-correlation-123'
+      logAccessDenied('user-123', '/dashboard', ['can_view_kpis'], correlationId)
+
+      expect(mockLogs.length).toBe(1)
+      const logEntry = JSON.parse(mockLogs[0])
+      expect(logEntry.correlationId).toBe(correlationId)
+    })
+
+    it('should use N/A when correlation ID is not provided', async () => {
+      const { logAccessDenied } = await import('@/middleware')
+
+      logAccessDenied('user-123', '/dashboard', ['can_view_kpis'])
+
+      expect(mockLogs.length).toBe(1)
+      const logEntry = JSON.parse(mockLogs[0])
+      expect(logEntry.correlationId).toBe('N/A')
+    })
+  })
+
+  // Story 0.5: Correlation ID generation tests
+  describe('getOrCreateCorrelationId function', () => {
+    it('should return existing correlation ID from headers', async () => {
+      const { getOrCreateCorrelationId, CORRELATION_ID_HEADER } = await import('@/middleware')
+
+      const existingId = 'existing-correlation-123'
+      const headers = new Headers()
+      headers.set(CORRELATION_ID_HEADER, existingId)
+
+      const result = getOrCreateCorrelationId(headers)
+
+      expect(result).toBe(existingId)
+    })
+
+    it('should generate new correlation ID when not in headers', async () => {
+      const { getOrCreateCorrelationId } = await import('@/middleware')
+
+      const headers = new Headers()
+      const result = getOrCreateCorrelationId(headers)
+
+      expect(result).toBeDefined()
+      expect(result).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+    })
+
+    it('should generate unique correlation IDs', async () => {
+      const { getOrCreateCorrelationId } = await import('@/middleware')
+
+      const headers1 = new Headers()
+      const headers2 = new Headers()
+
+      const id1 = getOrCreateCorrelationId(headers1)
+      const id2 = getOrCreateCorrelationId(headers2)
+
+      expect(id1).not.toBe(id2)
+    })
+  })
+
+  describe('CORRELATION_ID_HEADER constant', () => {
+    it('should export correlation ID header name', async () => {
+      const { CORRELATION_ID_HEADER } = await import('@/middleware')
+
+      expect(CORRELATION_ID_HEADER).toBe('x-correlation-id')
     })
   })
 

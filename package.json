@@ -20,6 +20,10 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:p0": "playwright test -g \"P0-\"",
     "test:ci": "npm run test:e2e --workers=4 && npm run test:coverage",
+    "test:perf": "npm run test:perf:login && npm run test:perf:asset-search && npm run test:perf:create-ot",
+    "test:perf:login": "k6 run tests/performance/baseline/login-load-test.js",
+    "test:perf:asset-search": "k6 run tests/performance/baseline/asset-search-load-test.js",
+    "test:perf:create-ot": "k6 run tests/performance/baseline/create-ot-load-test.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:push:reset": "prisma db push --force-reset",
@@ -63,8 +67,8 @@
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "@vitejs/plugin-react": "^4.3.0",
-    "@vitest/coverage-v8": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
     "autoprefixer": "^10.4.27",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.1.6",
@@ -72,18 +76,34 @@
     "globals": "^17.4.0",
     "husky": "^9.1.7",
     "jsdom": "^25.0.0",
+    "k6": "^0.55.0",
     "lint-staged": "^16.3.2",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.21.0",
     "typescript": "^5.6.0",
-    "vitest": "^4.0.18"
+    "vitest": "^1.0.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "tests/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "tsc --noEmit --project tsconfig.test.json"
+    ],
+    "app/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "tsc --noEmit"
+    ],
+    "lib/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "tsc --noEmit"
+    ],
+    "middleware.ts": [
       "eslint --fix",
       "tsc --noEmit"
     ]

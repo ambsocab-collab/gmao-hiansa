@@ -1,8 +1,10 @@
 /**
  * PBAC Authorization Middleware
  * Story 0.3: NextAuth.js con Credentials Provider
+ * Story 0.5: Error Handling, Observability y CI/CD (Correlation ID generation)
  *
  * Implements:
+ * - Correlation ID generation for all requests (Story 0.5)
  * - Authentication verification with NextAuth
  * - Capability-Based Access Control (PBAC) authorization
  * - Redirect to /unauthorized if missing capability
@@ -29,6 +31,28 @@
 
 import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
+
+/**
+ * Correlation ID header name
+ * Exported for testing
+ */
+export const CORRELATION_ID_HEADER = 'x-correlation-id'
+
+/**
+ * Generates or retrieves correlation ID for request
+ * Exported for testing
+ * @param request - NextRequest object
+ * @returns correlation ID string
+ */
+export function getOrCreateCorrelationId(request: Headers): string {
+  const existingId = request.get(CORRELATION_ID_HEADER)
+  if (existingId) {
+    return existingId
+  }
+
+  // Generate new correlation ID
+  return crypto.randomUUID()
+}
 
 /**
  * Route to required capabilities mapping
@@ -79,39 +103,55 @@ export function hasAllCapabilities(
 
 /**
  * Log denied access for audit purposes (NFR-S5)
+ * Story 0.5: Added correlation ID parameter for tracking
  * Exported for testing
  * @param userId - User ID
  * @param path - Requested path
  * @param requiredCapabilities - Required capabilities
+ * @param correlationId - Request correlation ID
  */
 export function logAccessDenied(
   userId: string | undefined,
   path: string,
-  requiredCapabilities: string[]
+  requiredCapabilities: string[],
+  correlationId?: string
 ): void {
   const logEntry = {
     timestamp: new Date().toISOString(),
-    event: 'ACCESS_DENIED',
+    level: 'warn',
     userId: userId || 'unknown',
-    path,
-    requiredCapabilities,
-    reason: 'Insufficient capabilities'
+    action: 'ACCESS_DENIED',
+    correlationId: correlationId || 'N/A',
+    metadata: {
+      path,
+      requiredCapabilities,
+      reason: 'Insufficient capabilities'
+    }
   }
 
-  // In production, this should go to a centralized logging system
-  // For now, using console.error with structured format
-  console.error('[AUDIT] Access Denied:', JSON.stringify(logEntry))
+  // Middleware runs on edge runtime, so we use console.error
+  // Format matches structured logger format used throughout the app
+  console.error(JSON.stringify(logEntry))
 }
 
 /**
  * Main middleware function
  * Uses NextAuth withAuth to verify authentication
  * Then checks route-specific capabilities and forcePasswordReset
+ *
+ * Story 0.5: Adds correlation ID generation and propagation
  */
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
+
+    // Story 0.5: Generate or retrieve correlation ID
+    const correlationId = getOrCreateCorrelationId(req.headers)
+
+    // Create request headers with correlation ID
+    const requestHeaders = new Headers(req.headers)
+    requestHeaders.set(CORRELATION_ID_HEADER, correlationId)
 
     // Check if user has temporary password that must be changed
     // If forcePasswordReset=true, force redirect to /change-password
@@ -120,7 +160,9 @@ export default withAuth(
         path !== '/change-password' &&
         path !== '/unauthorized' &&
         !path.startsWith('/api/auth')) {
-      return NextResponse.redirect(new URL('/change-password', req.url))
+      const response = NextResponse.redirect(new URL('/change-password', req.url))
+      response.headers.set(CORRELATION_ID_HEADER, correlationId)
+      return response
     }
 
     // Find routes matching current path
@@ -130,7 +172,13 @@ export default withAuth(
 
     // If no capability requirements for this route, allow
     if (!matchingRoute) {
-      return NextResponse.next()
+      const response = NextResponse.next({
+        request: {
+          headers: requestHeaders
+        }
+      })
+      response.headers.set(CORRELATION_ID_HEADER, correlationId)
+      return response
     }
 
     const requiredCapabilities = ROUTE_CAPABILITIES[matchingRoute]
@@ -138,15 +186,23 @@ export default withAuth(
 
     // Check if user has required capabilities
     if (!hasAllCapabilities(userCapabilities, requiredCapabilities)) {
-      // Audit log
-      logAccessDenied(token?.id as string, path, requiredCapabilities)
+      // Audit log with correlation ID
+      logAccessDenied(token?.id as string, path, requiredCapabilities, correlationId)
 
-      // Redirect to /unauthorized
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
+      // Redirect to /unauthorized with correlation ID
+      const response = NextResponse.redirect(new URL('/unauthorized', req.url))
+      response.headers.set(CORRELATION_ID_HEADER, correlationId)
+      return response
     }
 
-    // Allow access
-    return NextResponse.next()
+    // Allow access with correlation ID
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders
+      }
+    })
+    response.headers.set(CORRELATION_ID_HEADER, correlationId)
+    return response
   },
   {
     callbacks: {
