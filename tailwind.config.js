@@ -16,6 +16,22 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+      },
+      spacing: {
+        // 8px grid system (Tailwind default)
+        // Base spacing: 0.25rem = 4px, 0.5rem = 8px, 1rem = 16px, etc.
+        // Custom scale for design system:
+        'xs': '0.75rem',   // 12px
+        'sm': '0.875rem',  // 14px
+        'base': '1rem',    // 16px
+        'lg': '1.125rem',  // 18px
+        'xl': '1.25rem',   // 20px
+        '2xl': '1.5rem',   // 24px
+        '3xl': '1.875rem', // 30px
+        '4xl': '2.25rem',  // 36px
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -51,6 +67,24 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         // Design System Colors
+        // GMAO HiRock/Ultra Brand Colors
+        gmao: {
+          'burdeos': '#7D1220',  // Rojo Burdeos - Primary brand color
+          'hirock': '#FFD700',    // HiRock Gold
+          'ultra': '#8FBC8F',     // Ultra Green
+        },
+        // Work Order Status Colors (8 estados OT)
+        ot: {
+          'pendiente': '#6C757D',      // Gray
+          'asignada': '#007BFF',        // Blue
+          'en-progreso': '#FFD700',     // Yellow (HiRock)
+          'pendiente-repuesto': '#FD7E14', // Orange
+          'pendiente-parada': '#DC3545',   // Red
+          'reparacion-externa': '#6F42C1', // Purple
+          'completada': '#28A745',       // Green (Ultra)
+          'descartada': '#000000',       // Black
+        },
+        // Semantic colors (kept for compatibility)
         main: {
           blue: '#0066CC',
           DEFAULT: '#0066CC',
