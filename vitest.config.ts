@@ -20,11 +20,31 @@ export default defineConfig({
   // Plugins
   plugins: [react()],
 
-  // Test directories
-  include: ['tests/unit/**/*.{test,spec}.{ts,tsx}', 'tests/integration/**/*.{test,spec}.{ts,tsx}'],
+  // Test directories - only unit and integration tests
+  // e2e tests are run by Playwright, NOT Vitest
+  include: [
+    'tests/unit/**/*.{test,spec}.{ts,tsx}',
+    'tests/integration/**/*.{test,spec}.{ts,tsx}'
+  ],
+
+  // Exclude patterns - ensure e2e tests are NOT run by Vitest
+  exclude: [
+    'node_modules/**',
+    'dist/**',
+    '.next/**',
+    'out/**',
+    'tests/e2e/**',           // Exclude all e2e tests
+    '**/tests/e2e/**',       // Exclude e2e tests anywhere
+    '**/*.e2e.{test,spec}.{ts,tsx}',  // Exclude files with .e2e suffix
+  ],
 
   // TypeScript configuration
-  testMatch: ['**/__tests__/**/*.{test,spec}.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],
+  testMatch: [
+    'tests/unit/**/*.test.{ts,tsx}',
+    'tests/unit/**/*.spec.{ts,tsx}',
+    'tests/integration/**/*.test.{ts,tsx}',
+    'tests/integration/**/*.spec.{ts,tsx}'
+  ],
 
   // Environment
   environment: 'jsdom',
