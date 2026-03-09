@@ -1,21 +1,25 @@
 import * as bcrypt from 'bcryptjs'
 
+/**
+ * bcrypt salt rounds for password hashing
+ * Cost factor 10 provides good security/performance balance
+ */
 const SALT_ROUNDS = 10
 
 /**
- * Hashea una contraseña usando bcryptjs
- * @param password - Contraseña en texto plano
- * @returns Contraseña hasheada
+ * Hashes a password using bcryptjs
+ * @param password - Plain text password
+ * @returns Hashed password
  */
 export async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, SALT_ROUNDS)
 }
 
 /**
- * Verifica una contraseña contra un hash
- * @param password - Contraseña en texto plano
- * @param hashedPassword - Contraseña hasheada
- * @returns true si la contraseña es correcta
+ * Verifies a password against a hash
+ * @param password - Plain text password
+ * @param hashedPassword - Hashed password
+ * @returns true if password is correct
  */
 export async function verifyPassword(
   password: string,
@@ -25,24 +29,14 @@ export async function verifyPassword(
 }
 
 /**
- * Obtiene la sesión actual desde el server
+ * Gets current session from server
+ * Story 0.3: NextAuth.js con Credentials Provider
  *
- * ⚠️ TEMPORAL - Función Placeholder
- *
- * Esta función se implementará completamente en Story 1.4.
- * Actualmente retorna null porque NextAuth no está configurado.
- *
- * Story 1.4 implementará:
- * - ✅ Obtener sesión usando auth() de next-auth
- * - ✅ Extraer user ID, email, name, capabilities
- * - ✅ Retornar objeto de sesión type-safe
- *
- * @deprecated Usar hasta Story 1.4, luego reemplazar por implementación real
- * @returns null temporalmente (sesión no disponible hasta Story 1.4)
+ * Gets session using NextAuth auth()
+ * @returns Current session or null if no session
  */
+import { auth } from '@/lib/auth-adapter'
+
 export async function getSession() {
-  // Helper para obtener sesión en server components
-  // Se implementará completamente en Story 1.4
-  // TODO: Importar auth() de next-auth y retornar sesión real
-  return null
+  return await auth()
 }
