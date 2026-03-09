@@ -1,229 +1,86 @@
-<testsuites id="" name="" tests="5" failures="5" skipped="0" errors="0" time="30.237029999999997">
-<testsuite name="example-login.spec.ts" timestamp="2026-03-08T22:21:22.544Z" hostname="chromium" tests="5" failures="5" skipped="0" time="14.848" errors="0">
-<testcase name="Autenticación › P0-001: Usuario inicia sesión correctamente" classname="example-login.spec.ts" time="2.931">
-<failure message="example-login.spec.ts:22:7 P0-001: Usuario inicia sesión correctamente" type="FAILURE">
-<![CDATA[  [chromium] › example-login.spec.ts:22:7 › Autenticación › P0-001: Usuario inicia sesión correctamente 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
-
-
-      17 |   test.beforeEach(async ({ page }) => {
-      18 |     // Navigate to login page
-    > 19 |     await page.goto('/login');
-         |                ^
-      20 |   });
-      21 |
-      22 |   test('P0-001: Usuario inicia sesión correctamente', async ({ page }) => {
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:19:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\example-login-Autenticació-9e592-inicia-sesión-correctamente-chromium\trace.zip]]
-]]>
-</system-out>
+<testsuites id="" name="" tests="40" failures="0" skipped="0" errors="0" time="3.4630729999999996">
+<testsuite name="story-0.1-nextjs-setup.spec.ts" timestamp="2026-03-09T22:53:20.481Z" hostname="chromium" tests="24" failures="0" skipped="0" time="0.304" errors="0">
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json" classname="story-0.1-nextjs-setup.spec.ts" time="0.026">
 </testcase>
-<testcase name="Autenticación › P0-002: Usuario con credenciales inválidas recibe error" classname="example-login.spec.ts" time="3.032">
-<failure message="example-login.spec.ts:40:7 P0-002: Usuario con credenciales inválidas recibe error" type="FAILURE">
-<![CDATA[  [chromium] › example-login.spec.ts:40:7 › Autenticación › P0-002: Usuario con credenciales inválidas recibe error 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
-
-
-      17 |   test.beforeEach(async ({ page }) => {
-      18 |     // Navigate to login page
-    > 19 |     await page.goto('/login');
-         |                ^
-      20 |   });
-      21 |
-      22 |   test('P0-001: Usuario inicia sesión correctamente', async ({ page }) => {
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:19:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\example-login-Autenticació-40272-ales-inválidas-recibe-error-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-002: should have TypeScript 5.x in devDependencies" classname="story-0.1-nextjs-setup.spec.ts" time="0.01">
 </testcase>
-<testcase name="Gestión de Averías › P0-003: Operario reporta avería con búsqueda predictiva" classname="example-login.spec.ts" time="3.041">
-<failure message="example-login.spec.ts:68:7 P0-003: Operario reporta avería con búsqueda predictiva" type="FAILURE">
-<![CDATA[  [chromium] › example-login.spec.ts:68:7 › Gestión de Averías › P0-003: Operario reporta avería con búsqueda predictiva 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
-
-
-      59 |     });
-      60 |
-    > 61 |     await page.goto('/login');
-         |                ^
-      62 |     await page.fill(getByTestId('email-input'), testUser.email);
-      63 |     await page.fill(getByTestId('password-input'), 'password123');
-      64 |     await page.click(getByTestId('login-button'));
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:61:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\example-login-Gestión-de-A-64a19-ría-con-búsqueda-predictiva-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-003: should have required directory structure" classname="story-0.1-nextjs-setup.spec.ts" time="0.004">
 </testcase>
-<testcase name="Kanban de Órdenes de Trabajo › P0-004: Supervisor ve OTs en Kanban" classname="example-login.spec.ts" time="2.91">
-<failure message="example-login.spec.ts:118:7 P0-004: Supervisor ve OTs en Kanban" type="FAILURE">
-<![CDATA[  [chromium] › example-login.spec.ts:118:7 › Kanban de Órdenes de Trabajo › P0-004: Supervisor ve OTs en Kanban 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
-
-
-      109 |     });
-      110 |
-    > 111 |     await page.goto('/login');
-          |                ^
-      112 |     await page.fill(getByTestId('email-input'), testUser.email);
-      113 |     await page.fill(getByTestId('password-input'), 'password123');
-      114 |     await page.click(getByTestId('login-button'));
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:111:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-62b41-Supervisor-ve-OTs-en-Kanban-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-001: should have Prisma 5.22.0 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.01">
 </testcase>
-<testcase name="Kanban de Órdenes de Trabajo › P0-005: Supervisor asigna técnico a OT" classname="example-login.spec.ts" time="2.934">
-<failure message="example-login.spec.ts:134:7 P0-005: Supervisor asigna técnico a OT" type="FAILURE">
-<![CDATA[  [chromium] › example-login.spec.ts:134:7 › Kanban de Órdenes de Trabajo › P0-005: Supervisor asigna técnico a OT 
-
-    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
-
-
-      109 |     });
-      110 |
-    > 111 |     await page.goto('/login');
-          |                ^
-      112 |     await page.fill(getByTestId('email-input'), testUser.email);
-      113 |     await page.fill(getByTestId('password-input'), 'password123');
-      114 |     await page.click(getByTestId('login-button'));
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\example-login.spec.ts:111:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\example-login-Kanban-de-Ór-5737f-ervisor-asigna-técnico-a-OT-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-002: should have NextAuth 4.24.7 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.006">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-003: should have Zod 3.23.8 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.007">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-004: should have React Hook Form 7.51.5 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.012">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-005: should have TanStack Query 5.x installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.006">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-006: should have Lucide React 0.344.0 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.005">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-007: should have bcryptjs 2.4.3 installed" classname="story-0.1-nextjs-setup.spec.ts" time="0.008">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-001: should have tailwind.config.js file" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-002: should have custom brand colors in tailwind.config.js" classname="story-0.1-nextjs-setup.spec.ts" time="0.111">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-003: should have Inter font scale configured in tailwind.config.js" classname="story-0.1-nextjs-setup.spec.ts" time="0.043">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-004: should have spacing system based on 8px grid" classname="story-0.1-nextjs-setup.spec.ts" time="0.026">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-001: should have shadcn/ui Button component" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-002: should have shadcn/ui Card component" classname="story-0.1-nextjs-setup.spec.ts" time="0.003">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-003: should have shadcn/ui Dialog component" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-004: should have shadcn/ui Form component" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-005: should have shadcn/ui Table component" classname="story-0.1-nextjs-setup.spec.ts" time="0.003">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-006: should have shadcn/ui Toast component" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-007: should have @/components/ui path alias configured" classname="story-0.1-nextjs-setup.spec.ts" time="0.006">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-001: should have PostCSS configuration" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-002: should have Prisma schema file" classname="story-0.1-nextjs-setup.spec.ts" time="0.002">
+</testcase>
+<testcase name="@p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-003: should have TypeScript configuration for testing" classname="story-0.1-nextjs-setup.spec.ts" time="0.004">
+</testcase>
+</testsuite>
+<testsuite name="story-0.5-cicd-config.spec.ts" timestamp="2026-03-09T22:53:20.481Z" hostname="chromium" tests="16" failures="0" skipped="0" time="0.154" errors="0">
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-001: should have GitHub Actions workflow file" classname="story-0.5-cicd-config.spec.ts" time="0.008">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-002: should have workflow configured for pull requests" classname="story-0.5-cicd-config.spec.ts" time="0.032">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-003: should have workflow configured for main branch pushes" classname="story-0.5-cicd-config.spec.ts" time="0.013">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-004: should have test job in workflow" classname="story-0.5-cicd-config.spec.ts" time="0.014">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-005: should have Vercel project configuration" classname="story-0.5-cicd-config.spec.ts" time="0.003">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-006: should have preview deployment configured" classname="story-0.5-cicd-config.spec.ts" time="0.007">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-007: should have production deployment environment configured" classname="story-0.5-cicd-config.spec.ts" time="0.004">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-008: should have install and build steps in workflow" classname="story-0.5-cicd-config.spec.ts" time="0.009">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-001: should have .env.example file" classname="story-0.5-cicd-config.spec.ts" time="0.003">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-002: should have DATABASE_URL documented in .env.example" classname="story-0.5-cicd-config.spec.ts" time="0.007">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-003: should have NEXTAUTH_SECRET documented in .env.example" classname="story-0.5-cicd-config.spec.ts" time="0.007">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-004: should have NEXTAUTH_URL documented in .env.example" classname="story-0.5-cicd-config.spec.ts" time="0.006">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-005: should have SSE configuration documented in .env.example" classname="story-0.5-cicd-config.spec.ts" time="0.013">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-006: should have all required environment variables documented" classname="story-0.5-cicd-config.spec.ts" time="0.012">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-007: should have environment variable validation at startup" classname="story-0.5-cicd-config.spec.ts" time="0.007">
+</testcase>
+<testcase name="@p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-008: should have documentation for environment-specific variables" classname="story-0.5-cicd-config.spec.ts" time="0.009">
 </testcase>
 </testsuite>
 </testsuites>

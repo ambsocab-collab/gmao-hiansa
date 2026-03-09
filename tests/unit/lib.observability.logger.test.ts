@@ -30,7 +30,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Logger.formatLog()', () => {
-    it('should format log context as JSON', () => {
+    it('[P2] 0.5-UNIT-001: should format log context as JSON', () => {
       const logger = new Logger()
       const context = {
         timestamp: '2024-03-09T12:00:00.000Z',
@@ -51,7 +51,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Logger.debug()', () => {
-    it('should log debug messages with correlation ID', () => {
+    it('[P2] 0.5-UNIT-002: should log debug messages with correlation ID', () => {
       const correlationId = 'test-debug-123'
       logger.debug('Test debug action', correlationId, { debugData: 'test' })
 
@@ -67,7 +67,7 @@ describe('Logger - Structured Logging', () => {
       expect(logged.timestamp).toBeDefined()
     })
 
-    it('should log debug messages without metadata', () => {
+    it('[P3] 0.5-UNIT-003: should log debug messages without metadata', () => {
       const correlationId = 'test-debug-456'
       logger.debug('Test debug action', correlationId)
 
@@ -80,7 +80,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Logger.info()', () => {
-    it('should log info messages with userId and correlation ID', () => {
+    it('[P1] 0.5-UNIT-004: should log info messages with userId and correlation ID', () => {
       const userId = 'user-info-123'
       const correlationId = 'test-info-123'
       logger.info(userId, 'Test info action', correlationId, { infoData: 'test' })
@@ -97,7 +97,7 @@ describe('Logger - Structured Logging', () => {
       expect(logged.metadata).toEqual({ infoData: 'test' })
     })
 
-    it('should log info messages with undefined userId', () => {
+    it('[P2] 0.5-UNIT-005: should log info messages with undefined userId', () => {
       const correlationId = 'test-info-456'
       logger.info(undefined, 'Test info action', correlationId)
 
@@ -110,7 +110,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Logger.warn()', () => {
-    it('should log warning messages with userId and correlation ID', () => {
+    it('[P1] 0.5-UNIT-006: should log warning messages with userId and correlation ID', () => {
       const userId = 'user-warn-123'
       const correlationId = 'test-warn-123'
       logger.warn(userId, 'Test warning action', correlationId, { warnData: 'test' })
@@ -129,7 +129,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Logger.error()', () => {
-    it('should log error with AppError details and stack in development', async () => {
+    it('[P0] 0.5-UNIT-007: should log error with AppError details and stack in development', async () => {
       const error = new AppError('Test error', 400, 'TEST_ERROR', { detail: 'test' })
       const correlationId = 'test-error-123'
 
@@ -162,7 +162,7 @@ describe('Logger - Structured Logging', () => {
       }
     })
 
-    it('should log error without stack trace in production', async () => {
+    it('[P0] 0.5-UNIT-008: should log error without stack trace in production', async () => {
       const error = new AppError('Test error', 400, 'TEST_ERROR')
       const correlationId = 'test-error-456'
 
@@ -189,7 +189,7 @@ describe('Logger - Structured Logging', () => {
       }
     })
 
-    it('should log generic error with UNKNOWN_ERROR code', () => {
+    it('[P1] 0.5-UNIT-009: should log generic error with UNKNOWN_ERROR code', () => {
       const error = new Error('Generic error')
       const correlationId = 'test-error-789'
 
@@ -216,7 +216,7 @@ describe('Logger - Structured Logging', () => {
       }
     })
 
-    it('should handle error without userId', async () => {
+    it('[P2] 0.5-UNIT-010: should handle error without userId', async () => {
       const error = new AppError('Test error', 500, 'INTERNAL_ERROR')
       const correlationId = 'test-error-000'
 
@@ -231,7 +231,7 @@ describe('Logger - Structured Logging', () => {
   })
 
   describe('Log structure', () => {
-    it('should include ISO timestamp in all logs', () => {
+    it('[P1] 0.5-UNIT-011: should include ISO timestamp in all logs', () => {
       const correlationId = 'test-timestamp-123'
       logger.debug('Test timestamp', correlationId)
 
@@ -241,7 +241,7 @@ describe('Logger - Structured Logging', () => {
       expect(logged.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
     })
 
-    it('should include all required fields in info logs', () => {
+    it('[P1] 0.5-UNIT-012: should include all required fields in info logs', () => {
       const correlationId = 'test-fields-123'
       logger.info('user-123', 'Test fields', correlationId, { extra: 'data' })
 

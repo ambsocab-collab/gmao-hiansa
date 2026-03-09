@@ -1,0 +1,68 @@
+{
+  "dimension": "performance",
+  "score": 85,
+  "max_score": 100,
+  "grade": "B",
+  "violations": [
+    {
+      "file": "tests/unit/lib.factories.test.ts",
+      "line": 315,
+      "severity": "MEDIUM",
+      "category": "slow-cleanup",
+      "description": "Test timeout increased to 15s for database cleanup",
+      "suggestion": "Optimize cleanup queries or use transaction rollback",
+      "code_snippet": "}, 15000) // Increase timeout to 15s for database cleanup"
+    },
+    {
+      "file": "tests/unit/lib.factories.test.ts",
+      "line": 26,
+      "severity": "MEDIUM",
+      "category": "inefficient-cleanup",
+      "description": "cleanupTestData() runs before EACH test - deletes all records",
+      "suggestion": "Use transaction rollback or test-scoped cleanup instead",
+      "code_snippet": "beforeEach(async () => { await cleanupTestData() })"
+    },
+    {
+      "file": "tests/unit/client-logger.test.ts",
+      "line": 148,
+      "severity": "LOW",
+      "category": "hard-wait",
+      "description": "Tests use setTimeout(10ms) - unnecessary delay",
+      "suggestion": "Use vi.useFakeTimers() to eliminate wait time",
+      "code_snippet": "await new Promise((resolve) => setTimeout(resolve, 10))"
+    },
+    {
+      "file": "tests/unit/lib.sse.client.test.ts",
+      "line": 107,
+      "severity": "LOW",
+      "category": "hard-wait",
+      "description": "Tests use setTimeout(150ms) - adds delay to test execution",
+      "suggestion": "Use vi.advanceTimersByTime(150) with fake timers",
+      "code_snippet": "await new Promise((resolve) => setTimeout(resolve, 150))"
+    }
+  ],
+  "passed_checks": 16,
+  "failed_checks": 4,
+  "total_checks": 20,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 2,
+    "LOW": 2
+  },
+  "performance_metrics": {
+    "parallelizable_tests": 95,
+    "serial_tests": 5,
+    "avg_test_duration_estimate": "~100ms",
+    "slow_tests": [
+      "lib.factories.test.ts (>15s due to cleanup)",
+      "client-logger.test.ts (setTimeout delays)"
+    ]
+  },
+  "recommendations": [
+    "Use transaction rollback instead of DELETE for faster cleanup",
+    "Use vi.useFakeTimers() to eliminate setTimeout delays",
+    "Remove beforeEach cleanupTestData() - use test-scoped data instead",
+    "All tests are parallelizable - consider test.describe.configure({ mode: 'parallel' })"
+  ],
+  "summary": "Good performance with 4 violations (0 HIGH). Main issue is slow database cleanup (15s). 95% of tests can run in parallel."
+}

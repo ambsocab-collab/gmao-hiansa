@@ -10,7 +10,7 @@ import { POST, GET } from '@/app/api/auth/[...nextauth]/route'
 
 describe('NextAuth Configuration', () => {
   describe('Route Handlers', () => {
-    it('should export GET and POST handlers', () => {
+    it('[P0] 0.3-UNIT-001: should export GET and POST handlers', () => {
       // Verificar que los route handlers existen
       expect(GET).toBeDefined()
       expect(POST).toBeDefined()
@@ -20,7 +20,7 @@ describe('NextAuth Configuration', () => {
   })
 
   describe('Auth Options', () => {
-    it('should have Credentials provider configured', async () => {
+    it('[P0] 0.3-UNIT-002: should have Credentials provider configured', async () => {
       // Este test validará que el Credentials provider está configurado
       // La implementación hará pasar este test
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
@@ -36,7 +36,7 @@ describe('NextAuth Configuration', () => {
       expect(credentialsProvider.name).toBe('Credentials')
     })
 
-    it('should have JWT session strategy with 8 hour maxAge', async () => {
+    it('[P0] 0.3-UNIT-003: should have JWT session strategy with 8 hour maxAge', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.session).toBeDefined()
@@ -44,7 +44,7 @@ describe('NextAuth Configuration', () => {
       expect(authOptions.session.maxAge).toBe(8 * 60 * 60) // 8 horas en segundos
     })
 
-    it('should have jwt callback configured', async () => {
+    it('[P0] 0.3-UNIT-004: should have jwt callback configured', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks).toBeDefined()
@@ -52,21 +52,21 @@ describe('NextAuth Configuration', () => {
       expect(typeof authOptions.callbacks.jwt).toBe('function')
     })
 
-    it('should have session callback configured', async () => {
+    it('[P0] 0.3-UNIT-005: should have session callback configured', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks.session).toBeDefined()
       expect(typeof authOptions.callbacks.session).toBe('function')
     })
 
-    it('should have signIn callback configured', async () => {
+    it('[P1] 0.3-UNIT-006: should have signIn callback configured', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks.signIn).toBeDefined()
       expect(typeof authOptions.callbacks.signIn).toBe('function')
     })
 
-    it('should have custom pages configured', async () => {
+    it('[P1] 0.3-UNIT-007: should have custom pages configured', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.pages).toBeDefined()
@@ -76,7 +76,7 @@ describe('NextAuth Configuration', () => {
   })
 
   describe('JWT Callback Behavior', () => {
-    it('should add user id and capabilities to token when user exists', async () => {
+    it('[P0] 0.3-UNIT-008: should add user id and capabilities to token when user exists', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockUser = {
@@ -97,7 +97,7 @@ describe('NextAuth Configuration', () => {
       expect(result.capabilities).toEqual(['can_view_kpis', 'can_create_failure_report'])
     })
 
-    it('should add forcePasswordReset to token when user has temporary password', async () => {
+    it('[P1] 0.3-UNIT-009: should add forcePasswordReset to token when user has temporary password', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockUser = {
@@ -119,7 +119,7 @@ describe('NextAuth Configuration', () => {
       expect(result.forcePasswordReset).toBe(true)
     })
 
-    it('should preserve existing token when user is undefined', async () => {
+    it('[P2] 0.3-UNIT-010: should preserve existing token when user is undefined', async () => {
       const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockToken = {

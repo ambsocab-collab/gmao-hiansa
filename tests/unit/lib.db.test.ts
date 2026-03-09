@@ -1,5 +1,6 @@
 /**
  * Unit Tests for lib/db.ts
+ * Story 0.2: Database Schema Prisma con Jerarquía 5 Niveles
  * GMAO (Gestión de Mantenimiento Asistido por Ordenador)
  *
  * Testing PrismaClient singleton pattern
@@ -9,12 +10,12 @@ import { describe, it, expect } from 'vitest';
 import { prisma } from '@/lib/db';
 
 describe('lib/db - PrismaClient Singleton', () => {
-  it('should export prisma client instance', () => {
+  it('[P0] 0.2-UNIT-001: should export prisma client instance', () => {
     expect(prisma).toBeDefined();
     expect(typeof prisma).toBe('object');
   });
 
-  it('should have Prisma Client methods available', () => {
+  it('[P0] 0.2-UNIT-002: should have Prisma Client methods available', () => {
     expect(prisma.user).toBeDefined();
     expect(typeof prisma.user.findMany).toBe('function');
     expect(typeof prisma.user.findUnique).toBe('function');
@@ -23,23 +24,23 @@ describe('lib/db - PrismaClient Singleton', () => {
     expect(typeof prisma.user.delete).toBe('function');
   });
 
-  it('should maintain singleton pattern', async () => {
+  it('[P0] 0.2-UNIT-003: should maintain singleton pattern', async () => {
     // Import again to verify it's the same instance
     const { prisma: prisma2 } = await import('@/lib/db');
     expect(prisma).toBe(prisma2);
   });
 
-  it('should have transaction support', () => {
+  it('[P1] 0.2-UNIT-004: should have transaction support', () => {
     expect(prisma.$transaction).toBeDefined();
     expect(typeof prisma.$transaction).toBe('function');
   });
 
-  it('should have disconnect method', () => {
+  it('[P1] 0.2-UNIT-005: should have disconnect method', () => {
     expect(prisma.$disconnect).toBeDefined();
     expect(typeof prisma.$disconnect).toBe('function');
   });
 
-  it('should have connection management methods', () => {
+  it('[P1] 0.2-UNIT-006: should have connection management methods', () => {
     expect(prisma.$connect).toBeDefined();
     expect(prisma.$disconnect).toBeDefined();
     expect(prisma.$on).toBeDefined();
@@ -51,7 +52,7 @@ describe('lib/db - PrismaClient Singleton', () => {
   // Integration tests should cover database operations.
 
   describe('Prisma Client Configuration', () => {
-    it('should be configured for PostgreSQL', () => {
+    it('[P0] 0.2-UNIT-007: should be configured for PostgreSQL', () => {
       // Prisma Client should have User model from schema.prisma
       expect(prisma.user).toBeDefined();
 
@@ -72,12 +73,12 @@ describe('lib/db - PrismaClient Singleton', () => {
       });
     });
 
-    it('should have timestamp fields', () => {
+    it('[P2] 0.2-UNIT-008: should have timestamp fields', () => {
       expect(prisma.user.fields.created_at).toBeDefined();
       expect(prisma.user.fields.updated_at).toBeDefined();
     });
 
-    it('should have unique constraint on email', () => {
+    it('[P2] 0.2-UNIT-009: should have unique constraint on email', () => {
       const emailField = prisma.user.fields.email;
       expect(emailField).toBeDefined();
       // The unique constraint is enforced at database level
@@ -86,7 +87,7 @@ describe('lib/db - PrismaClient Singleton', () => {
   });
 
   describe('Singleton Pattern Behavior', () => {
-    it('should not create multiple instances in development', async () => {
+    it('[P1] 0.2-UNIT-010: should not create multiple instances in development', async () => {
       // In development, the singleton should prevent multiple instances
       const instances = [];
       for (let i = 0; i < 5; i++) {

@@ -123,6 +123,7 @@ describe('Client Logger', () => {
 
   describe('logErrorBoundary function', () => {
     beforeEach(() => {
+      vi.useFakeTimers()
       // Mock fetch to succeed
       global.fetch = vi.fn(() =>
         Promise.resolve({
@@ -133,6 +134,7 @@ describe('Client Logger', () => {
     })
 
     afterEach(() => {
+      vi.useRealTimers()
       vi.restoreAllMocks()
     })
 
@@ -145,7 +147,7 @@ describe('Client Logger', () => {
       logErrorBoundary(error)
 
       // Wait for async logging
-      await new Promise((resolve) => setTimeout(resolve, 10))
+      vi.advanceTimersByTime(10)
 
       expect(fetch).toHaveBeenCalled()
     })
@@ -159,7 +161,7 @@ describe('Client Logger', () => {
       logErrorBoundary(error)
 
       // Wait for async logging
-      await new Promise((resolve) => setTimeout(resolve, 10))
+      vi.advanceTimersByTime(10)
 
       const fetchCall = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]
       const body = JSON.parse(fetchCall[1]?.body as string)
@@ -181,7 +183,7 @@ describe('Client Logger', () => {
       logErrorBoundary(error)
 
       // Wait for async logging
-      await new Promise((resolve) => setTimeout(resolve, 10))
+      vi.advanceTimersByTime(10)
 
       expect(consoleErrorSpy).toHaveBeenCalledWith('[ERROR_BOUNDARY]', {
         message: 'Test error',

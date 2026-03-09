@@ -1,0 +1,59 @@
+{
+  "dimension": "isolation",
+  "score": 88,
+  "max_score": 100,
+  "grade": "B+",
+  "violations": [
+    {
+      "file": "tests/unit/lib.factories.test.ts",
+      "line": 26,
+      "severity": "MEDIUM",
+      "category": "shared-cleanup",
+      "description": "cleanupTestData() in beforeEach/afterEach operates on ALL test data - tests may interfere",
+      "suggestion": "Each test should create and cleanup its own scoped test data",
+      "code_snippet": "beforeEach(async () => { await cleanupTestData() })"
+    },
+    {
+      "file": "tests/unit/lib.observability.logger.test.ts",
+      "line": 16,
+      "severity": "MEDIUM",
+      "category": "global-state-mutation",
+      "description": "Tests modify global console with spies - potential leakage",
+      "suggestion": "Use vi.clearAllMocks() in afterEach to ensure cleanup",
+      "code_snippet": "consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})"
+    },
+    {
+      "file": "tests/integration/error-handler.test.ts",
+      "line": 13,
+      "severity": "LOW",
+      "category": "shared-fixture",
+      "description": "beforeEach creates console spy - potential state sharing",
+      "suggestion": "Ensure afterEach properly restores all mocks",
+      "code_snippet": "consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})"
+    },
+    {
+      "file": "tests/unit/lib.observability.logger.test.ts",
+      "line": 138,
+      "severity": "LOW",
+      "category": "environment-mutation",
+      "description": "Test modifies NODE_ENV without proper restoration",
+      "suggestion": "Use vi.stubEnv('NODE_ENV', 'development') for automatic cleanup",
+      "code_snippet": "process.env.NODE_ENV = 'development'"
+    }
+  ],
+  "passed_checks": 21,
+  "failed_checks": 4,
+  "total_checks": 25,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 2,
+    "LOW": 2
+  },
+  "recommendations": [
+    "Use vi.stubEnv() instead of direct process.env mutation for auto-cleanup",
+    "Ensure vi.clearAllMocks() is called in afterEach blocks",
+    "Scope cleanupTestData() to test-specific data instead of global cleanup",
+    "Consider test.describe.configure({ mode: 'parallel' }) to enforce isolation"
+  ],
+  "summary": "Tests are well isolated with 4 violations (0 HIGH). Good use of beforeEach/afterEach for cleanup."
+}

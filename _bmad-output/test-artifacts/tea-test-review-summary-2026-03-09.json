@@ -1,0 +1,77 @@
+{
+  "overall_score": 80,
+  "overall_grade": "B",
+  "quality_assessment": "Good quality with actionable improvements needed",
+
+  "dimension_scores": {
+    "determinism": 78,
+    "isolation": 88,
+    "maintainability": 68,
+    "performance": 85
+  },
+
+  "dimension_grades": {
+    "determinism": "C+",
+    "isolation": "B+",
+    "maintainability": "D+",
+    "performance": "B"
+  },
+
+  "violations_summary": {
+    "total": 25,
+    "HIGH": 4,
+    "MEDIUM": 13,
+    "LOW": 8
+  },
+
+  "all_violations": [
+    {"dimension": "determinism", "severity": "HIGH", "file": "tests/integration/api.sse.route.test.ts", "line": 47, "category": "time-dependency"},
+    {"dimension": "determinism", "severity": "HIGH", "file": "tests/integration/api.sse.route.test.ts", "line": 71, "category": "time-dependency"},
+    {"dimension": "determinism", "severity": "MEDIUM", "file": "tests/unit/client-logger.test.ts", "line": 148, "category": "hard-wait"},
+    {"dimension": "determinism", "severity": "MEDIUM", "file": "tests/unit/client-logger.test.ts", "line": 162, "category": "hard-wait"},
+    {"dimension": "determinism", "severity": "MEDIUM", "file": "tests/unit/lib.sse.client.test.ts", "line": 107, "category": "hard-wait"},
+    {"dimension": "determinism", "severity": "LOW", "file": "tests/unit/lib.sse.client.test.ts", "line": 140, "category": "time-dependency"},
+    {"dimension": "determinism", "severity": "LOW", "file": "tests/performance/baseline/create-ot-load-test.js", "line": 31, "category": "random-generation"},
+    {"dimension": "isolation", "severity": "MEDIUM", "file": "tests/unit/lib.factories.test.ts", "line": 26, "category": "shared-cleanup"},
+    {"dimension": "isolation", "severity": "MEDIUM", "file": "tests/unit/lib.observability.logger.test.ts", "line": 16, "category": "global-state-mutation"},
+    {"dimension": "isolation", "severity": "LOW", "file": "tests/integration/error-handler.test.ts", "line": 13, "category": "shared-fixture"},
+    {"dimension": "isolation", "severity": "LOW", "file": "tests/unit/lib.observability.logger.test.ts", "line": 138, "category": "environment-mutation"},
+    {"dimension": "maintainability", "severity": "MEDIUM", "file": "tests/unit/lib.sse.test.ts", "line": 1, "category": "missing-bdd-format"},
+    {"dimension": "maintainability", "severity": "MEDIUM", "file": "tests/integration/api.sse.route.test.ts", "line": 106, "category": "code-duplication"},
+    {"dimension": "maintainability", "severity": "MEDIUM", "file": "tests/unit/nextauth.config.test.ts", "line": 22, "category": "missing-test-ids"},
+    {"dimension": "maintainability", "severity": "LOW", "file": "tests/unit/lib.observability.logger.test.ts", "line": 54, "category": "missing-priority-markers"},
+    {"dimension": "maintainability", "severity": "LOW", "file": "tests/unit/lib.factories.test.ts", "line": 315, "category": "timeout-increase"},
+    {"dimension": "maintainability", "severity": "MEDIUM", "file": "tests/unit/lib.utils.errors.test.ts", "line": 1, "category": "missing-test-ids"},
+    {"dimension": "maintainability", "severity": "LOW", "file": "tests/integration/error-handler.test.ts", "line": 21, "category": "missing-comments"},
+    {"dimension": "maintainability", "severity": "HIGH", "file": "ALL_TEST_FILES", "line": 1, "category": "missing-test-ids"},
+    {"dimension": "maintainability", "severity": "HIGH", "file": "ALL_TEST_FILES", "line": 1, "category": "missing-priority-markers"},
+    {"dimension": "maintainability", "severity": "MEDIUM", "file": "ALL_TEST_FILES", "line": 1, "category": "incomplete-bdd-format"},
+    {"dimension": "performance", "severity": "MEDIUM", "file": "tests/unit/lib.factories.test.ts", "line": 315, "category": "slow-cleanup"},
+    {"dimension": "performance", "severity": "MEDIUM", "file": "tests/unit/lib.factories.test.ts", "line": 26, "category": "inefficient-cleanup"},
+    {"dimension": "performance", "severity": "LOW", "file": "tests/unit/client-logger.test.ts", "line": 148, "category": "hard-wait"},
+    {"dimension": "performance", "severity": "LOW", "file": "tests/unit/lib.sse.client.test.ts", "line": 107, "category": "hard-wait"}
+  ],
+
+  "high_severity_violations": [
+    {"dimension": "determinism", "severity": "HIGH", "file": "tests/integration/api.sse.route.test.ts", "line": 47, "category": "time-dependency", "description": "Test uses Date.now() without mocking - creates non-deterministic timestamps", "suggestion": "Mock Date.now() with vi.useFakeTimers() or use fixed timestamps"},
+    {"dimension": "determinism", "severity": "HIGH", "file": "tests/integration/api.sse.route.test.ts", "line": 71, "category": "time-dependency", "description": "Test uses Date.now() without mocking", "suggestion": "Mock Date.now() or use fixed timestamps in mocks"},
+    {"dimension": "maintainability", "severity": "HIGH", "file": "ALL_TEST_FILES", "line": 1, "category": "missing-test-ids", "description": "100% of tests lack traceable IDs (e.g., 0.4-UNIT-001)", "suggestion": "Add test IDs to all tests for requirements traceability"},
+    {"dimension": "maintainability", "severity": "HIGH", "file": "ALL_TEST_FILES", "line": 1, "category": "missing-priority-markers", "description": "100% of tests lack priority markers (P0/P1/P2/P3)", "suggestion": "Add priority markers to indicate criticality level"}
+  ],
+
+  "top_10_recommendations": [
+    {"dimension": "maintainability", "recommendation": "CRITICAL: Add test IDs (e.g., 0.4-UNIT-001) to ALL tests for traceability", "impact": "HIGH"},
+    {"dimension": "maintainability", "recommendation": "CRITICAL: Add priority markers (P0/P1/P2/P3) to ALL tests", "impact": "HIGH"},
+    {"dimension": "determinism", "recommendation": "Replace Date.now() with fixed timestamps in all test mocks", "impact": "HIGH"},
+    {"dimension": "determinism", "recommendation": "Use vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests", "impact": "HIGH"},
+    {"dimension": "maintainability", "recommendation": "Extract duplicate mock setup into helper functions or fixtures", "impact": "HIGH"},
+    {"dimension": "performance", "recommendation": "Use transaction rollback instead of DELETE for faster cleanup", "impact": "MEDIUM"},
+    {"dimension": "isolation", "recommendation": "Use vi.stubEnv() instead of direct process.env mutation for auto-cleanup", "impact": "MEDIUM"},
+    {"dimension": "isolation", "recommendation": "Scope cleanupTestData() to test-specific data instead of global cleanup", "impact": "MEDIUM"},
+    {"dimension": "maintainability", "recommendation": "Use BDD format: 'should [result] when [context]' in test names", "impact": "MEDIUM"},
+    {"dimension": "performance", "recommendation": "Remove beforeEach cleanupTestData() - use test-scoped data instead", "impact": "MEDIUM"}
+  ],
+
+  "subagent_execution": "SEQUENTIAL (fallback due to runtime capabilities)",
+  "performance_gain": "N/A (sequential mode)"
+}

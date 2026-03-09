@@ -1,5 +1,6 @@
 /**
  * Unit Tests for lib/sse.ts
+ * Story 0.4: SSE Infrastructure con Heartbeat
  * GMAO (Gestión de Mantenimiento Asistido por Ordenador)
  *
  * Testing Server-Sent Events utilities
@@ -10,13 +11,13 @@ import { createSSEStream, sendSSEEvent } from '@/lib/sse';
 
 describe('lib/sse - SSE Utilities', () => {
   describe('createSSEStream', () => {
-    it('should create a ReadableStream', () => {
+    it('[P1] 0.4-UNIT-001: should create a ReadableStream', () => {
       const stream = createSSEStream();
       expect(stream).toBeDefined();
       expect(stream).toBeInstanceOf(ReadableStream);
     });
 
-    it('should have readable stream properties', () => {
+    it('[P2] 0.4-UNIT-002: should have readable stream properties', () => {
       const stream = createSSEStream();
       expect(stream).toHaveProperty('getReader');
       expect(stream).toHaveProperty('cancel');
@@ -24,14 +25,14 @@ describe('lib/sse - SSE Utilities', () => {
       expect(typeof stream.cancel).toBe('function');
     });
 
-    it('should create independent streams', () => {
+    it('[P1] 0.4-UNIT-003: should create independent streams', () => {
       const stream1 = createSSEStream();
       const stream2 = createSSEStream();
 
       expect(stream1).not.toBe(stream2);
     });
 
-    it('should allow getting reader from stream', () => {
+    it('[P2] 0.4-UNIT-004: should allow getting reader from stream', () => {
       const stream = createSSEStream();
       const reader = stream.getReader();
 
@@ -48,7 +49,7 @@ describe('lib/sse - SSE Utilities', () => {
   });
 
   describe('sendSSEEvent', () => {
-    it('should enqueue SSE event to controller', () => {
+    it('[P0] 0.4-UNIT-005: should enqueue SSE event to controller', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -68,7 +69,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('data: {"test":"data","id":123}');
     });
 
-    it('should format event correctly', () => {
+    it('[P1] 0.4-UNIT-006: should format event correctly', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -85,7 +86,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toMatch(/data: \{.*\}\n\n$/);
     });
 
-    it('should handle complex JSON data', () => {
+    it('[P2] 0.4-UNIT-007: should handle complex JSON data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -109,7 +110,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('"nested"');
     });
 
-    it('should handle string data', () => {
+    it('[P2] 0.4-UNIT-008: should handle string data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -124,7 +125,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('data: "test string"');
     });
 
-    it('should handle numeric data', () => {
+    it('[P2] 0.4-UNIT-009: should handle numeric data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -139,7 +140,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('data: 42');
     });
 
-    it('should handle boolean data', () => {
+    it('[P2] 0.4-UNIT-010: should handle boolean data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -154,7 +155,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('data: true');
     });
 
-    it('should handle null data', () => {
+    it('[P2] 0.4-UNIT-011: should handle null data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -171,7 +172,7 @@ describe('lib/sse - SSE Utilities', () => {
   });
 
   describe('SSE Integration', () => {
-    it('should create stream and controller independently', () => {
+    it('[P2] 0.4-UNIT-012: should create stream and controller independently', () => {
       const stream = createSSEStream();
       const mockController = {
         enqueue: vi.fn()
@@ -185,7 +186,7 @@ describe('lib/sse - SSE Utilities', () => {
       reader.releaseLock();
     });
 
-    it('should handle Unicode characters in data', () => {
+    it('[P2] 0.4-UNIT-013: should handle Unicode characters in data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -207,7 +208,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('ñáéíóú');
     });
 
-    it('should handle event names with special characters', () => {
+    it('[P2] 0.4-UNIT-014: should handle event names with special characters', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -219,7 +220,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(mockController.enqueue).toHaveBeenCalledTimes(3);
     });
 
-    it('should handle empty object data', () => {
+    it('[P2] 0.4-UNIT-015: should handle empty object data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -234,7 +235,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(text).toContain('data: {}');
     });
 
-    it('should handle array data', () => {
+    it('[P2] 0.4-UNIT-016: should handle array data', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -256,7 +257,7 @@ describe('lib/sse - SSE Utilities', () => {
   });
 
   describe('SSE Event Format Compliance', () => {
-    it('should follow SSE format specification', () => {
+    it('[P1] 0.4-UNIT-017: should follow SSE format specification', () => {
       const mockController = {
         enqueue: vi.fn()
       };
@@ -274,7 +275,7 @@ describe('lib/sse - SSE Utilities', () => {
       expect(lines[2]).toBe(''); // Empty line at end
     });
 
-    it('should properly escape JSON in data field', () => {
+    it('[P2] 0.4-UNIT-018: should properly escape JSON in data field', () => {
       const mockController = {
         enqueue: vi.fn()
       };

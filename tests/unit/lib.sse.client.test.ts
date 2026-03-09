@@ -11,6 +11,9 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { SSEClient } from '@/lib/sse/client'
 import type { SSEChannel } from '@/types/sse'
 
+// Fixed timestamp for deterministic tests
+const FIXED_TIMESTAMP = Date.parse('2024-01-01T00:00:00Z')
+
 // Mock EventSource
 class MockEventSource {
   public readonly url: string
@@ -72,11 +75,13 @@ describe('SSEClient', () => {
   let client: SSEClient
 
   beforeEach(() => {
+    vi.useFakeTimers()
     testChannel = 'work-orders'
     client = new SSEClient(testChannel)
   })
 
   afterEach(() => {
+    vi.useRealTimers()
     client.disconnect()
   })
 
@@ -92,25 +97,21 @@ describe('SSEClient', () => {
       client.connect()
 
       // Wait for connection
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(client.active()).toBe(true)
-          resolve(null)
-        }, 150)
-      })
+      vi.advanceTimersByTime(150)
+      expect(client.active()).toBe(true)
     })
 
     it('should disconnect existing connection before connecting', async () => {
       client.connect()
 
       // Wait for first connection
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(150)
 
       // Connect again
       client.connect()
 
       // Wait for second connection
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(150)
 
       expect(client.active()).toBe(true)
     })
@@ -135,10 +136,9 @@ describe('SSEClient', () => {
       })
 
       // Trigger heartbeat event after connection
-      setTimeout(() => {
-        const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
-        eventSource.triggerEvent('heartbeat', { timestamp: Date.now() })
-      }, 150)
+      vi.advanceTimersByTime(150)
+      const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
+      eventSource.triggerEvent('heartbeat', { timestamp: FIXED_TIMESTAMP })
     })
 
     it('should register multiple handlers for same event', (done) => {
@@ -161,10 +161,9 @@ describe('SSEClient', () => {
         }
       })
 
-      setTimeout(() => {
-        const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
-        eventSource.triggerEvent('test_event', { test: 'data' })
-      }, 150)
+      vi.advanceTimersByTime(150)
+      const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
+      eventSource.triggerEvent('test_event', { test: 'data' })
     })
 
     it('should parse JSON data', (done) => {
@@ -175,13 +174,12 @@ describe('SSEClient', () => {
         done()
       })
 
-      setTimeout(() => {
-        const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
-        eventSource.triggerEvent('test_event', {
-          message: 'test',
-          number: 123
-        })
-      }, 150)
+      vi.advanceTimersByTime(150)
+      const eventSource = (client as unknown as { eventSource: MockEventSource }).eventSource
+      eventSource.triggerEvent('test_event', {
+        message: 'test',
+        number: 123
+      })
     })
   })
 
@@ -191,7 +189,7 @@ describe('SSEClient', () => {
 
       client.connect()
 
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(150)
 
       const handler = () => {
         callCount++
@@ -204,7 +202,7 @@ describe('SSEClient', () => {
       eventSource.triggerEvent('test_event', {})
 
       // Wait to verify handler is not called
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      vi.advanceTimersByTime(50)
 
       // Handler should not be called
       expect(callCount).toBe(0)
@@ -215,16 +213,12 @@ describe('SSEClient', () => {
     it('should close EventSource connection', () => {
       client.connect()
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(client.active()).toBe(true)
+      vi.advanceTimersByTime(150)
+      expect(client.active()).toBe(true)
 
-          client.disconnect()
+      client.disconnect()
 
-          expect(client.active()).toBe(false)
-          resolve(null)
-        }, 150)
-      })
+      expect(client.active()).toBe(false)
     })
 
     it('should handle disconnect when not connected', () => {
@@ -242,24 +236,16 @@ describe('SSEClient', () => {
     it('should return true when connected', () => {
       client.connect()
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(client.active()).toBe(true)
-          resolve(null)
-        }, 150)
-      })
+      vi.advanceTimersByTime(150)
+      expect(client.active()).toBe(true)
     })
 
     it('should return false after disconnect', () => {
       client.connect()
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          client.disconnect()
-          expect(client.active()).toBe(false)
-          resolve(null)
-        }, 150)
-      })
+      vi.advanceTimersByTime(150)
+      client.disconnect()
+      expect(client.active()).toBe(false)
     })
   })
 })

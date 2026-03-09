@@ -1,0 +1,85 @@
+{
+  "dimension": "determinism",
+  "score": 78,
+  "max_score": 100,
+  "grade": "C+",
+  "violations": [
+    {
+      "file": "tests/integration/api.sse.route.test.ts",
+      "line": 47,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() without mocking - creates non-deterministic timestamps",
+      "suggestion": "Mock Date.now() with vi.useFakeTimers() or use fixed timestamps",
+      "code_snippet": "expires: new Date(Date.now() + 3600000).toISOString()"
+    },
+    {
+      "file": "tests/integration/api.sse.route.test.ts",
+      "line": 71,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() without mocking",
+      "suggestion": "Mock Date.now() or use fixed timestamps in mocks",
+      "code_snippet": "expires: new Date(Date.now() + 3600000).toISOString()"
+    },
+    {
+      "file": "tests/unit/client-logger.test.ts",
+      "line": 148,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Test uses setTimeout for timing - creates flakiness",
+      "suggestion": "Use vi.useFakeTimers() and vi.advanceTimersByTime() instead",
+      "code_snippet": "await new Promise((resolve) => setTimeout(resolve, 10))"
+    },
+    {
+      "file": "tests/unit/client-logger.test.ts",
+      "line": 162,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Test uses setTimeout for timing",
+      "suggestion": "Use vi.advanceTimersByTime(10) instead",
+      "code_snippet": "await new Promise((resolve) => setTimeout(resolve, 10))"
+    },
+    {
+      "file": "tests/unit/lib.sse.client.test.ts",
+      "line": 107,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Test uses setTimeout - creates timing dependency",
+      "suggestion": "Use vi.useFakeTimers() for deterministic timing",
+      "code_snippet": "await new Promise((resolve) => setTimeout(resolve, 150))"
+    },
+    {
+      "file": "tests/unit/lib.sse.client.test.ts",
+      "line": 140,
+      "severity": "LOW",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() in mock event",
+      "suggestion": "Use fixed timestamp in test mocks",
+      "code_snippet": "eventSource.triggerEvent('heartbeat', { timestamp: Date.now() })"
+    },
+    {
+      "file": "tests/performance/baseline/create-ot-load-test.js",
+      "line": 31,
+      "severity": "LOW",
+      "category": "random-generation",
+      "description": "Load test uses Math.random() - acceptable for load tests",
+      "suggestion": "Consider using faker with seed for reproducible load tests",
+      "code_snippet": "return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))"
+    }
+  ],
+  "passed_checks": 18,
+  "failed_checks": 7,
+  "total_checks": 25,
+  "violation_summary": {
+    "HIGH": 2,
+    "MEDIUM": 4,
+    "LOW": 1
+  },
+  "recommendations": [
+    "Replace Date.now() with fixed timestamps in all test mocks",
+    "Use vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests",
+    "Consider faker.seed() for deterministic random data in non-load tests"
+  ],
+  "summary": "Tests have moderate determinism with 7 violations (2 HIGH, 4 MEDIUM). Main issues are Date.now() usage and setTimeout without fake timers."
+}

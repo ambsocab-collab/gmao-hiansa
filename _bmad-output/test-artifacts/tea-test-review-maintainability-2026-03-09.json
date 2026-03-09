@@ -1,0 +1,115 @@
+{
+  "dimension": "maintainability",
+  "score": 68,
+  "max_score": 100,
+  "grade": "D+",
+  "violations": [
+    {
+      "file": "tests/unit/lib.sse.test.ts",
+      "line": 1,
+      "severity": "MEDIUM",
+      "category": "missing-bdd-format",
+      "description": "Tests lack Given-When-Then structure in descriptions",
+      "suggestion": "Use BDD format: 'should [expected behavior] when [state/context]'",
+      "code_snippet": "it('should create a ReadableStream', () => { ... })"
+    },
+    {
+      "file": "tests/integration/api.sse.route.test.ts",
+      "line": 106,
+      "severity": "MEDIUM",
+      "category": "code-duplication",
+      "description": "Duplicate mock auth setup in 7+ tests",
+      "suggestion": "Extract to beforeEach helper function or fixture",
+      "code_snippet": "vi.mocked(auth).mockResolvedValueOnce({ user: { ... }, expires: ... })"
+    },
+    {
+      "file": "tests/unit/nextauth.config.test.ts",
+      "line": 22,
+      "severity": "MEDIUM",
+      "category": "missing-test-ids",
+      "description": "Tests lack traceable IDs (e.g., 0.3-UNIT-001)",
+      "suggestion": "Add test IDs for traceability to requirements",
+      "code_snippet": "it('should have Credentials provider configured', async () => {"
+    },
+    {
+      "file": "tests/unit/lib.observability.logger.test.ts",
+      "line": 54,
+      "severity": "LOW",
+      "category": "missing-priority-markers",
+      "description": "Tests lack priority markers (P0/P1/P2/P3)",
+      "suggestion": "Add priority markers to indicate criticality",
+      "code_snippet": "it('should log debug messages with correlation ID', () => {"
+    },
+    {
+      "file": "tests/unit/lib.factories.test.ts",
+      "line": 315,
+      "severity": "LOW",
+      "category": "timeout-increase",
+      "description": "Test timeout increased to 15s - may indicate slow test",
+      "suggestion": "Optimize cleanup or use smaller datasets",
+      "code_snippet": "}, 15000) // Increase timeout to 15s for database cleanup"
+    },
+    {
+      "file": "tests/unit/lib.utils.errors.test.ts",
+      "line": 1,
+      "severity": "MEDIUM",
+      "category": "missing-test-ids",
+      "description": "All tests lack traceable IDs for requirements mapping",
+      "suggestion": "Add test IDs like 0.5-UNIT-001, 0.5-UNIT-002 for traceability",
+      "code_snippet": "describe('Custom Error Classes', () => {"
+    },
+    {
+      "file": "tests/integration/error-handler.test.ts",
+      "line": 21,
+      "severity": "LOW",
+      "category": "missing-comments",
+      "description": "Complex error scenario lacks explanatory comment",
+      "suggestion": "Add comments explaining error handling scenarios",
+      "code_snippet": "it('should return error response with message and code', async () => {"
+    },
+    {
+      "file": "ALL_TEST_FILES",
+      "line": 1,
+      "severity": "HIGH",
+      "category": "missing-test-ids",
+      "description": "100% of tests lack traceable IDs (e.g., 0.4-UNIT-001)",
+      "suggestion": "Add test IDs to all tests for requirements traceability",
+      "code_snippet": "it('0.4-UNIT-001: should create a ReadableStream', () => {"
+    },
+    {
+      "file": "ALL_TEST_FILES",
+      "line": 1,
+      "severity": "HIGH",
+      "category": "missing-priority-markers",
+      "description": "100% of tests lack priority markers (P0/P1/P2/P3)",
+      "suggestion": "Add priority markers to indicate criticality level",
+      "code_snippet": "it('[P0] should create a ReadableStream', () => {"
+    },
+    {
+      "file": "ALL_TEST_FILES",
+      "line": 1,
+      "severity": "MEDIUM",
+      "category": "incomplete-bdd-format",
+      "description": "Tests use describe/it but lack Given-When-Then structure",
+      "suggestion": "Use format: 'should [result] when [context]' in test names",
+      "code_snippet": "it('should create stream when controller is initialized', () => {"
+    }
+  ],
+  "passed_checks": 12,
+  "failed_checks": 10,
+  "total_checks": 22,
+  "violation_summary": {
+    "HIGH": 2,
+    "MEDIUM": 5,
+    "LOW": 3
+  },
+  "recommendations": [
+    "CRITICAL: Add test IDs (e.g., 0.4-UNIT-001) to ALL tests for traceability",
+    "CRITICAL: Add priority markers (P0/P1/P2/P3) to ALL tests",
+    "Extract duplicate mock setup into helper functions or fixtures",
+    "Use BDD format: 'should [result] when [context]' in test names",
+    "Add comments explaining complex test scenarios",
+    "Optimize slow tests (15s timeout indicates performance issue)"
+  ],
+  "summary": "Tests have significant maintainability issues - 10 violations (2 HIGH). Missing test IDs and priority markers across all tests."
+}

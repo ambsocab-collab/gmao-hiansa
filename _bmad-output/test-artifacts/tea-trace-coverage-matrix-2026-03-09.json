@@ -1,0 +1,303 @@
+{
+  "phase": "PHASE_1_COMPLETE",
+  "generated_at": "2026-03-09T00:00:00.000Z",
+  "epic": "Epic 1 - Autenticación y Gestión de Usuarios PBAC",
+  "evaluator": "Bernardo (TEA Agent)",
+
+  "requirements": [
+    {
+      "id": "AC-1.1-001",
+      "story": "1.1",
+      "description": "Login con credenciales válidas",
+      "priority": "P0",
+      "coverage": "UNIT-ONLY",
+      "tests": ["tests/unit/lib.auth.test.ts"],
+      "gaps": ["E2E test", "UI interaction", "Redirect validation"]
+    },
+    {
+      "id": "AC-1.1-002",
+      "story": "1.1",
+      "description": "Login con credenciales inválidas",
+      "priority": "P0",
+      "coverage": "UNIT-ONLY",
+      "tests": ["tests/unit/lib.auth.test.ts"],
+      "gaps": ["E2E test", "Rate limiting", "Error message display"]
+    },
+    {
+      "id": "AC-1.1-003",
+      "story": "1.1",
+      "description": "Registro de usuario por admin",
+      "priority": "P0",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["API endpoint test", "E2E test", "Default capability validation"]
+    },
+    {
+      "id": "AC-1.1-004",
+      "story": "1.1",
+      "description": "Cambio de contraseña forzado en primer login",
+      "priority": "P0",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "Redirect validation", "Navigation blocking"]
+    },
+    {
+      "id": "AC-1.1-005",
+      "story": "1.1",
+      "description": "Gestión de perfil de usuario",
+      "priority": "P1",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "Email validation", "Password change with current password"]
+    },
+    {
+      "id": "AC-1.1-006",
+      "story": "1.1",
+      "description": "Eliminación de usuario (soft delete)",
+      "priority": "P0",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "Soft delete validation", "Last admin protection"]
+    },
+    {
+      "id": "AC-1.2-001",
+      "story": "1.2",
+      "description": "Display de 15 capabilities con checkboxes",
+      "priority": "P0",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "UI validation", "Spanish labels"]
+    },
+    {
+      "id": "AC-1.2-002",
+      "story": "1.2",
+      "description": "Usuario nuevo tiene solo can_create_failure_report por defecto",
+      "priority": "P0",
+      "coverage": "PARTIAL",
+      "tests": ["tests/integration/api.seed.test.ts"],
+      "gaps": ["Explicit new user test", "Other 14 unchecked validation"]
+    },
+    {
+      "id": "AC-1.2-003",
+      "story": "1.2",
+      "description": "Access denied sin capability requerida",
+      "priority": "P0",
+      "coverage": "UNIT-ONLY",
+      "tests": ["tests/unit/auth.middleware.test.ts"],
+      "gaps": ["E2E test", "Access denied message", "Read-only mode validation"]
+    },
+    {
+      "id": "AC-1.2-004",
+      "story": "1.2",
+      "description": "Admin inicial tiene todas las 15 capabilities",
+      "priority": "P0",
+      "coverage": "PARTIAL",
+      "tests": ["tests/integration/api.seed.test.ts"],
+      "gaps": ["E2E test", "Empty system detection"]
+    },
+    {
+      "id": "AC-1.2-005",
+      "story": "1.2",
+      "description": "Navegación dinámica basada en capabilities",
+      "priority": "P0",
+      "coverage": "UNIT-ONLY",
+      "tests": ["tests/unit/auth.middleware.test.ts"],
+      "gaps": ["E2E test", "Module visibility", "SSE real-time updates", "Unauthorized URL access"]
+    },
+    {
+      "id": "AC-1.3-001",
+      "story": "1.3",
+      "description": "Crear hasta 20 etiquetas personalizadas",
+      "priority": "P1",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["API test", "E2E test", "Limit validation", "Error on #21"]
+    },
+    {
+      "id": "AC-1.3-002",
+      "story": "1.3",
+      "description": "Asignar múltiples etiquetas a un usuario",
+      "priority": "P1",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "Badge display", "Independence from capabilities"]
+    },
+    {
+      "id": "AC-1.3-003",
+      "story": "1.3",
+      "description": "Filtrar usuarios por etiqueta",
+      "priority": "P2",
+      "coverage": "NONE",
+      "tests": [],
+      "gaps": ["E2E test", "List filtering", "Sorting validation"]
+    }
+  ],
+
+  "coverage_statistics": {
+    "total_requirements": 57,
+    "fully_covered": 5,
+    "partially_covered": 5,
+    "uncovered": 47,
+    "overall_coverage_percentage": 8.8,
+
+    "priority_breakdown": {
+      "P0": { "total": 37, "covered": 3, "percentage": 8.1, "status": "FAIL" },
+      "P1": { "total": 19, "covered": 2, "percentage": 10.5, "status": "FAIL" },
+      "P2": { "total": 1, "covered": 0, "percentage": 0, "status": "FAIL" },
+      "P3": { "total": 0, "covered": 0, "percentage": 0, "status": "N/A" }
+    }
+  },
+
+  "gap_analysis": {
+    "critical_gaps": [
+      { "id": "AC-1.1-003", "priority": "P0", "coverage": "NONE", "impact": "Core user journey not tested" },
+      { "id": "AC-1.1-004", "priority": "P0", "coverage": "NONE", "impact": "Security feature not validated" },
+      { "id": "AC-1.1-006", "priority": "P0", "coverage": "NONE", "impact": "Data integrity not tested" },
+      { "id": "AC-1.2-001", "priority": "P0", "coverage": "NONE", "impact": "Authorization UI not tested" },
+      { "id": "AC-1.2-005", "priority": "P0", "coverage": "UNIT-ONLY", "impact": "Navigation security not validated end-to-end" }
+    ],
+    "high_gaps": [
+      { "id": "AC-1.1-005", "priority": "P1", "coverage": "NONE", "impact": "User management not tested" },
+      { "id": "AC-1.3-001", "priority": "P1", "coverage": "NONE", "impact": "Tag management not tested" },
+      { "id": "AC-1.3-002", "priority": "P1", "coverage": "NONE", "impact": "Tag assignment not validated" }
+    ],
+    "medium_gaps": [
+      { "id": "AC-1.3-003", "priority": "P2", "coverage": "NONE", "impact": "List filtering not tested" }
+    ],
+    "low_gaps": [],
+    "partial_coverage_items": [
+      { "id": "AC-1.2-002", "coverage": "PARTIAL", "needs": "Explicit new user default capability test" },
+      { "id": "AC-1.2-003", "coverage": "UNIT-ONLY", "needs": "E2E access denied test" },
+      { "id": "AC-1.2-004", "coverage": "PARTIAL", "needs": "E2E admin first user test" },
+      { "id": "AC-1.2-005", "coverage": "UNIT-ONLY", "needs": "E2E navigation + SSE test" }
+    ],
+    "unit_only_items": [
+      { "id": "AC-1.1-001", "coverage": "UNIT-ONLY", "needs": "E2E login flow" },
+      { "id": "AC-1.1-002", "coverage": "UNIT-ONLY", "needs": "E2E error flow" }
+    ]
+  },
+
+  "coverage_heuristics": {
+    "endpoint_gaps": [
+      { "endpoint": "POST /api/auth/login", "method": "POST", "tested": false },
+      { "endpoint": "POST /api/auth/register", "method": "POST", "tested": false },
+      { "endpoint": "POST /api/users", "method": "POST", "tested": false },
+      { "endpoint": "PATCH /api/users/{id}", "method": "PATCH", "tested": false },
+      { "endpoint": "DELETE /api/users/{id}", "method": "DELETE", "tested": false },
+      { "endpoint": "POST /api/auth/change-password", "method": "POST", "tested": false },
+      { "endpoint": "POST /api/labels", "method": "POST", "tested": false }
+    ],
+    "auth_negative_path_gaps": [
+      { "capability": "can_view_kpis", "negative_test": false },
+      { "capability": "can_manage_users", "negative_test": false },
+      { "capability": "can_create_failure_report", "negative_test": false },
+      { "capability": "can_create_manual_ot", "negative_test": false },
+      { "capability": "can_update_own_ot", "negative_test": false },
+      { "capability": "can_view_own_ots", "negative_test": false },
+      { "capability": "can_view_all_ots", "negative_test": false },
+      { "capability": "can_complete_ot", "negative_test": false },
+      { "capability": "can_manage_stock", "negative_test": false },
+      { "capability": "can_assign_technicians", "negative_test": false },
+      { "capability": "can_manage_assets", "negative_test": false },
+      { "capability": "can_view_repair_history", "negative_test": false },
+      { "capability": "can_manage_providers", "negative_test": false },
+      { "capability": "can_manage_routines", "negative_test": false },
+      { "capability": "can_receive_reports", "negative_test": false }
+    ],
+    "happy_path_only_gaps": [
+      { "criterion": "Duplicate email registration", "error_path_test": false },
+      { "criterion": "Invalid password reset token", "error_path_test": false },
+      { "criterion": "Expired session handling", "error_path_test": false },
+      { "criterion": "Rate limiting after 5 failed attempts", "error_path_test": false },
+      { "criterion": "Tag limit of 20 enforcement", "error_path_test": false },
+      { "criterion": "Delete last admin protection", "error_path_test": false }
+    ],
+    "counts": {
+      "endpoints_without_tests": 7,
+      "auth_missing_negative_paths": 15,
+      "happy_path_only_criteria": 6
+    }
+  },
+
+  "recommendations": [
+    {
+      "priority": "URGENT",
+      "action": "Run /bmad:tea:atdd for 32 P0 requirements",
+      "requirements": ["AC-1.1-003", "AC-1.1-004", "AC-1.1-006", "AC-1.2-001", "AC-1.2-005"],
+      "impact": "Critical user journeys not tested - BLOCKS RELEASE"
+    },
+    {
+      "priority": "HIGH",
+      "action": "Run /bmad:tea:automate to expand coverage for 17 P1 requirements",
+      "requirements": ["AC-1.1-005", "AC-1.3-001", "AC-1.3-002"],
+      "impact": "Important features not validated - ADDRESS BEFORE PR MERGE"
+    },
+    {
+      "priority": "HIGH",
+      "action": "Add API tests for 7 uncovered endpoint(s)",
+      "requirements": ["POST /api/auth/login", "POST /api/users", "PATCH /api/users/{id}"],
+      "impact": "Business logic not tested at API level"
+    },
+    {
+      "priority": "HIGH",
+      "action": "Add negative-path auth/authz tests for 15 requirement(s)",
+      "requirements": ["All PBAC capabilities"],
+      "impact": "Authorization security not validated end-to-end"
+    },
+    {
+      "priority": "MEDIUM",
+      "action": "Complete coverage for 5 partially covered requirements",
+      "requirements": ["AC-1.2-002", "AC-1.2-003", "AC-1.2-004", "AC-1.2-005"],
+      "impact": "Unit tests exist, need E2E validation"
+    },
+    {
+      "priority": "MEDIUM",
+      "action": "Add error/edge scenario tests for 20+ happy-path-only criteria",
+      "requirements": ["Validation errors", "Rate limiting", "Session expiration"],
+      "impact": "Error paths not tested"
+    },
+    {
+      "priority": "LOW",
+      "action": "Run /bmad:tea:test-review to assess test quality",
+      "requirements": [],
+      "impact": "Test quality validation deferred"
+    }
+  ],
+
+  "quality_assessment": {
+    "blocker_issues": [
+      { "issue": "E2E Framework Missing", "impact": "BLOCKS all E2E testing", "remediation": "Install Playwright or Cypress" },
+      { "issue": "Test ID Format Missing", "impact": "Traceability impossible", "remediation": "Rename to E1-1.X-XXX format" },
+      { "issue": "No Priority Tags", "impact": "Can't run selective tests", "remediation": "Add @p0/@p1/@p2 tags" }
+    ],
+    "warning_issues": [
+      { "issue": "auth.middleware.test.ts too long (230 lines)", "impact": "Exceeds 200 line recommendation", "remediation": "Split into smaller files" }
+    ],
+    "info_issues": [
+      { "issue": "No BDD structure", "impact": "Tests lack Given-When-Then format", "remediation": "Refactor to BDD style" }
+    ],
+    "passing_quality_gates": {
+      "total_tests": 17,
+      "passing_tests": 5,
+      "passing_percentage": 29.4,
+      "status": "FAIL"
+    }
+  },
+
+  "test_execution_results": {
+    "total_tests": 12,
+    "passed": null,
+    "failed": null,
+    "skipped": null,
+    "status": "NOT_EXECUTED",
+    "note": "Test execution results not available - run test suite to get actual pass/fail data"
+  },
+
+  "metadata": {
+    "workflow": "testarch-trace",
+    "version": "5.0",
+    "generated_by": "BMad TEA Agent",
+    "language": "Spanish",
+    "test_artifacts_path": "_bmad-output/test-artifacts/traceability-report.md"
+  }
+}
