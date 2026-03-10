@@ -2,6 +2,9 @@
 // GMAO HiRock/Ultra - Seed Data para Desarrollo
 // Story 0.2: Database Schema con Jerarquía 5 Niveles
 
+/* eslint-disable no-console */
+// Console logs are acceptable in seed files for progress tracking
+
 import { PrismaClient, Division, EquipoEstado } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
 
@@ -134,7 +137,30 @@ async function main() {
     })),
   })
 
-  console.log('✅ Created 3 users (admin, tecnico, supervisor)')
+  // Usuario: Nuevo usuario con forcePasswordReset=true (para E2E tests de Story 1.1)
+  const newUserPassword = await bcrypt.hash('tempPassword123', 10)
+  const newUser = await prisma.user.create({
+    data: {
+      email: 'new.user@example.com',
+      password_hash: newUserPassword,
+      name: 'Nuevo Usuario',
+      phone: '+34 600 000 004',
+      force_password_reset: true,
+    },
+  })
+
+  // Capabilities del nuevo usuario (solo can_create_failure_report por defecto - NFR-S66)
+  const newUserCapabilities = allCapabilities.filter((cap) =>
+    cap.name === 'can_create_failure_report'
+  )
+  await prisma.userCapability.createMany({
+    data: newUserCapabilities.map((cap) => ({
+      user_id: newUser.id,
+      capability_id: cap.id,
+    })),
+  })
+
+  console.log('✅ Created 4 users (admin, tecnico, supervisor, new user with forcePasswordReset=true)')
 
   // ============================================
   // 3. CREAR JERARQUÍA DE 5 NIVELES
