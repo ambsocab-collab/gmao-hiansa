@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
 
 // Configuración de fuente Inter con escala completa (12px a 36px)
 const inter = Inter({
@@ -42,6 +43,9 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+
+        {/* Toast notification container */}
+        <Toaster />
       </body>
     </html>
   )
