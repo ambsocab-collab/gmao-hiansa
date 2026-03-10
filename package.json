@@ -93,7 +93,7 @@
     ],
     "tests/**/*.{ts,tsx}": [
       "eslint --fix",
-      "tsc --noEmit --project tsconfig.test.json"
+      "tsc --noEmit"
     ],
     "app/**/*.{ts,tsx}": [
       "eslint --fix",
