@@ -390,6 +390,17 @@ export async function createUser(data: {
       action: 'create_user',
     })
 
+    /**
+     * Performance tracking: log warning if createUser takes >1s (1000ms)
+     *
+     * Rationale: 1-second threshold for user-facing operations
+     * - User creation involves: DB write, password hashing (bcrypt), audit logging
+     * - Expected completion time: <500ms on Vercel serverless
+     * - Threshold: 1000ms provides buffer for cold starts, network latency
+     * - Action: Create warning log if exceeded (for performance optimization)
+     *
+     * @see Story 0.5: Performance tracking pattern (lib/observability/performance.ts)
+     */
     perf.end(1000) // Log warning if createUser takes >1s
 
     return {
