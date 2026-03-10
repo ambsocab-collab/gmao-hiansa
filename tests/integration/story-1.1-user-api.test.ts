@@ -48,7 +48,7 @@ describe('Story 1.1: User API Business Logic', () => {
       // Given: user creation data without explicit capabilities
       const userData = userFactory({
         email: 'test-default@example.com',
-        nombre: 'Test User',
+        name: 'Test User',
         capabilities: undefined // No capabilities specified
       })
 
@@ -57,7 +57,7 @@ describe('Story 1.1: User API Business Logic', () => {
       const createdUser = await prisma.user.create({
         data: {
           email: userData.email,
-          name: userData.nombre,
+          name: userData.name,
           password_hash: hashedPassword,
           force_password_reset: true,
           // Note: Server Action creates capabilities via user_capabilities junction table
@@ -77,7 +77,7 @@ describe('Story 1.1: User API Business Logic', () => {
       // Given: user with multiple capabilities
       const userData = userFactory({
         email: 'test-multi-cap@example.com',
-        nombre: 'Multi Capability User',
+        name: 'Multi Capability User',
         capabilities: [
           'can_create_failure_report',
           'can_view_work_orders',
@@ -101,7 +101,7 @@ describe('Story 1.1: User API Business Logic', () => {
       const createdUser = await prisma.user.create({
         data: {
           email: userData.email,
-          name: userData.nombre,
+          name: userData.name,
           password_hash: hashedPassword,
           force_password_reset: true,
           user_capabilities: {
@@ -239,7 +239,7 @@ describe('Story 1.1: User API Business Logic', () => {
       const newUser = await prisma.user.create({
         data: {
           email: userData.email,
-          name: userData.nombre,
+          name: userData.name,
           password_hash: hashedPassword,
           force_password_reset: true // Default for new users
         }

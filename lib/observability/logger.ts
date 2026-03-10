@@ -113,6 +113,24 @@ export class Logger {
       }
     })
   }
+
+  /**
+   * Audit logging for critical actions (user management, deletions, etc.)
+   * Story 1.1: Added audit method for tracking critical admin actions
+   * @param message - Human-readable audit message
+   * @param context - Audit context with correlationId, userId, action, etc.
+   */
+  audit(message: string, context: { correlationId: string; userId?: string; action?: string; [key: string]: unknown }) {
+    this.log(LogLevel.INFO, {
+      userId: context.userId,
+      action: context.action || 'audit',
+      correlationId: context.correlationId,
+      metadata: {
+        auditMessage: message,
+        ...context,
+      },
+    })
+  }
 }
 
 // Singleton instance

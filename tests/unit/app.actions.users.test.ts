@@ -30,9 +30,35 @@ import * as perfModule from '@/lib/observability/performance'
 
 // Mock all external dependencies
 vi.mock('@/lib/auth-adapter')
-vi.mock('@/lib/db')
+vi.mock('@/lib/db', () => ({
+  prisma: {
+    user: {
+      findUnique: vi.fn(),
+      update: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+    },
+    activityLog: {
+      create: vi.fn(),
+    },
+    auditLog: {
+      create: vi.fn(),
+    },
+    capability: {
+      createMany: vi.fn(),
+    },
+  },
+}))
 vi.mock('@/lib/auth')
-vi.mock('@/lib/observability/logger')
+vi.mock('@/lib/observability/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+    audit: vi.fn(),
+  },
+}))
 vi.mock('@/lib/observability/performance')
 
 // Mock headers() from next/headers

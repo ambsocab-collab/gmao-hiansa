@@ -22,6 +22,8 @@ model User {
   name                 String
   phone                String?
   force_password_reset Boolean  @default(false)
+  deleted              Boolean  @default(false) // Soft delete (Story 1.1)
+  last_login           DateTime? // Last login timestamp (Story 1.1)
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
 
@@ -29,8 +31,11 @@ model User {
   user_capabilities      UserCapability[]
   work_order_assignments WorkOrderAssignment[]
   failure_reports        FailureReport[] @relation("FailureReports")
+  activity_logs          ActivityLog[] // Story 1.1: User activity tracking
+  audit_logs             AuditLog[] // Story 1.1: Audit trail for critical actions
 
   @@index([email])
+  @@index([deleted]) // For filtering soft-deleted users (Story 1.1)
   @@index([created_at])
   @@map("users")
 }
@@ -59,6 +64,37 @@ model UserCapability {
   @@id([user_id, capability_id])
   @@index([user_id]) // Para buscar capabilities de un usuario
   @@map("user_capabilities")
+}
+
+// Story 1.1: Activity Log for user actions (login, profile_update, password_change)
+model ActivityLog {
+  id        String   @id @default(cuid())
+  user_id   String
+  action    String // login, profile_update, password_change, capability_changed
+  metadata  Json? // Additional context for the action
+  timestamp DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, timestamp]) // For querying user activity history
+  @@map("activity_logs")
+}
+
+// Story 1.1: Audit Log for critical actions (user_created, user_deleted, etc.)
+model AuditLog {
+  id        String   @id @default(cuid())
+  user_id   String // Admin who performed the action
+  action    String // user_created, user_deleted, capability_changed, etc.
+  target_id String? // ID of the affected user/entity
+  metadata  Json? // Additional context
+  timestamp DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, timestamp]) // For querying admin audit history
+  @@map("audit_logs")
 }
 
 // ============================================
