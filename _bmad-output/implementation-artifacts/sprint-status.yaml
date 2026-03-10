@@ -50,8 +50,8 @@ development_status:
   epic-0-retrospective: optional
 
   # Epic 1: Autenticación y Gestión de Usuarios (PBAC)
-  epic-1: backlog
-  1-1-login-registro-y-perfil-de-usuario: backlog
+  epic-1: in-progress
+  1-1-login-registro-y-perfil-de-usuario: in-progress  # Code Review Round 2: 14 action items (7 HIGH, 4 MEDIUM, 3 LOW) - 5 tests failing
   1-2-sistema-pbac-con-15-capacidades: backlog
   1-3-etiquetas-de-clasificacion-y-organizacion: backlog
   epic-1-retrospective: optional

@@ -154,13 +154,14 @@ export default withAuth(
     requestHeaders.set(CORRELATION_ID_HEADER, correlationId)
 
     // Check if user has temporary password that must be changed
-    // If forcePasswordReset=true, force redirect to /change-password
-    // Except if already on /change-password or /unauthorized or /logout
+    // If forcePasswordReset=true, force redirect to /cambiar-password (Spanish route)
+    // Except if already on /cambiar-password, /unauthorized, /logout or API routes
+    // Story 1.1: Navigation blocking until password is changed (NFR-S72-A)
     if (token?.forcePasswordReset === true &&
-        path !== '/change-password' &&
+        path !== '/cambiar-password' &&
         path !== '/unauthorized' &&
         !path.startsWith('/api/auth')) {
-      const response = NextResponse.redirect(new URL('/change-password', req.url))
+      const response = NextResponse.redirect(new URL('/cambiar-password', req.url))
       response.headers.set(CORRELATION_ID_HEADER, correlationId)
       return response
     }
@@ -227,8 +228,8 @@ export const config = {
     '/routines/:path*',
     '/users/:path*',
     '/reports/:path*',
-    // Change password and unauthorized routes
-    '/change-password/:path*',
+    // Change password and unauthorized routes (Story 1.1: Spanish route names)
+    '/cambiar-password/:path*',
     '/unauthorized/:path*'
   ]
 }

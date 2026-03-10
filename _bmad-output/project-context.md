@@ -1,13 +1,13 @@
 ---
 project_name: 'gmao-hiansa'
 user_name: 'Bernardo'
-date: '2026-03-07'
+date: '2026-03-10'
 sections_completed:
   ['technology_stack', 'documentation_references', 'language_rules', 'framework_rules', 'testing_rules', 'code_quality_rules', 'workflow_rules', 'critical_rules']
 status: 'complete'
-rule_count: 95
+rule_count: 130
 optimized_for_llm: true
-existing_patterns_found: 24
+existing_patterns_found: 32
 ---
 
 # Project Context for AI Agents
@@ -40,14 +40,26 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Lucide React 0.344.0** - Icons (tree-shakeable)
 
 ### State & Data
-- **TanStack Query 5.51.0** - Real-time data fetching (KPIs every 30s)
+- **TanStack Query 5.90.21** - Real-time data fetching (KPIs every 30s)
 - **React Hook Form 7.51.5** - Form handling with Zod integration
 - **Zod 3.23.8** - Type-safe validation (schemas auto-generate TypeScript types)
+
+### Observability & Error Handling
+- **Structured Logging** - Native JSON format for Vercel (correlation IDs)
+- **Performance Tracking** - Custom `lib/observability/performance.ts` (>1s threshold)
+- **Client Logging** - `lib/observability/client-logger.ts` with rate limiting (10 errors/min)
+- **Custom Error Classes** - AppError base with ValidationError, AuthorizationError, AuthenticationError, etc.
 
 ### Real-time Communication
 - **Server-Sent Events (SSE)** - NOT WebSockets (incompatible with Vercel serverless)
 - Heartbeat: 30 seconds
 - Auto-reconnection: <30 seconds
+
+### Testing & Quality
+- **Vitest 1.0.0** - Unit/Integration tests with jsdom environment
+- **Playwright 1.48.0** - E2E tests (Chromium only - 4 workers)
+- **k6 0.55.0** - Performance load testing (baseline: login, search, create OT)
+- **React Testing Library** - Component testing with shadcn/ui patterns
 
 ### Critical Constraints
 - **Browsers**: Chrome and Edge ONLY (Chromium browsers)
@@ -105,6 +117,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
   - `epics/overview.md` - Overview de epics
   - `epics/requirements-inventory.md` - Inventario de requisitos (123 FRs, 37 NFRs)
   - `epics/epic-list.md` - Lista de 10 epics con resúmenes
+  - `epics/epic-0-infraestructura-core-del-sistema.md` - 5 stories (Starter Template, DB, Auth, SSE, Error Handling)
   - `epics/epic-1-autenticacin-y-gestin-de-usuarios-pbac.md` - 11 stories
   - `epics/epic-2-gestin-de-activos-y-jerarqua-de-5-niveles.md` - 9 stories
   - `epics/epic-4-rdenes-de-trabajo-y-kanban-digital.md` - 9 stories
@@ -115,6 +128,15 @@ _This file contains critical rules and patterns that AI agents must follow when 
   - `epics/epic-9-sincronizacin-multi-dispositivo-y-pwa.md` - 5 stories
   - `epics/epic-10-funcionalidades-adicionales-y-ux-avanzada.md` - 7 stories
   - `epics/resumen-final-de-todos-los-epics.md` - Resumen ejecutivo de todos los epics
+
+#### Implementation Artifacts (Stories)
+- **Epic 0 (Infraestructura)** - Stories completadas:
+  - `0-1-starter-template-y-stack-tecnico.md`
+  - `0-2-database-schema-prisma-con-jerarqua-5-niveles.md`
+  - `0-3-nextauth-js-con-credentials-provider.md`
+  - `0-4-sse-infrastructure-con-heartbeat.md`
+  - `0-5-error-handling-observability-y-ci-cd.md` ⬅️ **Story 0.5 - Error Handling & Observability**
+  - `1-1-login-registro-y-perfil-de-usuario.md` ⬅️ **Story 1.1 - En progreso**
 
 ### Documentos Completos (Archivados)
 
@@ -135,7 +157,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - "Según `prd/functional-requirements.md#1-gestin-de-averas`..."
 - "De acuerdo con `architecture/core-architectural-decisions.md#data-architecture`..."
 - "Como se especifica en `ux-design-specification/component-strategy.md#1-otcard`..."
-- "Según `epics/epic-4-rdenes-de-trabajo-y-kanban-digital.md#story-43`..."
+- "Según `implementation-artifacts/0-5-error-handling-observability-y-ci-cd.md`..." (Story 0.5)
 
 ---
 
@@ -147,31 +169,67 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Strict mode enabled** - All type checking enforced
 - **Path aliases**: Use `@/` for root imports (configured in tsconfig.json)
 - **No `any` types** - Use `unknown` or proper types instead
+- **Type guards** - Use `isError()` and `isAppErrorLike()` for type narrowing
 
 #### Import/Export Conventions
 - **Components**: Named exports (e.g., `export function Button()`)
 - **Server Actions**: `export async function` with `'use server'` directive at top
 - **Types**: Export from `types/` folder (e.g., `types/models.ts`, `types/auth.ts`)
 - **shadcn/ui components**: Default import (e.g., `import { Button } from "@/components/ui/button"`)
+- **Utilities**: Named exports from `lib/utils/` and `lib/observability/`
 
-#### Error Handling Patterns
+#### Error Handling Patterns (CRITICAL - Story 0.5)
 - **Custom error classes** defined in `lib/utils/errors.ts`:
-  - `AppError` (base), `ValidationError` (400), `AuthorizationError` (403), `InsufficientStockError` (400)
+  - `AppError` (base) - Includes: code, statusCode, message, details, timestamp, correlationId
+  - `ValidationError` (400) - For input validation failures
+  - `AuthorizationError` (403) - For PBAC capability checks
+  - `AuthenticationError` (401) - For auth failures (used in Story 0.3)
+  - `InsufficientStockError` (400) - For stock management
+  - `InternalError` (500) - For unexpected server errors
 - **Error messages in Spanish** - User-facing text must be Spanish
 - **Server Actions**: Throw errors directly (Next.js handles them)
-- **API Routes**: Use error handler middleware from `lib/api/errors.ts`
+- **API Routes**: Use `apiErrorHandler()` from `lib/api/errorHandler.ts`
+- **Type safety**: Use `isError()` guard before type assertions (see `lib/api/errorHandler.ts:31`)
 
-#### Async/Await Patterns
+#### Async/Await Patterns with Performance Tracking
 - **Server Components**: Use `async/await` directly in component body
 - **Server Actions**: Always async, validate with Zod first, then throw errors if needed
 - **Database queries**: Use Prisma Client with `await` (returns camelCase properties)
+- **Performance tracking**: Wrap slow queries with `trackPerformance(action, correlationId)`:
+  ```typescript
+  const perf = trackPerformance('seed_database', correlationId)
+  await prisma.user.createMany({ data: users })
+  perf.end(1000) // Log warning if >1s
+  ```
 - **Never use `.then()/.catch()`** - Always async/await for consistency
 
 #### Type Safety Rules
 - **Zod schemas generate TypeScript types** - Use `z.infer<typeof schema>` for type derivation
 - **Prisma auto-generates types** - Use `Prisma.ModelName` types from `@prisma/client`
-- **No type assertions** - Let TypeScript infer types when possible
+- **No type assertions without guards** - Use `isError()` before `error as Error`
 - **Server Actions validate inputs** - Always parse with Zod before processing
+
+#### Duck Typing Pattern (Avoid Circular Dependencies)
+- **Logger pattern**: Use interface `AppErrorLike` with type guard `isAppErrorLike()`
+- **Purpose**: Avoid circular imports between `lib/observability/logger.ts` and `lib/utils/errors.ts`
+- **Usage**: Check for error structure, not instance of `AppError`
+- **Example** (see `lib/observability/logger.ts:35-52`):
+  ```typescript
+  export interface AppErrorLike {
+    code?: string
+    message: string
+    statusCode?: number
+  }
+
+  export function isAppErrorLike(error: unknown): error is AppErrorLike {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'message' in error &&
+      typeof (error as AppErrorLike).message === 'string'
+    )
+  }
+  ```
 
 ### Framework-Specific Rules
 
@@ -180,6 +238,14 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Route groups** - Use `(auth)` and `(public)` folders for logical grouping
 - **Server Actions in `app/actions/`** - All server actions must be in dedicated action files
 - **API Routes versioned** - Use `/api/v1/` prefix for all API endpoints
+
+#### Error Boundary Pattern (CRITICAL - Story 0.5)
+- **Root error boundary**: `app/error.tsx` (Client Component)
+- **Correlation ID**: Display `error.digest` to users for support tracking
+- **Client-side logging**: Use `logClientError()` from `lib/observability/client-logger.ts`
+- **Rate limiting**: Client logger limited to 10 errors/minute (prevents endpoint spam)
+- **User-friendly messages**: Spanish error messages, no technical jargon
+- **Recovery**: Provide "Intentar nuevamente" button with `reset()` function
 
 #### React Component Rules
 - **Named exports** for components (e.g., `export function KanbanBoard()`)
@@ -212,28 +278,41 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 #### Authorization in Components
 - **Middleware protection** - Route-level protection in `middleware.ts`
+- **Correlation ID propagation** - All requests include `x-correlation-id` header (generated in middleware)
 - **Server Actions**: Check `session.user.capabilities.includes('can_do_action')`
 - **UI adaptation**: Hide/show elements based on user capabilities
 - **No role-based logic** - Use PBAC capabilities (15 granular capabilities)
+
+#### Observability Integration (Story 0.5)
+- **Health check endpoint**: `GET /api/v1/health` - Returns DB status, version, timestamp
+- **Correlation IDs**: Generate in middleware, propagate to all logs/responses
+- **Structured logging**: All logs use JSON format (Vercel compatible)
+- **Performance tracking**: Log queries >1s threshold with `trackPerformance()`
+- **Client error endpoint**: `POST /api/v1/log/error` for client-side error logging
 
 ### Testing Rules
 
 #### Test Organization
 - **Colocate tests with code** - Place test files next to files they test
 - **Test file naming**: `{ComponentName}.test.tsx` or `{functionName}.test.ts`
-- **Integration tests**: `__tests__/` folder for cross-feature tests
-- **E2E tests**: `e2e/` folder (using Playwright or similar)
+- **Integration tests**: `__tests__/` or `tests/integration/` folder for cross-feature tests
+- **E2E tests**: `tests/e2e/` folder (using Playwright)
+- **Performance tests**: `tests/performance/baseline/` folder (using k6 scripts)
 
 #### Mock Patterns
 - **Prisma Client**: Mock `@prisma/client` for database tests
 - **NextAuth session**: Mock `auth()` function for authentication tests
 - **Server Actions**: Mock using vi.mock() for component tests
 - **External APIs**: Mock fetch/axios for API route tests
+- **Logger**: Mock `lib/observability/logger.ts` for tests that don't need logging
+- **Performance tracking**: Mock `trackPerformance()` to avoid timing assertions
 
-#### Test Coverage Expectations
+#### Test Coverage Expectations (Epic 0 Baseline)
 - **Critical paths**: Server Actions, business logic (aim for >80%)
 - **UI components**: Components with forms and validation (aim for >60%)
 - **Utilities**: Helper functions, validation schemas (aim for >90%)
+- **Error handling**: Custom error classes, error handlers (24/24 tests passing)
+- **Observability**: Logger, performance tracking, client-logger (21/21 tests passing)
 - **Not critical**: Simple presentational components (test manually if needed)
 
 #### Test Boundaries
@@ -241,27 +320,71 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Integration tests**: Server Actions with test database, API routes with mocked services
 - **E2E tests**: Critical user journeys (login → create OT → complete OT)
 
-#### Testing Framework
-- **Unit/Integration**: Vitest (configured for Next.js 15)
-- **E2E**: Playwright (when critical flows are implemented)
-- **Component testing**: React Testing Library (shadcn/ui patterns)
+#### Testing Framework Configuration
+- **Unit/Integration**: Vitest 1.0.0 with jsdom environment
+  - Config: `vitest.config.ts`
+  - Setup file: `tests/setup.ts`
+  - Coverage threshold: 70% (lines, functions, branches, statements)
+- **E2E**: Playwright 1.48.0
+  - Config: `playwright.config.ts`
+  - Browsers: Chromium only (Chrome/Edge requirement)
+  - Workers: 4 (fixed parallelism)
+  - Timeouts: 60s test, 15s assertion, 30s navigation
+- **Performance**: k6 0.55.0
+  - Scripts: `tests/performance/baseline/*.js`
+  - Baselines: login (100 users), asset-search (50 users), create-ot (20 users)
+  - Run via: `npm run test:perf` or `npm run test:perf:{endpoint}`
+
+#### Testing Best Practices
+- **TDD cycle**: Write failing tests first (RED), implement to pass (GREEN), refactor (REFACTOR)
+- **Describe blocks**: Group related tests with descriptive `describe()` blocks
+- **Test isolation**: Each test should be independent (use `beforeEach` for setup)
+- **Mock cleanup**: Use `vi.clearAllMocks()` in `beforeEach` to prevent test pollution
+- **Dynamic imports**: Use ESM dynamic imports for Server Components in tests
+- **Test IDs**: Use `data-testid` attributes for Playwright selectors
+
+#### Performance Testing (k6 - Story 0.5)
+- **Baseline scripts**: 3 load testing scenarios configured:
+  - `login-load-test.js` - 100 concurrent users, login endpoint
+  - `asset-search-load-test.js` - 50 concurrent users, search endpoint
+  - `create-ot-load-test.js` - 20 concurrent users, create OT endpoint
+- **Thresholds**: p95 latency <500ms for all endpoints
+- **Documentation**: See `tests/performance/baseline/README.md`
+- **Run commands**:
+  - `npm run test:perf` - Run all performance tests
+  - `npm run test:perf:login` - Login load test only
+  - `npm run test:perf:asset-search` - Search load test only
+  - `npm run test:perf:create-ot` - Create OT load test only
 
 ### Code Quality & Style Rules
 
 #### ESLint/Prettier Configuration
-- **ESLint**: Configured for Next.js 15 + TypeScript strict rules
-- **No console.log in production** - Use proper logging if needed
-- **No unused variables** - Enforced by TypeScript strict mode
+- **ESLint 9.0.0** - Flat config format (`eslint.config.js`)
+- **TypeScript strict rules** - Enforced via `@typescript-eslint/eslint-plugin`
+- **No console.log in production** - Allow: `console.warn`, `console.error` only
+- **No unused variables** - Enforced by TypeScript strict mode (ignore `_` prefix)
 - **Consistent imports** - Group imports: external, internal, types
+- **lint-staged**: Run on pre-commit via Husky (see `.husky/pre-commit`)
 
 #### File and Folder Structure
 - **Feature-based organization** - Group by feature, NOT by type
 - **Standard folders**:
   - `app/` - Next.js App Router (pages, layouts, API routes)
   - `components/` - React components (ui/ for generic, {feature}/ for specific)
-  - `lib/` - Utilities and helpers (auth/, db/, utils/, api/)
+  - `lib/` - Utilities and helpers
+    - `lib/auth.ts`, `lib/auth-adapter.ts` - Authentication
+    - `lib/db.ts` - Prisma client singleton
+    - `lib/utils/` - Utilities (errors.ts, etc.)
+    - `lib/observability/` - Logging & performance (Story 0.5)
+      - `logger.ts` - Structured logging
+      - `performance.ts` - Performance tracking
+      - `client-logger.ts` - Client-side logging with rate limiting
+    - `lib/api/` - API utilities (Story 0.5)
+      - `errorHandler.ts` - API error handler middleware
+    - `lib/sse/` - SSE infrastructure
   - `types/` - TypeScript type definitions
   - `prisma/` - Database schema and migrations
+  - `tests/` - All test files (unit/, integration/, e2e/, performance/)
 - **Tests colocated** - Place `{file}.test.ts` next to `{file}.ts`
 
 #### Naming Conventions
@@ -274,13 +397,17 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Functions and variables**: camelCase
   - Example: `getUsers()`, `workOrderCount`
 - **Folders**: kebab-case
-  - Example: `components/kanban/`, `lib/auth/`
+  - Example: `components/kanban/`, `lib/observability/`
 - **JSON responses**: camelCase (Prisma auto-converts from snake_case)
+- **Error classes**: PascalCase with "Error" suffix
+  - Example: `AppError`, `ValidationError`, `AuthorizationError`
 
 #### Documentation Requirements
 - **User-facing text**: Spanish (UI labels, error messages, notifications)
 - **Code comments**: Spanish for domain logic, English for technical patterns
 - **JSDoc**: Use for complex functions, exported utilities
+  - Required for: `trackPerformance()`, `apiErrorHandler()`, exported functions
+  - Format: Description, params (@param), returns (@returns)
 - **Component documentation**: Add brief comment for complex UI components
 
 #### Code Organization Patterns
@@ -288,6 +415,18 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Barrel exports** - Use `index.ts` to group related exports
 - **Absolute imports** - Use `@/` alias for root imports (configured in tsconfig.json)
 - **No circular dependencies** - Structure prevents import cycles
+  - Example: Logger uses duck typing (`isAppErrorLike()`) to avoid importing `AppError`
+- **Singleton pattern**: Use for Prisma client, logger (export const instance)
+
+#### Git Hooks (Husky + lint-staged)
+- **Pre-commit hook**: `.husky/pre-commit` runs `npx lint-staged`
+- **lint-staged configuration** (package.json):
+  - `*.ts,*.tsx`: eslint --fix
+  - `tests/**/*.ts,*.tsx`: eslint --fix + typecheck (tsconfig.test.json)
+  - `app/**/*.ts,*.tsx`: eslint --fix + typecheck
+  - `lib/**/*.ts,*.tsx`: eslint --fix + typecheck
+  - `middleware.ts`: eslint --fix + typecheck
+- **Block commits on**: ESLint errors or TypeScript type errors
 
 ### Development Workflow Rules
 
@@ -295,6 +434,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Feature branches**: `feature/{feature-name}` (e.g., `feature/kanban-board`)
 - **Bug fixes**: `fix/{bug-description}` (e.g., `fix/login-validation`)
 - **Refactoring**: `refactor/{description}` (e.g., `refactor/user-auth`)
+- **Story branches**: `story/{epic-number}.{story-number}` (e.g., `story-1.1-login`)
 - **Use kebab-case** - Always lowercase with hyphens
 - **Descriptive names** - Make branch purpose clear
 
@@ -305,7 +445,9 @@ _This file contains critical rules and patterns that AI agents must follow when 
   - `feat: agregar formulario de reporte de averías`
   - `fix: corregir validación de stock insuficiente`
   - `docs: actualizar README con instrucciones de deployment`
-- **AI-assisted commits**: Add `Co-Authored-By: Claude Sonnet 4.x <noreply@anthropic.com>`
+  - `test(story-0.5): agregar tests de error handling`
+  - `feat(story-0.5): implementar infraestructura de observability`
+- **AI-assisted commits**: Add `Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>`
 
 #### Pull Request Requirements
 - **Clear description** - Explain what and why, not just what
@@ -313,21 +455,52 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Tests updated** - Ensure tests pass for new functionality
 - **No merge conflicts** - Resolve before requesting review
 - **Code review** - At least one approval required for main branch
+- **CI/CD checks**: All GitHub Actions must pass (if configured)
 
 #### Deployment Patterns
 - **Vercel integration** - Automatic deploy on push to `main`
 - **Environment variables**:
   - Use `.env.local` for local development (gitignored)
   - Use `.env.example` as template (committed)
-  - Configure secrets in Vercel dashboard
+  - Configure secrets in Vercel dashboard (see `VERCEL_SETUP.md`)
 - **Database migrations** - Run `prisma migrate deploy` during deploy
 - **No manual deployments** - All deployments via git push to main
+- **Preview deployments**: Automatic for PRs (if Vercel GitHub integration configured)
+- **Rollback**: 1-click rollback available in Vercel dashboard
 
 #### Development Workflow
 - **Feature branches** - Work on feature branches, NOT directly on main
 - **Update frequently** - Pull latest main regularly to avoid conflicts
 - **Test before commit** - Run tests and linting before pushing
+  - `npm run test` - Run Vitest unit/integration tests
+  - `npm run test:e2e` - Run Playwright E2E tests
+  - `npm run lint` - Run ESLint
+  - `npm run type-check` - Run TypeScript type checking
 - **Clean git history** - Squash commits when merging if needed
+- **Pre-commit hooks**: Husky runs lint-staged automatically
+
+#### Available Scripts (package.json)
+- **Development**:
+  - `npm run dev` - Start Next.js dev server (port 3000)
+  - `npm run build` - Build for production
+  - `npm run start` - Start production server
+- **Testing**:
+  - `npm run test` - Run all Vitest tests
+  - `npm run test:watch` - Run Vitest in watch mode
+  - `npm run test:coverage` - Run tests with coverage report
+  - `npm run test:unit` - Run unit tests only
+  - `npm run test:integration` - Run integration tests only
+  - `npm run test:e2e` - Run Playwright E2E tests
+  - `npm run test:e2e:ui` - Run Playwright with UI
+  - `npm run test:perf` - Run all k6 performance tests
+  - `npm run test:perf:login` - Run login load test
+  - `npm run test:perf:asset-search` - Run asset search load test
+  - `npm run test:perf:create-ot` - Run create OT load test
+- **Database**:
+  - `npm run db:generate` - Generate Prisma client
+  - `npm run db:push` - Push schema to database
+  - `npm run db:seed` - Seed database with test data
+  - `npm run db:studio` - Open Prisma Studio
 
 ### Critical Don't-Miss Rules
 
@@ -339,7 +512,10 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **❌ NO mixing snake_case/camelCase** - DB: snake_case, Code: camelCase
 - **❌ NO callbacks or .then()/.catch()** - Always use async/await for consistency
 - **❌ NO any types** - Use `unknown` or proper TypeScript types
-- **❌ NO console.log in production** - Use proper logging if needed
+- **❌ NO console.log in production** - Use structured logging via `lib/observability/logger.ts`
+- **❌ NO type assertions without guards** - Use `isError()` before `error as Error`
+- **❌ NO circular dependencies** - Use duck typing patterns (e.g., `isAppErrorLike()`)
+- **❌ NO exposing stack traces in production** - Use custom error classes with sanitized messages
 
 #### Critical Edge Cases
 - **5-level hierarchy strict** - Planta → Linea → Equipo → Componente → Repuesto (validate in Prisma)
@@ -350,6 +526,9 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **10K+ asset search** - Must return results in <200ms (use DB indexes, caching)
 - **Stock minimum alerts** - Alert only when stock <= minimum (not every update)
 - **Real-time heartbeat** - SSE heartbeat every 30s, reconnect <30s if lost
+- **Correlation ID propagation** - Every request/response must include `x-correlation-id` header
+- **Performance tracking threshold** - Log queries >1000ms (1s) as warnings
+- **Client error rate limiting** - Max 10 errors/minute per client (prevents endpoint spam)
 
 #### Security Rules
 - **🔒 Password hashing** - Always use bcryptjs (NOT bcrypt native - incompatible with Vercel)
@@ -359,6 +538,9 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **🔒 Critical actions audit** - Log capability changes, OT deletions, stock adjustments
 - **🔒 No credentials in code** - Use environment variables (`.env.local`)
 - **🔒 Session management** - NextAuth handles sessions, set maxAge to 8 hours
+- **🔒 Sensitive data in logs** - NEVER log passwords, tokens, secrets (NFR-S8)
+- **🔒 Error messages in production** - Sanitize stack traces, use Spanish user messages only
+- **🔒 Test data cleanup protection** - Requires `can_manage_users` capability (Story 0.5)
 
 #### Performance Gotchas
 - **⚡ Default to Server Components** - Only Client Components when absolutely necessary
@@ -368,6 +550,11 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **⚡ Optimize images** - Always use `<Image />` from Next.js (auto-optimization)
 - **⚡ Code splitting** - Use `dynamic()` for heavy components (Kanban, Charts)
 - **⚡ Cache KPIs** - Cache KPI calculations for 30s (TanStack Query staleTime)
+- **⚡ Performance tracking placement** - Wrap slow operations with `trackPerformance()`:
+  - Database queries that may exceed 1s
+  - Bulk operations (seed, cleanup)
+  - External API calls
+- **⚡ Health check threshold** - Use 1000ms (1s) for DB connection check threshold
 
 #### Domain-Specific Rules
 - **Spanish user-facing text** - ALL UI labels, errors, notifications must be in Spanish
@@ -376,6 +563,23 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Industrial environment** - Assume WiFi, tablets, Windows desktops, 4K TVs with Chrome
 - **Always online** - PWA for installation/notifications, but requires internet connection
 - **No offline mode** - System assumes constant connectivity (factory environment)
+
+#### Error Handling Gotchas (Story 0.5)
+- **🚨 Error boundary is Client Component** - `app/error.tsx` uses `'use client'` directive
+- **🚨 Client-side logging rate limited** - Max 10 errors/minute per client
+- **🚨 Correlation IDs in all responses** - Include in JSON responses for debugging
+- **🚨 Type safety for error handlers** - Use `isError()` guard before type assertions
+- **🚨 Duck typing for logger** - `isAppErrorLike()` avoids circular dependencies
+- **🚨 Health check includes DB status** - Return `services.database: 'up'` or `'down'`
+- **🚨 Performance tracking requires correlation ID** - Always pass `correlationId` to `trackPerformance()`
+
+#### Observability Gotchas (Story 0.5)
+- **📊 All logs in JSON format** - Vercel requires structured logging
+- **📊 Log levels: DEBUG, INFO, WARN, ERROR** - Use appropriate level
+- **📊 Stack traces only in development** - Production logs hide stack traces
+- **📊 Performance logs include duration** - Log `duration` and `threshold` metadata
+- **📊 Correlation IDs for traceability** - Every log must include `correlationId`
+- **📊 Client errors go to endpoint** - POST to `/api/v1/log/error`, not `console.error()`
 
 ---
 
@@ -387,6 +591,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Follow ALL rules exactly as documented
 - When in doubt, prefer the more restrictive option
 - Update this file if new patterns emerge
+- **Story 0.5 Reference**: See `_bmad-output/implementation-artifacts/0-5-error-handling-observability-y-ci-cd.md` for complete error handling patterns
 
 **For Humans:**
 
@@ -395,4 +600,12 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Review quarterly for outdated rules
 - Remove rules that become obvious over time
 
-Last Updated: 2026-03-07
+**Recent Updates (2026-03-10):**
+- ✅ Added Story 0.5: Error Handling & Observability patterns
+- ✅ Updated TanStack Query to 5.90.21
+- ✅ Added k6 0.55.0 for performance testing
+- ✅ Added structured logging, performance tracking, client logging rules
+- ✅ Updated rule count: 95 → 130 rules
+- ✅ Total tests passing: 253/254 (Epic 0 GREEN phase)
+
+Last Updated: 2026-03-10

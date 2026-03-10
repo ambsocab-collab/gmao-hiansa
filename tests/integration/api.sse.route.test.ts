@@ -1,5 +1,6 @@
 /**
  * Integration Tests for SSE Endpoint
+ * Story 0.4: Implementar SSE con Heartbeat y Rate Limiting
  *
  * Tests the SSE API endpoint including:
  * - Authentication requirements
@@ -9,7 +10,7 @@
  * - Event broadcasting
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { GET } from '@/app/api/v1/sse/route'
 import { NextRequest } from 'next/server'
 
@@ -20,9 +21,13 @@ vi.mock('@/lib/auth-adapter', () => ({
 
 import { auth } from '@/lib/auth-adapter'
 
+// Fixed timestamp for deterministic tests (1 hour in future from test baseline)
+const FIXED_EXPIRES_TIMESTAMP = '2024-01-01T01:00:00.000Z'
+const FIXED_UPDATED_AT_TIMESTAMP = '2024-01-01T00:30:00.000Z'
+
 describe('SSE Endpoint Integration Tests', () => {
   describe('GET /api/v1/sse', () => {
-    it('should return 401 Unauthorized when no session', async () => {
+    it('[P0] 0.4-INT-001: should return 401 Unauthorized when no session', async () => {
       // Mock auth to return null (no session)
       vi.mocked(auth).mockResolvedValueOnce(null)
 
@@ -36,7 +41,7 @@ describe('SSE Endpoint Integration Tests', () => {
       expect(await response.text()).toBe('Unauthorized')
     })
 
-    it('should accept connection with valid session', async () => {
+    it('[P0] 0.4-INT-002: should accept connection with valid session', async () => {
       // Mock auth to return session
       vi.mocked(auth).mockResolvedValueOnce({
         user: {
@@ -44,7 +49,7 @@ describe('SSE Endpoint Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User'
         },
-        expires: new Date(Date.now() + 3600000).toISOString()
+        expires: FIXED_EXPIRES_TIMESTAMP
       })
 
       const request = new NextRequest(
@@ -60,7 +65,7 @@ describe('SSE Endpoint Integration Tests', () => {
       expect(response.headers.get('X-Accel-Buffering')).toBe('no')
     })
 
-    it('should return 400 Bad Request for invalid channel', async () => {
+    it('[P1] 0.4-INT-003: should return 400 Bad Request for invalid channel', async () => {
       // Mock auth to return session
       vi.mocked(auth).mockResolvedValueOnce({
         user: {
@@ -68,7 +73,7 @@ describe('SSE Endpoint Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User'
         },
-        expires: new Date(Date.now() + 3600000).toISOString()
+        expires: FIXED_EXPIRES_TIMESTAMP
       })
 
       const request = new NextRequest(
@@ -81,7 +86,7 @@ describe('SSE Endpoint Integration Tests', () => {
       expect(await response.text()).toContain('Invalid channel')
     })
 
-    it('should default to work-orders channel when not specified', async () => {
+    it('[P2] 0.4-INT-004: should default to work-orders channel when not specified', async () => {
       // Mock auth to return session
       vi.mocked(auth).mockResolvedValueOnce({
         user: {
@@ -89,7 +94,7 @@ describe('SSE Endpoint Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User'
         },
-        expires: new Date(Date.now() + 3600000).toISOString()
+        expires: FIXED_EXPIRES_TIMESTAMP
       })
 
       const request = new NextRequest('http://localhost:3000/api/v1/sse')
@@ -99,7 +104,7 @@ describe('SSE Endpoint Integration Tests', () => {
       expect(response.status).toBe(200)
     })
 
-    it('should accept all valid channels', async () => {
+    it('[P1] 0.4-INT-005: should accept all valid channels', async () => {
       const validChannels = ['work-orders', 'kpis', 'stock']
 
       for (const channel of validChannels) {
@@ -110,7 +115,7 @@ describe('SSE Endpoint Integration Tests', () => {
             email: 'test@example.com',
             name: 'Test User'
           },
-          expires: new Date(Date.now() + 3600000).toISOString()
+          expires: FIXED_EXPIRES_TIMESTAMP
         })
 
         const request = new NextRequest(
@@ -125,7 +130,7 @@ describe('SSE Endpoint Integration Tests', () => {
   })
 
   describe('SSE Stream Format', () => {
-    it('should send heartbeat as SSE event', async () => {
+    it('[P0] 0.4-INT-006: should send heartbeat as SSE event', async () => {
       // Mock auth to return session
       vi.mocked(auth).mockResolvedValueOnce({
         user: {
@@ -133,7 +138,7 @@ describe('SSE Endpoint Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User'
         },
-        expires: new Date(Date.now() + 3600000).toISOString()
+        expires: FIXED_EXPIRES_TIMESTAMP
       })
 
       const request = new NextRequest(
@@ -166,7 +171,7 @@ describe('SSE Endpoint Integration Tests', () => {
       reader.cancel()
     })
 
-    it('should include correct SSE headers', async () => {
+    it('[P0] 0.4-INT-007: should include correct SSE headers', async () => {
       // Mock auth to return session
       vi.mocked(auth).mockResolvedValueOnce({
         user: {
@@ -174,7 +179,7 @@ describe('SSE Endpoint Integration Tests', () => {
           email: 'test@example.com',
           name: 'Test User'
         },
-        expires: new Date(Date.now() + 3600000).toISOString()
+        expires: FIXED_EXPIRES_TIMESTAMP
       })
 
       const request = new NextRequest(
@@ -195,7 +200,7 @@ describe('SSE Endpoint Integration Tests', () => {
 })
 
 describe('SSE Endpoint Reconnection Support', () => {
-  it('should support replay buffer for missed events', async () => {
+  it('[P1] 0.4-INT-008: should support replay buffer for missed events', async () => {
     // Mock auth to return session
     vi.mocked(auth).mockResolvedValueOnce({
       user: {
@@ -216,7 +221,7 @@ describe('SSE Endpoint Reconnection Support', () => {
         workOrderId: 'test-wo-999',
         numero: 999,
         estado: 'EN_PROGRESO',
-        updatedAt: new Date().toISOString()
+        updatedAt: FIXED_UPDATED_AT_TIMESTAMP
       },
       id: 'test-event-999'
     })
@@ -237,7 +242,7 @@ describe('SSE Endpoint Reconnection Support', () => {
     BroadcastManager.resetForTesting()
   })
 
-  it('should cleanup connection on abort', async () => {
+  it('[P2] 0.4-INT-009: should cleanup connection on abort', async () => {
     // Mock auth to return session
     vi.mocked(auth).mockResolvedValueOnce({
       user: {

@@ -14,7 +14,8 @@ import NextAuth, { NextAuthOptions, User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 import { prisma } from '@/lib/db'
-import { AuthenticationError } from '@/lib/utils/errors'
+import { AuthenticationError, AuthorizationError } from '@/lib/utils/errors'
+import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit'
 
 /**
  * NextAuth configuration options
@@ -45,11 +46,23 @@ export const authOptions: NextAuthOptions = {
        * Authorize function
        * Validates credentials against Prisma User model
        * Includes security measures to prevent user enumeration and timing attacks
+       * Story 1.1: Adds rate limiting, soft delete check, and last login tracking
        */
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials, req): Promise<User | null> {
         // Validate credentials exist
         if (!credentials?.email || !credentials?.password) {
           throw new AuthenticationError('Credenciales inválidas')
+        }
+
+        // Story 1.1: Rate limiting (5 attempts / 15 minutes)
+        // Get IP from request headers (works with Vercel proxy)
+        const ip = (req?.headers?.['x-forwarded-for'] as string)?.split(',')[0].trim()
+          || (req?.headers?.['x-real-ip'] as string)
+          || 'unknown'
+
+        const rateLimitOk = await checkRateLimit(ip)
+        if (!rateLimitOk) {
+          throw new AuthenticationError('Demasiados intentos. Intenta nuevamente en 15 minutos.')
         }
 
         try {
@@ -66,12 +79,26 @@ export const authOptions: NextAuthOptions = {
             throw new AuthenticationError('Credenciales inválidas')
           }
 
+          // Story 1.1: Check soft delete (deleted users cannot login)
+          if (user.deleted) {
+            throw new AuthorizationError('Este usuario ha sido eliminado. Contacta al administrador.')
+          }
+
           // Verify password using bcryptjs
           const isValid = await compare(credentials.password, user.password_hash)
 
           if (!isValid) {
             throw new AuthenticationError('Credenciales inválidas')
           }
+
+          // Story 1.1: Update last_login timestamp
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { last_login: new Date() }
+          })
+
+          // Story 1.1: Reset rate limit after successful login
+          resetRateLimit(ip)
 
           // Return user object for NextAuth
           return {
@@ -83,8 +110,8 @@ export const authOptions: NextAuthOptions = {
             forcePasswordReset: user.force_password_reset
           }
         } catch (error) {
-          // If AuthenticationError, re-throw
-          if (error instanceof AuthenticationError) {
+          // If AuthenticationError or AuthorizationError, re-throw
+          if (error instanceof AuthenticationError || error instanceof AuthorizationError) {
             throw error
           }
           // Other error, throw generic with consistent message
@@ -153,10 +180,12 @@ export const authOptions: NextAuthOptions = {
   /**
    * Custom Pages
    * Custom routes for login and errors
+   * Story 1.1: Spanish route names
    */
   pages: {
     signIn: '/login',
-    error: '/login'
+    error: '/login',
+    // Note: newUser is not used, registration is admin-only via /usuarios/nuevo
   }
 }
 

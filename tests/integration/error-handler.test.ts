@@ -19,7 +19,7 @@ describe('API Error Handler', () => {
   })
 
   describe('apiErrorHandler()', () => {
-    it('should capture AppError and return correct status code', async () => {
+    it('[P0] 0.5-INT-001: should capture AppError and return correct status code', async () => {
       const error = new ValidationError('Email is required')
       const correlationId = 'test-error-123'
 
@@ -28,7 +28,7 @@ describe('API Error Handler', () => {
       expect(response.status).toBe(400)
     })
 
-    it('should return error response with message and code', async () => {
+    it('[P0] 0.5-INT-002: should return error response with message and code', async () => {
       const error = new ValidationError('Invalid email format')
       const correlationId = 'test-error-456'
 
@@ -44,7 +44,7 @@ describe('API Error Handler', () => {
       })
     })
 
-    it('should log error with correlation ID', async () => {
+    it('[P1] 0.5-INT-003: should log error with correlation ID', async () => {
       const error = new ValidationError('Test error')
       const correlationId = 'test-error-789'
 
@@ -53,7 +53,7 @@ describe('API Error Handler', () => {
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
     })
 
-    it('should return generic error response for non-AppError', async () => {
+    it('[P0] 0.5-INT-004: should return generic error response for non-AppError', async () => {
       const error = new Error('Generic error')
       const correlationId = 'test-error-000'
 
@@ -70,7 +70,7 @@ describe('API Error Handler', () => {
       })
     })
 
-    it('should not expose stack trace in response', async () => {
+    it('[P0] 0.5-INT-005: should not expose stack trace in response', async () => {
       const error = new AppError('Test error', 500, 'INTERNAL_ERROR', { detail: 'sensitive' })
       const correlationId = 'test-error-999'
 
@@ -81,7 +81,7 @@ describe('API Error Handler', () => {
       expect(json.error).not.toHaveProperty('stack')
     })
 
-    it('should handle errors without userId', async () => {
+    it('[P1] 0.5-INT-006: should handle errors without userId', async () => {
       const error = new AuthorizationError('Access denied')
       const correlationId = 'test-error-888'
 
@@ -90,7 +90,7 @@ describe('API Error Handler', () => {
       expect(response.status).toBe(403)
     })
 
-    it('should include correlation ID in all error responses', async () => {
+    it('[P0] 0.5-INT-007: should include correlation ID in all error responses', async () => {
       const error = new ValidationError('Validation failed')
       const correlationId = 'test-correlation-123'
 
