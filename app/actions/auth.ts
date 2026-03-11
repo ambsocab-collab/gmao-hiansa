@@ -8,7 +8,7 @@
 
 'use server'
 
-import { signIn, signOut } from '@/app/api/auth/[...nextauth]/route'
+import { signIn, signOut } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { checkRateLimit, resetRateLimit, initRateLimitCleanup } from '@/lib/rate-limit'

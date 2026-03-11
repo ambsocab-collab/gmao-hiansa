@@ -36,8 +36,8 @@ export default async function ProfilePage() {
       email: true,
       name: true,
       phone: true,
-      created_at: true,
-      last_login: true,
+      createdAt: true,
+      lastLogin: true,
     },
   })
 

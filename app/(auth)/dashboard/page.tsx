@@ -24,7 +24,7 @@ export default async function DashboardPage() {
   // Get user's initials for avatar
   const initials = session.user.name
     ?.split(' ')
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join('')
     .toUpperCase()
     .substring(0, 2) || 'U'
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
           <div className="mt-4">
             <dt className="text-sm font-medium text-gray-500 mb-2">Capabilities</dt>
             <dd className="mt-1 flex flex-wrap gap-2">
-              {session.user.capabilities?.map((capability) => (
+              {session.user.capabilities?.map((capability: string) => (
                 <span
                   key={capability}
                   className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"

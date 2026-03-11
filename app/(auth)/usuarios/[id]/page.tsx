@@ -59,7 +59,7 @@ export default async function UsuarioDetailPage({
     notFound()
   }
 
-  const capabilities = user.user_capabilities.map((uc) => uc.capability)
+  const capabilities = user.user_capabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -205,9 +205,9 @@ export default async function UsuarioDetailPage({
               Capabilities ({capabilities.length})
             </h2>
             <div className="space-y-3">
-              {capabilities.map((capability) => (
+              {capabilities.map((capability: { name: string; label: string }) => (
                 <div
-                  key={capability.id}
+                  key={capability.name}
                   className="flex items-start space-x-3 p-3 border rounded-md"
                 >
                   <div className="flex-1">

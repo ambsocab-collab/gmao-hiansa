@@ -41,14 +41,14 @@ export default async function UsuariosListPage() {
       email: true,
       name: true,
       phone: true,
-      force_password_reset: true,
-      created_at: true,
-      last_login: true,
+      forcePasswordReset: true,
+      createdAt: true,
+      lastLogin: true,
       user_capabilities: {
         include: { capability: true },
       },
     },
-    orderBy: { created_at: 'desc' },
+    orderBy: { createdAt: 'desc' },
   })
 
   return (
@@ -99,7 +99,7 @@ export default async function UsuariosListPage() {
                         <p className="text-xs text-gray-500">
                           {capabilities.length} capabilities
                         </p>
-                        {user.force_password_reset && (
+                        {user.forcePasswordReset && (
                           <span className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
                             Contraseña temporal
                           </span>

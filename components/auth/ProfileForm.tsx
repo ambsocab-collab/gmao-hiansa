@@ -34,8 +34,8 @@ interface User {
   email: string
   name: string
   phone: string | null
-  created_at: Date
-  last_login: Date | null
+  createdAt: Date
+  lastLogin: Date | null
 }
 
 interface ProfileFormState {
@@ -235,7 +235,7 @@ export function ProfileForm({ user }: { user: User }) {
               <div>
                 <dt className="text-xs text-gray-500">Miembro desde</dt>
                 <dd className="text-sm text-gray-900">
-                  {new Date(user.created_at).toLocaleDateString('es-ES', {
+                  {new Date(user.createdAt).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -245,8 +245,8 @@ export function ProfileForm({ user }: { user: User }) {
               <div>
                 <dt className="text-xs text-gray-500">Último acceso</dt>
                 <dd className="text-sm text-gray-900">
-                  {user.last_login
-                    ? new Date(user.last_login).toLocaleDateString('es-ES', {
+                  {user.lastLogin
+                    ? new Date(user.lastLogin).toLocaleDateString('es-ES', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

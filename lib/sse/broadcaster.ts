@@ -190,7 +190,7 @@ export const BroadcastManager = BroadcastManagerClass.getInstance()
  */
 export function broadcastWorkOrderUpdate(workOrder: {
   id: string
-  numero: number
+  numero: string
   estado: string
   updatedAt: Date
 }): void {

@@ -26,7 +26,7 @@ export default async function AuthLayout({
   // Get user's initials for avatar
   const initials = session.user.name
     ?.split(' ')
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join('')
     .toUpperCase()
     .substring(0, 2) || 'U'

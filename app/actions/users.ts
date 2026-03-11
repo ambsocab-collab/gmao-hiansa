@@ -99,10 +99,8 @@ export async function updateProfile(data: { name: string; phone?: string }) {
       },
     })
 
-    logger.info('Profile updated successfully', {
-      correlationId,
-      userId: session.user.id,
-      action: 'update_profile',
+    logger.info(session.user.id, 'update_profile', correlationId, {
+      success: true,
     })
 
     perf.end()
@@ -117,8 +115,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
 
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {
-      logger.warn('Profile update validation failed', {
-        correlationId,
+      logger.warn(undefined, 'update_profile_validation_failed', correlationId, {
         errors: error.errors,
       })
       throw new ValidationError('Datos inválidos', error.errors)

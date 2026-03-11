@@ -20,7 +20,7 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
 
@@ -42,8 +42,11 @@ export async function GET(
       )
     }
 
+    // Await params (Next.js 15 requirement)
+    const { id } = await params
+
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user_capabilities: {
           include: { capability: true },
@@ -68,12 +71,12 @@ export async function GET(
       email: user.email,
       name: user.name,
       phone: user.phone,
-      forcePasswordReset: user.force_password_reset,
+      forcePasswordReset: user.forcePasswordReset,
       deleted: user.deleted,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
+      createdAt: user.createdAt,
+      lastLogin: user.lastLogin,
       capabilities: user.user_capabilities.map((uc) => uc.capability.name),
-      activityLogs: user.activity_logs,
+      activityLogs: user.activityLogs,
     }
 
     return NextResponse.json({ user: transformedUser })
@@ -93,13 +96,16 @@ export async function GET(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
 
   try {
+    // Await params (Next.js 15 requirement)
+    const { id } = await params
+
     // Call Server Action
-    const result = await deleteUser(params.id)
+    const result = await deleteUser(id)
 
     return NextResponse.json(result)
   } catch (error) {
