@@ -72,9 +72,11 @@ export class Logger {
 
     switch (level) {
       case LogLevel.DEBUG:
+        // eslint-disable-next-line no-console -- Logger component needs console output
         console.debug(formattedLog)
         break
       case LogLevel.INFO:
+        // eslint-disable-next-line no-console -- Logger component needs console output
         console.info(formattedLog)
         break
       case LogLevel.WARN:

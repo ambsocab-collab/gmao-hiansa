@@ -23,7 +23,7 @@ export function createSSEStream() {
 export function sendSSEEvent(
   controller: ReadableStreamDefaultController,
   event: string,
-  data: any
+  data: Record<string, unknown>
 ) {
   const encoder = new TextEncoder()
   const message = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`

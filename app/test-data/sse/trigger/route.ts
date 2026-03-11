@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       // Broadcast test work order update event
       broadcastWorkOrderUpdate({
         id: 'test-wo-123',
-        numero: 123,
+        numero: '123',
         estado: 'EN_PROGRESO',
         updatedAt: new Date()
       })
