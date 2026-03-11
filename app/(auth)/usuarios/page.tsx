@@ -44,7 +44,7 @@ export default async function UsuariosListPage() {
       forcePasswordReset: true,
       createdAt: true,
       lastLogin: true,
-      user_capabilities: {
+      userCapabilities: {
         include: { capability: true },
       },
     },
@@ -70,7 +70,7 @@ export default async function UsuariosListPage() {
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <ul className="divide-y divide-gray-200" role="list">
           {users.map((user) => {
-            const capabilities = user.user_capabilities.map(
+            const capabilities = user.userCapabilities.map(
               (uc) => uc.capability.label
             )
 

@@ -45,12 +45,8 @@ export default async function UsuarioDetailPage({
   const user = await prisma.user.findUnique({
     where: { id },
     include: {
-      user_capabilities: {
+      userCapabilities: {
         include: { capability: true },
-      },
-      activity_logs: {
-        orderBy: { timestamp: 'desc' },
-        take: 20,
       },
     },
   })
@@ -59,7 +55,14 @@ export default async function UsuarioDetailPage({
     notFound()
   }
 
-  const capabilities = user.user_capabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
+  // Get activity logs separately
+  const activityLogs = await prisma.activityLog.findMany({
+    where: { userId: id },
+    orderBy: { timestamp: 'desc' },
+    take: 20,
+  })
+
+  const capabilities = user.userCapabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -159,13 +162,13 @@ export default async function UsuarioDetailPage({
               className="space-y-4"
               data-testid="activity-history"
             >
-              {user.activity_logs.length === 0 ? (
+              {activityLogs.length === 0 ? (
                 <p className="text-sm text-gray-500">
                   Sin actividad registrada
                 </p>
               ) : (
                 <ul className="divide-y divide-gray-200">
-                  {user.activity_logs.map((log) => (
+                  {activityLogs.map((log: { id: string; action: string; timestamp: Date }) => (
                     <li key={log.id} className="py-3">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-900">
