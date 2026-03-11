@@ -58,9 +58,12 @@ export function getOrCreateCorrelationId(request: Headers): string {
  * Route to required capabilities mapping
  * Defines which capabilities are needed to access each route
  * Exported for testing
+ *
+ * Note: /dashboard is accessible to all authenticated users
+ * Specific dashboard features are protected by capabilities within the page
  */
 export const ROUTE_CAPABILITIES: Record<string, string[]> = {
-  '/dashboard': ['can_view_kpis'],
+  '/dashboard': [], // No capabilities required - all authenticated users can access
   '/work-orders': ['can_view_all_ots'],
   '/assets': ['can_manage_assets'],
   '/stock': ['can_manage_stock'],

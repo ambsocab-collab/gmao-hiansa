@@ -14,7 +14,7 @@
 import { ChangePasswordForm } from '@/components/auth/ChangePasswordForm'
 
 export const metadata = {
-  title: 'Cambiar Contraseña - GMAO HiRock/Ultra',
+  title: 'Cambiar Contraseña - GMAO HIANSA',
   description: 'Cambia tu contraseña temporal',
 }
 

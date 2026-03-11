@@ -27,7 +27,12 @@ interface LoginFormState {
   error: string
   isLoading: boolean
   rateLimitBlocked: boolean
-  rateLimitRemaining: number
+}
+
+interface RateLimitResponse {
+  remaining: number
+  maxAttempts: number
+  blocked: boolean
 }
 
 export function LoginForm() {
@@ -39,17 +44,31 @@ export function LoginForm() {
     error: '',
     isLoading: false,
     rateLimitBlocked: false,
-    rateLimitRemaining: 5,
   })
+
+  const checkRateLimit = async (): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/v1/auth/rate-limit')
+      if (response.ok) {
+        const data: RateLimitResponse = await response.json()
+        return data.blocked
+      }
+    } catch (error) {
+      console.error('[LoginForm] Failed to check rate limit:', error)
+    }
+    return false
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Check rate limit
-    if (state.rateLimitBlocked) {
+    // Check rate limit BEFORE attempting login
+    const isBlocked = await checkRateLimit()
+    if (isBlocked) {
       setState(prev => ({
         ...prev,
-        error: 'Demasiados intentos. Intenta nuevamente en 15 minutos.',
+        rateLimitBlocked: true,
+        error: 'Demasiados intentos fallidos. Cuenta bloqueada por 15 minutos.',
       }))
       return
     }
@@ -76,7 +95,6 @@ export function LoginForm() {
           setState(prev => ({
             ...prev,
             error: 'Email o contraseña incorrectos',
-            rateLimitRemaining: prev.rateLimitRemaining - 1,
           }))
         }
       } else if (result?.ok) {
@@ -149,11 +167,6 @@ export function LoginForm() {
             style={{ color: '#EF4444' }}
           >
             <p className="text-sm font-medium">{state.error}</p>
-            {!state.rateLimitBlocked && state.rateLimitRemaining < 5 && (
-              <p className="text-xs mt-1">
-                Intentos restantes: {state.rateLimitRemaining}
-              </p>
-            )}
           </div>
         )}
 

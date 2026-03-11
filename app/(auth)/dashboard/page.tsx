@@ -10,7 +10,7 @@ import { auth } from '@/lib/auth-adapter'
 import { redirect } from 'next/navigation'
 
 export const metadata = {
-  title: 'Dashboard - GMAO HiRock/Ultra',
+  title: 'Dashboard - GMAO HIANSA',
   description: 'Panel principal de gestión de mantenimiento',
 }
 
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Bienvenido al Sistema de Gestión de Mantenimiento
+            Bienvenido al Sistema de Gestión de Mantenimiento - GMAO HIANSA
           </h2>
           <p className="text-gray-600">
             Selecciona una opción del menú para comenzar.

@@ -13,7 +13,7 @@
 import { LoginForm } from '@/components/auth/LoginForm'
 
 export const metadata = {
-  title: 'Iniciar Sesión - GMAO HiRock/Ultra',
+  title: 'Iniciar Sesión - GMAO HIANSA',
   description: 'Accede al sistema de gestión de mantenimiento',
 }
 
@@ -24,7 +24,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">
-            GMAO HiRock/Ultra
+            GMAO HIANSA
           </h1>
           <p className="mt-2 text-sm text-gray-600">
             Sistema de Gestión de Mantenimiento
