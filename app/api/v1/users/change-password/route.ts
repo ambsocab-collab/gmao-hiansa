@@ -11,12 +11,16 @@
 import { changePassword } from '@/app/actions/users'
 import { apiErrorHandler } from '@/lib/api/errorHandler'
 import { logger } from '@/lib/observability/logger'
+import { auth } from '@/lib/auth-adapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
+    session = await auth()
+
     const body = await request.json()
 
     // Convert JSON body to FormData for Server Action

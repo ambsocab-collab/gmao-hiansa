@@ -19,9 +19,10 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function GET(request: NextRequest) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
-    const session = await auth()
+    session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     }
@@ -32,11 +33,7 @@ export async function GET(request: NextRequest) {
     )
 
     if (!hasManageUsersCapability) {
-      logger.warn('Forbidden users list attempt', {
-        correlationId,
-        userId: session.user.id,
-        action: 'list_users',
-      })
+      logger.warn(session.user.id, 'list_users_forbidden', correlationId)
       return NextResponse.json(
         { error: 'No tienes permiso para listar usuarios' },
         { status: 403 }
@@ -54,7 +51,7 @@ export async function GET(request: NextRequest) {
         forcePasswordReset: true,
         createdAt: true,
         lastLogin: true,
-        user_capabilities: {
+        userCapabilities: {
           include: { capability: true },
         },
       },
@@ -70,7 +67,7 @@ export async function GET(request: NextRequest) {
       forcePasswordReset: user.forcePasswordReset,
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
-      capabilities: user.user_capabilities.map((uc) => uc.capability.name),
+      capabilities: user.userCapabilities.map((uc) => uc.capability.name),
     }))
 
     return NextResponse.json({ users: transformedUsers })
@@ -87,8 +84,11 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
+    session = await auth()
+
     const body = await request.json()
 
     // Call Server Action

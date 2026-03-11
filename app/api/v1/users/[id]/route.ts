@@ -23,9 +23,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
-    const session = await auth()
+    session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     }
@@ -48,12 +49,8 @@ export async function GET(
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
-        user_capabilities: {
+        userCapabilities: {
           include: { capability: true },
-        },
-        activityLogs: {
-          orderBy: { timestamp: 'desc' },
-          take: 50,
         },
       },
     })
@@ -65,6 +62,13 @@ export async function GET(
       )
     }
 
+    // Get activity logs separately
+    const activityLogs = await prisma.activityLog.findMany({
+      where: { userId: id },
+      orderBy: { timestamp: 'desc' },
+      take: 50,
+    })
+
     // Transform user
     const transformedUser = {
       id: user.id,
@@ -75,8 +79,8 @@ export async function GET(
       deleted: user.deleted,
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
-      capabilities: user.user_capabilities.map((uc) => uc.capability.name),
-      activityLogs: user.activity_logs,
+      capabilities: user.userCapabilities.map((uc) => uc.capability.name),
+      activityLogs,
     }
 
     return NextResponse.json({ user: transformedUser })
@@ -96,8 +100,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
+    session = await auth()
+
     // Await params (Next.js 15 requirement)
     const { id } = await params
 

@@ -19,9 +19,10 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function GET(request: NextRequest) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
-    const session = await auth()
+    session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     }
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ user })
   } catch (error) {
-    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'get_profile_api_error', correlationId, session.user.id)
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'get_profile_api_error', correlationId, session?.user?.id ?? undefined)
 
     return apiErrorHandler(error, correlationId, 'GET /api/v1/users/profile')
   }
@@ -57,8 +58,11 @@ export async function GET(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
+    session = await auth()
+
     const body = await request.json()
 
     // Call Server Action
@@ -66,7 +70,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error) {
-    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'put_profile_api_error', correlationId, session?.user?.id)
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'put_profile_api_error', correlationId, session?.user?.id ?? undefined)
 
     // Use consistent error handler
     return apiErrorHandler(error, correlationId, 'PUT /api/v1/users/profile')
