@@ -29,10 +29,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error) {
-    logger.error('Error in change-password API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'change_password_api_error', correlationId, session?.user?.id)
 
     // Use consistent error handler
     return apiErrorHandler(error, correlationId, 'POST /api/v1/users/change-password')

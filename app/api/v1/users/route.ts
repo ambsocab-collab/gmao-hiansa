@@ -51,14 +51,14 @@ export async function GET(request: NextRequest) {
         email: true,
         name: true,
         phone: true,
-        force_password_reset: true,
-        created_at: true,
-        last_login: true,
+        forcePasswordReset: true,
+        createdAt: true,
+        lastLogin: true,
         user_capabilities: {
           include: { capability: true },
         },
       },
-      orderBy: { created_at: 'desc' },
+      orderBy: { createdAt: 'desc' },
     })
 
     // Transform users to include capabilities array
@@ -67,18 +67,15 @@ export async function GET(request: NextRequest) {
       email: user.email,
       name: user.name,
       phone: user.phone,
-      forcePasswordReset: user.force_password_reset,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
+      forcePasswordReset: user.forcePasswordReset,
+      createdAt: user.createdAt,
+      lastLogin: user.lastLogin,
       capabilities: user.user_capabilities.map((uc) => uc.capability.name),
     }))
 
     return NextResponse.json({ users: transformedUsers })
   } catch (error) {
-    logger.error('Error in GET users API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'get_users_api_error', correlationId, session?.user?.id)
 
     return apiErrorHandler(error, correlationId, 'GET /api/v1/users')
   }
@@ -99,10 +96,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error) {
-    logger.error('Error in POST users API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'create_user_api_error', correlationId, session?.user?.id)
 
     // Use consistent error handler
     return apiErrorHandler(error, correlationId, 'POST /api/v1/users')

@@ -51,7 +51,7 @@ export async function GET(
         user_capabilities: {
           include: { capability: true },
         },
-        activity_logs: {
+        activityLogs: {
           orderBy: { timestamp: 'desc' },
           take: 50,
         },
@@ -76,15 +76,12 @@ export async function GET(
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
       capabilities: user.user_capabilities.map((uc) => uc.capability.name),
-      activityLogs: user.activityLogs,
+      activityLogs: user.activity_logs,
     }
 
     return NextResponse.json({ user: transformedUser })
   } catch (error) {
-    logger.error('Error in GET user by ID API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'get_user_by_id_api_error', correlationId, session?.user?.id)
 
     return apiErrorHandler(error, correlationId, 'GET /api/v1/users/[id]')
   }
@@ -109,10 +106,7 @@ export async function DELETE(
 
     return NextResponse.json(result)
   } catch (error) {
-    logger.error('Error in DELETE user API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'delete_user_api_error', correlationId, session?.user?.id)
 
     return apiErrorHandler(error, correlationId, 'DELETE /api/v1/users/[id]')
   }

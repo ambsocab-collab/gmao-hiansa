@@ -118,7 +118,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
       logger.warn(undefined, 'update_profile_validation_failed', correlationId, {
         errors: error.errors,
       })
-      throw new ValidationError('Datos inválidos', error.errors)
+      throw new ValidationError('Datos inválidos', { errors: error.errors })
     }
 
     // Handle custom errors
@@ -131,10 +131,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
     }
 
     // Handle unexpected errors
-    logger.error('Unexpected error updating profile', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'update_profile_error', correlationId, session?.user?.id)
 
     throw new InternalError('Error al actualizar perfil. Intente nuevamente.')
   }
@@ -158,10 +155,7 @@ export async function changePassword(formData: FormData) {
     // 1. Get current session
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn('Unauthorized password change attempt', {
-        correlationId,
-        action: 'change_password',
-      })
+      logger.warn(undefined, 'change_password', correlationId ? {  } : undefined)
       throw new AuthenticationError('Debes iniciar sesión para cambiar tu contraseña')
     }
 
@@ -241,7 +235,7 @@ export async function changePassword(formData: FormData) {
         correlationId,
         errors: error.errors,
       })
-      throw new ValidationError('Datos inválidos', error.errors)
+      throw new ValidationError('Datos inválidos', { errors: error.errors })
     }
 
     // Handle custom errors
@@ -306,10 +300,7 @@ export async function createUser(data: {
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn('Unauthorized user creation attempt', {
-        correlationId,
-        action: 'create_user',
-      })
+      logger.warn(undefined, 'create_user', correlationId ? {  } : undefined)
       throw new AuthenticationError('Debes iniciar sesión para crear usuarios')
     }
 
@@ -423,7 +414,7 @@ export async function createUser(data: {
         correlationId,
         errors: error.errors,
       })
-      throw new ValidationError('Datos inválidos', error.errors)
+      throw new ValidationError('Datos inválidos', { errors: error.errors })
     }
 
     // Handle custom errors
@@ -465,10 +456,7 @@ export async function deleteUser(userId: string) {
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn('Unauthorized user deletion attempt', {
-        correlationId,
-        action: 'delete_user',
-      })
+      logger.warn(undefined, 'delete_user', correlationId ? {  } : undefined)
       throw new AuthenticationError('Debes iniciar sesión para eliminar usuarios')
     }
 

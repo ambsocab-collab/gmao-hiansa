@@ -33,9 +33,9 @@ export async function GET(request: NextRequest) {
         email: true,
         name: true,
         phone: true,
-        created_at: true,
-        last_login: true,
-        force_password_reset: true,
+        createdAt: true,
+        lastLogin: true,
+        forcePasswordReset: true,
       },
     })
 
@@ -45,10 +45,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ user })
   } catch (error) {
-    logger.error('Error in GET profile API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'get_profile_api_error', correlationId, session.user.id)
 
     return apiErrorHandler(error, correlationId, 'GET /api/v1/users/profile')
   }
@@ -69,10 +66,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(result)
   } catch (error) {
-    logger.error('Error in PUT profile API route', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'put_profile_api_error', correlationId, session?.user?.id)
 
     // Use consistent error handler
     return apiErrorHandler(error, correlationId, 'PUT /api/v1/users/profile')
