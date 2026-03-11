@@ -47,7 +47,7 @@ export const changePasswordSchema = z.object({
 
 export const updateProfileSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
-  phone: z.string().optional(),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional(),
 })
 
 /**
@@ -272,9 +272,13 @@ export async function changePassword(formData: FormData) {
 export const createUserSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
   email: z.string().email('Email inválido'),
-  phone: z.string().optional(),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional(),
   roleLabel: z.string().optional(),
-  password: z.string().min(8, 'Mínimo 8 caracteres'),
+  password: z
+    .string()
+    .min(8, 'Mínimo 8 caracteres')
+    .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
+    .regex(/[0-9]/, 'Debe contener al menos un número'),
   capabilities: z.array(z.string()).default(['can_create_failure_report']),
 })
 
@@ -499,7 +503,17 @@ export async function deleteUser(userId: string) {
       throw new ValidationError('Usuario no encontrado')
     }
 
-    // 4. Perform soft delete
+    // 4. Prevent self-deletion
+    if (userId === session.user.id) {
+      logger.warn('Self-deletion attempt blocked', {
+        correlationId,
+        userId: session.user.id,
+        action: 'delete_user',
+      })
+      throw new ValidationError('No puedes eliminar tu propio usuario')
+    }
+
+    // 5. Perform soft delete
     await prisma.user.update({
       where: { id: userId },
       data: { deleted: true },

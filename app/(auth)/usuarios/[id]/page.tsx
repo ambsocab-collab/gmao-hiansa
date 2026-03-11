@@ -107,7 +107,7 @@ export default async function UsuarioDetailPage({
                   Contraseña Temporal
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {user.force_password_reset ? (
+                  {user.forcePasswordReset ? (
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
                       Sí - debe cambiarla
                     </span>
@@ -121,7 +121,7 @@ export default async function UsuarioDetailPage({
                   Miembro desde
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {new Date(user.created_at).toLocaleDateString('es-ES', {
+                  {new Date(user.createdAt).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -133,8 +133,8 @@ export default async function UsuarioDetailPage({
                   Último acceso
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {user.last_login
-                    ? new Date(user.last_login).toLocaleDateString('es-ES', {
+                  {user.lastLogin
+                    ? new Date(user.lastLogin).toLocaleDateString('es-ES', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -178,6 +178,21 @@ export default async function UsuarioDetailPage({
               )}
             </div>
           </Card>
+
+          {/* TODO: Work History Card (AC 32 - Story 1.1)
+           *
+           * Pending feature: Implement complete work history display
+           * - OTs completadas (work orders completed by user)
+           * - OTs en progreso (work orders currently assigned)
+           * - MTTR (Mean Time To Repair) metric
+           * - Productividad metrics (completion rate, avg completion time)
+           * - Filtros por rango de fechas (date range filters)
+           *
+           * Requires Epic 3 (Work Orders) to be implemented first
+           * Related models: WorkOrder, WorkOrderStatus
+           *
+           * Story task reference: línea 190, 191
+           */}
         </div>
 
         {/* Capabilities */}
