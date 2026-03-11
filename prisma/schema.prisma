@@ -16,23 +16,23 @@ datasource db {
 // ============================================
 
 model User {
-  id                  String   @id @default(cuid())
-  email               String   @unique
-  passwordHash        String   @map("password_hash")
-  name                String
-  phone               String?
-  forcePasswordReset  Boolean  @default(false) @map("force_password_reset")
-  deleted             Boolean  @default(false) // Soft delete (Story 1.1)
-  lastLogin           DateTime? @map("last_login") // Last login timestamp (Story 1.1)
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  passwordHash       String    @map("password_hash")
+  name               String
+  phone              String?
+  forcePasswordReset Boolean   @default(false) @map("force_password_reset")
+  deleted            Boolean   @default(false) // Soft delete (Story 1.1)
+  lastLogin          DateTime? @map("last_login") // Last login timestamp (Story 1.1)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
 
   // Relations
-  user_capabilities      UserCapability[]
-  work_order_assignments WorkOrderAssignment[]
-  failure_reports        FailureReport[] @relation("FailureReports")
-  activity_logs          ActivityLog[] // Story 1.1: User activity tracking
-  audit_logs             AuditLog[] // Story 1.1: Audit trail for critical actions
+  userCapabilities     UserCapability[]
+  workOrderAssignments WorkOrderAssignment[]
+  failureReports       FailureReport[]       @relation("FailureReports")
+  activityLogs         ActivityLog[] // Story 1.1: User activity tracking
+  auditLogs            AuditLog[] // Story 1.1: Audit trail for critical actions
 
   @@index([email])
   @@index([deleted]) // For filtering soft-deleted users (Story 1.1)
@@ -47,15 +47,15 @@ model Capability {
   description String?
 
   // Relations
-  user_capabilities UserCapability[]
+  userCapabilities UserCapability[]
 
   @@map("capabilities")
 }
 
 model UserCapability {
-  userId       String    @map("user_id")
-  capabilityId String    @map("capability_id")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  userId       String   @map("userId")
+  capabilityId String   @map("capabilityId")
+  createdAt    DateTime @default(now()) @map("created_at")
 
   // Relations
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -63,13 +63,13 @@ model UserCapability {
 
   @@id([userId, capabilityId])
   @@index([userId]) // Para buscar capabilities de un usuario
-  @@map("user_capabilities")
+  @@map("userCapabilities")
 }
 
 // Story 1.1: Activity Log for user actions (login, profile_update, password_change)
 model ActivityLog {
   id        String   @id @default(cuid())
-  userId    String   @map("user_id")
+  userId    String   @map("userId")
   action    String // login, profile_update, password_change, capability_changed
   metadata  Json? // Additional context for the action
   timestamp DateTime @default(now())
@@ -78,13 +78,13 @@ model ActivityLog {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, timestamp]) // For querying user activity history
-  @@map("activity_logs")
+  @@map("activityLogs")
 }
 
 // Story 1.1: Audit Log for critical actions (user_created, user_deleted, etc.)
 model AuditLog {
   id        String   @id @default(cuid())
-  userId    String   @map("user_id") // Admin who performed the action
+  userId    String   @map("userId") // Admin who performed the action
   action    String // user_created, user_deleted, capability_changed, etc.
   targetId  String?  @map("target_id") // ID of the affected user/entity
   metadata  Json? // Additional context
@@ -94,7 +94,7 @@ model AuditLog {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, timestamp]) // For querying admin audit history
-  @@map("audit_logs")
+  @@map("auditLogs")
 }
 
 // ============================================
@@ -157,7 +157,7 @@ model Equipo {
   linea             Linea              @relation(fields: [linea_id], references: [id], onDelete: Cascade)
   equipo_components EquipoComponente[] // Muchos-a-muchos vía EquipoComponente
   work_orders       WorkOrder[]
-  failure_reports   FailureReport[]
+  failureReports    FailureReport[]
 
   @@unique([linea_id, code])
   @@index([linea_id])
@@ -265,18 +265,18 @@ enum AssignmentRole {
 
 model WorkOrderAssignment {
   work_order_id String
-  user_id       String
+  userId        String
   role          AssignmentRole
   created_at    DateTime       @default(now())
 
   // Relations
   work_order WorkOrder @relation(fields: [work_order_id], references: [id], onDelete: Cascade)
-  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([work_order_id, user_id])
-  @@index([user_id]) // Para buscar OTs asignadas a un usuario
+  @@id([work_order_id, userId])
+  @@index([userId]) // Para buscar OTs asignadas a un usuario
   @@index([work_order_id]) // Para buscar asignaciones de una OT
-  @@map("work_order_assignments")
+  @@map("workOrderAssignments")
 }
 
 enum FailureReportEstado {
@@ -309,5 +309,5 @@ model FailureReport {
   @@index([equipo_id, estado]) // Para joins con filtro de estado
   @@index([reportado_por]) // Para reportes de un usuario
   @@index([created_at]) // Para ordenamiento temporal
-  @@map("failure_reports")
+  @@map("failureReports")
 }

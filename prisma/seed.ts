@@ -68,18 +68,18 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@hiansa.com',
-      password_hash: adminPassword,
+      passwordHash: adminPassword,
       name: 'Administrador',
       phone: '+34 600 000 001',
-      force_password_reset: false,
+      forcePasswordReset: false,
     },
   })
 
   // Asignar todas las capabilities al admin
   await prisma.userCapability.createMany({
     data: allCapabilities.map((cap) => ({
-      user_id: admin.id,
-      capability_id: cap.id,
+      userId: admin.id,
+      capabilityId: cap.id,
     })),
   })
 
@@ -88,10 +88,10 @@ async function main() {
   const tecnico = await prisma.user.create({
     data: {
       email: 'tecnico@hiansa.com',
-      password_hash: tecnicoPassword,
+      passwordHash: tecnicoPassword,
       name: 'Carlos Tecnico',
       phone: '+34 600 000 002',
-      force_password_reset: false,
+      forcePasswordReset: false,
     },
   })
 
@@ -103,8 +103,8 @@ async function main() {
   )
   await prisma.userCapability.createMany({
     data: tecnicoCapabilities.map((cap) => ({
-      user_id: tecnico.id,
-      capability_id: cap.id,
+      userId: tecnico.id,
+      capabilityId: cap.id,
     })),
   })
 
@@ -113,10 +113,10 @@ async function main() {
   const supervisor = await prisma.user.create({
     data: {
       email: 'supervisor@hiansa.com',
-      password_hash: supervisorPassword,
+      passwordHash: supervisorPassword,
       name: 'Maria Supervisor',
       phone: '+34 600 000 003',
-      force_password_reset: false,
+      forcePasswordReset: false,
     },
   })
 
@@ -132,8 +132,8 @@ async function main() {
   )
   await prisma.userCapability.createMany({
     data: supervisorCapabilities.map((cap) => ({
-      user_id: supervisor.id,
-      capability_id: cap.id,
+      userId: supervisor.id,
+      capabilityId: cap.id,
     })),
   })
 
@@ -142,10 +142,10 @@ async function main() {
   const newUser = await prisma.user.create({
     data: {
       email: 'new.user@example.com',
-      password_hash: newUserPassword,
+      passwordHash: newUserPassword,
       name: 'Nuevo Usuario',
       phone: '+34 600 000 004',
-      force_password_reset: true,
+      forcePasswordReset: true,
     },
   })
 
@@ -155,8 +155,8 @@ async function main() {
   )
   await prisma.userCapability.createMany({
     data: newUserCapabilities.map((cap) => ({
-      user_id: newUser.id,
-      capability_id: cap.id,
+      userId: newUser.id,
+      capabilityId: cap.id,
     })),
   })
 
@@ -387,7 +387,7 @@ async function main() {
   await prisma.workOrderAssignment.create({
     data: {
       work_order_id: workOrder.id,
-      user_id: tecnico.id,
+      userId: tecnico.id,
       role: 'TECNICO',
     },
   })

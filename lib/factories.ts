@@ -21,19 +21,19 @@ export async function createTestUser(
     email?: string
     name?: string
     phone?: string
-    force_password_reset?: boolean
+    forcePasswordReset?: boolean
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  const password_hash = await bcrypt.hash('test123', 10)
+  const passwordHash = await bcrypt.hash('test123', 10)
   return client.user.create({
     data: {
       email: overrides?.email || `test-${Date.now()}@example.com`,
-      password_hash,
+      passwordHash,
       name: overrides?.name || 'Test User',
       phone: overrides?.phone || '+34 600 000 000',
-      force_password_reset: overrides?.force_password_reset ?? false,
+      forcePasswordReset: overrides?.forcePasswordReset ?? false,
     },
   })
 }
