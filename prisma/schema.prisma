@@ -16,16 +16,16 @@ datasource db {
 // ============================================
 
 model User {
-  id                   String   @id @default(cuid())
-  email                String   @unique
-  password_hash        String
-  name                 String
-  phone                String?
-  force_password_reset Boolean  @default(false)
-  deleted              Boolean  @default(false) // Soft delete (Story 1.1)
-  last_login           DateTime? // Last login timestamp (Story 1.1)
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  email               String   @unique
+  passwordHash        String   @map("password_hash")
+  name                String
+  phone               String?
+  forcePasswordReset  Boolean  @default(false) @map("force_password_reset")
+  deleted             Boolean  @default(false) // Soft delete (Story 1.1)
+  lastLogin           DateTime? @map("last_login") // Last login timestamp (Story 1.1)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
   // Relations
   user_capabilities      UserCapability[]
@@ -36,7 +36,7 @@ model User {
 
   @@index([email])
   @@index([deleted]) // For filtering soft-deleted users (Story 1.1)
-  @@index([created_at])
+  @@index([createdAt])
   @@map("users")
 }
 
@@ -53,47 +53,47 @@ model Capability {
 }
 
 model UserCapability {
-  user_id       String
-  capability_id String
-  created_at    DateTime @default(now())
+  userId       String    @map("user_id")
+  capabilityId String    @map("capability_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
 
   // Relations
-  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  capability Capability @relation(fields: [capability_id], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  capability Capability @relation(fields: [capabilityId], references: [id], onDelete: Cascade)
 
-  @@id([user_id, capability_id])
-  @@index([user_id]) // Para buscar capabilities de un usuario
+  @@id([userId, capabilityId])
+  @@index([userId]) // Para buscar capabilities de un usuario
   @@map("user_capabilities")
 }
 
 // Story 1.1: Activity Log for user actions (login, profile_update, password_change)
 model ActivityLog {
   id        String   @id @default(cuid())
-  user_id   String
+  userId    String   @map("user_id")
   action    String // login, profile_update, password_change, capability_changed
   metadata  Json? // Additional context for the action
   timestamp DateTime @default(now())
 
   // Relations
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id, timestamp]) // For querying user activity history
+  @@index([userId, timestamp]) // For querying user activity history
   @@map("activity_logs")
 }
 
 // Story 1.1: Audit Log for critical actions (user_created, user_deleted, etc.)
 model AuditLog {
   id        String   @id @default(cuid())
-  user_id   String // Admin who performed the action
+  userId    String   @map("user_id") // Admin who performed the action
   action    String // user_created, user_deleted, capability_changed, etc.
-  target_id String? // ID of the affected user/entity
+  targetId  String?  @map("target_id") // ID of the affected user/entity
   metadata  Json? // Additional context
   timestamp DateTime @default(now())
 
   // Relations
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id, timestamp]) // For querying admin audit history
+  @@index([userId, timestamp]) // For querying admin audit history
   @@map("audit_logs")
 }
 

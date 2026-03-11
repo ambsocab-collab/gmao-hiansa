@@ -21,7 +21,7 @@ export const metadata = {
 export default async function UsuarioDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const session = await auth()
 
@@ -38,9 +38,12 @@ export default async function UsuarioDetailPage({
     redirect('/dashboard')
   }
 
+  // Await params (Next.js 15 requirement)
+  const { id } = await params
+
   // Get user with details
   const user = await prisma.user.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       user_capabilities: {
         include: { capability: true },

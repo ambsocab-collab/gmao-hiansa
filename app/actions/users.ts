@@ -61,14 +61,14 @@ export const updateProfileSchema = z.object({
  * @returns Success message
  */
 export async function updateProfile(data: { name: string; phone?: string }) {
-  const correlationId = headers().get('x-correlation-id') || 'unknown'
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
   const perf = trackPerformance('update_profile', correlationId)
 
   try {
     // 1. Get current session
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn('Unauthorized profile update attempt', {
+      logger.warn(undefined, 'update_profile', correlationId, {
         correlationId,
         action: 'update_profile',
       })
@@ -90,7 +90,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
     // 4. Log activity
     await prisma.activityLog.create({
       data: {
-        user_id: session.user.id,
+        userId: session.user.id,
         action: 'profile_update',
         metadata: {
           fields: ['name', 'phone'],
@@ -154,7 +154,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
  * @returns Success message
  */
 export async function changePassword(formData: FormData) {
-  const correlationId = headers().get('x-correlation-id') || 'unknown'
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
   const perf = trackPerformance('change_password', correlationId)
 
   try {
@@ -193,7 +193,7 @@ export async function changePassword(formData: FormData) {
     // 4. Verify current password
     const isCurrentPasswordValid = await verifyPassword(
       validatedData.currentPassword,
-      user.password_hash
+      user.passwordHash
     )
 
     if (!isCurrentPasswordValid) {
@@ -212,15 +212,15 @@ export async function changePassword(formData: FormData) {
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        password_hash: hashedPassword,
-        force_password_reset: false,
+        passwordHash: hashedPassword,
+        forcePasswordReset: false,
       },
     })
 
     // 7. Log activity
     await prisma.activityLog.create({
       data: {
-        user_id: session.user.id,
+        userId: session.user.id,
         action: 'password_change',
         timestamp: new Date(),
       },
@@ -302,7 +302,7 @@ export async function createUser(data: {
   password: string
   capabilities: string[]
 }) {
-  const correlationId = headers().get('x-correlation-id') || 'unknown'
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
   const perf = trackPerformance('create_user', correlationId)
 
   try {
@@ -356,8 +356,8 @@ export async function createUser(data: {
         email: validatedData.email,
         name: validatedData.name,
         phone: validatedData.phone || null,
-        password_hash: hashedPassword,
-        force_password_reset: true, // Force password reset on first login
+        passwordHash: hashedPassword,
+        forcePasswordReset: true, // Force password reset on first login
         user_capabilities: {
           create: validatedData.capabilities.map((capabilityName) => ({
             capability: {
@@ -376,9 +376,9 @@ export async function createUser(data: {
     // 7. Log activity for admin
     await prisma.auditLog.create({
       data: {
-        user_id: session.user.id,
+        userId: session.user.id,
         action: 'user_created',
-        target_id: user.id,
+        targetId: user.id,
         metadata: {
           createdUserEmail: user.email,
           capabilities: validatedData.capabilities,
@@ -461,7 +461,7 @@ export async function createUser(data: {
  * @returns Success message
  */
 export async function deleteUser(userId: string) {
-  const correlationId = headers().get('x-correlation-id') || 'unknown'
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
   const perf = trackPerformance('delete_user', correlationId)
 
   try {
@@ -522,9 +522,9 @@ export async function deleteUser(userId: string) {
     // 5. Log audit trail
     await prisma.auditLog.create({
       data: {
-        user_id: session.user.id,
+        userId: session.user.id,
         action: 'user_deleted',
-        target_id: userId,
+        targetId: userId,
         metadata: {
           deletedUserEmail: user.email,
         },
