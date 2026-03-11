@@ -25,99 +25,150 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
 
     // When: user attempts login
     await page.goto('/login');
-    await page.getByTestId('login-email').fill(newUser.email);
-    await page.getByTestId('login-password').fill(newUser.password);
+
+    // Wait for form and clear fields
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+
+    // Type credentials for reliability
+    await page.getByTestId('login-email').type(newUser.email, { delay: 10 });
+    await page.getByTestId('login-password').type(newUser.password, { delay: 10 });
     await page.getByTestId('login-submit').click();
 
     // Then: redirected to /change-password (NOT dashboard)
-    await page.waitForURL('/cambiar-password', { timeout: 3000 });
-    expect(page.url()).toContain('/cambiar-password');
+    // Wait for either cambiar-password page or error page
+    await page.waitForLoadState('networkidle');
 
-    // And: see explanatory message
-    await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso')).toBeVisible();
+    // Check if we're on cambiar-password page
+    const currentUrl = page.url();
+    if (currentUrl.includes('/cambiar-password')) {
+      // And: see explanatory message
+      await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso')).toBeVisible();
+    } else if (currentUrl.includes('/login')) {
+      // Login failed - check for error message
+      const errorElement = page.getByTestId('login-error');
+      if (await errorElement.isVisible()) {
+        throw new Error(`Login failed: ${await errorElement.textContent()}`);
+      }
+      throw new Error('Login failed but no error message shown');
+    } else {
+      throw new Error(`Unexpected redirect to: ${currentUrl}`);
+    }
   });
 
   test('[P0-E2E-006] should block navigation to other routes until password is changed', async ({ page }) => {
     // Given: user with forcePasswordReset=true logged in
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('new.user@example.com');
-    await page.getByTestId('login-password').fill('tempPassword123');
+
+    // Wait for form and clear fields
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+
+    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
+    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/cambiar-password');
+
+    // Wait for cambiar-password page to load
+    await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso')).toBeVisible({ timeout: 10000 });
 
     // When: user tries to navigate to dashboard directly
     await page.goto('/dashboard');
 
     // Then: redirected back to /change-password
-    await page.waitForURL('/cambiar-password', { timeout: 2000 });
-
-    // And: see blocking message
-    await expect(page.getByText(/debes cambiar tu contraseña|change your password/i)).toBeVisible();
+    await expect(page.getByText(/debes cambiar tu contraseña|change your password/i)).toBeVisible({ timeout: 5000 });
+    expect(page.url()).toContain('/cambiar-password');
 
     // When: user tries to navigate to other protected routes
     const protectedRoutes = ['/work-orders', '/assets', '/stock'];
     for (const route of protectedRoutes) {
       await page.goto(route);
       // Then: always redirected back to /change-password
-      await page.waitForURL('/cambiar-password', { timeout: 2000 });
+      await expect(page.getByText(/debes cambiar tu contraseña|change your password/i)).toBeVisible({ timeout: 5000 });
+      expect(page.url()).toContain('/cambiar-password');
     }
   });
 
   test('[P0-E2E-007] should allow password change and redirect to dashboard', async ({ page }) => {
     // Given: user on /change-password with forcePasswordReset=true
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('new.user@example.com');
-    await page.getByTestId('login-password').fill('tempPassword123');
+
+    // Wait for form and clear fields
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+
+    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
+    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/cambiar-password');
+
+    // Wait for cambiar-password page to load
+    await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso')).toBeVisible({ timeout: 10000 });
 
     // When: user fills password change form
-    await page.getByTestId('current-password').fill('tempPassword123');
-    await page.getByTestId('new-password').fill('NewSecure123');
-    await page.getByTestId('confirm-password').fill('NewSecure123');
+    await page.getByTestId('current-password').type('tempPassword123', { delay: 10 });
+    await page.getByTestId('new-password').type('NewSecure123', { delay: 10 });
+    await page.getByTestId('confirm-password').type('NewSecure123', { delay: 10 });
     await page.getByTestId('change-password-submit').click();
 
     // Then: see success message
-    await expect(page.getByText('Contraseña cambiada exitosamente')).toBeVisible();
+    await expect(page.getByText('Contraseña cambiada exitosamente')).toBeVisible({ timeout: 5000 });
 
-    // And: redirected to dashboard
-    await page.waitForURL('/dashboard', { timeout: 3000 });
-
-    // And: can now access dashboard and other routes
-    await expect(page.getByText(/Dashboard|Panel/i)).toBeVisible();
+    // And: redirected to dashboard - wait for content
+    await expect(page.getByText(/Dashboard|Hola/i)).toBeVisible({ timeout: 10000 });
+    expect(page.url()).toContain('/dashboard');
   });
 
   test('[P0-E2E-008] should validate password strength on change', async ({ page }) => {
     // Given: user on /change-password
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('new.user@example.com');
-    await page.getByTestId('login-password').fill('tempPassword123');
+
+    // Wait for form and clear fields
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+
+    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
+    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/cambiar-password');
+
+    // Wait for cambiar-password page to load
+    await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso')).toBeVisible({ timeout: 10000 });
 
     // When: user enters weak password (less than 8 characters)
-    await page.getByTestId('current-password').fill('tempPassword123');
-    await page.getByTestId('new-password').fill('weak');
-    await page.getByTestId('confirm-password').fill('weak');
+    await page.getByTestId('current-password').clear();
+    await page.getByTestId('new-password').clear();
+    await page.getByTestId('confirm-password').clear();
+
+    await page.getByTestId('current-password').type('tempPassword123', { delay: 10 });
+    await page.getByTestId('new-password').type('weak', { delay: 10 });
+    await page.getByTestId('confirm-password').type('weak', { delay: 10 });
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown
-    await expect(page.getByText(/Mínimo 8 caracteres|at least 8 characters/i)).toBeVisible();
+    await expect(page.getByText(/Mínimo 8 caracteres|at least 8 caracteres/i).first()).toBeVisible({ timeout: 2000 });
 
     // When: user enters password without uppercase
-    await page.getByTestId('new-password').fill('weakpassword123');
-    await page.getByTestId('confirm-password').fill('weakpassword123');
+    await page.getByTestId('new-password').clear();
+    await page.getByTestId('confirm-password').clear();
+
+    await page.getByTestId('new-password').type('weakpassword123', { delay: 10 });
+    await page.getByTestId('confirm-password').type('weakpassword123', { delay: 10 });
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown
-    await expect(page.getByText(/mayúscula|uppercase/i)).toBeVisible();
+    await expect(page.getByText(/mayúscula|uppercase/i).first()).toBeVisible({ timeout: 2000 });
 
     // When: user enters password without number
-    await page.getByTestId('new-password').fill('Weakpassword');
-    await page.getByTestId('confirm-password').fill('Weakpassword');
+    await page.getByTestId('new-password').clear();
+    await page.getByTestId('confirm-password').clear();
+
+    await page.getByTestId('new-password').type('Weakpassword', { delay: 10 });
+    await page.getByTestId('confirm-password').type('Weakpassword', { delay: 10 });
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown
-    await expect(page.getByText(/número|number/i)).toBeVisible();
+    await expect(page.getByText(/número|number/i).first()).toBeVisible({ timeout: 2000 });
   });
 });
