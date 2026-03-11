@@ -2,13 +2,13 @@
  * NextAuth Adapter
  * Story 0.3: NextAuth.js con Credentials Provider
  *
- * Exports NextAuth auth() without creating circular dependencies
+ * Exports NextAuth getServerSession without creating circular dependencies
  */
 
-import { auth as nextAuth } from '@/app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth.config'
 
 /**
- * Alias of NextAuth auth()
- * Allows importing the function without creating circular dependency with route handler
+ * Helper to get session without creating circular dependency with route handler
  */
-export const auth = nextAuth
+export const auth = () => getServerSession(authOptions)

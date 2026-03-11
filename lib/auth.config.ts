@@ -1,12 +1,12 @@
-import type { NextAuthOptions } from 'next-auth'
-import type { User } from 'next-auth'
+import type { User, Session } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 import { prisma } from '@/lib/db'
 import { AuthenticationError, AuthorizationError } from '@/lib/utils/errors'
 import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit'
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       id: 'credentials',
@@ -20,8 +20,8 @@ export const authOptions: NextAuthOptions = {
           throw new AuthenticationError('Credenciales inválidas')
         }
 
-        const ip = (req?.headers?.['x-forwarded-for'] as string)?.split(',')[0].trim()
-          || (req?.headers?.['x-real-ip'] as string)
+        const ip = (req?.headers?.get('x-forwarded-for') as string)?.split(',')[0].trim()
+          || (req?.headers?.get('x-real-ip') as string)
           || 'unknown'
 
         const rateLimitOk = await checkRateLimit(ip)
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
             include: {
-              user_capabilities: {
+              userCapabilities: {
                 include: { capability: true }
               }
             }
@@ -65,7 +65,8 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             email: user.email,
             name: user.name,
-            capabilities: user.user_capabilities.map((uc) => uc.capability.name),
+            passwordHash: user.passwordHash,
+            capabilities: user.userCapabilities.map((uc) => uc.capability.name),
             forcePasswordReset: user.forcePasswordReset
           }
         } catch (error) {
@@ -79,12 +80,12 @@ export const authOptions: NextAuthOptions = {
   ],
 
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 8 * 60 * 60
   },
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: User | null }) {
       if (user) {
         token.id = user.id
         token.capabilities = user.capabilities
@@ -93,7 +94,7 @@ export const authOptions: NextAuthOptions = {
       return token
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.id as string
         session.user.capabilities = token.capabilities as string[]

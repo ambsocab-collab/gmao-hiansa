@@ -142,7 +142,7 @@ export function logAccessDenied(
  * Story 0.5: Adds correlation ID generation and propagation
  */
 export default withAuth(
-  function middleware(req) {
+  function middleware(req: any) {
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
 
@@ -208,7 +208,7 @@ export default withAuth(
   {
     callbacks: {
       // Verify user is authenticated
-      authorized: ({ token }) => !!token
+      authorized: ({ token }: any) => !!token
     }
   }
 )

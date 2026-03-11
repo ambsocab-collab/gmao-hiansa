@@ -5,26 +5,23 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
-      email: string;
-      name: string;
       capabilities: string[];
+      forcePasswordReset?: boolean;
     } & DefaultSession['user'];
   }
 
   interface User {
-    id: string;
-    email: string;
-    name: string;
-    passwordHash: string;
+    passwordHash?: string;
     phone?: string;
-    forcePasswordReset: boolean;
-    capabilities: string[];
+    forcePasswordReset?: boolean;
+    capabilities?: string[];
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: string;
-    capabilities: string[];
+    id?: string;
+    capabilities?: string[];
+    forcePasswordReset?: boolean;
   }
 }
