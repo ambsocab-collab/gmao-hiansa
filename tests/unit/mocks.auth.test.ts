@@ -5,7 +5,7 @@
  * Tests para validar los mocks de sesión
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import {
   mockSession,
   mockSessionWithCapabilities,

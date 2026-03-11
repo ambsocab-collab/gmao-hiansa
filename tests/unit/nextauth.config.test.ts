@@ -5,7 +5,7 @@
  * RED PHASE: Tests que validan la configuración de NextAuth
  */
 
-import { describe, it, expect, beforeAll, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { POST, GET } from '@/app/api/auth/[...nextauth]/route'
 
 describe('NextAuth Configuration', () => {
