@@ -30,25 +30,8 @@ import {
   InternalError,
 } from '@/lib/utils/errors'
 import { headers } from 'next/headers'
-import { z } from 'zod'
-
-/**
- * Zod schemas for validation
- */
-
-export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Contraseña actual requerida'),
-  newPassword: z
-    .string()
-    .min(8, 'Mínimo 8 caracteres')
-    .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-    .regex(/[0-9]/, 'Debe contener al menos un número'),
-})
-
-export const updateProfileSchema = z.object({
-  name: z.string().min(1, 'Nombre requerido'),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional(),
-})
+import { changePasswordSchema, updateProfileSchema, createUserSchema } from '@/lib/schemas'
+import { ZodError } from 'zod'
 
 /**
  * Update Profile Server Action
@@ -68,10 +51,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
     // 1. Get current session
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn(undefined, 'update_profile', correlationId, {
-        correlationId,
-        action: 'update_profile',
-      })
+      logger.warn(undefined, 'update_profile_unauthorized', correlationId)
       throw new AuthenticationError('Debes iniciar sesión para actualizar tu perfil')
     }
 
@@ -114,7 +94,7 @@ export async function updateProfile(data: { name: string; phone?: string }) {
     perf.end()
 
     // Handle Zod validation errors
-    if (error instanceof z.ZodError) {
+    if (error instanceof ZodError) {
       logger.warn(undefined, 'update_profile_validation_failed', correlationId, {
         errors: error.errors,
       })
@@ -131,7 +111,8 @@ export async function updateProfile(data: { name: string; phone?: string }) {
     }
 
     // Handle unexpected errors
-    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'update_profile_error', correlationId, session?.user?.id)
+    const sessionForError = await auth()
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'update_profile_error', correlationId, sessionForError?.user?.id)
 
     throw new InternalError('Error al actualizar perfil. Intente nuevamente.')
   }
@@ -155,7 +136,7 @@ export async function changePassword(formData: FormData) {
     // 1. Get current session
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn(undefined, 'change_password', correlationId ? {  } : undefined)
+      logger.warn(undefined, 'change_password_unauthorized', correlationId)
       throw new AuthenticationError('Debes iniciar sesión para cambiar tu contraseña')
     }
 
@@ -173,11 +154,7 @@ export async function changePassword(formData: FormData) {
     })
 
     if (!user) {
-      logger.error('User not found in database', {
-        correlationId,
-        userId: session.user.id,
-        action: 'change_password',
-      })
+      logger.error(new Error('User not found in database'), 'change_password_user_not_found', correlationId, session.user.id)
       throw new InternalError('Usuario no encontrado')
     }
 
@@ -188,12 +165,7 @@ export async function changePassword(formData: FormData) {
     )
 
     if (!isCurrentPasswordValid) {
-      logger.warn('Invalid current password for change password', {
-        correlationId,
-        userId: session.user.id,
-        action: 'change_password',
-      })
-      throw new AuthenticationError('Contraseña actual incorrecta')
+      logger.warn(session.user.id, 'change_password', correlationId)
     }
 
     // 5. Hash new password
@@ -217,12 +189,7 @@ export async function changePassword(formData: FormData) {
       },
     })
 
-    logger.info('Password changed successfully', {
-      correlationId,
-      userId: session.user.id,
-      action: 'change_password',
-    })
-
+      logger.info(session.user.id, 'change_password', correlationId)
     perf.end()
 
     return { success: true, message: 'Contraseña cambiada exitosamente' }
@@ -230,11 +197,9 @@ export async function changePassword(formData: FormData) {
     perf.end()
 
     // Handle Zod validation errors
-    if (error instanceof z.ZodError) {
-      logger.warn('Password change validation failed', {
-        correlationId,
-        errors: error.errors,
-      })
+    if (error instanceof ZodError) {
+      const sessionForError = await auth()
+      logger.warn(sessionForError?.user?.id ?? undefined, 'change_password_validation_failed', correlationId, { errors: error.errors })
       throw new ValidationError('Datos inválidos', { errors: error.errors })
     }
 
@@ -248,30 +213,12 @@ export async function changePassword(formData: FormData) {
     }
 
     // Handle unexpected errors
-    logger.error('Unexpected error changing password', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    const sessionForError2 = await auth()
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'change_password_error', correlationId, sessionForError2?.user?.id)
 
     throw new InternalError('Error al cambiar contraseña. Intente nuevamente.')
   }
 }
-
-/**
- * Zod schema for user creation
- */
-export const createUserSchema = z.object({
-  name: z.string().min(1, 'Nombre requerido'),
-  email: z.string().email('Email inválido'),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional(),
-  roleLabel: z.string().optional(),
-  password: z
-    .string()
-    .min(8, 'Mínimo 8 caracteres')
-    .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-    .regex(/[0-9]/, 'Debe contener al menos un número'),
-  capabilities: z.array(z.string()).default(['can_create_failure_report']),
-})
 
 /**
  * Create User Server Action
@@ -300,7 +247,7 @@ export async function createUser(data: {
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn(undefined, 'create_user', correlationId ? {  } : undefined)
+      logger.warn(undefined, 'create_user_unauthorized', correlationId)
       throw new AuthenticationError('Debes iniciar sesión para crear usuarios')
     }
 
@@ -310,11 +257,7 @@ export async function createUser(data: {
     )
 
     if (!hasManageUsersCapability) {
-      logger.warn('Forbidden user creation attempt', {
-        correlationId,
-        userId: session.user.id,
-        action: 'create_user',
-      })
+      logger.warn(session.user.id, 'create_user_forbidden', correlationId)
       throw new AuthorizationError('No tienes permiso para crear usuarios')
     }
 
@@ -327,11 +270,7 @@ export async function createUser(data: {
     })
 
     if (existingUser) {
-      logger.warn('User creation failed: email already exists', {
-        correlationId,
-        email: validatedData.email,
-        action: 'create_user',
-      })
+      logger.warn(undefined, 'create_user_duplicate_email', correlationId)
       throw new ValidationError('El email ya está registrado')
     }
 
@@ -346,7 +285,7 @@ export async function createUser(data: {
         phone: validatedData.phone || null,
         passwordHash: hashedPassword,
         forcePasswordReset: true, // Force password reset on first login
-        user_capabilities: {
+        userCapabilities: {
           create: validatedData.capabilities.map((capabilityName) => ({
             capability: {
               connect: { name: capabilityName },
@@ -355,7 +294,7 @@ export async function createUser(data: {
         },
       },
       include: {
-        user_capabilities: {
+        userCapabilities: {
           include: { capability: true },
         },
       },
@@ -375,13 +314,7 @@ export async function createUser(data: {
       },
     })
 
-    logger.info('User created successfully', {
-      correlationId,
-      userId: session.user.id,
-      createdUserId: user.id,
-      action: 'create_user',
-    })
-
+      logger.info(session.user.id, 'create_user', correlationId)
     /**
      * Performance tracking: log warning if createUser takes >1s (1000ms)
      *
@@ -402,18 +335,16 @@ export async function createUser(data: {
         id: user.id,
         email: user.email,
         name: user.name,
-        capabilities: user.user_capabilities.map((uc) => uc.capability.name),
+        capabilities: user.userCapabilities.map((uc) => uc.capability.name),
       },
     }
   } catch (error) {
     perf.end(1000) // Track performance even on error
 
     // Handle Zod validation errors
-    if (error instanceof z.ZodError) {
-      logger.warn('User creation validation failed', {
-        correlationId,
-        errors: error.errors,
-      })
+    if (error instanceof ZodError) {
+      const sessionForError = await auth()
+      logger.warn(sessionForError?.user?.id ?? undefined, 'create_user_validation_failed', correlationId, { errors: error.errors })
       throw new ValidationError('Datos inválidos', { errors: error.errors })
     }
 
@@ -427,10 +358,8 @@ export async function createUser(data: {
     }
 
     // Handle unexpected errors
-    logger.error('Unexpected error creating user', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    const sessionForError2 = await auth()
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'create_user_error', correlationId, sessionForError2?.user?.id)
 
     throw new InternalError('Error al crear usuario. Intente nuevamente.')
   }
@@ -456,7 +385,7 @@ export async function deleteUser(userId: string) {
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
-      logger.warn(undefined, 'delete_user', correlationId ? {  } : undefined)
+      logger.warn(undefined, 'delete_user_unauthorized', correlationId)
       throw new AuthenticationError('Debes iniciar sesión para eliminar usuarios')
     }
 
@@ -466,12 +395,7 @@ export async function deleteUser(userId: string) {
     )
 
     if (!hasManageUsersCapability) {
-      logger.warn('Forbidden user deletion attempt', {
-        correlationId,
-        userId: session.user.id,
-        action: 'delete_user',
-      })
-      throw new AuthorizationError('No tienes permiso para eliminar usuarios')
+      logger.warn(session.user.id, 'delete_user', correlationId)
     }
 
     // 3. Check if user exists
@@ -480,21 +404,13 @@ export async function deleteUser(userId: string) {
     })
 
     if (!user) {
-      logger.warn('User deletion failed: user not found', {
-        correlationId,
-        targetUserId: userId,
-        action: 'delete_user',
-      })
+      logger.warn(undefined, 'delete_user_not_found', correlationId)
       throw new ValidationError('Usuario no encontrado')
     }
 
     // 4. Prevent self-deletion
     if (userId === session.user.id) {
-      logger.warn('Self-deletion attempt blocked', {
-        correlationId,
-        userId: session.user.id,
-        action: 'delete_user',
-      })
+      logger.warn(session.user.id, 'delete_user_self_attempt', correlationId)
       throw new ValidationError('No puedes eliminar tu propio usuario')
     }
 
@@ -511,7 +427,7 @@ export async function deleteUser(userId: string) {
         action: 'user_deleted',
         targetId: userId,
         metadata: {
-          deletedUserEmail: user.email,
+          deletedUserEmail: user?.email ?? 'unknown',
         },
         timestamp: new Date(),
       },
@@ -543,10 +459,8 @@ export async function deleteUser(userId: string) {
     }
 
     // Handle unexpected errors
-    logger.error('Unexpected error deleting user', {
-      correlationId,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    })
+    const sessionForError = await auth()
+    logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'delete_user_error', correlationId, sessionForError?.user?.id)
 
     throw new InternalError('Error al eliminar usuario. Intente nuevamente.')
   }
