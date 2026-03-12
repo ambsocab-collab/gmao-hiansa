@@ -50,7 +50,7 @@ export const getByTestId = (testId: string) => {
   return `[data-testid="${testId}"]`;
 };
 
-export const getByRole = (role: string, options = {}) => {
+export const getByRole = (role: string, _options = {}) => {
   return `[role="${role}"]`;
 };
 

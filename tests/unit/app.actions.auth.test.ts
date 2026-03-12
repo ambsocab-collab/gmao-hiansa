@@ -8,7 +8,7 @@
  * - Rate limiting
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { checkRateLimit, resetRateLimit, getRemainingAttempts } from '@/lib/rate-limit'
 
 describe('Rate Limiting', () => {

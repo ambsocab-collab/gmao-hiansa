@@ -267,7 +267,7 @@ describe('Story 0.4: SSE Infrastructure - Integration Tests', () => {
       })
 
       // Subscribe to events
-      const unsubscribe = BroadcastManager.subscribe('work-orders', (event) => {
+      const unsubscribe = BroadcastManager.subscribe('work-orders', (_event) => {
         eventReceivedTime = Date.now()
       })
 

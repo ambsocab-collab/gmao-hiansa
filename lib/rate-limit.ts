@@ -103,7 +103,7 @@ export async function checkRateLimit(ip: string, requestHeaders?: Headers): Prom
  * Useful after successful login
  * @param ip - Client IP address (ignored, using global counter)
  */
-export function resetRateLimit(ip: string): void {
+export function resetRateLimit(_ip: string): void {
   loginAttempts.delete('__global__')
 }
 
@@ -112,7 +112,7 @@ export function resetRateLimit(ip: string): void {
  * @param ip - Client IP address (ignored, using global counter for testing)
  * @returns Number of remaining attempts (0-5)
  */
-export function getRemainingAttempts(ip: string): number {
+export function getRemainingAttempts(_ip: string): number {
   const record = loginAttempts.get('__global__')
   if (!record) return RATE_LIMIT_CONFIG.MAX_ATTEMPTS
 

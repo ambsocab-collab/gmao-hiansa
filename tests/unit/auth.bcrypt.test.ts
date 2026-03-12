@@ -8,9 +8,8 @@
  * - Integración con Prisma User model
  */
 
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { hashPassword, verifyPassword } from '@/lib/auth'
-import { compare } from 'bcryptjs'
 
 describe('Authentication Logic - bcryptjs', () => {
   describe('hashPassword function', () => {

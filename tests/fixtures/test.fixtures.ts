@@ -101,5 +101,4 @@ export const testWithCleanup = test.extend({
   },
 });
 
-export { test };
-export const expect = expect;
+export { test, expect };

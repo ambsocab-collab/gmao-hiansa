@@ -1,6 +1,5 @@
 import { PactV4 } from '@pact-foundation/pact';
 import { pactConfig } from '../support/pact-config';
-import { providerStates } from '../support/provider-states';
 
 /**
  * Pact Consumer Test for gmao-hiansa
@@ -55,7 +54,7 @@ describe('Auth API', () => {
       });
 
       // Test implementation with URL injection
-      const { token } = await pact.executeTest(async (mockUrl) => {
+      await pact.executeTest(async (mockUrl) => {
         const response = await fetch(`${mockUrl}/api/v1/auth/login`, {
           method: 'POST',
           headers: {

@@ -1,4 +1,4 @@
-import { PactV4, SpecificationVersion } from '@pact-foundation/pact';
+import { SpecificationVersion } from '@pact-foundation/pact';
 import path from 'path';
 
 /**

@@ -9,17 +9,13 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { POST } from '@/app/api/auth/[...nextauth]/route'
 import { NextRequest } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
-import { withAuth } from 'next-auth/middleware'
-import middleware, {
+import {
   ROUTE_CAPABILITIES,
-  hasCapability,
   hasAllCapabilities,
-  logAccessDenied,
-  CORRELATION_ID_HEADER
+  logAccessDenied
 } from '@/middleware'
 
 // Mock NextAuth
@@ -65,15 +61,6 @@ describe('Story 0.3: NextAuth.js - Integration Tests', () => {
 
       // Mock Prisma findUnique to return test user
       const findUniqueSpy = vi.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser)
-
-      // Create mock sign-in request
-      const mockRequest = new NextRequest('http://localhost:3000/api/auth/callback/credentials', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: 'test@example.com',
-          password: 'password123'
-        })
-      })
 
       // Mock NextAuth credentials provider
       const credentialsProvider = {

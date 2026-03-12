@@ -3,7 +3,6 @@ import type { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 import { prisma } from '@/lib/db'
-import { AuthenticationError, AuthorizationError } from '@/lib/utils/errors'
 import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit'
 
 export const authOptions = {
@@ -32,48 +31,44 @@ export const authOptions = {
           throw error
         }
 
-        try {
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
-            include: {
-              userCapabilities: {
-                include: { capability: true }
-              }
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+          include: {
+            userCapabilities: {
+              include: { capability: true }
             }
-          })
-
-          if (!user) {
-            await compare('password', '$2b$10$dummy.hash.for.timing.attack.prevention')
-            throw new Error('Credenciales inválidas')
           }
+        })
 
-          if (user.deleted) {
-            throw new Error('Este usuario ha sido eliminado. Contacta al administrador.')
-          }
+        if (!user) {
+          await compare('password', '$2b$10$dummy.hash.for.timing.attack.prevention')
+          throw new Error('Credenciales inválidas')
+        }
 
-          const isValid = await compare(credentials.password, user.passwordHash)
+        if (user.deleted) {
+          throw new Error('Este usuario ha sido eliminado. Contacta al administrador.')
+        }
 
-          if (!isValid) {
-            throw new Error('Credenciales inválidas')
-          }
+        const isValid = await compare(credentials.password, user.passwordHash)
 
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { lastLogin: new Date() }
-          })
+        if (!isValid) {
+          throw new Error('Credenciales inválidas')
+        }
 
-          resetRateLimit(ip)
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date() }
+        })
 
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            passwordHash: user.passwordHash,
-            capabilities: user.userCapabilities.map((uc) => uc.capability.name),
-            forcePasswordReset: user.forcePasswordReset
-          }
-        } catch (error: any) {
-          throw error
+        resetRateLimit(ip)
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          passwordHash: user.passwordHash,
+          capabilities: user.userCapabilities.map((uc) => uc.capability.name),
+          forcePasswordReset: user.forcePasswordReset
         }
       }
     })

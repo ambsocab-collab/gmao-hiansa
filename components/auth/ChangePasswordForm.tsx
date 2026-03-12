@@ -43,7 +43,6 @@ const PASSWORD_REQUIREMENTS = {
 }
 
 export function ChangePasswordForm() {
-  const router = useRouter()
   const { toast } = useToast()
   const [state, setState] = useState<ChangePasswordFormState>({
     currentPassword: '',

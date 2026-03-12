@@ -10,7 +10,7 @@
  * - Event broadcasting
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { GET } from '@/app/api/v1/sse/route'
 import { NextRequest } from 'next/server'
 

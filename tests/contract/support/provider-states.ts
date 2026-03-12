@@ -5,8 +5,6 @@
  * Provider states for Pact contract testing
  */
 
-import { pactConfig } from './pact-config';
-
 export const providerStates = {
   /**
    * Provider state: Usuario autenticado
