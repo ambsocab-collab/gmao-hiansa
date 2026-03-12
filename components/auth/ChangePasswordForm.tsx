@@ -107,24 +107,26 @@ export function ChangePasswordForm() {
         body: JSON.stringify({
           currentPassword: state.currentPassword,
           newPassword: state.newPassword,
+          confirmPassword: state.confirmPassword,
         }),
       })
 
-      console.log('[ChangePasswordForm] Response status:', response.status)
-
       const data = await response.json()
-      console.log('[ChangePasswordForm] Response data:', data)
 
       if (!response.ok) {
+        // Extract error message from object or string
+        const errorMessage = typeof data.error === 'object'
+          ? data.error?.message || 'Error al cambiar contraseña'
+          : data.error || 'Error al cambiar contraseña'
+
         setState(prev => ({
           ...prev,
-          error: data.error || 'Error al cambiar contraseña',
+          error: errorMessage,
         }))
         return
       }
 
       // Password changed successfully - show success message
-      console.log('[ChangePasswordForm] Password change successful, showing toast and redirecting...')
       toast({
         title: '¡Contraseña cambiada!',
         description: 'Contraseña cambiada exitosamente',
@@ -132,10 +134,8 @@ export function ChangePasswordForm() {
 
       // Sign out to force session refresh, then redirect to login
       // User will need to log in again with new password
-      console.log('[ChangePasswordForm] Signing out to refresh session...')
       await signOut({ redirect: false })
       window.location.href = '/login'
-      console.log('[ChangePasswordForm] Redirect command executed (this may not appear due to navigation)')
     } catch {
       setState(prev => ({
         ...prev,

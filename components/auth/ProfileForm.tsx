@@ -169,15 +169,21 @@ export function ProfileForm({ user }: { user: User }) {
         body: JSON.stringify({
           currentPassword: passwordState.currentPassword,
           newPassword: passwordState.newPassword,
+          confirmPassword: passwordState.confirmPassword,
         }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
+        // Extract error message from object or string
+        const errorMessage = typeof data.error === 'object'
+          ? data.error?.message || 'Error al cambiar contraseña'
+          : data.error || 'Error al cambiar contraseña'
+
         setPasswordState(prev => ({
           ...prev,
-          error: data.error || 'Error al cambiar contraseña',
+          error: errorMessage,
         }))
         return
       }

@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
     const formData = new FormData()
     formData.append('currentPassword', body.currentPassword)
     formData.append('newPassword', body.newPassword)
+    formData.append('confirmPassword', body.confirmPassword)
 
     // Call Server Action
     const result = await changePassword(formData)

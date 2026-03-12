@@ -16,6 +16,11 @@ import { test, expect } from '@playwright/test';
 // For now, they document the expected behavior
 
 test.describe('Story 1.1: Admin User Management', () => {
+  // Ensure clean session before each test
+  test.beforeEach(async ({ page }) => {
+    // Clear cookies to ensure clean session state
+    await page.context().clearCookies()
+  })
 
   test('[P0-E2E-012] should allow admin to create new user with default capability', async ({ page }) => {
     // Listen for console errors
@@ -54,8 +59,8 @@ test.describe('Story 1.1: Admin User Management', () => {
     await page.getByTestId('login-password').type('admin123', { delay: 10 });
     await page.getByTestId('login-submit').click();
 
-    // Wait for redirect to dashboard (increased timeout)
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    // Wait for dashboard content instead of URL (more reliable)
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     // When: admin navigates to user creation page
     await page.goto('/usuarios/nuevo');

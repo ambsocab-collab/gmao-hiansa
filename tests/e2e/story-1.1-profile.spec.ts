@@ -23,10 +23,15 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Given: authenticated user (using tecnico from seed)
     // This test only reads, no modification - can use shared seed user
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('tecnico@hiansa.com');
-    await page.getByTestId('login-password').fill('tecnico123');
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type('tecnico@hiansa.com', { delay: 10 });
+    await page.getByTestId('login-password').type('tecnico123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/dashboard', { timeout: 15000 });
+
+    // Wait for dashboard content instead of URL
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     // When: user navigates to profile
     await page.goto('/perfil');
@@ -51,10 +56,13 @@ test.describe('Story 1.1: User Profile Management', () => {
 
     // Create test user via admin (login as admin first)
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('admin@hiansa.com');
-    await page.getByTestId('login-password').fill('admin123');
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
+    await page.getByTestId('login-password').type('admin123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/dashboard', { timeout: 15000 });
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     // Create unique user
     await page.goto('/usuarios/nuevo');
@@ -68,8 +76,11 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Logout and login as test user
     await page.getByTestId('logout-button').click();
     await page.goto('/login');
-    await page.getByTestId('login-email').fill(uniqueEmail);
-    await page.getByTestId('login-password').fill(tempPassword);
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
+    await page.getByTestId('login-password').type(tempPassword, { delay: 10 });
     await page.getByTestId('login-submit').click();
     await page.waitForURL('/cambiar-password', { timeout: 15000 });
 
@@ -81,10 +92,13 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.waitForURL('/login', { timeout: 10000 });
 
     // Login again with new password
-    await page.getByTestId('login-email').fill(uniqueEmail);
-    await page.getByTestId('login-password').fill('NewPassword123');
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
+    await page.getByTestId('login-password').type('NewPassword123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/dashboard', { timeout: 15000 });
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     await page.goto('/perfil');
 
@@ -110,10 +124,13 @@ test.describe('Story 1.1: User Profile Management', () => {
 
     // Create test user via admin (login as admin first)
     await page.goto('/login');
-    await page.getByTestId('login-email').fill('admin@hiansa.com');
-    await page.getByTestId('login-password').fill('admin123');
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
+    await page.getByTestId('login-password').type('admin123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/dashboard', { timeout: 15000 });
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     // Create unique user
     await page.goto('/usuarios/nuevo');
@@ -127,8 +144,11 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Logout and login as test user
     await page.getByTestId('logout-button').click();
     await page.goto('/login');
-    await page.getByTestId('login-email').fill(uniqueEmail);
-    await page.getByTestId('login-password').fill(tempPassword);
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').clear();
+    await page.getByTestId('login-password').clear();
+    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
+    await page.getByTestId('login-password').type(tempPassword, { delay: 10 });
     await page.getByTestId('login-submit').click();
     await page.waitForURL('/cambiar-password', { timeout: 15000 });
 
@@ -140,10 +160,10 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.waitForURL('/login', { timeout: 10000 });
 
     // Login again with initial password
-    await page.getByTestId('login-email').fill(uniqueEmail);
-    await page.getByTestId('login-password').fill('InitialPassword123');
+    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
+    await page.getByTestId('login-password').type('InitialPassword123', { delay: 10 });
     await page.getByTestId('login-submit').click();
-    await page.waitForURL('/dashboard', { timeout: 15000 });
+    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     await page.goto('/perfil');
 
@@ -157,9 +177,12 @@ test.describe('Story 1.1: User Profile Management', () => {
     await expect(page.getByTestId('confirm-password')).toBeVisible();
 
     // When: user changes password
-    await page.getByTestId('current-password').fill('InitialPassword123');
-    await page.getByTestId('new-password').fill('NewPassword123');
-    await page.getByTestId('confirm-password').fill('NewPassword123');
+    await page.getByTestId('current-password').clear();
+    await page.getByTestId('new-password').clear();
+    await page.getByTestId('confirm-password').clear();
+    await page.getByTestId('current-password').type('InitialPassword123', { delay: 10 });
+    await page.getByTestId('new-password').type('NewPassword123', { delay: 10 });
+    await page.getByTestId('confirm-password').type('NewPassword123', { delay: 10 });
     await page.getByTestId('change-password-submit').click();
 
     // Then: see success message

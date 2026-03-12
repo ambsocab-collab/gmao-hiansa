@@ -1,22 +1,22 @@
-<testsuites id="" name="" tests="15" failures="15" skipped="0" errors="0" time="177.038713">
-<testsuite name="story-1.1-admin-user-management.spec.ts" timestamp="2026-03-10T20:46:51.086Z" hostname="chromium" tests="4" failures="4" skipped="0" time="143.725" errors="0">
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability" classname="story-1.1-admin-user-management.spec.ts" time="47.962">
+<testsuites id="" name="" tests="14" failures="9" skipped="5" errors="0" time="72.965288">
+<testsuite name="story-1.1-admin-user-management.spec.ts" timestamp="2026-03-12T22:43:03.272Z" hostname="chromium" tests="4" failures="4" skipped="0" time="61.071" errors="0">
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability" classname="story-1.1-admin-user-management.spec.ts" time="22.02">
 <failure message="story-1.1-admin-user-management.spec.ts:20:7 [P0-E2E-012] should allow admin to create new user with default capability" type="FAILURE">
 <![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:20:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability 
 
-    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    TimeoutError: locator.waitFor: Timeout 15000ms exceeded.
     Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
+      - waiting for getByTestId('login-email') to be visible
 
 
-      20 |   test('[P0-E2E-012] should allow admin to create new user with default capability', async ({ page }) => {
-      21 |     // Given: admin user with can_manage_users capability (from seed: admin@hiansa.com)
-    > 22 |     await page.goto('/login');
-         |                ^
-      23 |     await page.getByTestId('login-email').fill('admin@hiansa.com');
-      24 |     await page.getByTestId('login-password').fill('admin123');
-      25 |     await page.getByTestId('login-submit').click();
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:22:16
+      46 |
+      47 |     // Wait for form and clear fields
+    > 48 |     await page.getByTestId('login-email').waitFor({ state: 'visible' });
+         |                                           ^
+      49 |     await page.getByTestId('login-email').clear();
+      50 |     await page.getByTestId('login-password').clear();
+      51 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:48:43
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\test-failed-1.png
@@ -38,7 +38,13 @@
 ]]>
 </failure>
 <system-out>
-<![CDATA[
+<![CDATA[Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+Browser console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+
 [[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\test-failed-1.png]]
 
 [[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\video.webm]]
@@ -49,23 +55,23 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user" classname="story-1.1-admin-user-management.spec.ts" time="33.11">
-<failure message="story-1.1-admin-user-management.spec.ts:58:7 [P0-E2E-013] should allow admin to assign multiple capabilities to user" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:58:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user 
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user" classname="story-1.1-admin-user-management.spec.ts" time="20.068">
+<failure message="story-1.1-admin-user-management.spec.ts:88:7 [P0-E2E-013] should allow admin to assign multiple capabilities to user" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:88:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user 
 
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/dashboard" until "load"
+    ============================================================
 
-
-      59 |     // Given: admin user
-      60 |     await page.goto('/login');
-    > 61 |     await page.getByTestId('login-email').fill('admin@hiansa.com');
-         |                                           ^
-      62 |     await page.getByTestId('login-password').fill('admin123');
-      63 |     await page.getByTestId('login-submit').click();
-      64 |     await page.waitForURL('/dashboard', { timeout: 3000 });
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:61:43
+       99 |     await page.getByTestId('login-password').type('admin123', { delay: 10 });
+      100 |     await page.getByTestId('login-submit').click();
+    > 101 |     await page.waitForURL('**/dashboard', { timeout: 15000 });
+          |                ^
+      102 |
+      103 |     await page.goto('/usuarios/nuevo');
+      104 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:101:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\test-failed-1.png
@@ -98,23 +104,23 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login" classname="story-1.1-admin-user-management.spec.ts" time="32.553">
-<failure message="story-1.1-admin-user-management.spec.ts:107:7 [P0-E2E-014] should perform soft delete and prevent login" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:107:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login 
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login" classname="story-1.1-admin-user-management.spec.ts" time="18.983">
+<failure message="story-1.1-admin-user-management.spec.ts:150:7 [P0-E2E-014] should perform soft delete and prevent login" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:150:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login 
 
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/dashboard" until "load"
+    ============================================================
 
-
-      108 |     // Given: admin user
-      109 |     await page.goto('/login');
-    > 110 |     await page.getByTestId('login-email').fill('admin@hiansa.com');
-          |                                           ^
-      111 |     await page.getByTestId('login-password').fill('admin123');
-      112 |     await page.getByTestId('login-submit').click();
-      113 |     await page.waitForURL('/dashboard', { timeout: 3000 });
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:110:43
+      162 |     await page.getByTestId('login-password').type('admin123', { delay: 10 });
+      163 |     await page.getByTestId('login-submit').click();
+    > 164 |     await page.waitForURL('**/dashboard', { timeout: 15000 });
+          |                ^
+      165 |
+      166 |     // Create a test user to delete
+      167 |     await page.goto('/usuarios/nuevo');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:164:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium\test-failed-1.png
@@ -147,86 +153,35 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-014] should show deleted users in admin list with indicator" classname="story-1.1-admin-user-management.spec.ts" time="30.1">
-<failure message="story-1.1-admin-user-management.spec.ts:145:7 [P0-E2E-014] should show deleted users in admin list with indicator" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:145:7 › Story 1.1: Admin User Management › [P0-E2E-014] should show deleted users in admin list with indicator 
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities" classname="story-1.1-admin-user-management.spec.ts" time="0">
+<failure message="story-1.1-admin-user-management.spec.ts:206:7 [P0-E2E-015] should show users list with admin capabilities" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:206:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities 
 
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      146 |     // Given: admin user
-      147 |     await page.goto('/login');
-    > 148 |     await page.getByTestId('login-email').fill('admin@hiansa.com');
-          |                                           ^
-      149 |     await page.getByTestId('login-password').fill('admin123');
-      150 |     await page.getByTestId('login-submit').click();
-      151 |     await page.waitForURL('/dashboard', { timeout: 3000 });
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:148:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
 ]]>
 </failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-1b89c-n-admin-list-with-indicator-chromium\trace.zip]]
-]]>
-</system-out>
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-forced-password-reset.spec.ts" timestamp="2026-03-10T20:46:51.086Z" hostname="chromium" tests="4" failures="4" skipped="0" time="143.564" errors="0">
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" classname="story-1.1-forced-password-reset.spec.ts" time="47.549">
-<failure message="story-1.1-forced-password-reset.spec.ts:18:7 [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-forced-password-reset.spec.ts:18:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
+<testsuite name="story-1.1-forced-password-reset.spec.ts" timestamp="2026-03-12T22:43:03.272Z" hostname="chromium" tests="4" failures="1" skipped="3" time="0.002" errors="0">
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" classname="story-1.1-forced-password-reset.spec.ts" time="0.002">
+<failure message="story-1.1-forced-password-reset.spec.ts:31:7 [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-forced-password-reset.spec.ts:31:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
 
-    TimeoutError: page.goto: Timeout 30000ms exceeded.
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
+    Error: Database verification failed: Health check failed: 404
 
+       at test-setup.ts:40
 
-      25 |
-      26 |     // When: user attempts login
-    > 27 |     await page.goto('/login');
-         |                ^
-      28 |     await page.getByTestId('login-email').fill(newUser.email);
-      29 |     await page.getByTestId('login-password').fill(newUser.password);
-      30 |     await page.getByTestId('login-submit').click();
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:27:16
+      38 |     }
+      39 |   } catch (error: any) {
+    > 40 |     throw new Error(`Database verification failed: ${error.message}`);
+         |           ^
+      41 |   }
+      42 | }
+      43 |
+        at verifyDatabaseSeed (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\test-setup.ts:40:11)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:20:3
 
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip
     Usage:
 
@@ -237,194 +192,43 @@
 </failure>
 <system-out>
 <![CDATA[
-[[ATTACHMENT|test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\error-context.md]]
-
 [[ATTACHMENT|test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed" classname="story-1.1-forced-password-reset.spec.ts" time="32.833">
-<failure message="story-1.1-forced-password-reset.spec.ts:40:7 [P0-E2E-006] should block navigation to other routes until password is changed" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-forced-password-reset.spec.ts:40:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      41 |     // Given: user with forcePasswordReset=true logged in
-      42 |     await page.goto('/login');
-    > 43 |     await page.getByTestId('login-email').fill('new.user@example.com');
-         |                                           ^
-      44 |     await page.getByTestId('login-password').fill('tempPassword123');
-      45 |     await page.getByTestId('login-submit').click();
-      46 |     await page.waitForURL('/cambiar-password');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:43:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--ac4d1-s-until-password-is-changed-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed" classname="story-1.1-forced-password-reset.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard" classname="story-1.1-forced-password-reset.spec.ts" time="33.058">
-<failure message="story-1.1-forced-password-reset.spec.ts:66:7 [P0-E2E-007] should allow password change and redirect to dashboard" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-forced-password-reset.spec.ts:66:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      67 |     // Given: user on /change-password with forcePasswordReset=true
-      68 |     await page.goto('/login');
-    > 69 |     await page.getByTestId('login-email').fill('new.user@example.com');
-         |                                           ^
-      70 |     await page.getByTestId('login-password').fill('tempPassword123');
-      71 |     await page.getByTestId('login-submit').click();
-      72 |     await page.waitForURL('/cambiar-password');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:69:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard" classname="story-1.1-forced-password-reset.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change" classname="story-1.1-forced-password-reset.spec.ts" time="30.124">
-<failure message="story-1.1-forced-password-reset.spec.ts:90:7 [P0-E2E-008] should validate password strength on change" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-forced-password-reset.spec.ts:90:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      91 |     // Given: user on /change-password
-      92 |     await page.goto('/login');
-    > 93 |     await page.getByTestId('login-email').fill('new.user@example.com');
-         |                                           ^
-      94 |     await page.getByTestId('login-password').fill('tempPassword123');
-      95 |     await page.getByTestId('login-submit').click();
-      96 |     await page.waitForURL('/cambiar-password');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:93:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-forced-password--5dd69-password-strength-on-change-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change" classname="story-1.1-forced-password-reset.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-login-auth.spec.ts" timestamp="2026-03-10T20:46:51.086Z" hostname="chromium" tests="4" failures="4" skipped="0" time="143.462" errors="0">
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids" classname="story-1.1-login-auth.spec.ts" time="48.469">
-<failure message="story-1.1-login-auth.spec.ts:12:7 [P0-E2E-001] should display login form with required fields and testids" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-login-auth.spec.ts:12:7 › Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids 
+<testsuite name="story-1.1-login-auth.spec.ts" timestamp="2026-03-12T22:43:03.272Z" hostname="chromium" tests="3" failures="1" skipped="2" time="0.001" errors="0">
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids" classname="story-1.1-login-auth.spec.ts" time="0.001">
+<failure message="story-1.1-login-auth.spec.ts:29:7 [P0-E2E-001] should display login form with required fields and testids" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-login-auth.spec.ts:29:7 › Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids 
 
-    TimeoutError: page.goto: Timeout 30000ms exceeded.
-    Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
+    Error: Database verification failed: Health check failed: 404
 
+       at test-setup.ts:40
 
-      12 |   test('[P0-E2E-001] should display login form with required fields and testids', async ({ page }) => {
-      13 |     // Given: user navigates to login page
-    > 14 |     await page.goto('/login');
-         |                ^
-      15 |
-      16 |     // Then: login form is visible with correct structure
-      17 |     await expect(page.getByTestId('login-form')).toBeVisible();
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:14:16
+      38 |     }
+      39 |   } catch (error: any) {
+    > 40 |     throw new Error(`Database verification failed: ${error.message}`);
+         |           ^
+      41 |   }
+      42 | }
+      43 |
+        at verifyDatabaseSeed (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\test-setup.ts:40:11)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:19:3
 
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\trace.zip
     Usage:
 
@@ -435,182 +239,37 @@
 </failure>
 <system-out>
 <![CDATA[
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\error-context.md]]
-
 [[ATTACHMENT|test-results\story-1.1-login-auth-Story-8bd1c-required-fields-and-testids-chromium\trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard" classname="story-1.1-login-auth.spec.ts" time="32.88">
-<failure message="story-1.1-login-auth.spec.ts:32:7 [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-login-auth.spec.ts:32:7 › Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      42 |
-      43 |     // When: user enters valid credentials
-    > 44 |     await page.getByTestId('login-email').fill(testUser.email);
-         |                                           ^
-      45 |     await page.getByTestId('login-password').fill(testUser.password);
-      46 |     await page.getByTestId('login-submit').click();
-      47 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:44:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard" classname="story-1.1-login-auth.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials" classname="story-1.1-login-auth.spec.ts" time="32.624">
-<failure message="story-1.1-login-auth.spec.ts:61:7 [P0-E2E-003] should show error message with invalid credentials" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-login-auth.spec.ts:61:7 › Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      64 |
-      65 |     // When: user enters invalid credentials
-    > 66 |     await page.getByTestId('login-email').fill('nonexistent@example.com');
-         |                                           ^
-      67 |     await page.getByTestId('login-password').fill('wrongpassword');
-      68 |     await page.getByTestId('login-submit').click();
-      69 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:66:43
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-e2909-ge-with-invalid-credentials-chromium\trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-004] should apply rate limiting after 5 failed login attempts" classname="story-1.1-login-auth.spec.ts" time="29.489">
-<failure message="story-1.1-login-auth.spec.ts:87:7 [P0-E2E-004] should apply rate limiting after 5 failed login attempts" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-login-auth.spec.ts:87:7 › Story 1.1: Login Authentication Flow › [P0-E2E-004] should apply rate limiting after 5 failed login attempts 
-
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
-
-
-      91 |     for (let i = 0; i < 5; i++) {
-      92 |       await page.goto('/login');
-    > 93 |       await page.getByTestId('login-email').fill(testEmail);
-         |                                             ^
-      94 |       await page.getByTestId('login-password').fill('wrongpassword');
-      95 |       await page.getByTestId('login-submit').click();
-      96 |       await expect(page.getByTestId('login-error')).toBeVisible();
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:93:45
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-login-auth-Story-47ea5-ter-5-failed-login-attempts-chromium\trace.zip]]
-]]>
-</system-out>
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials" classname="story-1.1-login-auth.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-profile.spec.ts" timestamp="2026-03-10T20:46:51.086Z" hostname="chromium" tests="3" failures="3" skipped="0" time="112.964" errors="0">
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information" classname="story-1.1-profile.spec.ts" time="47.739">
-<failure message="story-1.1-profile.spec.ts:20:7 [P0-E2E-009] should display user profile with current information" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-profile.spec.ts:20:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information 
+<testsuite name="story-1.1-profile.spec.ts" timestamp="2026-03-12T22:43:03.272Z" hostname="chromium" tests="3" failures="3" skipped="0" time="59.886" errors="0">
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information" classname="story-1.1-profile.spec.ts" time="21.897">
+<failure message="story-1.1-profile.spec.ts:22:7 [P0-E2E-009] should display user profile with current information" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-profile.spec.ts:22:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information 
 
-    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    TimeoutError: locator.fill: Timeout 15000ms exceeded.
     Call log:
-      - navigating to "http://localhost:3000/login", waiting until "load"
+      - waiting for getByTestId('login-email')
 
 
-      20 |   test('[P0-E2E-009] should display user profile with current information', async ({ page }) => {
-      21 |     // Given: authenticated user (using tecnico from seed)
-    > 22 |     await page.goto('/login');
-         |                ^
-      23 |     await page.getByTestId('login-email').fill('tecnico@hiansa.com');
-      24 |     await page.getByTestId('login-password').fill('tecnico123');
-      25 |     await page.getByTestId('login-submit').click();
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:22:16
+      24 |     // This test only reads, no modification - can use shared seed user
+      25 |     await page.goto('/login');
+    > 26 |     await page.getByTestId('login-email').fill('tecnico@hiansa.com');
+         |                                           ^
+      27 |     await page.getByTestId('login-password').fill('tecnico123');
+      28 |     await page.getByTestId('login-submit').click();
+      29 |     await page.waitForURL('/dashboard', { timeout: 15000 });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:26:43
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium\test-failed-1.png
@@ -643,23 +302,23 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile" classname="story-1.1-profile.spec.ts" time="32.961">
-<failure message="story-1.1-profile.spec.ts:43:7 [P0-E2E-010] should allow user to edit own profile" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-profile.spec.ts:43:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile 
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile" classname="story-1.1-profile.spec.ts" time="19.693">
+<failure message="story-1.1-profile.spec.ts:46:7 [P0-E2E-010] should allow user to edit own profile" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-profile.spec.ts:46:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile 
 
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/dashboard" until "load"
+    ============================================================
 
-
-      44 |     // Given: authenticated user (using tecnico from seed)
-      45 |     await page.goto('/login');
-    > 46 |     await page.getByTestId('login-email').fill('tecnico@hiansa.com');
-         |                                           ^
-      47 |     await page.getByTestId('login-password').fill('tecnico123');
-      48 |     await page.getByTestId('login-submit').click();
-      49 |     await page.waitForURL('/dashboard', { timeout: 3000 });
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:46:43
+      55 |     await page.getByTestId('login-password').fill('admin123');
+      56 |     await page.getByTestId('login-submit').click();
+    > 57 |     await page.waitForURL('/dashboard', { timeout: 15000 });
+         |                ^
+      58 |
+      59 |     // Create unique user
+      60 |     await page.goto('/usuarios/nuevo');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:57:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\test-failed-1.png
@@ -692,23 +351,23 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile" classname="story-1.1-profile.spec.ts" time="32.264">
-<failure message="story-1.1-profile.spec.ts:67:7 [P0-E2E-011] should allow user to change password from profile" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-profile.spec.ts:67:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile 
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile" classname="story-1.1-profile.spec.ts" time="18.296">
+<failure message="story-1.1-profile.spec.ts:105:7 [P0-E2E-011] should allow user to change password from profile" type="FAILURE">
+<![CDATA[  [chromium] › story-1.1-profile.spec.ts:105:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile 
 
-    TimeoutError: locator.fill: Timeout 15000ms exceeded.
-    Call log:
-      - waiting for getByTestId('login-email')
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/dashboard" until "load"
+    ============================================================
 
-
-      68 |     // Given: authenticated user (using supervisor from seed)
-      69 |     await page.goto('/login');
-    > 70 |     await page.getByTestId('login-email').fill('supervisor@hiansa.com');
-         |                                           ^
-      71 |     await page.getByTestId('login-password').fill('supervisor123');
-      72 |     await page.getByTestId('login-submit').click();
-      73 |     await page.waitForURL('/dashboard', { timeout: 3000 });
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:70:43
+      114 |     await page.getByTestId('login-password').fill('admin123');
+      115 |     await page.getByTestId('login-submit').click();
+    > 116 |     await page.waitForURL('/dashboard', { timeout: 15000 });
+          |                ^
+      117 |
+      118 |     // Create unique user
+      119 |     await page.goto('/usuarios/nuevo');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:116:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\test-failed-1.png
