@@ -87,13 +87,17 @@ export async function POST(request: NextRequest) {
   let session: Awaited<ReturnType<typeof auth>> | null = null
 
   try {
+    console.log('[POST /api/v1/users] Request received')
     session = await auth()
+    console.log('[POST /api/v1/users] Session authenticated:', session?.user?.email)
 
     const body = await request.json()
+    console.log('[POST /api/v1/users] Received request body:', JSON.stringify(body, null, 2))
 
     // Call Server Action
     const result = await createUser(body)
 
+    console.log('[POST /api/v1/users] createUser result:', JSON.stringify(result, null, 2))
     return NextResponse.json(result)
   } catch (error) {
     logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'create_user_api_error', correlationId, session?.user?.id)

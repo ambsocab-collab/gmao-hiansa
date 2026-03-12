@@ -244,6 +244,8 @@ export async function createUser(data: {
   const perf = trackPerformance('create_user', correlationId)
 
   try {
+    console.log('[createUser] Received data:', JSON.stringify(data, null, 2))
+
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
@@ -262,7 +264,9 @@ export async function createUser(data: {
     }
 
     // 3. Validate data
+    console.log('[createUser] About to validate with createUserSchema')
     const validatedData = createUserSchema.parse(data)
+    console.log('[createUser] Validation passed:', JSON.stringify(validatedData, null, 2))
 
     // 4. Check if email already exists
     const existingUser = await prisma.user.findUnique({
@@ -343,6 +347,7 @@ export async function createUser(data: {
 
     // Handle Zod validation errors
     if (error instanceof ZodError) {
+      console.log('[createUser] ZodError:', JSON.stringify(error.errors, null, 2))
       const sessionForError = await auth()
       logger.warn(sessionForError?.user?.id ?? undefined, 'create_user_validation_failed', correlationId, { errors: error.errors })
       throw new ValidationError('Datos inválidos', { errors: error.errors })

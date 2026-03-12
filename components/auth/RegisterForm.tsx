@@ -92,6 +92,7 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('[RegisterForm] handleSubmit called!')
 
     // Clear previous errors
     setState(prev => ({
@@ -128,28 +129,44 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
       return
     }
 
-    setState(prev => ({ ...prev, isLoading: true }))
+    setState(prev => ({ ...prev, isLoading: true, error: '' }))
+
+    // Debug: log form state before submitting
+    console.log('[RegisterForm] Submitting form with state:', {
+      name: state.name,
+      email: state.email,
+      phone: state.phone,
+      roleLabel: state.roleLabel,
+      passwordLength: state.password?.length,
+      selectedCapabilities: state.selectedCapabilities,
+    })
 
     try {
+      const requestBody = {
+        name: state.name,
+        email: state.email,
+        phone: state.phone || null,
+        roleLabel: state.roleLabel || null,
+        password: state.password,
+        capabilities: state.selectedCapabilities,
+      }
+      console.log('[RegisterForm] Creating user with request body:', JSON.stringify(requestBody, null, 2))
+
       const response = await fetch('/api/v1/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: state.name,
-          email: state.email,
-          phone: state.phone || null,
-          roleLabel: state.roleLabel || null,
-          password: state.password,
-          capabilities: state.selectedCapabilities,
-        }),
+        body: JSON.stringify(requestBody),
       })
 
       const data = await response.json()
+      console.log('[RegisterForm] Response status:', response.status, 'Response data:', data)
 
       if (!response.ok) {
+        // Extract error message from error object
+        const errorMessage = data.error?.message || data.error || 'Error al crear usuario'
         setState(prev => ({
           ...prev,
-          error: data.error || 'Error al crear usuario',
+          error: errorMessage,
         }))
         return
       }
@@ -170,7 +187,10 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
   return (
     <form
       data-testid="register-form"
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        console.log('[RegisterForm] Form onSubmit triggered!')
+        handleSubmit(e)
+      }}
       className="space-y-8"
     >
       {/* User Information */}
@@ -371,6 +391,7 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
           type="submit"
           disabled={state.isLoading}
           className="flex-1 h-11"
+          onClick={() => console.log('[RegisterForm] Submit button clicked!')}
         >
           {state.isLoading ? (
             <>

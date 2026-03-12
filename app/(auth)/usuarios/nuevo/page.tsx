@@ -25,7 +25,10 @@ export const metadata = {
 export default async function NuevoUsuarioPage() {
   const session = await auth()
 
+  console.log('[NuevoUsuarioPage] Session:', JSON.stringify({ user: session?.user }, null, 2))
+
   if (!session?.user) {
+    console.log('[NuevoUsuarioPage] No session, redirecting to login')
     redirect('/login')
   }
 
@@ -34,7 +37,11 @@ export default async function NuevoUsuarioPage() {
     'can_manage_users'
   )
 
+  console.log('[NuevoUsuarioPage] hasManageUsersCapability:', hasManageUsersCapability)
+  console.log('[NuevoUsuarioPage] capabilities:', session.user.capabilities)
+
   if (!hasManageUsersCapability) {
+    console.log('[NuevoUsuarioPage] No can_manage_users capability, redirecting to dashboard')
     redirect('/dashboard')
   }
 
