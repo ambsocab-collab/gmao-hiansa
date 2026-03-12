@@ -15,10 +15,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2 } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
 
 interface ChangePasswordFormState {
   currentPassword: string
@@ -42,6 +44,7 @@ const PASSWORD_REQUIREMENTS = {
 
 export function ChangePasswordForm() {
   const router = useRouter()
+  const { toast } = useToast()
   const [state, setState] = useState<ChangePasswordFormState>({
     currentPassword: '',
     newPassword: '',
@@ -108,7 +111,10 @@ export function ChangePasswordForm() {
         }),
       })
 
+      console.log('[ChangePasswordForm] Response status:', response.status)
+
       const data = await response.json()
+      console.log('[ChangePasswordForm] Response data:', data)
 
       if (!response.ok) {
         setState(prev => ({
@@ -118,9 +124,19 @@ export function ChangePasswordForm() {
         return
       }
 
-      // Password changed successfully - redirect to dashboard
-      router.push('/dashboard')
-      router.refresh()
+      // Password changed successfully - show success message
+      console.log('[ChangePasswordForm] Password change successful, showing toast and redirecting...')
+      toast({
+        title: '¡Contraseña cambiada!',
+        description: 'Contraseña cambiada exitosamente',
+      })
+
+      // Sign out to force session refresh, then redirect to login
+      // User will need to log in again with new password
+      console.log('[ChangePasswordForm] Signing out to refresh session...')
+      await signOut({ redirect: false })
+      window.location.href = '/login'
+      console.log('[ChangePasswordForm] Redirect command executed (this may not appear due to navigation)')
     } catch {
       setState(prev => ({
         ...prev,

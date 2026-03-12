@@ -77,11 +77,14 @@ export function LoginForm() {
 
     try {
       // Call NextAuth sign-in
+      console.log('[LoginForm] Attempting login with email:', state.email)
       const result = await signIn('credentials', {
         email: state.email,
         password: state.password,
         redirect: false,
       })
+
+      console.log('[LoginForm] Login result:', result)
 
       if (result?.error) {
         // Handle error
@@ -98,15 +101,20 @@ export function LoginForm() {
           }))
         }
       } else if (result?.ok) {
-        // Successful login - show welcome toast and redirect to dashboard
+        // Successful login - show welcome toast
+        // NextAuth will handle redirect based on middleware (forcePasswordReset check)
         toast({
           title: '¡Bienvenido!',
           description: 'Has iniciado sesión correctamente',
         })
-        router.push('/dashboard')
+        // Let NextAuth handle the redirect - it will use the callbackUrl or default
+        // The middleware will intercept and redirect to /cambiar-password if forcePasswordReset=true
         router.refresh()
+        // Use window.location for full page reload to trigger middleware
+        window.location.href = '/dashboard'
       }
-    } catch {
+    } catch (error) {
+      console.error('[LoginForm] Login error:', error)
       setState(prev => ({
         ...prev,
         error: 'Error al iniciar sesión. Intente nuevamente.',
