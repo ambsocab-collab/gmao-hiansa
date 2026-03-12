@@ -144,6 +144,7 @@ export async function changePassword(formData: FormData) {
     const rawData = {
       currentPassword: formData.get('currentPassword') as string,
       newPassword: formData.get('newPassword') as string,
+      confirmPassword: formData.get('confirmPassword') as string,
     }
 
     const validatedData = changePasswordSchema.parse(rawData)
@@ -166,6 +167,7 @@ export async function changePassword(formData: FormData) {
 
     if (!isCurrentPasswordValid) {
       logger.warn(session.user.id, 'change_password', correlationId)
+      throw new ValidationError('Contraseña actual incorrecta')
     }
 
     // 5. Hash new password
@@ -399,6 +401,7 @@ export async function deleteUser(userId: string) {
 
     if (!hasManageUsersCapability) {
       logger.warn(session.user.id, 'delete_user', correlationId)
+      throw new AuthorizationError('No tienes permiso para eliminar usuarios')
     }
 
     // 3. Check if user exists
