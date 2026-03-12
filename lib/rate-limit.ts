@@ -34,11 +34,39 @@ export const RATE_LIMIT_CONFIG = {
 export const loginAttempts = new Map<string, RateLimitRecord>()
 
 /**
+ * Checks if rate limiting should be bypassed for testing
+ * @param requestHeaders - Optional request headers to check for x-playwright-test header
+ * @returns true if bypass is active
+ */
+function shouldBypassRateLimit(requestHeaders?: Headers): boolean {
+  // Bypass rate limiting for E2E tests
+  // Check for PLAYWRIGHT_TEST environment variable OR x-playwright-test header
+  if (process.env.PLAYWRIGHT_TEST === '1' || process.env.NODE_ENV === 'test') {
+    return true
+  }
+
+  // Check for x-playwright-test header (set by Playwright config)
+  if (requestHeaders?.get('x-playwright-test') === '1') {
+    console.log('[checkRateLimit] BYPASSED via x-playwright-test header')
+    return true
+  }
+
+  return false
+}
+
+/**
  * Checks if an IP has exceeded the rate limit
  * @param ip - Client IP address
+ * @param requestHeaders - Optional request headers for test bypass detection
  * @returns true if attempt is allowed, false if should be blocked
  */
-export async function checkRateLimit(ip: string): Promise<boolean> {
+export async function checkRateLimit(ip: string, requestHeaders?: Headers): Promise<boolean> {
+  // Bypass rate limiting for E2E tests
+  if (shouldBypassRateLimit(requestHeaders)) {
+    console.log('[checkRateLimit] BYPASSED for E2E tests')
+    return true
+  }
+
   const now = Date.now()
 
   // For E2E testing purposes, use a global counter instead of IP-specific

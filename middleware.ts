@@ -70,6 +70,7 @@ export const ROUTE_CAPABILITIES: Record<string, string[]> = {
   '/providers': ['can_manage_providers'],
   '/routines': ['can_manage_routines'],
   '/users': ['can_manage_users'],
+  '/usuarios': ['can_manage_users'], // Spanish route for user management
   '/reports': ['can_view_repair_history']
 }
 
@@ -149,6 +150,9 @@ export default withAuth(
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
 
+    // DEBUG: Log token and path for debugging forcePasswordReset
+    console.log('[Middleware] Path:', path, 'Token forcePasswordReset:', token?.forcePasswordReset, 'Token ID:', token?.id, 'Full token:', JSON.stringify(token))
+
     // Story 0.5: Generate or retrieve correlation ID
     const correlationId = getOrCreateCorrelationId(req.headers)
 
@@ -164,6 +168,7 @@ export default withAuth(
         path !== '/cambiar-password' &&
         path !== '/unauthorized' &&
         !path.startsWith('/api/auth')) {
+      console.log('[Middleware] Redirecting to /cambiar-password due to forcePasswordReset=true')
       const response = NextResponse.redirect(new URL('/cambiar-password', req.url))
       response.headers.set(CORRELATION_ID_HEADER, correlationId)
       return response
@@ -230,6 +235,7 @@ export const config = {
     '/providers/:path*',
     '/routines/:path*',
     '/users/:path*',
+    '/usuarios/:path*', // Spanish routes for user management
     '/reports/:path*',
     // Change password and unauthorized routes (Story 1.1: Spanish route names)
     '/cambiar-password/:path*',

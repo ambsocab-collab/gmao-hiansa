@@ -22,7 +22,10 @@ export const authOptions = {
 
         const ip = 'localhost'; // Simplificado para evitar problemas con headers en Next.js 15
 
-        const rateLimitOk = await checkRateLimit(ip)
+        // Get request headers for test bypass detection
+        const requestHeaders = req?.headers ? new Headers(req.headers as Record<string, string>) : undefined
+
+        const rateLimitOk = await checkRateLimit(ip, requestHeaders)
         if (!rateLimitOk) {
           const error = new Error('RATE_LIMITED:Demasiados intentos. Intenta nuevamente en 15 minutos.')
           error.name = 'RATE_LIMITED'
@@ -87,6 +90,7 @@ export const authOptions = {
         token.id = user.id
         token.capabilities = user.capabilities
         token.forcePasswordReset = user.forcePasswordReset
+        console.log('[JWT Callback] User logged in, forcePasswordReset:', user.forcePasswordReset, 'Email:', user.email)
       }
       return token
     },
