@@ -264,9 +264,7 @@ export async function createUser(data: {
     }
 
     // 3. Validate data
-    console.log('[createUser] About to validate with createUserSchema')
     const validatedData = createUserSchema.parse(data)
-    console.log('[createUser] Validation passed:', JSON.stringify(validatedData, null, 2))
 
     // 4. Check if email already exists
     const existingUser = await prisma.user.findUnique({

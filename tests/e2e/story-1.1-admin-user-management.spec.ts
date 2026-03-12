@@ -25,6 +25,18 @@ test.describe('Story 1.1: Admin User Management', () => {
       }
     });
 
+    // Intercept API responses to see error details
+    page.on('response', async response => {
+      if (response.url().includes('/api/v1/users') && response.status() === 400) {
+        try {
+          const body = await response.json();
+          console.log('API Error Response:', body);
+        } catch {
+          console.log('API Error Response: [unreadable]');
+        }
+      }
+    });
+
     // Generate unique email to avoid conflicts with previous test runs
     const timestamp = Date.now()
     const uniqueEmail = `maria.gonzalez.${timestamp}@example.com`
@@ -113,6 +125,30 @@ test.describe('Story 1.1: Admin User Management', () => {
     // Wait for result
     await page.waitForTimeout(3000);
 
+    // Check for error messages - try multiple selectors
+    const errorSelectors = [
+      'div[style*="color"]',
+      'div.bg-red-50',
+      '[role="alert"]',
+      'p.text-red-600',
+    ];
+
+    for (const selector of errorSelectors) {
+      const elements = page.locator(selector);
+      const count = await elements.count();
+      if (count > 0) {
+        for (let i = 0; i < count; i++) {
+          const text = await elements.nth(i).textContent();
+          if (text && text.trim()) {
+            console.log(`Error found with selector "${selector}":`, text);
+          }
+        }
+      }
+    }
+
+    // Log final URL
+    console.log('Current URL after form submission:', page.url());
+
     // Then: redirected to users list after successful creation
     await page.waitForURL('**/usuarios', { timeout: 10000 });
     expect(page.url()).toContain('/usuarios');
@@ -132,9 +168,9 @@ test.describe('Story 1.1: Admin User Management', () => {
     await page.goto('/usuarios/nuevo');
 
     // When: admin selects multiple capabilities
-    await page.getByTestId('capability-can_view_work_orders').check();
-    await page.getByTestId('capability-can_create_work_orders').check();
-    await page.getByTestId('capability-can_complete_work_orders').check();
+    await page.getByTestId('capability-can_view_all_ots').check();
+    await page.getByTestId('capability-can_create_manual_ot').check();
+    await page.getByTestId('capability-can_complete_ot').check();
 
     // And: fills user details
     await page.getByTestId('registro-nombre').fill('Técnico Avanzado');

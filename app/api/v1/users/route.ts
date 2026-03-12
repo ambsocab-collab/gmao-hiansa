@@ -90,9 +90,11 @@ export async function POST(request: NextRequest) {
     console.log('[POST /api/v1/users] Request received')
     session = await auth()
     console.log('[POST /api/v1/users] Session authenticated:', session?.user?.email)
+    console.log('[POST /api/v1/users] User capabilities:', session?.user?.capabilities)
 
     const body = await request.json()
     console.log('[POST /api/v1/users] Received request body:', JSON.stringify(body, null, 2))
+    console.log('[POST /api/v1/users] Capabilities in request:', body.capabilities, 'Type:', typeof body.capabilities, 'Length:', Array.isArray(body.capabilities) ? body.capabilities.length : 'N/A')
 
     // Call Server Action
     const result = await createUser(body)

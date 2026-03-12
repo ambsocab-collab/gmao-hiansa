@@ -47,23 +47,23 @@ interface RegisterFormState {
   }
 }
 
-// 15 PBAC Capabilities
+// 15 PBAC Capabilities (from database seed)
 const ALL_CAPABILITIES = [
   'can_create_failure_report',
-  'can_view_work_orders',
-  'can_create_work_orders',
-  'can_complete_work_orders',
-  'can_assign_technicians',
-  'can_manage_assets',
+  'can_create_manual_ot',
+  'can_update_own_ot',
+  'can_view_own_ots',
+  'can_view_all_ots',
+  'can_complete_ot',
   'can_manage_stock',
-  'can_manage_users',
+  'can_assign_technicians',
   'can_view_kpis',
-  'can_view_reports',
-  'can_export_data',
+  'can_manage_assets',
+  'can_view_repair_history',
   'can_manage_providers',
   'can_manage_routines',
-  'can_manage_labels',
-  'can_delete_any_data',
+  'can_manage_users',
+  'can_receive_reports',
 ]
 
 export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
@@ -146,7 +146,7 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
         name: state.name,
         email: state.email,
         phone: state.phone || null,
-        roleLabel: state.roleLabel || null,
+        roleLabel: state.roleLabel || undefined,
         password: state.password,
         capabilities: state.selectedCapabilities,
       }
