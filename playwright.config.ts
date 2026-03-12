@@ -61,6 +61,24 @@ export default defineConfig({
 
     // Test data attributes
     testIdAttribute: 'data-testid',
+
+    // Extra environment variables for server-side code
+    extraHTTPHeaders: {
+      'x-playwright-test': '1',
+    },
+  },
+
+  // Global setup to set environment variables for the server
+  globalSetup: undefined, // No global setup file needed
+
+  // Environment variables that should be available to tests
+  // These are passed to the browser context, NOT to the server
+  // To set server-side env vars, use webServer.env
+  webServer: {
+    command: 'npm run dev:e2e',
+    port: 3000,
+    timeout: 240 * 1000, // Increased from 120s to 240s for slower builds
+    reuseExistingServer: !process.env.CI,
   },
 
   // Projects for different browsers
@@ -70,14 +88,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
-  // Run local dev server before starting tests
-  webServer: {
-    command: 'npm run dev',
-    port: 3000,
-    timeout: 240 * 1000, // Increased from 120s to 240s for slower builds
-    reuseExistingServer: !process.env.CI,
-  },
 
   // Output directory
   outputDir: 'test-results',
