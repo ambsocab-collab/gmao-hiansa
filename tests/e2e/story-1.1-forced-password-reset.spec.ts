@@ -173,9 +173,10 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('login-submit').click();
 
     // Then: redirected to dashboard (forcePasswordReset is now false)
+    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    expect(page.url()).toContain('/dashboard');
     // Wait for dashboard content to be visible
     await expect(page.getByText(/Dashboard/i).first()).toBeVisible({ timeout: 10000 });
-    expect(page.url()).toContain('/dashboard');
   });
 
   test('[P0-E2E-008] should validate password strength on change', async ({ page }) => {

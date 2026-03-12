@@ -68,7 +68,7 @@ export default async function UsuariosListPage() {
 
       {/* Users List */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
-        <ul className="divide-y divide-gray-200" role="list">
+        <ul className="divide-y divide-gray-200" role="list" data-testid="user-list">
           {users.map((user) => {
             const capabilities = user.userCapabilities.map(
               (uc) => uc.capability.label

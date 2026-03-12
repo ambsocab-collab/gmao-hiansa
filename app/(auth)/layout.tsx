@@ -61,7 +61,7 @@ export default async function AuthLayout({
 
               {/* Logout Button */}
               <form action="/api/auth/signout" method="POST">
-                <Button type="submit" variant="outline" size="sm">
+                <Button type="submit" variant="outline" size="sm" data-testid="logout-button">
                   Cerrar Sesión
                 </Button>
               </form>

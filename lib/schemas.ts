@@ -24,7 +24,7 @@ export const updateProfileSchema = z.object({
 export const createUserSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
   email: z.string().email('Email inválido'),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional().or(z.literal('')),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Formato de teléfono inválido').optional().or(z.literal('')).nullable(),
   roleLabel: z.string().optional(),
   password: z
     .string()

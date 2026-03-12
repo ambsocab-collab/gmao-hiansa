@@ -6,12 +6,13 @@
  * PUT /api/v1/users/profile - Update current user profile
  */
 
-import { updateProfile } from '@/app/actions/users'
+import { updateProfileSchema } from '@/lib/schemas'
 import { apiErrorHandler } from '@/lib/api/errorHandler'
 import { logger } from '@/lib/observability/logger'
 import { auth } from '@/lib/auth-adapter'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
+import { ZodError } from 'zod'
 
 /**
  * GET /api/v1/users/profile
@@ -63,16 +64,72 @@ export async function PUT(request: NextRequest) {
   try {
     session = await auth()
 
+    if (!session?.user?.id) {
+      logger.warn(undefined, 'update_profile_unauthorized', correlationId)
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    }
+
     const body = await request.json()
 
-    // Call Server Action
-    const result = await updateProfile(body)
+    // Validate data
+    const validatedData = updateProfileSchema.parse(body)
 
-    return NextResponse.json(result)
+    // Update user profile
+    const updatedUser = await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        name: validatedData.name,
+        phone: validatedData.phone || null,
+      },
+    })
+
+    // Log activity
+    await prisma.activityLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'profile_update',
+        metadata: {
+          fields: ['name', 'phone'],
+        },
+        timestamp: new Date(),
+      },
+    })
+
+    logger.info(session.user.id, 'update_profile', correlationId, {
+      success: true,
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Perfil actualizado exitosamente',
+      user: updatedUser,
+    })
   } catch (error) {
+    // Handle Zod validation errors
+    if (error instanceof ZodError) {
+      logger.warn(session?.user?.id ?? undefined, 'update_profile_validation_failed', correlationId, {
+        errors: error.errors,
+      })
+      return NextResponse.json(
+        { error: 'Datos inválidos', details: error.errors },
+        { status: 400 }
+      )
+    }
+
+    // Handle custom errors
+    if (
+      error instanceof Error &&
+      'name' in error &&
+      (error.name === 'AuthenticationError' ||
+        error.name === 'ValidationError' ||
+        error.name === 'AuthorizationError')
+    ) {
+      return NextResponse.json({ error: error.message }, { status: 401 })
+    }
+
+    // Handle unexpected errors
     logger.error(new Error(error instanceof Error ? error.message : 'Unknown error'), 'put_profile_api_error', correlationId, session?.user?.id ?? undefined)
 
-    // Use consistent error handler
     return apiErrorHandler(error, correlationId, 'PUT /api/v1/users/profile')
   }
 }

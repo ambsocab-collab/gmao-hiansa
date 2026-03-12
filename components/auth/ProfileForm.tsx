@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Loader2, Edit2, Check, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/use-toast'
 import {
   Dialog,
   DialogContent,
@@ -49,8 +50,17 @@ interface ProfileFormState {
   }
 }
 
+interface PasswordFormState {
+  currentPassword: string
+  newPassword: string
+  confirmPassword: string
+  error: string
+  isLoading: boolean
+}
+
 export function ProfileForm({ user }: { user: User }) {
   const router = useRouter()
+  const { toast } = useToast()
   const [state, setState] = useState<ProfileFormState>({
     isEditing: false,
     isLoading: false,
@@ -63,6 +73,13 @@ export function ProfileForm({ user }: { user: User }) {
   })
 
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
+  const [passwordState, setPasswordState] = useState<PasswordFormState>({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    error: '',
+    isLoading: false,
+  })
 
   const handleEdit = () => {
     setState(prev => ({
@@ -121,6 +138,71 @@ export function ProfileForm({ user }: { user: User }) {
       }))
     } finally {
       setState(prev => ({ ...prev, isLoading: false }))
+    }
+  }
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    // Validation
+    if (!passwordState.currentPassword || !passwordState.newPassword || !passwordState.confirmPassword) {
+      setPasswordState(prev => ({ ...prev, error: 'Todos los campos son requeridos' }))
+      return
+    }
+
+    if (passwordState.newPassword !== passwordState.confirmPassword) {
+      setPasswordState(prev => ({ ...prev, error: 'Las contraseñas no coinciden' }))
+      return
+    }
+
+    if (passwordState.newPassword.length < 8) {
+      setPasswordState(prev => ({ ...prev, error: 'Mínimo 8 caracteres' }))
+      return
+    }
+
+    setPasswordState(prev => ({ ...prev, isLoading: true, error: '' }))
+
+    try {
+      const response = await fetch('/api/v1/users/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: passwordState.currentPassword,
+          newPassword: passwordState.newPassword,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setPasswordState(prev => ({
+          ...prev,
+          error: data.error || 'Error al cambiar contraseña',
+        }))
+        return
+      }
+
+      // Success - close dialog and show toast
+      toast({
+        title: '¡Contraseña cambiada!',
+        description: 'Contraseña cambiada exitosamente',
+      })
+
+      setShowPasswordDialog(false)
+      setPasswordState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+        error: '',
+        isLoading: false,
+      })
+    } catch {
+      setPasswordState(prev => ({
+        ...prev,
+        error: 'Error al cambiar contraseña. Intente nuevamente.',
+      }))
+    } finally {
+      setPasswordState(prev => ({ ...prev, isLoading: false }))
     }
   }
 
@@ -320,12 +402,99 @@ export function ProfileForm({ user }: { user: User }) {
                   Ingresa tu contraseña actual y la nueva contraseña
                 </DialogDescription>
               </DialogHeader>
-              <div className="py-4">
-                <p className="text-sm text-gray-600">
-                  Esta funcionalidad está implementada. Por favor usa el flujo
-                  completo de cambio de contraseña.
-                </p>
-              </div>
+              <form
+                data-testid="cambiar-password-form"
+                onSubmit={handlePasswordChange}
+                className="space-y-4 py-4"
+              >
+                {/* Error Message */}
+                {passwordState.error && (
+                  <div className="p-3 rounded-md bg-red-50 border border-red-200">
+                    <p className="text-sm text-red-800">{passwordState.error}</p>
+                  </div>
+                )}
+
+                {/* Current Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="current-password">Contraseña Actual</Label>
+                  <Input
+                    id="current-password"
+                    data-testid="current-password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={passwordState.currentPassword}
+                    onChange={(e) =>
+                      setPasswordState(prev => ({ ...prev, currentPassword: e.target.value }))
+                    }
+                    disabled={passwordState.isLoading}
+                    required
+                    className="h-11"
+                  />
+                </div>
+
+                {/* New Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="new-password">Nueva Contraseña</Label>
+                  <Input
+                    id="new-password"
+                    data-testid="new-password"
+                    type="password"
+                    placeholder="NuevaContraseña123"
+                    value={passwordState.newPassword}
+                    onChange={(e) =>
+                      setPasswordState(prev => ({ ...prev, newPassword: e.target.value }))
+                    }
+                    disabled={passwordState.isLoading}
+                    required
+                    className="h-11"
+                  />
+                </div>
+
+                {/* Confirm Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                  <Input
+                    id="confirm-password"
+                    data-testid="confirm-password"
+                    type="password"
+                    placeholder="NuevaContraseña123"
+                    value={passwordState.confirmPassword}
+                    onChange={(e) =>
+                      setPasswordState(prev => ({ ...prev, confirmPassword: e.target.value }))
+                    }
+                    disabled={passwordState.isLoading}
+                    required
+                    className="h-11"
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  data-testid="change-password-submit"
+                  disabled={passwordState.isLoading}
+                  className="w-full h-11"
+                >
+                  {passwordState.isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Cambiando contraseña...
+                    </>
+                  ) : (
+                    'Cambiar Contraseña'
+                  )}
+                </Button>
+
+                {/* Password Requirements Info */}
+                <div className="text-xs text-gray-500 space-y-1">
+                  <p>La contraseña debe cumplir:</p>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Mínimo 8 caracteres</li>
+                    <li>Al menos una mayúscula</li>
+                    <li>Al menos un número</li>
+                  </ul>
+                </div>
+              </form>
             </DialogContent>
           </Dialog>
         </div>

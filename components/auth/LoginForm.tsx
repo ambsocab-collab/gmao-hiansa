@@ -88,12 +88,18 @@ export function LoginForm() {
       console.log('[LoginForm] result.ok:', result?.ok, 'result.error:', result?.error, 'result.url:', result?.url)
 
       if (result?.error) {
-        // Handle error
+        // Handle error - preserve specific error messages for deleted users
         if (result.error.includes('rate limit') || result.error.includes('demasiados intentos')) {
           setState(prev => ({
             ...prev,
             rateLimitBlocked: true,
             error: 'Demasiados intentos fallidos. Cuenta bloqueada por 15 minutos.',
+          }))
+        } else if (result.error.toLowerCase().includes('eliminado')) {
+          // Preserve the deleted user error message
+          setState(prev => ({
+            ...prev,
+            error: result.error,
           }))
         } else {
           setState(prev => ({
