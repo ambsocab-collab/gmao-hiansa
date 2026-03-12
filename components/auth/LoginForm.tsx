@@ -99,7 +99,7 @@ export function LoginForm() {
           // Preserve the deleted user error message
           setState(prev => ({
             ...prev,
-            error: result.error,
+            error: result.error || 'Error al iniciar sesión',
           }))
         } else {
           setState(prev => ({

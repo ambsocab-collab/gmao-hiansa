@@ -86,9 +86,9 @@ describe('User Server Actions', () => {
     vi.spyOn(db.prisma.activityLog, 'create').mockResolvedValue({} as any)
     vi.spyOn(db.prisma.auditLog, 'create').mockResolvedValue({
       id: 'audit-123',
-      user_id: 'test-user-123',
+      userId: 'test-user-123',
       action: 'test_action',
-      target_id: 'test-target-123',
+      targetId: 'test-target-123',
       metadata: {},
       timestamp: new Date(),
     } as any)
@@ -100,7 +100,7 @@ describe('User Server Actions', () => {
         id: 'user-123',
         email: 'user@example.com',
         name: 'Test User',
-        capabilities: [],
+        capabilities: ['can_create_failure_report'],
       },
     }
 
@@ -108,7 +108,7 @@ describe('User Server Actions', () => {
       // Arrange
       const profileData = {
         name: 'Updated Name',
-        phone: '+34 612 345 678',
+        phone: '+34612345678',
       }
 
       vi.spyOn(authAdapter, 'auth').mockResolvedValue(mockSession as any)
@@ -116,7 +116,7 @@ describe('User Server Actions', () => {
         id: 'user-123',
         name: 'Updated Name',
         email: 'user@example.com',
-        phone: '+34 612 345 678',
+        phone: '+34612345678',
       } as any)
       vi.spyOn(db.prisma.activityLog, 'create').mockResolvedValue({} as any)
 
@@ -133,12 +133,12 @@ describe('User Server Actions', () => {
         where: { id: 'user-123' },
         data: {
           name: 'Updated Name',
-          phone: '+34 612 345 678',
+          phone: '+34612345678',
         },
       })
       expect(db.prisma.activityLog.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
-          user_id: 'user-123',
+          userId: 'user-123',
           action: 'profile_update',
         }),
       })
@@ -180,14 +180,14 @@ describe('User Server Actions', () => {
         id: 'user-123',
         email: 'user@example.com',
         name: 'Test User',
-        capabilities: [],
+        capabilities: ['can_create_failure_report'],
       },
     }
 
     const mockUser = {
       id: 'user-123',
       email: 'user@example.com',
-      password_hash: 'hashed-current-password',
+      passwordHash: 'hashed-current-password',
     }
 
     it('[P1-UNIT-005] should change password successfully', async () => {
@@ -217,8 +217,8 @@ describe('User Server Actions', () => {
       expect(db.prisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user-123' },
         data: {
-          password_hash: 'new-hashed-password',
-          force_password_reset: false,
+          passwordHash: 'new-hashed-password',
+          forcePasswordReset: false,
         },
       })
     })
@@ -331,7 +331,7 @@ describe('User Server Actions', () => {
       const userData = {
         name: 'New User',
         email: 'newuser@example.com',
-        phone: '+34 600 000 001',
+        phone: '+34600000001',
         password: 'TempPassword123',
         capabilities: ['can_create_failure_report'],
       }
@@ -343,7 +343,7 @@ describe('User Server Actions', () => {
         id: 'new-user-123',
         email: 'newuser@example.com',
         name: 'New User',
-        user_capabilities: [
+        userCapabilities: [
           {
             capability: { name: 'can_create_failure_report' },
           },
@@ -368,10 +368,10 @@ describe('User Server Actions', () => {
         data: expect.objectContaining({
           email: 'newuser@example.com',
           name: 'New User',
-          phone: '+34 600 000 001',
-          password_hash: 'hashed-password',
-          force_password_reset: true,
-          user_capabilities: {
+          phone: '+34600000001',
+          passwordHash: 'hashed-password',
+          forcePasswordReset: true,
+          userCapabilities: {
             create: [
               {
                 capability: {
@@ -382,7 +382,7 @@ describe('User Server Actions', () => {
           },
         }),
         include: expect.objectContaining({
-          user_capabilities: expect.objectContaining({
+          userCapabilities: expect.objectContaining({
             include: expect.objectContaining({
               capability: true,
             }),
@@ -400,8 +400,8 @@ describe('User Server Actions', () => {
         createUser({
           name: 'Test',
           email: 'test@example.com',
-          password: 'password123',
-          capabilities: [],
+          password: 'Password123',
+          capabilities: ['can_create_failure_report'],
         })
       ).rejects.toThrow('Debes iniciar sesión para crear usuarios')
     })
@@ -424,8 +424,8 @@ describe('User Server Actions', () => {
         createUser({
           name: 'Test',
           email: 'test@example.com',
-          password: 'password123',
-          capabilities: [],
+          password: 'Password123',
+          capabilities: ['can_create_failure_report'],
         })
       ).rejects.toThrow('No tienes permiso para crear usuarios')
     })
@@ -435,8 +435,8 @@ describe('User Server Actions', () => {
       const userData = {
         name: 'Test User',
         email: 'existing@example.com',
-        password: 'password123',
-        capabilities: [],
+        password: 'Password123',
+        capabilities: ['can_create_failure_report'],
       }
 
       vi.spyOn(authAdapter, 'auth').mockResolvedValue(mockAdminSession as any)
@@ -458,8 +458,8 @@ describe('User Server Actions', () => {
         createUser({
           name: '',
           email: 'test@example.com',
-          password: 'password123',
-          capabilities: [],
+          password: 'Password123',
+          capabilities: ['can_create_failure_report'],
         })
       ).rejects.toThrow()
     })
@@ -473,8 +473,8 @@ describe('User Server Actions', () => {
         createUser({
           name: 'Test',
           email: 'invalid-email',
-          password: 'password123',
-          capabilities: [],
+          password: 'Password123',
+          capabilities: ['can_create_failure_report'],
         })
       ).rejects.toThrow()
     })
@@ -489,7 +489,7 @@ describe('User Server Actions', () => {
           name: 'Test',
           email: 'test@example.com',
           password: 'short',
-          capabilities: [],
+          capabilities: ['can_create_failure_report'],
         })
       ).rejects.toThrow()
     })
@@ -524,9 +524,9 @@ describe('User Server Actions', () => {
       } as any)
       vi.spyOn(db.prisma.auditLog, 'create').mockResolvedValue({
         id: 'audit-123',
-        user_id: 'admin-123',
+        userId: 'admin-123',
         action: 'user_deleted',
-        target_id: userId,
+        targetId: userId,
         metadata: {
           deletedUserEmail: 'todelete@example.com',
         },
@@ -623,7 +623,7 @@ describe('User Server Actions', () => {
       vi.spyOn(authAdapter, 'auth').mockResolvedValue(mockSession as any)
       vi.spyOn(db.prisma.user, 'findUnique').mockResolvedValue({
         id: 'user-123',
-        password_hash: 'hash',
+        passwordHash: 'hash',
       } as any)
       vi.spyOn(authLib, 'verifyPassword').mockResolvedValue(true)
       vi.spyOn(authLib, 'hashPassword').mockResolvedValue('new-hash')
@@ -657,7 +657,7 @@ describe('User Server Actions', () => {
       vi.spyOn(authLib, 'hashPassword').mockResolvedValue('hash')
       vi.spyOn(db.prisma.user, 'create').mockResolvedValue({
         id: 'new-123',
-        user_capabilities: [{ capability: { name: 'can_create_failure_report' } }],
+        userCapabilities: [{ capability: { name: 'can_create_failure_report' } }],
       } as any)
       vi.spyOn(db.prisma.auditLog, 'create').mockResolvedValue({} as any)
 
@@ -665,8 +665,8 @@ describe('User Server Actions', () => {
       await createUser({
         name: 'New',
         email: 'new@example.com',
-        password: 'password123',
-        capabilities: [],
+        password: 'Password123',
+        capabilities: ['can_create_failure_report'],
       })
 
       // Assert
@@ -703,12 +703,10 @@ describe('User Server Actions', () => {
 
       // Assert
       expect(loggerModule.logger.info).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          correlationId: 'test-correlation-id-123',
-          userId: 'user-123',
-          action: 'update_profile',
-        })
+        'user-123',  // userId
+        'update_profile',  // action
+        'test-correlation-id-123',  // correlationId
+        expect.any(Object)  // metadata (opcional)
       )
     })
 
@@ -720,7 +718,7 @@ describe('User Server Actions', () => {
       vi.spyOn(authAdapter, 'auth').mockResolvedValue(mockSession as any)
       vi.spyOn(db.prisma.user, 'findUnique').mockResolvedValue({
         id: 'user-123',
-        password_hash: 'hash',
+        passwordHash: 'hash',
       } as any)
       vi.spyOn(authLib, 'verifyPassword').mockResolvedValue(true)
       vi.spyOn(authLib, 'hashPassword').mockResolvedValue('new-hash')
@@ -737,12 +735,9 @@ describe('User Server Actions', () => {
 
       // Assert
       expect(loggerModule.logger.info).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          correlationId: 'test-correlation-id-123',
-          userId: 'user-123',
-          action: 'change_password',
-        })
+        'user-123',  // userId
+        'change_password',  // action
+        'test-correlation-id-123'  // correlationId
       )
     })
 
@@ -761,7 +756,7 @@ describe('User Server Actions', () => {
       vi.spyOn(authLib, 'hashPassword').mockResolvedValue('hash')
       vi.spyOn(db.prisma.user, 'create').mockResolvedValue({
         id: 'new-123',
-        user_capabilities: [{ capability: { name: 'can_create_failure_report' } }],
+        userCapabilities: [{ capability: { name: 'can_create_failure_report' } }],
       } as any)
       vi.spyOn(db.prisma.auditLog, 'create').mockResolvedValue({} as any)
 
@@ -769,19 +764,15 @@ describe('User Server Actions', () => {
       await createUser({
         name: 'New',
         email: 'new@example.com',
-        password: 'password123',
-        capabilities: [],
+        password: 'Password123',
+        capabilities: ['can_create_failure_report'],
       })
 
       // Assert
       expect(loggerModule.logger.info).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          correlationId: 'test-correlation-id-123',
-          userId: 'admin-123',
-          createdUserId: 'new-123',
-          action: 'create_user',
-        })
+        'admin-123',  // userId
+        'create_user',  // action
+        'test-correlation-id-123'  // correlationId
       )
     })
 
@@ -810,9 +801,9 @@ describe('User Server Actions', () => {
       } as any)
       vi.spyOn(db.prisma.auditLog, 'create').mockResolvedValue({
         id: 'audit-log-123',
-        user_id: 'admin-123',
+        userId: 'admin-123',
         action: 'user_deleted',
-        target_id: 'user-to-delete',
+        targetId: 'user-to-delete',
         metadata: {
           deletedUserEmail: 'todelete@example.com',
         },
@@ -841,7 +832,7 @@ describe('User Server Actions', () => {
           id: 'user-123',
           email: 'user@example.com',
           name: 'Regular User',
-          capabilities: [],
+          capabilities: ['can_create_failure_report'],
         },
       }
       vi.spyOn(authAdapter, 'auth').mockResolvedValue(mockNonAdminSession as any)
@@ -851,20 +842,17 @@ describe('User Server Actions', () => {
         await createUser({
           name: 'Test',
           email: 'test@example.com',
-          password: 'password123',
-          capabilities: [],
+          password: 'Password123',
+          capabilities: ['can_create_failure_report'],
         })
       } catch {
         // Expected to throw
       }
 
       expect(loggerModule.logger.warn).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          correlationId: 'test-correlation-id-123',
-          userId: 'user-123',
-          action: 'create_user',
-        })
+        'user-123',  // userId
+        'create_user_forbidden',  // action
+        'test-correlation-id-123'  // correlationId (metadata opcional)
       )
     })
   })

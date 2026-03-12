@@ -44,5 +44,15 @@ Thumbs.db
 *.tsbuildinfo
 *.bak
 
+# Test output files
+test-output.txt
+nul
+
+# Temporary test scripts (can be regenerated)
+check-*.js
+create-*.js
+verify-*.js
+reset-*.js
+
 .vercel
 .env*.local

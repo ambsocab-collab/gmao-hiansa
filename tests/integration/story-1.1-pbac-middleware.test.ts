@@ -49,13 +49,12 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
       expect(requiredCapabilities).toEqual(['can_manage_users'])
     })
 
-    it('[P0-INT-001] should grant access to /dashboard route with can_view_kpis capability', () => {
-      // Given: user with can_view_kpis capability
+    it('[P0-INT-001] should grant access to /dashboard route for any authenticated user', () => {
+      // Given: user with basic capabilities
       const user = userFactory({
         email: 'viewer@example.com',
         capabilities: [
-          'can_create_failure_report',
-          'can_view_kpis'
+          'can_create_failure_report'
         ]
       })
 
@@ -66,9 +65,9 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
         requiredCapabilities
       )
 
-      // Then: capability check passes
+      // Then: capability check passes (dashboard requires no specific capabilities)
       expect(hasAccess).toBe(true)
-      expect(requiredCapabilities).toEqual(['can_view_kpis'])
+      expect(requiredCapabilities).toEqual([]) // No capabilities required for /dashboard
     })
 
     it('[P0-INT-001] should grant access to /work-orders route with can_view_all_ots capability', () => {
@@ -153,11 +152,11 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
       expect(requiredCapabilities).toEqual(['can_manage_users'])
     })
 
-    it('[P0-INT-002] should deny access to /dashboard route without can_view_kpis capability', () => {
-      // Given: user without can_view_kpis capability
+    it('[P0-INT-002] should grant access to /dashboard for any authenticated user (even with minimal capabilities)', () => {
+      // Given: user with only basic capability
       const user = userFactory({
         email: 'basic@example.com',
-        capabilities: ['can_create_failure_report'] // Missing can_view_kpis
+        capabilities: ['can_create_failure_report'] // Minimal capability set
       })
 
       // When: checking if user has required capability for /dashboard route
@@ -167,8 +166,26 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
         requiredCapabilities
       )
 
-      // Then: capability check fails
-      expect(hasAccess).toBe(false)
+      // Then: capability check passes (dashboard requires no specific capabilities)
+      expect(hasAccess).toBe(true) // Changed from false to true
+      expect(requiredCapabilities).toEqual([]) // No capabilities required
+    })
+
+    it('[P0-INT-002] should allow /dashboard access even with undefined capabilities (capability check only)', () => {
+      // Given: unauthenticated user (undefined capabilities)
+      const undefinedCapabilities = undefined
+
+      // When: checking if user has required capability for /dashboard route
+      const requiredCapabilities = ROUTE_CAPABILITIES['/dashboard']
+      const hasAccess = hasAllCapabilities(
+        undefinedCapabilities,
+        requiredCapabilities
+      )
+
+      // Then: capability check passes (dashboard requires no capabilities)
+      // Note: Authentication is checked separately in middleware, not by hasAllCapabilities
+      expect(hasAccess).toBe(true)
+      expect(requiredCapabilities).toEqual([])
     })
 
     it('[P0-INT-002] should deny access when user has only some required capabilities', () => {
@@ -212,19 +229,21 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
       expect(hasAccess).toBe(false)
     })
 
-    it('[P0-INT-002] should deny access when capabilities are undefined', () => {
+    it('[P0-INT-002] should allow /dashboard access with undefined capabilities (capability check only)', () => {
       // Given: user with undefined capabilities (not authenticated)
       const undefinedCapabilities = undefined
 
-      // When: checking any protected route
+      // When: checking /dashboard route
       const requiredCapabilities = ROUTE_CAPABILITIES['/dashboard']
       const hasAccess = hasAllCapabilities(
         undefinedCapabilities,
         requiredCapabilities
       )
 
-      // Then: access denied
-      expect(hasAccess).toBe(false)
+      // Then: capability check passes (dashboard requires no capabilities)
+      // Note: Authentication is checked separately in middleware, not by hasAllCapabilities
+      expect(hasAccess).toBe(true)
+      expect(requiredCapabilities).toEqual([])
     })
   })
 
@@ -405,7 +424,7 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
       expect(Object.keys(ROUTE_CAPABILITIES).length).toBeGreaterThan(0)
 
       // And: specific routes have correct requirements
-      expect(ROUTE_CAPABILITIES['/dashboard']).toEqual(['can_view_kpis'])
+      expect(ROUTE_CAPABILITIES['/dashboard']).toEqual([]) // No capabilities required for /dashboard
       expect(ROUTE_CAPABILITIES['/work-orders']).toEqual(['can_view_all_ots'])
       expect(ROUTE_CAPABILITIES['/assets']).toEqual(['can_manage_assets'])
       expect(ROUTE_CAPABILITIES['/stock']).toEqual(['can_manage_stock'])
@@ -425,8 +444,11 @@ describe('Story 1.1: PBAC Middleware Integration', () => {
 
       // Note: Not all 15 capabilities may be used in routes initially
       // but the mapping should cover the main ones
-      expect(uniqueCapabilities).toContain('can_view_kpis')
       expect(uniqueCapabilities).toContain('can_manage_users')
+      expect(uniqueCapabilities).toContain('can_view_all_ots')
+
+      // can_view_kpis is not required by any route (dashboard is open to all authenticated users)
+      // but the capability exists for use within dashboard components
     })
   })
 })

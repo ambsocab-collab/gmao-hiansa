@@ -58,15 +58,15 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: userData.email,
           name: userData.name,
-          password_hash: hashedPassword,
-          force_password_reset: true,
-          // Note: Server Action creates capabilities via user_capabilities junction table
+          passwordHash: hashedPassword,
+          forcePasswordReset: true,
+          // Note: Server Action creates capabilities via userCapabilities junction table
           // For this test, we verify the default capability logic
         }
       })
 
       // Then: user has forcePasswordReset=true
-      expect(createdUser.force_password_reset).toBe(true)
+      expect(createdUser.forcePasswordReset).toBe(true)
 
       // And: user was created successfully
       expect(createdUser.email).toBe('test-default@example.com')
@@ -102,9 +102,9 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: userData.email,
           name: userData.name,
-          password_hash: hashedPassword,
-          force_password_reset: true,
-          user_capabilities: {
+          passwordHash: hashedPassword,
+          forcePasswordReset: true,
+          userCapabilities: {
             create: userData.capabilities.map((capabilityName) => ({
               capability: {
                 connect: { name: capabilityName }
@@ -113,17 +113,17 @@ describe('Story 1.1: User API Business Logic', () => {
           }
         },
         include: {
-          user_capabilities: {
+          userCapabilities: {
             include: { capability: true }
           }
         }
       })
 
       // Then: user has exactly 3 capabilities
-      expect(createdUser.user_capabilities).toHaveLength(3)
+      expect(createdUser.userCapabilities).toHaveLength(3)
 
       // And: all specified capabilities are assigned
-      const capabilityNames = createdUser.user_capabilities.map(uc => uc.capability.name)
+      const capabilityNames = createdUser.userCapabilities.map(uc => uc.capability.name)
       expect(capabilityNames).toContain('can_create_failure_report')
       expect(capabilityNames).toContain('can_view_work_orders')
       expect(capabilityNames).toContain('can_create_work_orders')
@@ -141,8 +141,8 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'existing@example.com',
           name: 'Existing',
-          password_hash: hashedPassword,
-          force_password_reset: false
+          passwordHash: hashedPassword,
+          forcePasswordReset: false
         }
       })
 
@@ -152,8 +152,8 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'existing@example.com',
           name: 'Duplicate',
-          password_hash: hashedPassword,
-          force_password_reset: false
+          passwordHash: hashedPassword,
+          forcePasswordReset: false
         }
       })).rejects.toThrow()
     })
@@ -168,8 +168,8 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'user1@example.com',
           name: 'User One',
-          password_hash: hashedPassword,
-          force_password_reset: false
+          passwordHash: hashedPassword,
+          forcePasswordReset: false
         }
       })
 
@@ -178,8 +178,8 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'user2@example.com',
           name: 'User Two',
-          password_hash: hashedPassword,
-          force_password_reset: false
+          passwordHash: hashedPassword,
+          forcePasswordReset: false
         }
       })
 
@@ -203,29 +203,29 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'test-reset@example.com',
           name: 'Test Reset',
-          password_hash: oldPassword,
-          force_password_reset: true,
+          passwordHash: oldPassword,
+          forcePasswordReset: true,
           deleted: false
         }
       })
 
-      expect(user.force_password_reset).toBe(true)
+      expect(user.forcePasswordReset).toBe(true)
 
       // When: user changes password
       const newPassword = await bcrypt.hash('newPassword123', 10)
       const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: {
-          password_hash: newPassword,
-          force_password_reset: false
+          passwordHash: newPassword,
+          forcePasswordReset: false
         }
       })
 
       // Then: forcePasswordReset is false
-      expect(updatedUser.force_password_reset).toBe(false)
+      expect(updatedUser.forcePasswordReset).toBe(false)
 
       // And: new password hash is different
-      expect(updatedUser.password_hash).not.toBe(user.password_hash)
+      expect(updatedUser.passwordHash).not.toBe(user.passwordHash)
     })
 
     it('[P0-API-003] should create new user with forcePasswordReset=true', async () => {
@@ -240,13 +240,13 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: userData.email,
           name: userData.name,
-          password_hash: hashedPassword,
-          force_password_reset: true // Default for new users
+          passwordHash: hashedPassword,
+          forcePasswordReset: true // Default for new users
         }
       })
 
       // Then: forcePasswordReset is true
-      expect(newUser.force_password_reset).toBe(true)
+      expect(newUser.forcePasswordReset).toBe(true)
 
       // And: other fields are correct
       expect(newUser.email).toBe('test-newuser@example.com')
@@ -262,7 +262,7 @@ describe('Story 1.1: User API Business Logic', () => {
         data: {
           email: 'test-delete@example.com',
           name: 'ToDelete',
-          password_hash: hashedPassword,
+          passwordHash: hashedPassword,
           deleted: false
         }
       })
@@ -298,25 +298,25 @@ describe('Story 1.1: User API Business Logic', () => {
           {
             email: 'active1@example.com',
             name: 'Active 1',
-            password_hash: hashedPassword,
+            passwordHash: hashedPassword,
             deleted: false
           },
           {
             email: 'active2@example.com',
             name: 'Active 2',
-            password_hash: hashedPassword,
+            passwordHash: hashedPassword,
             deleted: false
           },
           {
             email: 'deleted1@example.com',
             name: 'Deleted 1',
-            password_hash: hashedPassword,
+            passwordHash: hashedPassword,
             deleted: true
           },
           {
             email: 'deleted2@example.com',
             name: 'Deleted 2',
-            password_hash: hashedPassword,
+            passwordHash: hashedPassword,
             deleted: true
           }
         ]
