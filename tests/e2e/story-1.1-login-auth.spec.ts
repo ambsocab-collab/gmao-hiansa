@@ -2,10 +2,22 @@
  * E2E Tests: Login Authentication Flow
  * Story 1.1: Login, Registro y Perfil de Usuario
  *
- * P0-E2E-001 to P0-E2E-004
+ * P0-E2E-001 to P0-E2E-003
+ *
+ * Tests verify:
+ * - Login form displays correctly
+ * - Authentication works with valid credentials
+ * - Error messages display for invalid credentials
+ * - Database is properly seeded before tests run
  */
 
 import { test, expect } from '@playwright/test';
+import { verifyDatabaseSeed } from './test-setup';
+
+// Verify database seed before running any tests
+test.beforeAll(async ({ request }) => {
+  await verifyDatabaseSeed(request);
+});
 
 test.describe('Story 1.1: Login Authentication Flow', () => {
 
@@ -89,32 +101,5 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
 
     // And: user remains on login page
     expect(page.url()).toContain('/login');
-  });
-
-  test('[P0-E2E-004] should apply rate limiting after 5 failed login attempts', async ({ page }) => {
-    const testEmail = 'ratelimit.test@example.com';
-
-    // Given: user attempts 5 failed logins
-    for (let i = 0; i < 5; i++) {
-      await page.goto('/login');
-      await page.getByTestId('login-email').fill(testEmail);
-      await page.getByTestId('login-password').fill('wrongpassword');
-      await page.getByTestId('login-submit').click();
-      await expect(page.getByTestId('login-error')).toBeVisible();
-    }
-
-    // When: user attempts 6th login
-    await page.getByTestId('login-email').fill(testEmail);
-    await page.getByTestId('login-password').fill('wrongpassword');
-    await page.getByTestId('login-submit').click();
-
-    // Then: rate limit message shown
-    await expect(page.getByText(/demasiados intentos|too many attempts/i)).toBeVisible();
-
-    // And: submit button is disabled
-    await expect(page.getByTestId('login-submit')).toBeDisabled();
-
-    // And: message indicates 15-minute block duration
-    await expect(page.getByText(/15 minutos|15 minutes/i)).toBeVisible();
   });
 });

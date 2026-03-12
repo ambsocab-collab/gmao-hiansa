@@ -9,9 +9,16 @@
  * - Navigation blocking until password is changed
  * - Password change success and redirect
  * - Password strength validation
+ * - Database is properly seeded before tests run
  */
 
 import { test, expect } from '@playwright/test';
+import { verifyDatabaseSeed } from './test-setup';
+
+// Verify database seed before running any tests
+test.beforeAll(async ({ request }) => {
+  await verifyDatabaseSeed(request);
+});
 
 test.describe('Story 1.1: Forced Password Reset Flow', () => {
   // Reset test user before each test to ensure clean state
@@ -44,8 +51,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     // Click submit and wait for response
     await page.getByTestId('login-submit').click();
 
-    // Wait a moment for the login request to complete
-    await page.waitForTimeout(2000);
+    // Wait for navigation to cambiar-password (increased timeout)
+    await page.waitForURL('**/cambiar-password', { timeout: 10000 });
 
     // Debug: log current URL and check for error messages
     const currentUrl = page.url();
@@ -115,7 +122,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
         try {
           const body = await response.text();
           console.log('Change password API response body:', body);
-        } catch (e) {
+        } catch (_e) {
           console.log('Change password API response body: [unreadable]');
         }
       }
@@ -153,7 +160,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await submitButton.click();
 
     // Then: redirected to login page (session refreshed after password change)
-    await page.waitForURL('**/login', { timeout: 10000 });
+    // Wait for login form to be visible (more reliable than waitForURL with window.location.href)
+    await expect(page.getByTestId('login-form')).toBeVisible({ timeout: 10000 });
     expect(page.url()).toContain('/login');
 
     // When: user logs in again with new password
@@ -165,10 +173,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('login-submit').click();
 
     // Then: redirected to dashboard (forcePasswordReset is now false)
-    await page.waitForURL('**/dashboard', { timeout: 10000 });
-
-    // And: see dashboard content
-    await expect(page.getByText(/Dashboard/i).first()).toBeVisible({ timeout: 5000 });
+    // Wait for dashboard content to be visible
+    await expect(page.getByText(/Dashboard/i).first()).toBeVisible({ timeout: 10000 });
     expect(page.url()).toContain('/dashboard');
   });
 

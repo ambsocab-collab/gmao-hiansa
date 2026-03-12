@@ -85,6 +85,7 @@ export function LoginForm() {
       })
 
       console.log('[LoginForm] Login result:', result)
+      console.log('[LoginForm] result.ok:', result?.ok, 'result.error:', result?.error, 'result.url:', result?.url)
 
       if (result?.error) {
         // Handle error
@@ -102,16 +103,36 @@ export function LoginForm() {
         }
       } else if (result?.ok) {
         // Successful login - show welcome toast
-        // NextAuth will handle redirect based on middleware (forcePasswordReset check)
         toast({
           title: '¡Bienvenido!',
           description: 'Has iniciado sesión correctamente',
         })
-        // Let NextAuth handle the redirect - it will use the callbackUrl or default
-        // The middleware will intercept and redirect to /cambiar-password if forcePasswordReset=true
+
+        // Refresh the router to ensure we have the latest session data
+        // Only refresh on successful login to avoid interfering with error display
         router.refresh()
-        // Use window.location for full page reload to trigger middleware
-        window.location.href = '/dashboard'
+
+        // Fetch session to check if forcePasswordReset is true
+        const sessionResponse = await fetch('/api/auth/session', {
+          cache: 'no-store'  // Ensure we don't get a cached response
+        })
+        if (sessionResponse.ok) {
+          const session = await sessionResponse.json()
+          console.log('[LoginForm] Session after login:', session)
+          console.log('[LoginForm] forcePasswordReset value:', session?.user?.forcePasswordReset)
+
+          // If forcePasswordReset is true, redirect to cambiar-password
+          if (session?.user?.forcePasswordReset) {
+            console.log('[LoginForm] forcePasswordReset is true, redirecting to /cambiar-password')
+            router.push('/cambiar-password')
+            router.refresh()
+            return
+          }
+        }
+
+        // Otherwise, redirect to dashboard
+        router.push('/dashboard')
+        router.refresh()
       }
     } catch (error) {
       console.error('[LoginForm] Login error:', error)
