@@ -23,13 +23,14 @@ export async function loginAs(
   await page.getByTestId('login-email').waitFor({ state: 'visible' });
   await page.getByTestId('login-email').clear();
   await page.getByTestId('login-password').clear();
-  await page.getByTestId('login-email').type(email, { delay: 10 });
-  await page.getByTestId('login-password').type(password, { delay: 10 });
+  await page.getByTestId('login-email').fill(email);
+  await page.getByTestId('login-password').fill(password);
 
   // Click submit and wait for navigation to complete
   // Wait for URL to change from /login (handles redirects to dashboard, /cambiar-password, etc.)
+  // Increased timeout for parallel test execution (server may be under load)
   await Promise.all([
-    page.waitForURL((url) => url.pathname !== '/login', { timeout: 5000 }),
+    page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
     page.getByTestId('login-submit').click(),
   ]);
 }

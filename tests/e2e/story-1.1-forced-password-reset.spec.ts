@@ -116,9 +116,9 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('new-password').clear();
     await page.getByTestId('confirm-password').clear();
 
-    await page.getByTestId('current-password').type('tempPassword123', { delay: 10 });
-    await page.getByTestId('new-password').type('NewSecure123', { delay: 10 });
-    await page.getByTestId('confirm-password').type('NewSecure123', { delay: 10 });
+    await page.getByTestId('current-password').fill('tempPassword123');
+    await page.getByTestId('new-password').fill('NewSecure123');
+    await page.getByTestId('confirm-password').fill('NewSecure123');
 
     // Check if button is enabled and clickable
     const submitButton = page.getByTestId('change-password-submit');
@@ -133,15 +133,19 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     expect(page.url()).toContain('/login');
 
     // When: user logs in again with new password
+    // Use the login helper which has proper Promise.all pattern for navigation
+    await page.goto('/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
-    await page.getByTestId('login-password').type('NewSecure123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
+    await page.getByTestId('login-email').fill('new.user@example.com');
+    await page.getByTestId('login-password').fill('NewSecure123');
+
+    // Click submit and wait for navigation (Promise.all pattern)
+    await Promise.all([
+      page.waitForURL((url) => url.pathname !== '/login', { timeout: 5000 }),
+      page.getByTestId('login-submit').click(),
+    ]);
 
     // Then: redirected to dashboard (forcePasswordReset is now false)
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
     expect(page.url()).toContain('/dashboard');
     // Wait for dashboard content to be visible
     await expect(page.getByText(/Dashboard/i).first()).toBeVisible({ timeout: 10000 });
@@ -159,9 +163,9 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('new-password').clear();
     await page.getByTestId('confirm-password').clear();
 
-    await page.getByTestId('current-password').type('tempPassword123', { delay: 10 });
-    await page.getByTestId('new-password').type('weak', { delay: 10 });
-    await page.getByTestId('confirm-password').type('weak', { delay: 10 });
+    await page.getByTestId('current-password').fill('tempPassword123');
+    await page.getByTestId('new-password').fill('weak');
+    await page.getByTestId('confirm-password').fill('weak');
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown
@@ -171,8 +175,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('new-password').clear();
     await page.getByTestId('confirm-password').clear();
 
-    await page.getByTestId('new-password').type('weakpassword123', { delay: 10 });
-    await page.getByTestId('confirm-password').type('weakpassword123', { delay: 10 });
+    await page.getByTestId('new-password').fill('weakpassword123');
+    await page.getByTestId('confirm-password').fill('weakpassword123');
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown
@@ -182,8 +186,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await page.getByTestId('new-password').clear();
     await page.getByTestId('confirm-password').clear();
 
-    await page.getByTestId('new-password').type('Weakpassword', { delay: 10 });
-    await page.getByTestId('confirm-password').type('Weakpassword', { delay: 10 });
+    await page.getByTestId('new-password').fill('Weakpassword');
+    await page.getByTestId('confirm-password').fill('Weakpassword');
     await page.getByTestId('change-password-submit').click();
 
     // Then: validation error shown

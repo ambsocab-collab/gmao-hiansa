@@ -59,7 +59,7 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
     await loginAsTecnico(page);
 
     // Then: redirected to dashboard - see dashboard content
-    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/Hola, /).first()).toBeVisible();
 
     // And: see avatar with initials
     await expect(page.locator('[data-testid="user-avatar"]').first()).toBeVisible();
@@ -74,12 +74,9 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
     await page.getByTestId('login-password').fill('wrongpassword');
     await page.getByTestId('login-submit').click();
 
-    // Wait for server response - increased wait time
-    await page.waitForTimeout(1500);
-
-    // Then: error message displayed within 2 seconds (increased from 1s)
+    // Then: error message displayed (Playwright auto-waits for assertion)
     const errorMessage = page.getByTestId('login-error');
-    await expect(errorMessage).toBeVisible({ timeout: 5000 });
+    await expect(errorMessage).toBeVisible();
 
     // And: error message is user-friendly (Spanish)
     await expect(errorMessage).toContainText('Email o contraseña incorrectos');

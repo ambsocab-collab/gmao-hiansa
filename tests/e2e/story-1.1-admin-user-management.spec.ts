@@ -24,7 +24,30 @@ test.describe('Story 1.1: Admin User Management', () => {
     await page.context().clearCookies()
   })
 
-  test('[P0-E2E-012] should allow admin to create new user with default capability', async ({ page }) => {
+  // Track created users for cleanup
+  const createdUserEmails: string[] = [];
+
+  test.afterAll(async ({ request }) => {
+    // Cleanup: Delete all test users created during this test suite
+    for (const email of createdUserEmails) {
+      try {
+        // Get user by email to find ID
+        const searchResponse = await request.get(`http://localhost:3000/api/v1/users?email=${encodeURIComponent(email)}`);
+        if (searchResponse.ok()) {
+          const users = await searchResponse.json();
+          if (users && users.length > 0 && users[0].id) {
+            await request.delete(`http://localhost:3000/api/v1/users/${users[0].id}`);
+            console.log(`Cleaned up test user: ${email}`);
+          }
+        }
+      } catch (error) {
+        console.warn(`Failed to cleanup test user ${email}:`, error);
+      }
+    }
+    createdUserEmails.length = 0;
+  });
+
+  test('[P0-E2E-012] should allow admin to create new user with default capability', async ({ page, request }) => {
     // Listen for console errors
     page.on('console', msg => {
       if (msg.type() === 'error') {
@@ -46,6 +69,7 @@ test.describe('Story 1.1: Admin User Management', () => {
 
     // Generate unique email using faker.js (deterministic)
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
+    createdUserEmails.push(uniqueEmail); // Track for cleanup
 
     // Given: admin user with can_manage_users capability (from seed: admin@hiansa.com)
     await loginAsAdmin(page);
@@ -81,6 +105,7 @@ test.describe('Story 1.1: Admin User Management', () => {
   test('[P0-E2E-013] should allow admin to assign multiple capabilities to user', async ({ page }) => {
     // Generate unique email using faker.js (deterministic)
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
+    createdUserEmails.push(uniqueEmail); // Track for cleanup
 
     // Given: admin user
     await loginAsAdmin(page);
@@ -135,6 +160,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     // Generate unique email using faker.js (deterministic)
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
     const tempPassword = 'TempPassword123';
+    createdUserEmails.push(uniqueEmail); // Track for cleanup (though this test deletes the user itself)
 
     // Given: admin user
     await loginAsAdmin(page);

@@ -21,6 +21,29 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.context().clearCookies()
   })
 
+  // Track created users for cleanup
+  const createdUserEmails: string[] = [];
+
+  test.afterAll(async ({ request }) => {
+    // Cleanup: Delete all test users created during this test suite
+    for (const email of createdUserEmails) {
+      try {
+        // Get user by email to find ID
+        const searchResponse = await request.get(`http://localhost:3000/api/v1/users?email=${encodeURIComponent(email)}`);
+        if (searchResponse.ok()) {
+          const users = await searchResponse.json();
+          if (users && users.length > 0 && users[0].id) {
+            await request.delete(`http://localhost:3000/api/v1/users/${users[0].id}`);
+            console.log(`Cleaned up test user: ${email}`);
+          }
+        }
+      } catch (error) {
+        console.warn(`Failed to cleanup test user ${email}:`, error);
+      }
+    }
+    createdUserEmails.length = 0;
+  });
+
   test('[P0-E2E-009] should display user profile with current information', async ({ page }) => {
     // Given: authenticated user (using tecnico from seed)
     // This test only reads, no modification - can use shared seed user
@@ -45,6 +68,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Generate unique email using faker.js (deterministic)
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
     const tempPassword = 'TempPassword123';
+    createdUserEmails.push(uniqueEmail); // Track for cleanup
 
     // Create test user via admin (login as admin first)
     await loginAsAdmin(page);
@@ -64,10 +88,17 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
     await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
-    await page.getByTestId('login-password').type(tempPassword, { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await page.waitForURL('/cambiar-password', { timeout: 15000 });
+    await page.getByTestId('login-email').fill(uniqueEmail);
+    await page.getByTestId('login-password').fill(tempPassword);
+
+    // Use Promise.all for reliable navigation
+    await Promise.all([
+      page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+      page.getByTestId('login-submit').click(),
+    ]);
+
+    // Verify we're on cambiar-password page
+    expect(page.url()).toContain('/cambiar-password');
 
     // Change password to remove forcePasswordReset
     await page.getByTestId('current-password').fill(tempPassword);
@@ -80,8 +111,8 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
     await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
-    await page.getByTestId('login-password').type('NewPassword123', { delay: 10 });
+    await page.getByTestId('login-email').fill(uniqueEmail);
+    await page.getByTestId('login-password').fill('NewPassword123');
     await page.getByTestId('login-submit').click();
     await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
@@ -105,6 +136,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Generate unique email using faker.js (deterministic)
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
     const tempPassword = 'TempPassword123';
+    createdUserEmails.push(uniqueEmail); // Track for cleanup
 
     // Create test user via admin (login as admin first)
     await loginAsAdmin(page);
@@ -124,10 +156,17 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
     await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
-    await page.getByTestId('login-password').type(tempPassword, { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await page.waitForURL('/cambiar-password', { timeout: 15000 });
+    await page.getByTestId('login-email').fill(uniqueEmail);
+    await page.getByTestId('login-password').fill(tempPassword);
+
+    // Use Promise.all for reliable navigation
+    await Promise.all([
+      page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+      page.getByTestId('login-submit').click(),
+    ]);
+
+    // Verify we're on cambiar-password page
+    expect(page.url()).toContain('/cambiar-password');
 
     // Change password to remove forcePasswordReset
     await page.getByTestId('current-password').fill(tempPassword);
@@ -136,10 +175,18 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('change-password-submit').click();
     await page.waitForURL('/login', { timeout: 10000 });
 
-    // Login again with initial password
-    await page.getByTestId('login-email').type(uniqueEmail, { delay: 10 });
-    await page.getByTestId('login-password').type('InitialPassword123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
+    // Login again with new password (form fields need to be filled after redirect)
+    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    await page.getByTestId('login-email').fill(uniqueEmail);
+    await page.getByTestId('login-password').fill('InitialPassword123');
+
+    // Use Promise.all for reliable navigation
+    await Promise.all([
+      page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+      page.getByTestId('login-submit').click(),
+    ]);
+
+    // Verify dashboard is loaded
     await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
     await page.goto('/perfil');
@@ -157,9 +204,9 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('current-password').clear();
     await page.getByTestId('new-password').clear();
     await page.getByTestId('confirm-password').clear();
-    await page.getByTestId('current-password').type('InitialPassword123', { delay: 10 });
-    await page.getByTestId('new-password').type('NewPassword123', { delay: 10 });
-    await page.getByTestId('confirm-password').type('NewPassword123', { delay: 10 });
+    await page.getByTestId('current-password').fill('InitialPassword123');
+    await page.getByTestId('new-password').fill('NewPassword123');
+    await page.getByTestId('confirm-password').fill('NewPassword123');
     await page.getByTestId('change-password-submit').click();
 
     // Then: see success message
