@@ -53,15 +53,12 @@ describe('Story 1.1: User Soft Delete', () => {
     })
 
     it('[P0-API-004] should filter out deleted users from queries', async () => {
-      // Cleanup this test's data and data from other tests
+      // Cleanup this test's data
       await prisma.user.deleteMany({
         where: {
-          OR: [
-            { email: { startsWith: 'active' } },
-            { email: { startsWith: 'deleted' } },
-            { email: { startsWith: 'user' } },
-            { email: { startsWith: 'existing' } }
-          ]
+          email: {
+            in: ['active1@example.com', 'active2@example.com', 'deleted1@example.com', 'deleted2@example.com']
+          }
         }
       })
 
@@ -97,15 +94,23 @@ describe('Story 1.1: User Soft Delete', () => {
         ]
       })
 
+      // Define test user emails for filtering
+      const testUserEmails = ['active1@example.com', 'active2@example.com', 'deleted1@example.com', 'deleted2@example.com']
+
       // When: querying all users
-      const allUsers = await prisma.user.findMany()
+      const allUsers = await prisma.user.findMany({
+        where: { email: { in: testUserEmails } }
+      })
 
       // Then: all 4 users exist (including deleted)
       expect(allUsers).toHaveLength(4)
 
       // When: querying only active users
       const activeUsers = await prisma.user.findMany({
-        where: { deleted: false }
+        where: {
+          deleted: false,
+          email: { in: testUserEmails }
+        }
       })
 
       // Then: only 2 active users returned
@@ -114,7 +119,10 @@ describe('Story 1.1: User Soft Delete', () => {
 
       // When: querying only deleted users
       const deletedUsers = await prisma.user.findMany({
-        where: { deleted: true }
+        where: {
+          deleted: true,
+          email: { in: testUserEmails }
+        }
       })
 
       // Then: only 2 deleted users returned

@@ -1997,7 +1997,7 @@ Los siguientes pasos son depurar estos problemas de autenticación para que los 
 - ✅ Mocks para autenticación
 - ✅ Mocks para NextAuth
 
-### ✅ Integration Tests: 38/39 passing (97.4%)
+### ✅ Integration Tests: 39/39 passing (100%)
 
 **PBAC Access Denial (6/6):**
 - ✅ Dashboard accesible para cualquier usuario autenticado
@@ -2051,9 +2051,9 @@ Los siguientes pasos son depurar estos problemas de autenticación para que los 
 - ✅ Crea usuario con capability explícita
 - ✅ Asigna múltiples capabilities a usuario
 
-**User Soft Delete (1/2):**
+**User Soft Delete (2/2):**
 - ✅ Set deleted flag on soft delete
-- ⚠️ Filter out deleted users from queries (fallo por estado compartido entre tests)
+- ✅ Filter out deleted users from queries
 
 ### Archivos Modificados - Session 12
 
@@ -2070,6 +2070,10 @@ Los siguientes pasos son depurar estos problemas de autenticación para que los 
 
 **Corrección de Test Fixtures:**
 - `tests/integration/fixtures/user-api-fixtures.ts` - Simplificado el cleanup para evitar interferencias
+
+**Corrección Final - Test Isolation (Session 12 Final):**
+- `tests/integration/story-1.1-user-soft-delete.test.ts` - Test ahora filtra por emails específicos
+- `tests/integration/story-1.1-user-capability-assignment.test.ts` - Agregado cleanup específico para cada test
 
 ### Issues Resueltos - Session 12
 
@@ -2089,26 +2093,31 @@ Los siguientes pasos son depurar estos problemas de autenticación para que los 
    - Solución: Exportado `authOptions` desde `route.ts`
    - Resultado: NextAuth config tests ahora pasan
 
-### Issues Pendientes - Session 12
+### Issues Resueltos - Session 12 (Final)
 
-1. **⚠️ Integration test user-soft-delete:**
-   - Estado: 1/2 tests fallando por estado compartido entre tests
-   - Causa: El cleanup en `beforeEach` afecta a tests que se ejecutan después
-   - Próximo paso: Refactorizar la estrategia de cleanup para usar `beforeAll`/`afterAll` por test suite
+5. **✅ Integration test user-soft-delete:**
+   - Solución: Test ahora filtra resultados por emails específicos en lugar de confiar en que no haya otros usuarios
+   - Agregado cleanup específico para cada test de user-capability-assignment
+   - Resultado: Todos los integration tests ahora pasan (100%)
 
-### Resumen Session 12
+### Resumen Session 12 (Final)
 
 **Correcciones Implementadas:**
 - Auth helper ahora espera explícitamente la navegación (no por tiempo)
 - Rate limiting funciona correctamente en unit tests
 - Middleware PBAC permite acceso a dashboard para todos
 - NextAuth config tests tienen acceso a authOptions
-- 153/154 tests passing (99.4%)
+- Tests de soft-delete y capability-assignment ahora tienen cleanup específico
+- **154/154 tests passing (100%)** 🎉
 
 **Comentario Final Session 12:**
-🎯 **Tests E2E y Unit Completados (100%)**
+🎯 **ALL TESTS PASSING - Story 1.1 COMPLETADA (100%)**
 
-Se corrigieron los problemas de race condition en los tests de login mediante la espera explícita de la navegación. Los tests ahora confirman el cambio de pantalla por visibilidad (cambio de URL) en lugar de por tiempo arbitrario.
+Se corrigieron todos los problemas de tests:
 
-Los integration tests están casi completos (97.4%), con solo un test fallando debido a problemas de aislamiento entre tests. Esto se puede resolver refactorizando la estrategia de cleanup en el fixture.
+1. **E2E Tests (14/14):** Race conditions resueltas mediante espera explícita de navegación con `waitForURL`
+2. **Unit Tests (101/101):** Rate limiting y NextAuth config corregidos
+3. **Integration Tests (39/39):** Tests de soft-delete y capability-assignment corregidos con cleanup específico
+
+Los tests ahora confirman los cambios de pantalla por visibilidad (cambio de URL) en lugar de por tiempo arbitrario, y cada test tiene su propio cleanup específico para evitar interferencias.
 

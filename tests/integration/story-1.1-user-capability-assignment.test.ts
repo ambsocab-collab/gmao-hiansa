@@ -19,6 +19,11 @@ setupUserAPITests()
 describe('Story 1.1: User Capability Assignment', () => {
   describe('[P0-API-001] Default Capability Assignment', () => {
     it('[P0-API-001] should assign only can_create_failure_report to new users by default', async () => {
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'test-default' } }
+      })
+
       // Given: user creation data without explicit capabilities
       const userData = userFactory({
         email: 'test-default@example.com',
@@ -48,6 +53,16 @@ describe('Story 1.1: User Capability Assignment', () => {
     })
 
     it('[P0-API-001] should create user with explicit capabilities', async () => {
+      // Cleanup this test's data
+      await prisma.userCapability.deleteMany({
+        where: {
+          user: { email: { startsWith: 'test-multi-cap' } }
+        }
+      })
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'test-multi-cap' } }
+      })
+
       // Given: user with multiple capabilities
       const userData = userFactory({
         email: 'test-multi-cap@example.com',
