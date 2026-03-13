@@ -11,6 +11,8 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { faker } from '@faker-js/faker/locale/es';
+import { loginAsAdmin, loginAs, logout } from '../helpers/auth.helpers';
 
 // Note: These tests will use loginAs('admin') fixture when fully implemented
 // For now, they document the expected behavior
@@ -42,25 +44,11 @@ test.describe('Story 1.1: Admin User Management', () => {
       }
     });
 
-    // Generate unique email to avoid conflicts with previous test runs
-    const timestamp = Date.now()
-    const uniqueEmail = `maria.gonzalez.${timestamp}@example.com`
+    // Generate unique email using faker.js (deterministic)
+    const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
 
     // Given: admin user with can_manage_users capability (from seed: admin@hiansa.com)
-    await page.goto('/login');
-
-    // Wait for form and clear fields
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    // Type credentials for reliability
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-
-    // Wait for dashboard content instead of URL (more reliable)
-    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
+    await loginAsAdmin(page);
 
     // When: admin navigates to user creation page
     await page.goto('/usuarios/nuevo');
@@ -91,20 +79,11 @@ test.describe('Story 1.1: Admin User Management', () => {
   });
 
   test('[P0-E2E-013] should allow admin to assign multiple capabilities to user', async ({ page }) => {
-    // Generate unique email to avoid conflicts with previous test runs
-    const timestamp = Date.now()
-    const uniqueEmail = `tecnico.avanzado.${timestamp}@example.com`
+    // Generate unique email using faker.js (deterministic)
+    const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
 
     // Given: admin user
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
-
+    await loginAsAdmin(page);
     await page.goto('/usuarios/nuevo');
 
     // When: admin selects multiple capabilities
@@ -125,7 +104,7 @@ test.describe('Story 1.1: Admin User Management', () => {
 
     // And: user can access work orders (verified by navigating)
     // Login as new user and verify access
-    await page.getByTestId('logout-button').click();
+    await logout(page);
 
     await page.goto('/login');
     await page.getByTestId('login-email').fill(uniqueEmail);
@@ -153,20 +132,12 @@ test.describe('Story 1.1: Admin User Management', () => {
   });
 
   test('[P0-E2E-014] should perform soft delete and prevent login', async ({ page }) => {
-    // Generate unique email for test user
-    const timestamp = Date.now()
-    const uniqueEmail = `user.to.delete.${timestamp}@example.com`
-    const tempPassword = 'TempPassword123'
+    // Generate unique email using faker.js (deterministic)
+    const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
+    const tempPassword = 'TempPassword123';
 
     // Given: admin user
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    await loginAsAdmin(page);
 
     // Create a test user to delete
     await page.goto('/usuarios/nuevo');
@@ -210,14 +181,7 @@ test.describe('Story 1.1: Admin User Management', () => {
 
   test('[P0-E2E-015] should show users list with admin capabilities', async ({ page }) => {
     // Given: admin user
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    await loginAsAdmin(page);
 
     // When: admin navigates to users list
     await page.goto('/usuarios');

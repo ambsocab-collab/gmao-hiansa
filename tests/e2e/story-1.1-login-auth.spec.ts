@@ -13,6 +13,7 @@
 
 import { test, expect } from '@playwright/test';
 import { verifyDatabaseSeed } from './test-setup';
+import { loginAsTecnico } from '../helpers/auth.helpers';
 
 // Verify database seed before running any tests
 test.beforeAll(async ({ request }) => {
@@ -54,23 +55,8 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
       password: 'tecnico123',
     };
 
-    // And: user is on login page
-    await page.goto('/login');
-
-    // When: user enters valid credentials
-    // Wait for form to be fully loaded and ready
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-
-    // Clear fields first (in case of autofill or leftover data)
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    // Fill with credentials using type for better reliability
-    await page.getByTestId('login-email').type(testUser.email, { delay: 10 });
-    await page.getByTestId('login-password').type(testUser.password, { delay: 10 });
-
-    // Click submit button
-    await page.getByTestId('login-submit').click();
+    // When: user enters valid credentials using auth helper
+    await loginAsTecnico(page);
 
     // Then: redirected to dashboard - see dashboard content
     await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });

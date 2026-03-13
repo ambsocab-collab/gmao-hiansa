@@ -20,6 +20,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:p0": "playwright test -g \"P0-\"",
+    "test:e2e:story-1.1": "playwright test tests/e2e/story-1.1-*.spec.ts",
+    "test:e2e:story-1.1:reporter": "playwright test tests/e2e/story-1.1-*.spec.ts --reporter=html",
     "test:ci": "npm run test:e2e --workers=4 && npm run test:coverage",
     "test:perf": "npm run test:perf:login && npm run test:perf:asset-search && npm run test:perf:create-ot",
     "test:perf:login": "k6 run tests/performance/baseline/login-load-test.js",

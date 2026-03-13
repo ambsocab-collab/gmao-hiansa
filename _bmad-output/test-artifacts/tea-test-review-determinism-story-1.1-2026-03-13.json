@@ -1,0 +1,86 @@
+{
+  "dimension": "determinism",
+  "score": 75,
+  "max_score": 100,
+  "grade": "C+",
+  "violations": [
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 46,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic",
+      "suggestion": "Use faker.seed(12345) and faker.internet.email() for deterministic test data",
+      "code_snippet": "const timestamp = Date.now()"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 95,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic",
+      "suggestion": "Use faker.seed(12345) and faker.internet.email() for deterministic test data",
+      "code_snippet": "const timestamp = Date.now()"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 157,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic",
+      "suggestion": "Use faker.seed(12345) and faker.internet.email() for deterministic test data",
+      "code_snippet": "const timestamp = Date.now()"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 53,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic",
+      "suggestion": "Use faker.seed(12345) and faker.internet.email() for deterministic test data",
+      "code_snippet": "const timestamp = Date.now()"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 121,
+      "severity": "HIGH",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic",
+      "suggestion": "Use faker.seed(12345) and faker.internet.email() for deterministic test data",
+      "code_snippet": "const timestamp = Date.now()"
+    },
+    {
+      "file": "tests/e2e/story-1.1-login-auth.spec.ts",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Test uses waitForTimeout(1500) - creates flakiness",
+      "suggestion": "Replace with expect(page.getByTestId('login-error')).toBeVisible() or waitForResponse",
+      "code_snippet": "await page.waitForTimeout(1500);"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Test uses waitForTimeout(1500) - creates flakiness",
+      "suggestion": "Replace with expect(locator).toBeVisible() or waitForResponse",
+      "code_snippet": "await page.waitForTimeout(1500);"
+    }
+  ],
+  "passed_checks": 14,
+  "failed_checks": 7,
+  "total_checks": 21,
+  "violation_summary": {
+    "HIGH": 5,
+    "MEDIUM": 2,
+    "LOW": 0
+  },
+  "recommendations": [
+    "Use faker with fixed seed (faker.seed(12345)) for all unique test data",
+    "Replace waitForTimeout(1500) with conditional waits (expect().toBeVisible() or waitForResponse)",
+    "Consider using test data factories with deterministic sequences instead of timestamps",
+    "Use data.factories.ts from test-support with deterministic data generation"
+  ],
+  "summary": "Tests have 5 HIGH severity violations (Date.now() for unique emails) and 2 MEDIUM violations (hard waits). Email uniqueness can be achieved deterministically using faker with fixed seeds or sequential counters."
+}

@@ -14,6 +14,7 @@
 
 import { test, expect } from '@playwright/test';
 import { verifyDatabaseSeed } from './test-setup';
+import { loginAsNewUser, logout } from '../helpers/auth.helpers';
 
 // Verify database seed before running any tests
 test.beforeAll(async ({ request }) => {
@@ -36,23 +37,8 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
       forcePasswordReset: true
     };
 
-    // When: user attempts login
-    await page.goto('/login');
-
-    // Wait for form and clear fields (using same pattern as login-auth tests)
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    // Type credentials for reliability (using delay for better reliability)
-    await page.getByTestId('login-email').type(newUser.email, { delay: 10 });
-    await page.getByTestId('login-password').type(newUser.password, { delay: 10 });
-
-    // Click submit and wait for response
-    await page.getByTestId('login-submit').click();
-
-    // Wait for navigation to cambiar-password (increased timeout)
-    await page.waitForURL('**/cambiar-password', { timeout: 10000 });
+    // When: user attempts login using auth helper
+    await loginAsNewUser(page);
 
     // Debug: log current URL and check for error messages
     const currentUrl = page.url();
@@ -82,16 +68,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
 
   test('[P0-E2E-006] should block navigation to other routes until password is changed', async ({ page }) => {
     // Given: user with forcePasswordReset=true logged in
-    await page.goto('/login');
-
-    // Wait for form and clear fields
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
-    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
+    await loginAsNewUser(page);
 
     // Wait for cambiar-password page to load
     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });
@@ -129,16 +106,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     });
 
     // Given: user on /cambiar-password with forcePasswordReset=true
-    await page.goto('/login');
-
-    // Wait for form and clear fields
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
-    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
+    await loginAsNewUser(page);
 
     // Wait for cambiar-password page to load
     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });
@@ -181,16 +149,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
 
   test('[P0-E2E-008] should validate password strength on change', async ({ page }) => {
     // Given: user on /cambiar-password
-    await page.goto('/login');
-
-    // Wait for form and clear fields
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-
-    await page.getByTestId('login-email').type('new.user@example.com', { delay: 10 });
-    await page.getByTestId('login-password').type('tempPassword123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
+    await loginAsNewUser(page);
 
     // Wait for cambiar-password page to load
     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });

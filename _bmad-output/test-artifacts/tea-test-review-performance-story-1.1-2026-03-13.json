@@ -1,0 +1,69 @@
+{
+  "dimension": "performance",
+  "score": 85,
+  "max_score": 100,
+  "grade": "B",
+  "violations": [
+    {
+      "file": "tests/e2e/story-1.1-login-auth.spec.ts",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Hard wait of 1500ms creates unnecessary delay",
+      "suggestion": "Replace with expect(page.getByTestId('login-error')).toBeVisible() or waitForResponse",
+      "code_snippet": "await page.waitForTimeout(1500);"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "hard-wait",
+      "description": "Hard wait of 1500ms creates unnecessary delay",
+      "suggestion": "Replace with conditional wait for element or response",
+      "code_snippet": "await page.waitForTimeout(1500);"
+    },
+    {
+      "file": "tests/integration/story-1.1-user-api.test.ts",
+      "line": 26,
+      "severity": "LOW",
+      "category": "slow-cleanup",
+      "description": "Integration tests cleanup database with DELETE operations in beforeEach/afterEach",
+      "suggestion": "Consider transaction rollback for faster cleanup in integration tests",
+      "code_snippet": "await prisma.user.deleteMany({ where: { email: { contains: 'test-' } } });"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 50,
+      "severity": "LOW",
+      "category": "code-duplication",
+      "description": "Duplicate login code across tests adds unnecessary execution time",
+      "suggestion": "Extract to helper function to reduce code duplication and improve maintainability",
+      "code_snippet": "await page.goto('/login'); await page.getByTestId('login-email').type('admin@hiansa.com', ...);"
+    }
+  ],
+  "passed_checks": 17,
+  "failed_checks": 4,
+  "total_checks": 21,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 2,
+    "LOW": 2
+  },
+  "performance_metrics": {
+    "parallelizable_tests": 95,
+    "serial_tests": 0,
+    "tests_with_hard_waits": 2,
+    "tests_using_data_factories": 3,
+    "avg_test_duration_estimate": "~3-5 seconds per test",
+    "slow_tests": [],
+    "cleanup_strategy": "DELETE (acceptable for current scale)"
+  },
+  "recommendations": [
+    "Replace waitForTimeout(1500) with conditional waits (expect().toBeVisible() or waitForResponse)",
+    "Consider using transaction rollback instead of DELETE for integration test cleanup",
+    "Extract duplicate login code to helper functions for better performance",
+    "Use test.describe.configure({ mode: 'parallel' }) to enforce parallel execution",
+    "Tests are well-structured for parallelization - 95% can run in parallel"
+  ],
+  "summary": "Good test performance with 95% parallelizable. 2 MEDIUM violations (hard waits), 2 LOW violations (cleanup efficiency). No HIGH severity issues. Tests use efficient selectors (getByTestId) and proper cleanup patterns."
+}

@@ -11,6 +11,8 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { faker } from '@faker-js/faker/locale/es';
+import { loginAsTecnico, loginAsAdmin, loginAs, logout } from '../helpers/auth.helpers';
 
 test.describe('Story 1.1: User Profile Management', () => {
   // Ensure clean session before each test
@@ -22,16 +24,7 @@ test.describe('Story 1.1: User Profile Management', () => {
   test('[P0-E2E-009] should display user profile with current information', async ({ page }) => {
     // Given: authenticated user (using tecnico from seed)
     // This test only reads, no modification - can use shared seed user
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('tecnico@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('tecnico123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-
-    // Wait for dashboard content instead of URL
-    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
+    await loginAsTecnico(page);
 
     // When: user navigates to profile
     await page.goto('/perfil');
@@ -49,20 +42,12 @@ test.describe('Story 1.1: User Profile Management', () => {
   });
 
   test('[P0-E2E-010] should allow user to edit own profile', async ({ page }) => {
-    // Generate unique email for test isolation
-    const timestamp = Date.now()
-    const uniqueEmail = `profile.test.${timestamp}@example.com`
-    const tempPassword = 'TempPassword123'
+    // Generate unique email using faker.js (deterministic)
+    const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
+    const tempPassword = 'TempPassword123';
 
     // Create test user via admin (login as admin first)
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
+    await loginAsAdmin(page);
 
     // Create unique user
     await page.goto('/usuarios/nuevo');
@@ -74,7 +59,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.waitForURL('**/usuarios', { timeout: 30000 });
 
     // Logout and login as test user
-    await page.getByTestId('logout-button').click();
+    await logout(page);
     await page.goto('/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
@@ -117,20 +102,12 @@ test.describe('Story 1.1: User Profile Management', () => {
   });
 
   test('[P0-E2E-011] should allow user to change password from profile', async ({ page }) => {
-    // Generate unique email for test isolation
-    const timestamp = Date.now()
-    const uniqueEmail = `password.test.${timestamp}@example.com`
-    const tempPassword = 'TempPassword123'
+    // Generate unique email using faker.js (deterministic)
+    const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
+    const tempPassword = 'TempPassword123';
 
     // Create test user via admin (login as admin first)
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
-    await page.getByTestId('login-email').clear();
-    await page.getByTestId('login-password').clear();
-    await page.getByTestId('login-email').type('admin@hiansa.com', { delay: 10 });
-    await page.getByTestId('login-password').type('admin123', { delay: 10 });
-    await page.getByTestId('login-submit').click();
-    await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
+    await loginAsAdmin(page);
 
     // Create unique user
     await page.goto('/usuarios/nuevo');
@@ -142,7 +119,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.waitForURL('**/usuarios', { timeout: 30000 });
 
     // Logout and login as test user
-    await page.getByTestId('logout-button').click();
+    await logout(page);
     await page.goto('/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();

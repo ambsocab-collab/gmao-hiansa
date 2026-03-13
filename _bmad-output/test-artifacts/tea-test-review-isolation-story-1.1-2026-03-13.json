@@ -1,0 +1,59 @@
+{
+  "dimension": "isolation",
+  "score": 90,
+  "max_score": 100,
+  "grade": "A-",
+  "violations": [
+    {
+      "file": "tests/e2e/story-1.1-login-auth.spec.ts",
+      "line": 18,
+      "severity": "LOW",
+      "category": "shared-test-data",
+      "description": "Tests use shared seeded user 'tecnico@hiansa.com' instead of creating test-specific data",
+      "suggestion": "Each test should create its own test data in beforeEach for true isolation",
+      "code_snippet": "const testUser = { email: 'tecnico@hiansa.com', ... };"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 18,
+      "severity": "LOW",
+      "category": "shared-test-data",
+      "description": "Tests use shared seeded user 'new.user@example.com' instead of creating test-specific data",
+      "suggestion": "Create test-specific user data in each test for true isolation",
+      "code_snippet": "const newUser = { email: 'new.user@example.com', ... };"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 23,
+      "severity": "LOW",
+      "category": "shared-test-data",
+      "description": "Tests use shared seeded user 'tecnico@hiansa.com' instead of creating test-specific data",
+      "suggestion": "Each test should create its own test data for complete isolation",
+      "code_snippet": "await page.getByTestId('login-email').type('tecnico@hiansa.com', ...);"
+    },
+    {
+      "file": "tests/integration/story-1.1-rate-limiting.test.ts",
+      "line": 13,
+      "severity": "MEDIUM",
+      "category": "environment-mutation",
+      "description": "Tests mutate process.env.NODE_ENV directly instead of using vi.stubEnv()",
+      "suggestion": "Use vi.stubEnv('NODE_ENV', 'development') for automatic cleanup",
+      "code_snippet": "process.env.NODE_ENV = 'development';"
+    }
+  ],
+  "passed_checks": 17,
+  "failed_checks": 4,
+  "total_checks": 21,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 1,
+    "LOW": 3
+  },
+  "recommendations": [
+    "Use vi.stubEnv() instead of direct process.env mutation for auto-cleanup",
+    "Consider creating test-specific data instead of relying on shared seed data for true isolation",
+    "The current approach using seeded data is acceptable for this project size - shared seed data improves performance",
+    "beforeEach/afterEach hooks are properly implemented for state cleanup"
+  ],
+  "summary": "Tests are well isolated with proper beforeEach/afterEach cleanup. Only 4 minor violations found: 3 LOW (shared seed data) and 1 MEDIUM (env mutation). The use of shared seed data is a design choice that improves test performance."
+}

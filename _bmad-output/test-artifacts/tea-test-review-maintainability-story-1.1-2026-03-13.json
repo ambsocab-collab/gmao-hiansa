@@ -1,0 +1,114 @@
+{
+  "dimension": "maintainability",
+  "score": 70,
+  "max_score": 100,
+  "grade": "C+",
+  "violations": [
+    {
+      "file": "tests/integration/story-1.1-user-api.test.ts",
+      "line": 1,
+      "severity": "HIGH",
+      "category": "file-too-long",
+      "description": "Integration test file is 462 lines - too complex to maintain effectively",
+      "suggestion": "Split into separate files by feature area (e.g., user-api-capabilities.test.ts, user-api-validation.test.ts)",
+      "code_snippet": "describe('Story 1.1: User API Business Logic', () => { /* 462 lines */ });"
+    },
+    {
+      "file": "tests/integration/story-1.1-pbac-middleware.test.ts",
+      "line": 1,
+      "severity": "HIGH",
+      "category": "file-too-long",
+      "description": "Integration test file is 455 lines - should be split for better maintainability",
+      "suggestion": "Split into separate files: pbac-authorization.test.ts, pbac-helper-functions.test.ts, pbac-route-mapping.test.ts",
+      "code_snippet": "describe('Story 1.1: PBAC Middleware Integration', () => { /* 455 lines */ });"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 50,
+      "severity": "MEDIUM",
+      "category": "duplicate-code",
+      "description": "Admin login code repeated in every test (lines 50-64, 100-106, 162-169, 213-220)",
+      "suggestion": "Extract to helper function: async function loginAsAdmin(page) { ... }",
+      "code_snippet": "await page.goto('/login'); await page.getByTestId('login-email').type('admin@hiansa.com', ...);"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 57,
+      "severity": "MEDIUM",
+      "category": "duplicate-code",
+      "description": "User creation via admin pattern duplicated (lines 57-75, 126-143)",
+      "suggestion": "Extract to helper function: async function createUserViaAdmin(page, userData) { ... }",
+      "code_snippet": "await page.goto('/usuarios/nuevo'); await page.getByTestId('register-name').fill(...);"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 40,
+      "severity": "MEDIUM",
+      "category": "duplicate-code",
+      "description": "Login flow repeated across all tests (clear fields, type credentials, click submit)",
+      "suggestion": "Extract to helper function or use Page Object Model pattern",
+      "code_snippet": "await page.getByTestId('login-email').clear(); await page.getByTestId('login-email').type(...);"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 234,
+      "severity": "MEDIUM",
+      "category": "file-too-long",
+      "description": "E2E test file is 234 lines - consider splitting by feature",
+      "suggestion": "Split into: user-creation.spec.ts, user-deletion.spec.ts, users-list.spec.ts",
+      "code_snippet": "test.describe('Story 1.1: Admin User Management', () => { /* 234 lines */ });"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 192,
+      "severity": "MEDIUM",
+      "category": "file-too-long",
+      "description": "E2E test file is 192 lines - consider splitting",
+      "suggestion": "Split into: profile-display.spec.ts, profile-edit.spec.ts, password-change.spec.ts",
+      "code_snippet": "test.describe('Story 1.1: User Profile Management', () => { /* 192 lines */ });"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 234,
+      "severity": "MEDIUM",
+      "category": "file-too-long",
+      "description": "E2E test file is 234 lines - consider splitting",
+      "suggestion": "Split into: forced-reset-redirect.spec.ts, navigation-blocking.spec.ts, password-change.spec.ts",
+      "code_snippet": "test.describe('Story 1.1: Forced Password Reset Flow', () => { /* 234 lines */ });"
+    },
+    {
+      "file": "tests/e2e/story-1.1-forced-password-reset.spec.ts",
+      "line": 118,
+      "severity": "LOW",
+      "category": "complex-debugging",
+      "description": "Test has excessive console logging and debugging code (lines 118-129)",
+      "suggestion": "Remove debug logging or use conditional logging based on environment",
+      "code_snippet": "page.on('console', msg => console.log('Browser console:', msg.text()));"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 26,
+      "severity": "LOW",
+      "category": "complex-debugging",
+      "description": "Console error listeners repeated in multiple tests",
+      "suggestion": "Move to fixture or test-wide setup, not in individual tests",
+      "code_snippet": "page.on('console', msg => { if (msg.type() === 'error') { ... } });"
+    }
+  ],
+  "passed_checks": 11,
+  "failed_checks": 10,
+  "total_checks": 21,
+  "violation_summary": {
+    "HIGH": 2,
+    "MEDIUM": 6,
+    "LOW": 2
+  },
+  "recommendations": [
+    "Split large integration test files (>400 lines) into smaller, focused files",
+    "Extract duplicate login code into helper functions or use Page Object Model pattern",
+    "Create shared test utilities for common operations (login, user creation, password change)",
+    "Remove or conditionally enable debug console.log statements in tests",
+    "Use test.describe.configure({ mode: 'serial' }) for tests that must run sequentially due to shared data"
+  ],
+  "summary": "Tests have good structure with test IDs and priority markers, but suffer from code duplication and large file sizes. 2 HIGH violations (files >400 lines), 6 MEDIUM violations (duplicate code and file size), 2 LOW violations (debug code)."
+}

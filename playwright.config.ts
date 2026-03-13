@@ -68,8 +68,8 @@ export default defineConfig({
     },
   },
 
-  // Global setup to set environment variables for the server
-  globalSetup: undefined, // No global setup file needed
+  // Global setup to verify database seed before running tests
+  globalSetup: require.resolve('./tests/e2e/global-setup'),
 
   // Environment variables that should be available to tests
   // These are passed to the browser context, NOT to the server

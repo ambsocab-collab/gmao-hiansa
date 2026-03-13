@@ -1,0 +1,143 @@
+{
+  "overall_score": 80,
+  "overall_grade": "B",
+  "quality_assessment": "Good quality with actionable improvements needed",
+  "dimension_scores": {
+    "determinism": 75,
+    "isolation": 90,
+    "maintainability": 70,
+    "performance": 85
+  },
+  "dimension_grades": {
+    "determinism": "C+",
+    "isolation": "A-",
+    "maintainability": "C+",
+    "performance": "B"
+  },
+  "dimension_contributions": {
+    "determinism": 22.5,
+    "isolation": 27,
+    "maintainability": 17.5,
+    "performance": 12.75
+  },
+  "violations_summary": {
+    "total": 25,
+    "HIGH": 7,
+    "MEDIUM": 11,
+    "LOW": 7
+  },
+  "high_severity_violations": [
+    {
+      "file": "tests/integration/story-1.1-user-api.test.ts",
+      "line": 1,
+      "severity": "HIGH",
+      "dimension": "maintainability",
+      "category": "file-too-long",
+      "description": "Integration test file is 462 lines - too complex to maintain effectively"
+    },
+    {
+      "file": "tests/integration/story-1.1-pbac-middleware.test.ts",
+      "line": 1,
+      "severity": "HIGH",
+      "dimension": "maintainability",
+      "category": "file-too-long",
+      "description": "Integration test file is 455 lines - should be split for better maintainability"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 46,
+      "severity": "HIGH",
+      "dimension": "determinism",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 95,
+      "severity": "HIGH",
+      "dimension": "determinism",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic"
+    },
+    {
+      "file": "tests/e2e/story-1.1-admin-user-management.spec.ts",
+      "line": 157,
+      "severity": "HIGH",
+      "dimension": "determinism",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 53,
+      "severity": "HIGH",
+      "dimension": "determinism",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic"
+    },
+    {
+      "file": "tests/e2e/story-1.1-profile.spec.ts",
+      "line": 121,
+      "severity": "HIGH",
+      "dimension": "determinism",
+      "category": "time-dependency",
+      "description": "Test uses Date.now() for unique email generation - non-deterministic"
+    }
+  ],
+  "top_10_recommendations": [
+    {
+      "dimension": "determinism",
+      "recommendation": "Use faker with fixed seed (faker.seed(12345)) for all unique test data",
+      "impact": "HIGH"
+    },
+    {
+      "dimension": "maintainability",
+      "recommendation": "Split large integration test files (>400 lines) into smaller, focused files",
+      "impact": "HIGH"
+    },
+    {
+      "dimension": "determinism",
+      "recommendation": "Replace waitForTimeout(1500) with conditional waits (expect().toBeVisible() or waitForResponse)",
+      "impact": "HIGH"
+    },
+    {
+      "dimension": "maintainability",
+      "recommendation": "Extract duplicate login code into helper functions or use Page Object Model pattern",
+      "impact": "MEDIUM"
+    },
+    {
+      "dimension": "maintainability",
+      "recommendation": "Create shared test utilities for common operations (login, user creation, password change)",
+      "impact": "MEDIUM"
+    },
+    {
+      "dimension": "isolation",
+      "recommendation": "Use vi.stubEnv() instead of direct process.env mutation for auto-cleanup",
+      "impact": "MEDIUM"
+    },
+    {
+      "dimension": "maintainability",
+      "recommendation": "Remove or conditionally enable debug console.log statements in tests",
+      "impact": "MEDIUM"
+    },
+    {
+      "dimension": "performance",
+      "recommendation": "Replace waitForTimeout(1500) with conditional waits (expect().toBeVisible() or waitForResponse)",
+      "impact": "MEDIUM"
+    },
+    {
+      "dimension": "performance",
+      "recommendation": "Consider using transaction rollback instead of DELETE for integration test cleanup",
+      "impact": "LOW"
+    },
+    {
+      "dimension": "isolation",
+      "recommendation": "Consider creating test-specific data instead of relying on shared seed data for true isolation",
+      "impact": "LOW"
+    }
+  ],
+  "execution_mode": "sequential",
+  "performance_gain": "N/A (sequential execution)",
+  "test_files_analyzed": 8,
+  "total_tests_count": "14 E2E + 35+ integration/unit"
+}
