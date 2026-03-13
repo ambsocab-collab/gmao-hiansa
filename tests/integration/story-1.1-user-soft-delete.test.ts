@@ -18,6 +18,10 @@ setupUserAPITests()
 describe('Story 1.1: User Soft Delete', () => {
   describe('[P0-API-004] Soft Delete Flag Setting', () => {
     it('[P0-API-004] should set deleted flag on soft delete', async () => {
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'test-delete' } }
+      })
       // Given: existing user
       const hashedPassword = await bcrypt.hash('password123', 10)
       const user = await prisma.user.create({
@@ -49,8 +53,17 @@ describe('Story 1.1: User Soft Delete', () => {
     })
 
     it('[P0-API-004] should filter out deleted users from queries', async () => {
-      // Given: clean database state
-      await prisma.user.deleteMany({})
+      // Cleanup this test's data and data from other tests
+      await prisma.user.deleteMany({
+        where: {
+          OR: [
+            { email: { startsWith: 'active' } },
+            { email: { startsWith: 'deleted' } },
+            { email: { startsWith: 'user' } },
+            { email: { startsWith: 'existing' } }
+          ]
+        }
+      })
 
       // And: mix of active and deleted users
       const hashedPassword = await bcrypt.hash('password123', 10)

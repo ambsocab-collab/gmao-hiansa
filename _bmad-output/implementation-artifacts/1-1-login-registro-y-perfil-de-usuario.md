@@ -1909,3 +1909,206 @@ Los siguientes pasos son depurar estos problemas de autenticación para que los 
 **Pendiente de regenerar:**
 - Prisma Client (file lock en Windows - intentar después de cerrar todos los procesos Node.js)
 
+---
+
+## Test Results - Session 12 (2026-03-13)
+
+### ✅ E2E Tests: 14/14 passing (100%)
+
+**Login Authentication Flow (3/3):**
+- ✅ P0-E2E-001: Display login form with required fields and testids
+- ✅ P0-E2E-002: Login exitoso y redirect a dashboard
+- ✅ P0-E2E-003: Mensaje de error con credenciales inválidas
+
+**Forced Password Reset Flow (4/4):**
+- ✅ P0-E2E-005: Redirect a /cambiar-password cuando forcePasswordReset=true
+- ✅ P0-E2E-006: Bloqueo de navegación a otras rutas hasta cambiar contraseña
+- ✅ P0-E2E-007: Cambio de contraseña y redirect a dashboard
+- ✅ P0-E2E-008: Validación de fortaleza de contraseña en cambio
+
+**Admin User Management (4/4):**
+- ✅ P0-E2E-012: Admin puede crear nuevo usuario con capability por defecto
+- ✅ P0-E2E-013: Admin puede asignar múltiples capabilities a usuario
+- ✅ P0-E2E-014: Soft delete y previene login
+- ✅ P0-E2E-015: Lista de usuarios con capacidades de admin
+
+**User Profile Management (3/3):**
+- ✅ P0-E2E-009: Display perfil de usuario con información actual
+- ✅ P0-E2E-010: Usuario puede editar su propio perfil
+- ✅ P0-E2E-011: Usuario puede cambiar contraseña desde el perfil
+
+### ✅ Unit Tests: 101/101 passing (100%)
+
+**Rate Limiting (8/8):**
+- ✅ checkRateLimit: Permite primer intento
+- ✅ checkRateLimit: Permite hasta 5 intentos
+- ✅ checkRateLimit: Bloquea después de 5 intentos fallidos
+- ✅ resetRateLimit: Resetea rate limit para IP
+- ✅ getRemainingAttempts: Retorna 5 para nueva IP
+- ✅ getRemainingAttempts: Decrementa después de cada intento
+- ✅ getRemainingAttempts: Retorna 0 cuando está bloqueado
+- ✅ getRemainingAttempts: Resetea después de usar IP diferente
+
+**Middleware PBAC (19/19):**
+- ✅ ROUTE_CAPABILITIES configuration para dashboard, work-orders, assets, stock, providers, routines, users, reports
+- ✅ hasCapability helper function
+- ✅ hasAllCapabilities helper function
+- ✅ logAccessDenied function
+- ✅ getOrCreateCorrelationId function
+
+**NextAuth Configuration (12/12):**
+- ✅ Credentials provider configurado
+- ✅ JWT session strategy con 8 hour maxAge
+- ✅ jwt callback configurado
+- ✅ session callback configurado
+- ✅ signIn callback configurado
+- ✅ JWT callback añade user id y capabilities al token
+- ✅ JWT callback añade forcePasswordReset al token cuando es true
+
+**User Server Actions (33/33):**
+- ✅ createUser: Validación de Zod
+- ✅ createUser: Requiere autenticación
+- ✅ createUser: Requiere capability can_manage_users
+- ✅ createUser: Requiere email único
+- ✅ createUser: Valida name requerido
+- ✅ createUser: Valida formato de email
+- ✅ createUser: Valida largo mínimo de password
+- ✅ deleteUser: Soft delete
+- ✅ updateUserProfile: Actualización de perfil
+- ✅ Y más...
+
+**Auth Library Tests (13/13):**
+- ✅ hashPassword function
+- ✅ comparePassword function
+- ✅ validatePasswordStrength function
+- ✅ Y más...
+
+**Auth Middleware Tests:**
+- ✅ Tests de middleware de autenticación
+- ✅ Tests de verificación de capabilities
+- ✅ Tests de redirección a /unauthorized
+
+**Auth Bcrypt Tests (7/7):**
+- ✅ Hash de password
+- ✅ Comparación de password
+- ✅ Validación de fortaleza de password
+
+**Mocks Tests (9/9):**
+- ✅ Mocks para autenticación
+- ✅ Mocks para NextAuth
+
+### ✅ Integration Tests: 38/39 passing (97.4%)
+
+**PBAC Access Denial (6/6):**
+- ✅ Dashboard accesible para cualquier usuario autenticado
+- ✅ Dashboard accesible con capabilities undefined
+- ✅ Dashboard accesible con capabilities vacías
+- ✅ Denegación de acceso sin capability requerida
+- ✅ Mensaje de error correcto
+- ✅ Correlation ID en logs de denegación
+
+**PBAC Helper Functions (11/11):**
+- ✅ hasCapability retorna true cuando usuario tiene capability
+- ✅ hasCapability retorna false cuando usuario no tiene capability
+- ✅ hasCapability retorna false cuando capabilities es undefined
+- ✅ hasAllCapabilities retorna true cuando usuario tiene todas las capabilities
+- ✅ hasAllCapabilities retorna false cuando usuario falta alguna capability
+- ✅ hasAllCapabilities retorna true cuando no se requieren capabilities
+- ✅ hasAllCapabilities retorna false cuando capabilities es undefined
+- ✅ Y más...
+
+**PBAC Route Authorization (5/5):**
+- ✅ /dashboard route accesible para cualquier usuario autenticado
+- ✅ /work-orders route requiere can_view_all_ots
+- ✅ /users route requiere can_manage_users
+- ✅ Redirección a /unauthorized sin capability
+- ✅ Log de auditoría de acceso denegado
+
+**PBAC Route Mapping (2/2):**
+- ✅ Route capabilities mapping correcto para todas las rutas protegidas
+- ✅ Dashboard no requiere capabilities específicas
+
+**Rate Limiting (4/4):**
+- ✅ Retorna estado inicial de rate limit
+- ✅ Track de intentos fallidos de login
+- ✅ Bloquea después de 5 intentos fallidos
+- ✅ Permite solo 5 intentos por 15 minutos
+
+**User Rate Limiting (3/3):**
+- ✅ Rate limiting en API de login
+- ✅ Rate limit status endpoint
+- ✅ Rate limit reset endpoint
+
+**User Email Validation (2/2):**
+- ✅ Validación de unicidad de email en registro
+- ✅ Permite usuarios con diferentes emails
+
+**User Password Management (2/2):**
+- ✅ Actualiza forcePasswordReset a false después de cambiar password
+- ✅ Crea nuevo usuario con forcePasswordReset=true
+
+**User Capability Assignment (2/2):**
+- ✅ Crea usuario con capability explícita
+- ✅ Asigna múltiples capabilities a usuario
+
+**User Soft Delete (1/2):**
+- ✅ Set deleted flag on soft delete
+- ⚠️ Filter out deleted users from queries (fallo por estado compartido entre tests)
+
+### Archivos Modificados - Session 12
+
+**Corrección del Auth Helper:**
+- `tests/helpers/auth.helpers.ts` - Ahora espera explícitamente la navegación con `waitForURL`
+
+**Corrección del Rate Limiting:**
+- `lib/rate-limit.ts` - Removido bypass para NODE_ENV='test', usa IPs específicas para unit tests
+- `tests/integration/story-1.1-rate-limiting.test.ts` - Actualizado para usar IPs en lugar de __global__
+
+**Corrección del Middleware:**
+- `middleware.ts` - Dashboard requiere `[]` capabilities (accesible para todos)
+- `app/api/auth/[...nextauth]/route.ts` - Exportado `authOptions` para testing
+
+**Corrección de Test Fixtures:**
+- `tests/integration/fixtures/user-api-fixtures.ts` - Simplificado el cleanup para evitar interferencias
+
+### Issues Resueltos - Session 12
+
+1. **✅ Login helper no esperaba navegación:**
+   - Solución: Agregado `Promise.all` con `waitForURL` para esperar el cambio de URL
+   - Resultado: E2E tests ahora pasan tanto en headed como headless
+
+2. **✅ Rate limiting bypass NODE_ENV='test':**
+   - Solución: Removido bypass para NODE_ENV, solo bypass con PLAYWRIGHT_TEST
+   - Resultado: Unit tests de rate limiting ahora prueban la lógica real
+
+3. **✅ Middleware dashboard capability:**
+   - Solución: Dashboard requiere `[]` capabilities, no `['can_view_kpis']`
+   - Resultado: PBAC tests de dashboard ahora pasan
+
+4. **✅ NextAuth authOptions no exportado:**
+   - Solución: Exportado `authOptions` desde `route.ts`
+   - Resultado: NextAuth config tests ahora pasan
+
+### Issues Pendientes - Session 12
+
+1. **⚠️ Integration test user-soft-delete:**
+   - Estado: 1/2 tests fallando por estado compartido entre tests
+   - Causa: El cleanup en `beforeEach` afecta a tests que se ejecutan después
+   - Próximo paso: Refactorizar la estrategia de cleanup para usar `beforeAll`/`afterAll` por test suite
+
+### Resumen Session 12
+
+**Correcciones Implementadas:**
+- Auth helper ahora espera explícitamente la navegación (no por tiempo)
+- Rate limiting funciona correctamente en unit tests
+- Middleware PBAC permite acceso a dashboard para todos
+- NextAuth config tests tienen acceso a authOptions
+- 153/154 tests passing (99.4%)
+
+**Comentario Final Session 12:**
+🎯 **Tests E2E y Unit Completados (100%)**
+
+Se corrigieron los problemas de race condition en los tests de login mediante la espera explícita de la navegación. Los tests ahora confirman el cambio de pantalla por visibilidad (cambio de URL) en lugar de por tiempo arbitrario.
+
+Los integration tests están casi completos (97.4%), con solo un test fallando debido a problemas de aislamiento entre tests. Esto se puede resolver refactorizando la estrategia de cleanup en el fixture.
+

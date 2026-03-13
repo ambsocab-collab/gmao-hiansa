@@ -39,9 +39,9 @@ export const loginAttempts = new Map<string, RateLimitRecord>()
  * @returns true if bypass is active
  */
 function shouldBypassRateLimit(requestHeaders?: Headers): boolean {
-  // Bypass rate limiting for E2E tests
-  // Check for PLAYWRIGHT_TEST environment variable OR x-playwright-test header
-  if (process.env.PLAYWRIGHT_TEST === '1' || process.env.NODE_ENV === 'test') {
+  // Bypass rate limiting only for E2E tests with PLAYWRIGHT_TEST env variable
+  // Unit tests should NOT bypass rate limiting
+  if (process.env.PLAYWRIGHT_TEST === '1') {
     return true
   }
 
@@ -69,15 +69,17 @@ export async function checkRateLimit(ip: string, requestHeaders?: Headers): Prom
 
   const now = Date.now()
 
-  // For E2E testing purposes, use a global counter instead of IP-specific
-  // This ensures tests work consistently regardless of IP variations
-  const record = loginAttempts.get('__global__')
+  // Use IP-specific key for each call to avoid interference between tests
+  // E2E tests with x-playwright-test header use '__global__' for cross-test tracking
+  const key = requestHeaders?.get('x-playwright-test') === '1' ? '__global__' : ip
 
-  console.log('[checkRateLimit] IP:', ip, 'Current count:', record?.count || 0)
+  const record = loginAttempts.get(key)
+
+  console.log('[checkRateLimit] IP:', ip, 'Key:', key, 'Current count:', record?.count || 0)
 
   // If no record or reset time has passed, create new record
   if (!record || now > record.resetTime) {
-    loginAttempts.set('__global__', {
+    loginAttempts.set(key, {
       count: 1,
       resetTime: now + RATE_LIMIT_CONFIG.WINDOW_MS
     })
@@ -99,26 +101,26 @@ export async function checkRateLimit(ip: string, requestHeaders?: Headers): Prom
 }
 
 /**
- * Resets attempt counter
+ * Resets attempt counter for an IP
  * Useful after successful login
- * @param ip - Client IP address (ignored, using global counter)
+ * @param ip - Client IP address to reset
  */
-export function resetRateLimit(_ip: string): void {
-  loginAttempts.delete('__global__')
+export function resetRateLimit(ip: string): void {
+  loginAttempts.delete(ip)
 }
 
 /**
  * Gets number of remaining attempts for an IP
- * @param ip - Client IP address (ignored, using global counter for testing)
+ * @param ip - Client IP address
  * @returns Number of remaining attempts (0-5)
  */
-export function getRemainingAttempts(_ip: string): number {
-  const record = loginAttempts.get('__global__')
+export function getRemainingAttempts(ip: string): number {
+  const record = loginAttempts.get(ip)
   if (!record) return RATE_LIMIT_CONFIG.MAX_ATTEMPTS
 
   const now = Date.now()
   if (now > record.resetTime) {
-    loginAttempts.delete('__global__')
+    loginAttempts.delete(ip)
     return RATE_LIMIT_CONFIG.MAX_ATTEMPTS
   }
 

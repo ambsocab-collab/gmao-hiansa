@@ -19,6 +19,10 @@ setupUserAPITests()
 describe('Story 1.1: User Password Management', () => {
   describe('[P0-API-003] ForcePasswordReset Flag Update', () => {
     it('[P0-API-003] should update forcePasswordReset to false after password change', async () => {
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'test-reset' } }
+      })
       // Given: user with forcePasswordReset=true
       const oldPassword = await bcrypt.hash('oldPassword123', 10)
       const user = await prisma.user.create({
@@ -51,6 +55,10 @@ describe('Story 1.1: User Password Management', () => {
     })
 
     it('[P0-API-003] should create new user with forcePasswordReset=true', async () => {
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'test-newuser' } }
+      })
       // Given: new user data
       const userData = newUserFactory({
         email: 'test-newuser@example.com'

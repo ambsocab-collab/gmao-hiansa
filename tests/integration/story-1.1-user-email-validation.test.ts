@@ -18,8 +18,10 @@ setupUserAPITests()
 describe('Story 1.1: User Email Validation', () => {
   describe('[P0-API-002] Email Uniqueness Validation', () => {
     it('[P0-API-002] should validate email uniqueness on registration', async () => {
-      // Given: clean database
-      await prisma.user.deleteMany({})
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'existing' } }
+      })
 
       // And: existing user
       const hashedPassword = await bcrypt.hash('password123', 10)
@@ -45,8 +47,10 @@ describe('Story 1.1: User Email Validation', () => {
     })
 
     it('[P0-API-002] should allow users with different emails', async () => {
-      // Given: clean database
-      await prisma.user.deleteMany({})
+      // Cleanup this test's data
+      await prisma.user.deleteMany({
+        where: { email: { startsWith: 'user' } }
+      })
 
       // And: existing user
       const hashedPassword = await bcrypt.hash('password123', 10)

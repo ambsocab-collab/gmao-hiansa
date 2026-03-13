@@ -21,9 +21,7 @@ export function setupUserAPITests() {
     await prisma.activityLog.deleteMany({})
     await prisma.auditLog.deleteMany({})
     await prisma.userCapability.deleteMany({})
-    await prisma.user.deleteMany({
-      where: { email: { contains: 'test-' } }
-    })
+    // Individual tests are responsible for their own user cleanup with deleteMany({})
   })
 
   afterEach(async () => {
@@ -31,9 +29,7 @@ export function setupUserAPITests() {
     await prisma.activityLog.deleteMany({})
     await prisma.auditLog.deleteMany({})
     await prisma.userCapability.deleteMany({})
-    await prisma.user.deleteMany({
-      where: { email: { contains: 'test-' } }
-    })
+    // Individual tests are responsible for their own user cleanup with deleteMany({})
   })
 }
 

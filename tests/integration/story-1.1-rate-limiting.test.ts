@@ -26,7 +26,7 @@ describe('Story 1.1 - Rate Limiting API', () => {
 
   it('[API-P0-INT-001] should return initial rate limit status', async () => {
     const remaining = getRemainingAttempts('localhost');
-    const record = loginAttempts.get('__global__');
+    const record = loginAttempts.get('localhost');
 
     expect(remaining).toBe(RATE_LIMIT_CONFIG.MAX_ATTEMPTS);
     expect(RATE_LIMIT_CONFIG.MAX_ATTEMPTS).toBe(5);
@@ -68,7 +68,7 @@ describe('Story 1.1 - Rate Limiting API', () => {
 
     // Verify final rate limit status
     remaining = getRemainingAttempts(testIP);
-    const record = loginAttempts.get('__global__');
+    const record = loginAttempts.get(testIP);
     expect(record?.count).toBeGreaterThan(RATE_LIMIT_CONFIG.MAX_ATTEMPTS);
   });
 
@@ -89,7 +89,7 @@ describe('Story 1.1 - Rate Limiting API', () => {
     expect(blocked).toBe(false);
 
     // Verify blocked status
-    const record = loginAttempts.get('__global__');
+    const record = loginAttempts.get(testIP);
     expect(record?.count).toBeGreaterThan(RATE_LIMIT_CONFIG.MAX_ATTEMPTS);
   });
 });

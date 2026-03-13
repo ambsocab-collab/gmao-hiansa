@@ -8,8 +8,7 @@
 import { Page } from '@playwright/test';
 
 /**
- * Login helper - performs login action without waiting for redirect
- * Tests should wait for expected UI elements after calling this helper
+ * Login helper - performs login action and waits for navigation to complete
  *
  * @param page - Playwright Page object
  * @param email - User email
@@ -26,7 +25,13 @@ export async function loginAs(
   await page.getByTestId('login-password').clear();
   await page.getByTestId('login-email').type(email, { delay: 10 });
   await page.getByTestId('login-password').type(password, { delay: 10 });
-  await page.getByTestId('login-submit').click();
+
+  // Click submit and wait for navigation to complete
+  // Wait for URL to change from /login (handles redirects to dashboard, /cambiar-password, etc.)
+  await Promise.all([
+    page.waitForURL((url) => url.pathname !== '/login', { timeout: 5000 }),
+    page.getByTestId('login-submit').click(),
+  ]);
 }
 
 /**
@@ -50,7 +55,7 @@ export async function loginAsTecnico(page: Page): Promise<void> {
 /**
  * Login as new user with forced password reset
  * (new.user@example.com / tempPassword123)
- * After login, test should wait for '/cambiar-password' URL
+ * After login, user will be redirected to '/cambiar-password' automatically
  *
  * @param page - Playwright Page object
  */
