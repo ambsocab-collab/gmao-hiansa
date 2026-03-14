@@ -20,6 +20,10 @@ function getBaseURL(): string {
 }
 
 test.describe('Story 1.1: User Profile Management', () => {
+  // IMPORTANT: These tests MUST run serially because they use tecnico@hiansa.com
+  // Running them in parallel causes race conditions when modifying the same user's profile
+  test.describe.configure({ mode: 'serial' });
+
   // Ensure clean session before each test
   test.beforeEach(async ({ page }) => {
     // Clear cookies to ensure clean session state

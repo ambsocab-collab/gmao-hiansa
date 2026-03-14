@@ -1,87 +1,62 @@
-<testsuites id="" name="" tests="14" failures="1" skipped="0" errors="0" time="151.816562">
-<testsuite name="story-1.1-admin-user-management.spec.ts" timestamp="2026-03-14T11:21:44.768Z" hostname="chromium" tests="4" failures="1" skipped="0" time="60.146" errors="0">
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability" classname="story-1.1-admin-user-management.spec.ts" time="21.266">
-<failure message="story-1.1-admin-user-management.spec.ts:55:7 [P0-E2E-012] should allow admin to create new user with default capability" type="FAILURE">
-<![CDATA[  [chromium] › story-1.1-admin-user-management.spec.ts:55:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: getByTestId('capability-checkboxes')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for getByTestId('capability-checkboxes')
-
-
-      91 |
-      92 |     // And: see capability checkboxes (15 from database + 1 from component)
-    > 93 |     await expect(page.getByTestId('capability-checkboxes')).toBeVisible();
-         |                                                             ^
-      94 |     const checkboxes = page.locator('[data-testid^="capability-"]');
-      95 |     await expect(checkboxes).toHaveCount(16); // 15 capabilities from DB
-      96 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:93:61
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-1.1-admin-user-manag-479b5-ser-with-default-capability-chromium\trace.zip]]
-]]>
-</system-out>
+<testsuites id="" name="" tests="23" failures="0" skipped="0" errors="0" time="211.52351000000002">
+<testsuite name="story-1.1-admin-user-management.spec.ts" timestamp="2026-03-14T12:08:09.304Z" hostname="chromium" tests="4" failures="0" skipped="0" time="86.167" errors="0">
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability" classname="story-1.1-admin-user-management.spec.ts" time="14.537">
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user" classname="story-1.1-admin-user-management.spec.ts" time="17.244">
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user" classname="story-1.1-admin-user-management.spec.ts" time="29.634">
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login" classname="story-1.1-admin-user-management.spec.ts" time="15.706">
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login" classname="story-1.1-admin-user-management.spec.ts" time="31.374">
 </testcase>
-<testcase name="Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities" classname="story-1.1-admin-user-management.spec.ts" time="5.93">
+<testcase name="Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities" classname="story-1.1-admin-user-management.spec.ts" time="10.622">
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-forced-password-reset.spec.ts" timestamp="2026-03-14T11:21:44.768Z" hostname="chromium" tests="4" failures="0" skipped="0" time="27.691" errors="0">
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" classname="story-1.1-forced-password-reset.spec.ts" time="4.68">
+<testsuite name="story-1.1-forced-password-reset.spec.ts" timestamp="2026-03-14T12:08:09.304Z" hostname="chromium" tests="4" failures="0" skipped="0" time="93.405" errors="0">
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true" classname="story-1.1-forced-password-reset.spec.ts" time="14.277">
 <system-out>
 <![CDATA[✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+After login, current URL: http://localhost:3000/cambiar-password
+✅ Database is available and healthy
 ✅ Test user tecnico@hiansa.com verified
 ✅ Test user new.user@example.com verified
 After login, current URL: http://localhost:3000/cambiar-password
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed" classname="story-1.1-forced-password-reset.spec.ts" time="7.913">
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed" classname="story-1.1-forced-password-reset.spec.ts" time="35.859">
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard" classname="story-1.1-forced-password-reset.spec.ts" time="10.979">
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard" classname="story-1.1-forced-password-reset.spec.ts" time="35.272">
 <system-out>
 <![CDATA[Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
 Browser console: [LoginForm] Attempting login with email: new.user@example.com
 Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
 Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
-Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T19:23:08.489Z}
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T20:08:41.121Z}
+Browser console: [LoginForm] forcePasswordReset value: true
+Browser console: [LoginForm] forcePasswordReset is true, redirecting to /cambiar-password
+Submit button enabled: [33mtrue[39m
+Change password API response status: [33m200[39m
+Change password API response body: {"success":true,"message":"Contraseña cambiada exitosamente"}
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T20:08:51.207Z}
+Browser console: [LoginForm] forcePasswordReset value: false
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+
+[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium\trace.zip]]
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T20:09:34.214Z}
 Browser console: [LoginForm] forcePasswordReset value: true
 Browser console: [LoginForm] forcePasswordReset is true, redirecting to /cambiar-password
 Submit button enabled: [33mtrue[39m
@@ -92,17 +67,17 @@ Browser console: %cDownload the React DevTools for a better development experien
 Browser console: [LoginForm] Attempting login with email: new.user@example.com
 Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
 Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
-Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T19:23:14.006Z}
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-14T20:09:42.787Z}
 Browser console: [LoginForm] forcePasswordReset value: false
 Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change" classname="story-1.1-forced-password-reset.spec.ts" time="4.119">
+<testcase name="Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change" classname="story-1.1-forced-password-reset.spec.ts" time="7.997">
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-login-auth.spec.ts" timestamp="2026-03-14T11:21:44.768Z" hostname="chromium" tests="3" failures="0" skipped="0" time="8.111" errors="0">
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids" classname="story-1.1-login-auth.spec.ts" time="1.458">
+<testsuite name="story-1.1-login-auth.spec.ts" timestamp="2026-03-14T12:08:09.304Z" hostname="chromium" tests="3" failures="0" skipped="0" time="14.191" errors="0">
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids" classname="story-1.1-login-auth.spec.ts" time="2.42">
 <system-out>
 <![CDATA[✅ Database is available and healthy
 ✅ Test user tecnico@hiansa.com verified
@@ -110,17 +85,43 @@ Browser console: %cDownload the React DevTools for a better development experien
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard" classname="story-1.1-login-auth.spec.ts" time="4.171">
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard" classname="story-1.1-login-auth.spec.ts" time="6.992">
 </testcase>
-<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials" classname="story-1.1-login-auth.spec.ts" time="2.482">
+<testcase name="Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials" classname="story-1.1-login-auth.spec.ts" time="4.779">
+<system-out>
+<![CDATA[✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+]]>
+</system-out>
 </testcase>
 </testsuite>
-<testsuite name="story-1.1-profile.spec.ts" timestamp="2026-03-14T11:21:44.768Z" hostname="chromium" tests="3" failures="0" skipped="0" time="44.958" errors="0">
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information" classname="story-1.1-profile.spec.ts" time="5.599">
+<testsuite name="story-1.1-profile.spec.ts" timestamp="2026-03-14T12:08:09.304Z" hostname="chromium" tests="3" failures="0" skipped="0" time="90.435" errors="0">
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information" classname="story-1.1-profile.spec.ts" time="13.099">
 </testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile" classname="story-1.1-profile.spec.ts" time="20.283">
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile" classname="story-1.1-profile.spec.ts" time="38.223">
 </testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile" classname="story-1.1-profile.spec.ts" time="19.076">
+<testcase name="Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile" classname="story-1.1-profile.spec.ts" time="39.113">
+</testcase>
+</testsuite>
+<testsuite name="story-1.2-pbac-system.spec.ts" timestamp="2026-03-14T12:08:09.304Z" hostname="chromium" tests="9" failures="0" skipped="0" time="101.295" errors="0">
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-020] should display 15 capability checkboxes with Spanish labels" classname="story-1.2-pbac-system.spec.ts" time="13.291">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-021] should have correct data-testid for each capability checkbox" classname="story-1.2-pbac-system.spec.ts" time="9.511">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-023] should create new user with only can_create_failure_report checked by default" classname="story-1.2-pbac-system.spec.ts" time="15.047">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-025] should allow admin to assign multiple capabilities to user" classname="story-1.2-pbac-system.spec.ts" time="21.647">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-028] should deny access to /assets for users without can_manage_assets capability" classname="story-1.2-pbac-system.spec.ts" time="12.841">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-031] should deny access to repair history for users without can_view_repair_history" classname="story-1.2-pbac-system.spec.ts" time="9.888">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-033] should assign all 15 capabilities to initial admin user" classname="story-1.2-pbac-system.spec.ts" time="8.621">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-035] should show only navigation items for user capabilities" classname="story-1.2-pbac-system.spec.ts" time="4.577">
+</testcase>
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-037] should deny access when accessing unauthorized module via direct URL" classname="story-1.2-pbac-system.spec.ts" time="5.872">
 </testcase>
 </testsuite>
 </testsuites>

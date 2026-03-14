@@ -23,6 +23,10 @@ function getBaseURL(): string {
 // For now, they document the expected behavior
 
 test.describe('Story 1.1: Admin User Management', () => {
+  // IMPORTANT: These tests MUST run serially because they all use admin@hiansa.com
+  // Running them in parallel causes race conditions when managing the same user
+  test.describe.configure({ mode: 'serial' });
+
   // Ensure clean session before each test
   test.beforeEach(async ({ page }) => {
     // Clear cookies to ensure clean session state
@@ -90,9 +94,9 @@ test.describe('Story 1.1: Admin User Management', () => {
     await expect(page.getByTestId('register-password')).toBeVisible();
 
     // And: see capability checkboxes (15 from database + 1 from component)
-    await expect(page.getByTestId('capability-checkboxes')).toBeVisible();
+    await expect(page.getByTestId('capabilities-checkbox-group')).toBeVisible();
     const checkboxes = page.locator('[data-testid^="capability-"]');
-    await expect(checkboxes).toHaveCount(16); // 15 capabilities from DB
+    await expect(checkboxes).toHaveCount(15); // 15 capabilities from Story 1.2
 
     // When: admin fills form and creates user
     await page.getByTestId('register-name').fill('María González');

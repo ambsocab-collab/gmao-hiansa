@@ -27,6 +27,10 @@ test.beforeAll(async ({ request }) => {
 });
 
 test.describe('Story 1.1: Forced Password Reset Flow', () => {
+  // IMPORTANT: These tests MUST run serially because they all use new.user@example.com
+  // Running them in parallel causes race conditions when changing the same user's password
+  test.describe.configure({ mode: 'serial' });
+
   // Reset test user before each test to ensure clean state
   test.beforeEach(async ({ request }) => {
     await request.post('http://localhost:3000/api/v1/test/reset-user', {

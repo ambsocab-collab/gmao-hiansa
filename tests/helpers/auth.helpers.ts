@@ -36,9 +36,9 @@ export async function loginAs(
 
   // Click submit and wait for navigation to complete
   // Wait for URL to change from /login (handles redirects to dashboard, /cambiar-password, etc.)
-  // Increased timeout for parallel test execution (server may be under load)
+  // Increased timeout to 30s for parallel test execution (server may be under load)
   await Promise.all([
-    page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+    page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
     page.getByTestId('login-submit').click(),
   ]);
 }

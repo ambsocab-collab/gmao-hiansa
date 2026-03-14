@@ -74,7 +74,7 @@ export function CapabilityCheckboxGroup({
   }
 
   return (
-    <Card>
+    <Card data-testid="capabilities-checkbox-group">
       <CardHeader>
         <CardTitle>Capacidades del Usuario</CardTitle>
       </CardHeader>

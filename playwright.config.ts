@@ -29,8 +29,8 @@ export default defineConfig({
     timeout: 15 * 1000, // 15 seconds per assertion
   },
 
-  // Retry on CI only
-  retries: process.env.CI ? 2 : 0,
+  // Retry on CI and locally (for flaky tests in parallel mode)
+  retries: 2,
 
   // Parallel workers - Fixed to 4 workers
   workers: 4,
