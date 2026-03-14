@@ -5,9 +5,16 @@
  * Story 1.3: Etiquetas de Clasificación y Organización
  *
  * Allows admins to assign/remove tags from users on the detail page
+ *
+ * FIXED: Now uses Server Action (assignTagsToUser) instead of API endpoint
+ * - Ensures PBAC capability validation
+ * - Maintains correlation ID tracking
+ * - Follows project architecture pattern
  */
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { assignTagsToUser } from '@/app/actions/tags'
 
 interface Tag {
   id: string
@@ -27,8 +34,11 @@ export function EditTagsClient({
   availableTags,
   initialTags,
 }: EditTagsClientProps) {
+  const router = useRouter()
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(initialTags)
   const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const handleTagToggle = (tagId: string) => {
     setSelectedTagIds((prev) =>
@@ -36,31 +46,33 @@ export function EditTagsClient({
         ? prev.filter((id) => id !== tagId)
         : [...prev, tagId]
     )
+    // Clear messages when user changes selection
+    setError('')
+    setSuccess(false)
   }
 
   const handleSaveTags = async () => {
     setIsSaving(true)
+    setError('')
+    setSuccess(false)
 
     try {
-      const response = await fetch(`/api/v1/users/${userId}/tags`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tagIds: selectedTagIds }),
-      })
+      // Use Server Action instead of API endpoint for PBAC validation and correlation ID tracking
+      const result = await assignTagsToUser(userId, selectedTagIds)
 
-      if (response.ok) {
-        // Reload page to show updated tags
-        // Use setTimeout to avoid interfering with ongoing operations
+      if (result.success) {
+        setSuccess(true)
+        // Refresh router state to show updated tags after a short delay
         setTimeout(() => {
-          window.location.reload()
-        }, 100)
+          router.refresh()
+        }, 1000)
       } else {
-        console.error('Failed to save tags:', response.statusText)
+        setError(result.message || 'Error al guardar etiquetas')
       }
-    } catch (error) {
-      console.error('Error saving tags:', error)
+    } catch (err) {
+      // Server Actions throw errors directly - handle them
+      const errorMessage = err instanceof Error ? err.message : 'Error al guardar etiquetas'
+      setError(errorMessage)
     } finally {
       setIsSaving(false)
     }
@@ -76,6 +88,22 @@ export function EditTagsClient({
         Selecciona las etiquetas para este usuario. Las etiquetas son solo para
         organización visual y no afectan los permisos.
       </p>
+
+      {/* Success Message */}
+      {success && (
+        <div className="bg-green-50 border-l-4 border-green-400 p-4">
+          <p className="text-sm text-green-700">
+            ✓ Etiquetas guardadas exitosamente. Recargando página...
+          </p>
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
 
       <div className="space-y-3">
         {availableTags.map((tag) => (

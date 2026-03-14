@@ -11,6 +11,11 @@
 
 import { assignTagsToUser, getUserTags } from '@/app/actions/tags'
 import { NextRequest, NextResponse } from 'next/server'
+import {
+  ValidationError,
+  AuthorizationError,
+  AuthenticationError,
+} from '@/lib/utils/errors'
 
 interface RouteContext {
   params: {
@@ -63,6 +68,21 @@ export async function PUT(
       )
     }
   } catch (error) {
+    // Handle custom errors from Server Actions
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      )
+    }
+
+    if (error instanceof AuthorizationError || error instanceof AuthenticationError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 403 }
+      )
+    }
+
     console.error('Error assigning tags:', error)
     return NextResponse.json(
       { error: 'Error interno del servidor' },

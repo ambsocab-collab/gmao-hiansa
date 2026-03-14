@@ -50,7 +50,10 @@ export const createUserSchema = z.object({
  * NFR-S62: Support for multiple tag assignment
  */
 
-// Helper: Hex color validation (WCAG AA compliance will be checked at application level)
+// Helper: Hex color validation
+// NOTE: WCAG AA compliance is enforced at UI level in CreateTagForm component
+// The UI only offers a preset of WCAG AA compliant colors (contrast ratio >= 4.5:1)
+// This schema validates the hex format, but color selection is limited by the UI component
 const hexColorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/, {
   message: 'Color debe ser formato hex válido (ej: #FF5733)',
 })

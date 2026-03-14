@@ -271,6 +271,9 @@ describe('Story 1.3: Tags - PBAC Independence Verification', () => {
     })
 
     it('should handle special characters in tag names without affecting capabilities', () => {
+      // NOTE: This test uses roleLabel to verify PBAC middleware ignores non-capability properties
+      // The actual Tag/UserTag model from Prisma is tested in E2E tests (story-1.3-tags.spec.ts)
+
       // Given: User with special characters in tag name
       const user = userFactory({
         email: 'special-tag@example.com',

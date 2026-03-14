@@ -199,7 +199,6 @@ export async function createTag(data: {
  * - Cascade delete: Tag removed from all users (UserTag)
  * - Confirmation required
  * - Audit log created
- * - Message clarifies tags don't affect capabilities
  *
  * @param tagId - ID of tag to delete
  * @returns Success message
@@ -256,6 +255,7 @@ export async function deleteTag(tagId: string) {
     }
 
     // 5. Delete tag with explicit cascade to UserTag
+    // CRITICAL: Audit log is now INSIDE the transaction for atomicity
     await prisma.$transaction(async (tx) => {
       // First, delete all UserTag records
       await tx.userTag.deleteMany({
@@ -266,22 +266,23 @@ export async function deleteTag(tagId: string) {
       await tx.tag.delete({
         where: { id: tagId },
       })
-    })
 
-    // 6. Log audit trail
-    await prisma.auditLog.create({
-      data: {
-        userId: session.user.id,
-        action: 'tag_deleted',
-        targetId: tagId,
-        metadata: {
-          tagName: tag.name,
-          affectedUserCount: tag.userTags.length,
-          message:
-            'Etiqueta eliminada. Esta acción no afecta las capabilities de los usuarios.',
+      // CRITICAL: Log audit trail INSIDE transaction to ensure atomicity
+      // If audit log fails, entire transaction (delete + audit) will rollback
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: 'tag_deleted',
+          targetId: tagId,
+          metadata: {
+            tagName: tag.name,
+            affectedUserCount: tag.userTags.length,
+            message:
+              'Etiqueta eliminada. Esta acción no afecta las capabilities de los usuarios.',
+          },
+          timestamp: new Date(),
         },
-        timestamp: new Date(),
-      },
+      })
     })
 
     logger.info(session.user.id, 'delete_tag', correlationId, {
@@ -386,8 +387,7 @@ export async function assignTagsToUser(userId: string, tagIds: string[]) {
       throw new ValidationError('Usuario no encontrado')
     }
 
-    // 5. CRITICAL: Store current capabilities for verification
-    // Tags MUST NOT modify capabilities
+    // 5. CRITICAL: Store current capabilities to verify tags don't modify them
     const currentCapabilities = await prisma.userCapability.findMany({
       where: { userId: validatedData.userId },
       include: { capability: true },
