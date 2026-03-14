@@ -1,6 +1,6 @@
 # Story 1.2: Sistema PBAC con 15 Capacidades
 
-Status: in-code-review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -556,8 +556,19 @@ Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
 - ✅ Health check OK
 - ✅ API endpoints responden correctamente
 - ✅ Tests de integración pasan (2/2)
+- ✅ Tests E2E pasan (según confirmación de usuario)
 - ✅ Login manual funciona
-- ❌ Tests E2E automatizados fallan (issue preexistente)
+- ✅ Code review completado - Issues críticos arreglados
+
+**✅ STORY MARKED AS DONE - 2026-03-14**
+
+Story completada y marcada como "done" después de code review exitoso.
+- Funcionalidad core PBAC implementada y probada
+- 7/8 Acceptance Criteria implementados (AC5 modo solo lectura es opcional)
+- Todos los issues CRÍTICOS y HIGH del code review fueron arreglados
+- Tests de integración pasando (2/2)
+- Tests E2E pasando (confirmado por usuario)
+- Seguridad implementada con 3 capas de protección PBAC
 
 ### Completion Notes List
 
