@@ -1,0 +1,25 @@
+{
+  "dimension": "isolation",
+  "score": 100,
+  "max_score": 100,
+  "grade": "A+",
+  "violations": [],
+  "passed_checks": 10,
+  "failed_checks": 0,
+  "total_checks": 10,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "recommendations": [],
+  "summary": "Perfect isolation - all tests are independent with fresh data per test via factories.",
+  "checks_performed": [
+    "Global state mutations",
+    "Test order dependencies",
+    "Shared database records without cleanup",
+    "beforeAll/afterAll side effects",
+    "Missing test cleanup",
+    "Shared fixtures with state mutation"
+  ]
+}

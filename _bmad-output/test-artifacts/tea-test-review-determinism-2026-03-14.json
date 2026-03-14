@@ -1,0 +1,25 @@
+{
+  "dimension": "determinism",
+  "score": 100,
+  "max_score": 100,
+  "grade": "A+",
+  "violations": [],
+  "passed_checks": 10,
+  "failed_checks": 0,
+  "total_checks": 10,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "recommendations": [],
+  "summary": "Excellent determinism - no violations detected. All tests use deterministic factory data with no time/random dependencies.",
+  "checks_performed": [
+    "Math.random() usage",
+    "Date.now() or new Date() without mocking",
+    "setTimeout/setInterval usage",
+    "Hard waits (waitForTimeout)",
+    "External API calls without mocking",
+    "Non-deterministic data generation"
+  ]
+}

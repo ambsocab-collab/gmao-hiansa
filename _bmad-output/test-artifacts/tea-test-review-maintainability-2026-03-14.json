@@ -1,0 +1,27 @@
+{
+  "dimension": "maintainability",
+  "score": 100,
+  "max_score": 100,
+  "grade": "A+",
+  "violations": [],
+  "passed_checks": 10,
+  "failed_checks": 0,
+  "total_checks": 10,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "recommendations": [],
+  "summary": "Excellent maintainability - clear BDD structure, proper test IDs, well-organized describe blocks.",
+  "checks_performed": [
+    "Test file length >300 lines",
+    "Individual test length >100 lines",
+    "No test.describe grouping",
+    "Duplicate test logic",
+    "Unclear test names",
+    "Magic numbers/strings",
+    "Missing comments for complex logic",
+    "Inconsistent naming conventions"
+  ]
+}

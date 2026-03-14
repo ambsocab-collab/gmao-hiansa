@@ -1,0 +1,32 @@
+{
+  "overall_score": 100,
+  "overall_grade": "A+",
+  "quality_assessment": "Excellent - Perfect test quality with no violations detected",
+  "dimension_scores": {
+    "determinism": 100,
+    "isolation": 100,
+    "maintainability": 100,
+    "performance": 100
+  },
+  "dimension_grades": {
+    "determinism": "A+",
+    "isolation": "A+",
+    "maintainability": "A+",
+    "performance": "A+"
+  },
+  "violations_summary": {
+    "total": 0,
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "all_violations": [],
+  "high_severity_violations": [],
+  "top_10_recommendations": [],
+  "subagent_execution": "SEQUENTIAL (fallback from auto - no subagent support)",
+  "performance_gain": "N/A (sequential mode)",
+  "test_file": "tests/integration/story-1.3-tags-pbac.test.ts",
+  "test_count": 10,
+  "framework": "Vitest (Integration)",
+  "timestamp": "2026-03-14T14-30-00-000Z"
+}

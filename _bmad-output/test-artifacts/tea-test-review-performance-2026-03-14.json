@@ -1,0 +1,32 @@
+{
+  "dimension": "performance",
+  "score": 100,
+  "max_score": 100,
+  "grade": "A+",
+  "violations": [],
+  "passed_checks": 10,
+  "failed_checks": 0,
+  "total_checks": 10,
+  "violation_summary": {
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0
+  },
+  "performance_metrics": {
+    "parallelizable_tests": 100,
+    "serial_tests": 0,
+    "avg_test_duration_estimate": "~10-50ms (pure logic tests)",
+    "slow_tests": []
+  },
+  "recommendations": [],
+  "summary": "Excellent performance - all tests are fast pure logic tests, 100% parallelizable.",
+  "checks_performed": [
+    "Tests using test.describe.serial unnecessarily",
+    "Slow setup/teardown",
+    "Excessive navigation",
+    "No fixture reuse",
+    "Hard waits >2 seconds",
+    "Inefficient selectors",
+    "Large data sets in tests"
+  ]
+}
