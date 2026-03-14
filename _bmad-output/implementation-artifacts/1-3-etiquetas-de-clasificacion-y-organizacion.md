@@ -1,6 +1,6 @@
 # Story 1.3: Etiquetas de Clasificación y Organización
 
-Status: done
+Status: in-progress
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -116,6 +116,17 @@ para organizar visualmente a las personas sin afectar sus capacidades de acceso.
   - [ ] Test: Verificar que etiqueta NO otorga capabilities
   - [ ] Test: Filtrar usuarios por etiqueta
   - [ ] Test: Asignar misma etiqueta a usuarios con diferentes capabilities
+
+## Review Follow-ups (AI)
+
+- [ ] [AI-Review][HIGH] TagList.tsx:35 - Delete confirmation missing clarifier message "Esta acción no afecta las capabilities de los usuarios"
+- [ ] [AI-Review][HIGH] usuarios/page.tsx - Missing filter and sort by tag functionality (AC violation)
+- [ ] [AI-Review][MEDIUM] EditTagsClient.tsx:60,63 - Poor error handling, errors only logged to console not shown to user
+- [ ] [AI-Review][MEDIUM] CreateTagForm.tsx - Submit button not disabled when max tags limit reached
+- [ ] [AI-Review][MEDIUM] CreateTagForm.tsx - No loading state on submit button, risk of duplicate submissions
+- [ ] [AI-Review][MEDIUM] TagList.tsx:101-105 - Misleading warning message, says "can't delete" but deletion actually allowed
+- [ ] [AI-Review][LOW] TagList.tsx:42-53 - Inconsistent error handling pattern using alert() instead of toast/inline messages
+- [ ] [AI-Review][LOW] Story file - Update subtasks under "Validar límite de 20 etiquetas" to mark as [x] completed
 
 ## Dev Notes
 
