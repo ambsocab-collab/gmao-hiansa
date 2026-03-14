@@ -1,9 +1,15 @@
 /**
  * Usuarios List Page
  * Story 1.1: Login, Registro y Perfil de Usuario
+ * Story 1.3: Etiquetas de Clasificación y Organización
  *
  * Protected page for admins to view and manage users
  * Requires can_manage_users capability
+ *
+ * Features:
+ * - View all users with tags
+ * - Filter users by tag (AC3)
+ * - Sort users by tag (AC3)
  */
 
 import { auth } from '@/lib/auth-adapter'
@@ -11,6 +17,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { prisma } from '@/lib/db'
+import { UsersClient } from './components/UsersClient'
 
 export const metadata = {
   title: 'Usuarios - GMAO HiRock/Ultra',
@@ -56,6 +63,11 @@ export default async function UsuariosListPage() {
     orderBy: { createdAt: 'desc' },
   })
 
+  // Get all tags for filtering
+  const tags = await prisma.tag.findMany({
+    orderBy: { name: 'asc' },
+  })
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
@@ -76,74 +88,8 @@ export default async function UsuariosListPage() {
         </div>
       </div>
 
-      {/* Users List */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <ul className="divide-y divide-gray-200" role="list" data-testid="user-list">
-          {users.map((user) => {
-            const capabilities = user.userCapabilities.map(
-              (uc) => uc.capability.label
-            )
-
-            return (
-              <li key={user.id}>
-                <Link
-                  href={`/usuarios/${user.id}`}
-                  className="block hover:bg-gray-50 transition"
-                >
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-blue-600 truncate">
-                          {user.name}
-                        </p>
-                        <p className="mt-1 text-sm text-gray-600 truncate">
-                          {user.email}
-                        </p>
-                        {user.phone && (
-                          <p className="mt-1 text-sm text-gray-500 truncate">
-                            {user.phone}
-                          </p>
-                        )}
-                      </div>
-                      <div className="ml-4 flex-shrink-0 flex flex-col items-end gap-2">
-                        {/* Tags */}
-                        {user.userTags.length > 0 && (
-                          <div
-                            className="flex flex-wrap gap-1 justify-end"
-                            data-testid="usuario-etiquetas"
-                          >
-                            {user.userTags.map((userTag) => (
-                              <span
-                                key={userTag.tag.id}
-                                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
-                                style={{ backgroundColor: userTag.tag.color }}
-                              >
-                                {userTag.tag.name}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Capabilities count */}
-                        <p className="text-xs text-gray-500">
-                          {capabilities.length} capabilities
-                        </p>
-
-                        {/* Force password reset badge */}
-                        {user.forcePasswordReset && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                            Contraseña temporal
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
+      {/* Users Client Component with filtering and sorting */}
+      <UsersClient users={users} tags={tags} />
     </div>
   )
 }

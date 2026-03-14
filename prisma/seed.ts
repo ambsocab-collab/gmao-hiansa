@@ -195,6 +195,7 @@ async function main() {
         description: 'Personal de control de calidad',
       },
     ],
+    skipDuplicates: true, // Avoid errors when tags already exist
   })
 
   console.log(`✅ Created ${tags.count} classification tags`)
