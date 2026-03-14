@@ -17,7 +17,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { loginAsAdmin, loginAs } from '../helpers/auth.helpers';
+import { loginAsAdmin, loginAs, authenticatedAPICall } from '../helpers/auth.helpers';
 import {
   createUser,
   createUserWithCapabilities,
@@ -83,26 +83,25 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     const limitedUser = createUserWithCapabilities(['can_create_failure_report']);
     createdUserEmails.push(limitedUser.email);
 
-    const createResponse = await page.request.post('http://localhost:3000/api/v1/users', {
-      data: limitedUser,
-    });
+    // Use authenticated API call to create user (includes session cookies)
+    const createResponse = await authenticatedAPICall(page, 'POST', '/api/v1/users', limitedUser);
     expect(createResponse.ok()).toBeTruthy();
     const response = await createResponse.json();
     const userId = response.user?.id;
 
     // Create "Supervisor" tag if it doesn't exist (makes test independent of seed)
-    const tagResponse = await page.request.post('http://localhost:3000/api/v1/tags', {
-      data: {
-        name: 'Supervisor',
-        color: '#F59E0B',
-        description: 'Personal de supervisión',
-      },
+    // Use authenticated API call to create tag (includes session cookies)
+    const tagResponse = await authenticatedAPICall(page, 'POST', '/api/v1/tags', {
+      name: 'Supervisor',
+      color: '#F59E0B',
+      description: 'Personal de supervisión',
     });
 
     // Ignore 409 (conflict) if tag already exists - test can proceed
     const tagStatus = tagResponse.status();
     if (tagStatus !== 201 && tagStatus !== 409) {
       console.log('Tag creation response status:', tagStatus);
+      console.log('Tag creation response body:', await tagResponse.text());
     }
 
     // When: Assign "Supervisor" tag to user (which might suggest elevated access)
@@ -115,7 +114,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.getByRole('button', { name: 'Guardar Etiquetas' }).click();
 
     // Then: User capabilities should remain unchanged
-    const userResponse = await page.request.get(`http://localhost:3000/api/v1/users/${userId}`);
+    // Use authenticated API call to get user (includes session cookies)
+    const userResponse = await authenticatedAPICall(page, 'GET', `/api/v1/users/${userId}`);
     const userData = await userResponse.json();
     const user = userData.user;
     expect(user.capabilities).toEqual(['can_create_failure_report']);
@@ -165,34 +165,29 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     createdUserEmails.push(operario1.email, operario2.email);
 
     // Create first user
-    const createResponse1 = await page.request.post('http://localhost:3000/api/v1/users', {
-      data: operario1,
-    });
+    const createResponse1 = await authenticatedAPICall(page, 'POST', '/api/v1/users', operario1);
     expect(createResponse1.ok()).toBeTruthy();
     const response1 = await createResponse1.json();
     const userId1 = response1.user?.id;
 
     // Create second user
-    const createResponse2 = await page.request.post('http://localhost:3000/api/v1/users', {
-      data: operario2,
-    });
+    const createResponse2 = await authenticatedAPICall(page, 'POST', '/api/v1/users', operario2);
     expect(createResponse2.ok()).toBeTruthy();
     const response2 = await createResponse2.json();
     const userId2 = response2.user?.id;
 
     // Create "Operario" tag if it doesn't exist (makes test independent of seed)
-    const tagResponse = await page.request.post('http://localhost:3000/api/v1/tags', {
-      data: {
-        name: 'Operario',
-        color: '#3B82F6',
-        description: 'Personal de operaciones básicas',
-      },
+    const tagResponse = await authenticatedAPICall(page, 'POST', '/api/v1/tags', {
+      name: 'Operario',
+      color: '#3B82F6',
+      description: 'Personal de operaciones básicas',
     });
 
     // Ignore 409 (conflict) if tag already exists - test can proceed
     const tagStatus = tagResponse.status();
     if (tagStatus !== 201 && tagStatus !== 409) {
       console.log('Tag creation response status:', tagStatus);
+      console.log('Tag creation response body:', await tagResponse.text());
     }
 
     // When: Assign "Operario" tag to both users
@@ -213,8 +208,9 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.waitForTimeout(1000); // Wait for EditTagsClient's reload to complete
 
     // Then: Users should have different capabilities despite same tag
-    const user1Response = await page.request.get(`http://localhost:3000/api/v1/users/${userId1}`);
-    const user2Response = await page.request.get(`http://localhost:3000/api/v1/users/${userId2}`);
+    // Use authenticated API calls to get users (includes session cookies)
+    const user1Response = await authenticatedAPICall(page, 'GET', `/api/v1/users/${userId1}`);
+    const user2Response = await authenticatedAPICall(page, 'GET', `/api/v1/users/${userId2}`);
 
     const userData1 = await user1Response.json();
     const userData2 = await user2Response.json();
@@ -264,32 +260,32 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     const tecnico = createUserWithCapabilities(['can_view_all_ots']);
     createdUserEmails.push(tecnico.email);
 
-    const createResponse = await page.request.post('http://localhost:3000/api/v1/users', {
-      data: tecnico,
-    });
+    // Create user with authenticated API call
+    const createResponse = await authenticatedAPICall(page, 'POST', '/api/v1/users', tecnico);
     expect(createResponse.ok()).toBeTruthy();
     const response = await createResponse.json();
     const userId = response.user?.id;
 
     // Verify user capabilities before tag deletion
-    const beforeResponse = await page.request.get(`http://localhost:3000/api/v1/users/${userId}`);
+    // Use authenticated API call to get user (includes session cookies)
+    const beforeResponse = await authenticatedAPICall(page, 'GET', `/api/v1/users/${userId}`);
     const userBeforeData = await beforeResponse.json();
     const userBefore = userBeforeData.user;
     expect(userBefore.capabilities).toEqual(['can_view_all_ots']);
 
     // Create "Supervisor" tag if it doesn't exist (makes test independent of seed)
-    const tagResponse = await page.request.post('http://localhost:3000/api/v1/tags', {
-      data: {
-        name: 'Supervisor',
-        color: '#F59E0B',
-        description: 'Personal de supervisión',
-      },
+    // Use authenticated API call to create tag (includes session cookies)
+    const tagResponse = await authenticatedAPICall(page, 'POST', '/api/v1/tags', {
+      name: 'Supervisor',
+      color: '#F59E0B',
+      description: 'Personal de supervisión',
     });
 
     // Ignore 409 (conflict) if tag already exists - test can proceed
     const tagStatus = tagResponse.status();
     if (tagStatus !== 201 && tagStatus !== 409) {
       console.log('Tag creation response status:', tagStatus);
+      console.log('Tag creation response body:', await tagResponse.text());
     }
 
     // When: Delete "Supervisor" tag from system (using a tag not used in other P0 tests)
@@ -311,7 +307,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.waitForTimeout(3000);
 
     // Then: User capabilities should remain unchanged
-    const afterResponse = await page.request.get(`http://localhost:3000/api/v1/users/${userId}`);
+    // Use authenticated API call to get user (includes session cookies)
+    const afterResponse = await authenticatedAPICall(page, 'GET', `/api/v1/users/${userId}`);
     const userAfterData = await afterResponse.json();
     const userAfter = userAfterData.user;
     expect(userAfter.capabilities).toEqual(['can_view_all_ots']);
@@ -391,8 +388,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.waitForTimeout(1000);
 
     // And: Use existing user from seed (tecnico@hiansa.com)
-    // Get tecnico user ID via API
-    const usersResponse = await page.request.get('http://localhost:3000/api/v1/users');
+    // Get tecnico user ID via API (authenticated)
+    const usersResponse = await authenticatedAPICall(page, 'GET', '/api/v1/users');
     const usersData = await usersResponse.json();
     const tecnicoUser = usersData.users?.find((u: { email: string }) => u.email === 'tecnico@hiansa.com');
 
@@ -460,8 +457,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.waitForTimeout(1000);
 
     // And: Use existing user from seed (tecnico@hiansa.com)
-    // Get tecnico user ID via API
-    const usersResponse = await page.request.get('http://localhost:3000/api/v1/users');
+    // Get tecnico user ID via API (authenticated)
+    const usersResponse = await authenticatedAPICall(page, 'GET', '/api/v1/users');
     const usersData = await usersResponse.json();
     const tecnicoUser = usersData.users?.find((u: { email: string }) => u.email === 'tecnico@hiansa.com');
 
@@ -696,7 +693,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.getByRole('button', { name: 'Crear Etiqueta' }).click();
 
     // Then: Audit log should record creation
-    const auditResponse = await page.request.get('http://localhost:3000/api/v1/audit-logs');
+    // Use authenticated API call to get audit logs (includes session cookies)
+    const auditResponse = await authenticatedAPICall(page, 'GET', '/api/v1/audit-logs');
     const auditLogs = await auditResponse.json();
     const createLog = auditLogs.find((log) => log.action === 'tag_created');
     expect(createLog).toBeDefined();
@@ -711,7 +709,8 @@ test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RE
     await page.getByRole('button', { name: 'Confirmar' }).click();
 
     // Then: Audit log should record deletion
-    const auditResponse2 = await page.request.get('http://localhost:3000/api/v1/audit-logs');
+    // Use authenticated API call to get audit logs (includes session cookies)
+    const auditResponse2 = await authenticatedAPICall(page, 'GET', '/api/v1/audit-logs');
     const auditLogs2 = await auditResponse2.json();
     const deleteLog = auditLogs2.find((log) => log.action === 'tag_deleted');
     expect(deleteLog).toBeDefined();

@@ -5,7 +5,7 @@
  * Helper functions to eliminate code duplication in E2E authentication tests
  */
 
-import { Page } from '@playwright/test';
+import { Page, APIRequestContext } from '@playwright/test';
 
 /**
  * Get base URL from environment or use default
@@ -79,4 +79,77 @@ export async function loginAsNewUser(page: Page): Promise<void> {
  */
 export async function logout(page: Page): Promise<void> {
   await page.getByTestId('logout-button').click();
+}
+
+/**
+ * Create an authenticated API request context
+ *
+ * Extracts cookies from the browser session and creates an APIRequestContext
+ * that includes the session cookies for authenticated API calls.
+ *
+ * @param page - Playwright Page object (must be logged in)
+ * @returns APIRequestContext with session cookies
+ */
+export async function createAuthenticatedAPIRequest(page: Page): Promise<APIRequestContext> {
+  const baseURL = getBaseURL();
+
+  // Get all cookies from the browser context
+  const cookies = await page.context().cookies();
+
+  // Create a new APIRequestContext with the cookies
+  const request = await page.request.newContext({
+    baseURL,
+    extraHTTPHeaders: {
+      'Content-Type': 'application/json',
+    },
+    // Pass the cookies to include the session
+    storageState: {
+      cookies: cookies,
+      origins: []
+    }
+  });
+
+  return request;
+}
+
+/**
+ * Helper to make authenticated API calls using page.request
+ *
+ * This helper automatically includes the session cookies from the browser
+ * to ensure API calls are authenticated.
+ *
+ * @param page - Playwright Page object (must be logged in)
+ * @param method - HTTP method (GET, POST, PUT, DELETE)
+ * @param url - API endpoint URL
+ * @param data - Request body for POST/PUT requests
+ * @returns Response from the API call
+ */
+export async function authenticatedAPICall(
+  page: Page,
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  url: string,
+  data?: any
+) {
+  const baseURL = getBaseURL();
+  const fullUrl = url.startsWith('http') ? url : `${baseURL}${url}`;
+
+  // Get cookies from the browser context
+  const cookies = await page.context().cookies();
+
+  // Convert cookies to Cookie header format
+  const cookieHeader = cookies
+    .map(c => `${c.name}=${c.value}`)
+    .join('; ');
+
+  // Make the API call with cookies
+  // Note: Playwright automatically handles JSON serialization for 'data' parameter
+  const response = await page.request.fetch(fullUrl, {
+    method,
+    headers: {
+      'Cookie': cookieHeader,
+    },
+    data: method !== 'GET' ? data : undefined,
+  });
+
+  return response;
 }
