@@ -14,6 +14,11 @@ import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker/locale/es';
 import { loginAsTecnico, loginAsAdmin, loginAs, logout } from '../helpers/auth.helpers';
 
+// Helper to get base URL
+function getBaseURL(): string {
+  return process.env.BASE_URL || 'http://localhost:3000';
+}
+
 test.describe('Story 1.1: User Profile Management', () => {
   // Ensure clean session before each test
   test.beforeEach(async ({ page }) => {
@@ -50,7 +55,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await loginAsTecnico(page);
 
     // When: user navigates to profile
-    await page.goto('/perfil');
+    await page.goto(getBaseURL() + '/perfil');
 
     // Then: see profile form with current data
     await expect(page.getByTestId('perfil-form')).toBeVisible();
@@ -74,7 +79,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await loginAsAdmin(page);
 
     // Create unique user
-    await page.goto('/usuarios/nuevo');
+    await page.goto(getBaseURL() + '/usuarios/nuevo');
     await page.getByTestId('register-name').fill('Usuario Perfil Test');
     await page.getByTestId('register-email').fill(uniqueEmail);
     await page.getByTestId('register-password').fill(tempPassword);
@@ -84,7 +89,7 @@ test.describe('Story 1.1: User Profile Management', () => {
 
     // Logout and login as test user
     await logout(page);
-    await page.goto('/login');
+    await page.goto(getBaseURL() + '/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
     await page.getByTestId('login-password').clear();
@@ -116,7 +121,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await page.getByTestId('login-submit').click();
     await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
-    await page.goto('/perfil');
+    await page.goto(getBaseURL() + '/perfil');
 
     // When: user clicks edit and updates profile
     await page.getByTestId('edit-profile-button').click();
@@ -142,7 +147,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     await loginAsAdmin(page);
 
     // Create unique user
-    await page.goto('/usuarios/nuevo');
+    await page.goto(getBaseURL() + '/usuarios/nuevo');
     await page.getByTestId('register-name').fill('Usuario Password Test');
     await page.getByTestId('register-email').fill(uniqueEmail);
     await page.getByTestId('register-password').fill(tempPassword);
@@ -152,7 +157,7 @@ test.describe('Story 1.1: User Profile Management', () => {
 
     // Logout and login as test user
     await logout(page);
-    await page.goto('/login');
+    await page.goto(getBaseURL() + '/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').clear();
     await page.getByTestId('login-password').clear();
@@ -189,7 +194,7 @@ test.describe('Story 1.1: User Profile Management', () => {
     // Verify dashboard is loaded
     await expect(page.getByText(/Hola, /).first()).toBeVisible({ timeout: 15000 });
 
-    await page.goto('/perfil');
+    await page.goto(getBaseURL() + '/perfil');
 
     // When: user opens password change form
     await page.getByTestId('change-password-button').click();

@@ -14,6 +14,11 @@ import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker/locale/es';
 import { loginAsAdmin, loginAs, logout } from '../helpers/auth.helpers';
 
+// Helper to get base URL
+function getBaseURL(): string {
+  return process.env.BASE_URL || 'http://localhost:3000';
+}
+
 // Note: These tests will use loginAs('admin') fixture when fully implemented
 // For now, they document the expected behavior
 
@@ -75,7 +80,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     await loginAsAdmin(page);
 
     // When: admin navigates to user creation page
-    await page.goto('/usuarios/nuevo');
+    await page.goto(getBaseURL() + '/usuarios/nuevo');
 
     // Then: see registration form
     await expect(page.getByTestId('register-form')).toBeVisible();
@@ -109,7 +114,7 @@ test.describe('Story 1.1: Admin User Management', () => {
 
     // Given: admin user
     await loginAsAdmin(page);
-    await page.goto('/usuarios/nuevo');
+    await page.goto(getBaseURL() + '/usuarios/nuevo');
 
     // When: admin selects multiple capabilities
     await page.getByTestId('capability-can_view_all_ots').check();
@@ -131,7 +136,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     // Login as new user and verify access
     await logout(page);
 
-    await page.goto('/login');
+    await page.goto(getBaseURL() + '/login');
     await page.getByTestId('login-email').fill(uniqueEmail);
     await page.getByTestId('login-password').fill('TempPassword123');
     await page.getByTestId('login-submit').click();
@@ -166,7 +171,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     await loginAsAdmin(page);
 
     // Create a test user to delete
-    await page.goto('/usuarios/nuevo');
+    await page.goto(getBaseURL() + '/usuarios/nuevo');
     await page.getByTestId('register-name').fill('Usuario Para Eliminar');
     await page.getByTestId('register-email').fill(uniqueEmail);
     await page.getByTestId('register-password').fill(tempPassword);
@@ -195,7 +200,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     expect(page.url()).toContain('/usuarios');
 
     // When: deleted user attempts login
-    await page.goto('/login');
+    await page.goto(getBaseURL() + '/login');
     await page.getByTestId('login-email').fill(uniqueEmail);
     await page.getByTestId('login-password').fill(tempPassword);
     await page.getByTestId('login-submit').click();
@@ -210,7 +215,7 @@ test.describe('Story 1.1: Admin User Management', () => {
     await loginAsAdmin(page);
 
     // When: admin navigates to users list
-    await page.goto('/usuarios');
+    await page.goto(getBaseURL() + '/usuarios');
 
     // Then: see list of users (excluding deleted users)
     await expect(page.getByTestId('user-list')).toBeVisible();

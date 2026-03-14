@@ -8,6 +8,13 @@
 import { Page } from '@playwright/test';
 
 /**
+ * Get base URL from environment or use default
+ */
+function getBaseURL(): string {
+  return process.env.BASE_URL || 'http://localhost:3000';
+}
+
+/**
  * Login helper - performs login action and waits for navigation to complete
  *
  * @param page - Playwright Page object
@@ -19,7 +26,8 @@ export async function loginAs(
   email: string,
   password: string
 ): Promise<void> {
-  await page.goto('/login');
+  const baseURL = getBaseURL();
+  await page.goto(`${baseURL}/login`);
   await page.getByTestId('login-email').waitFor({ state: 'visible' });
   await page.getByTestId('login-email').clear();
   await page.getByTestId('login-password').clear();

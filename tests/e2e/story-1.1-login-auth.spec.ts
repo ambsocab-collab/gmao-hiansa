@@ -15,6 +15,11 @@ import { test, expect } from '@playwright/test';
 import { verifyDatabaseSeed } from './test-setup';
 import { loginAsTecnico } from '../helpers/auth.helpers';
 
+// Helper to get base URL
+function getBaseURL(): string {
+  return process.env.BASE_URL || 'http://localhost:3000';
+}
+
 // Verify database seed before running any tests
 test.beforeAll(async ({ request }) => {
   await verifyDatabaseSeed(request);
@@ -29,7 +34,7 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
 
   test('[P0-E2E-001] should display login form with required fields and testids', async ({ page }) => {
     // Given: user navigates to login page
-    await page.goto('/login');
+    await page.goto(`${getBaseURL()}/login`);
 
     // Then: login form is visible with correct structure
     await expect(page.getByTestId('login-form')).toBeVisible();
@@ -67,7 +72,7 @@ test.describe('Story 1.1: Login Authentication Flow', () => {
 
   test('[P0-E2E-003] should show error message with invalid credentials', async ({ page }) => {
     // Given: user is on login page
-    await page.goto('/login');
+    await page.goto(`${getBaseURL()}/login`);
 
     // When: user enters invalid credentials
     await page.getByTestId('login-email').fill('nonexistent@example.com');

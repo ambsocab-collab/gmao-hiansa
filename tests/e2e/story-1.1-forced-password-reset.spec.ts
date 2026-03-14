@@ -16,6 +16,11 @@ import { test, expect } from '@playwright/test';
 import { verifyDatabaseSeed } from './test-setup';
 import { loginAsNewUser, logout } from '../helpers/auth.helpers';
 
+// Helper to get base URL
+function getBaseURL(): string {
+  return process.env.BASE_URL || 'http://localhost:3000';
+}
+
 // Verify database seed before running any tests
 test.beforeAll(async ({ request }) => {
   await verifyDatabaseSeed(request);
@@ -74,7 +79,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });
 
     // When: user tries to navigate to dashboard directly
-    await page.goto('/dashboard');
+    await page.goto(getBaseURL() + '/dashboard');
 
     // Then: redirected back to /cambiar-password
     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 5000 });
@@ -83,7 +88,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
     // When: user tries to navigate to other protected routes
     const protectedRoutes = ['/work-orders', '/assets', '/stock'];
     for (const route of protectedRoutes) {
-      await page.goto(route);
+      await page.goto(getBaseURL() + route);
       // Then: always redirected back to /cambiar-password
       await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 5000 });
       expect(page.url()).toContain('/cambiar-password');
@@ -134,7 +139,7 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
 
     // When: user logs in again with new password
     // Use the login helper which has proper Promise.all pattern for navigation
-    await page.goto('/login');
+    await page.goto(getBaseURL() + '/login');
     await page.getByTestId('login-email').waitFor({ state: 'visible' });
     await page.getByTestId('login-email').fill('new.user@example.com');
     await page.getByTestId('login-password').fill('NewSecure123');
