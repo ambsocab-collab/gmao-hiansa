@@ -52,7 +52,7 @@ development_status:
   # Epic 1: Autenticación y Gestión de Usuarios (PBAC)
   epic-1: in-progress
   1-1-login-registro-y-perfil-de-usuario: done  # Code Review Rounds 1-7 completados - 86/86 tests passing (100%) - 2 CRITICAL security bugs fixed
-  1-2-sistema-pbac-con-15-capacidades: ready-for-dev  # Ultimate context engine analysis completed - comprehensive developer guide created
+  1-2-sistema-pbac-con-15-capacidades: in-progress  # Code Review Round 1 completado - 7/8 AC implementados - 3 CRITICAL/HIGH issues arreglados - Integration tests 2/2 passing
   1-3-etiquetas-de-clasificacion-y-organizacion: backlog
   epic-1-retrospective: optional
 
