@@ -227,7 +227,7 @@ test.describe('Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE)', 
     const userId = href?.split('/').pop() || '';
 
     // Navigate to edit page
-    await page.goto(`/usuarios/${userId}/editar`);
+    await page.goto(`/usuarios/${userId}`);
     await page.waitForLoadState('domcontentloaded');
 
     // Verify capability checkboxes are visible
