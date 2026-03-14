@@ -246,8 +246,6 @@ export async function createUser(data: {
   const perf = trackPerformance('create_user', correlationId)
 
   try {
-    console.log('[createUser] Received data:', JSON.stringify(data, null, 2))
-
     // 1. Get current session and verify capability
     const session = await auth()
     if (!session?.user?.id) {
@@ -347,7 +345,6 @@ export async function createUser(data: {
 
     // Handle Zod validation errors
     if (error instanceof ZodError) {
-      console.log('[createUser] ZodError:', JSON.stringify(error.errors, null, 2))
       const sessionForError = await auth()
       logger.warn(sessionForError?.user?.id ?? undefined, 'create_user_validation_failed', correlationId, { errors: error.errors })
       throw new ValidationError('Datos inválidos', { errors: error.errors })
@@ -568,6 +565,20 @@ export async function updateUserCapabilities(
           capabilityId: cap.id,
         })),
       })
+
+      // ✅ Validate that all requested capabilities were found
+      if (capabilityRecords.length !== capabilities.length) {
+        const invalidCapabilities = capabilities.filter(
+          capName => !capabilityRecords.find(cr => cr.name === capName)
+        )
+        logger.warn(session.user.id, 'update_capabilities_invalid_names', correlationId, {
+          invalidCapabilities,
+          provided: capabilities.length,
+          found: capabilityRecords.length
+        })
+        // Note: We don't throw here because the valid capabilities were still assigned
+        // This prevents partial updates from failing completely
+      }
     }
 
     // 9. Log audit trail

@@ -150,9 +150,6 @@ export default withAuth(
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
 
-    // DEBUG: Log token and path for debugging forcePasswordReset
-    console.log('[Middleware] Path:', path, 'Token forcePasswordReset:', token?.forcePasswordReset, 'Token ID:', token?.id, 'Full token:', JSON.stringify(token))
-
     // Story 0.5: Generate or retrieve correlation ID
     const correlationId = getOrCreateCorrelationId(req.headers)
 
@@ -168,7 +165,6 @@ export default withAuth(
         path !== '/cambiar-password' &&
         path !== '/unauthorized' &&
         !path.startsWith('/api/auth')) {
-      console.log('[Middleware] Redirecting to /cambiar-password due to forcePasswordReset=true')
       const response = NextResponse.redirect(new URL('/cambiar-password', req.url))
       response.headers.set(CORRELATION_ID_HEADER, correlationId)
       return response
@@ -195,8 +191,6 @@ export default withAuth(
 
     // Check if user has required capabilities
     if (!hasAllCapabilities(userCapabilities, requiredCapabilities)) {
-      console.log('[Middleware] Access denied - Path:', path, 'Required:', requiredCapabilities, 'User has:', userCapabilities)
-
       // Audit log with correlation ID
       logAccessDenied(token?.id as string, path, requiredCapabilities, correlationId)
 
@@ -204,8 +198,6 @@ export default withAuth(
       const unauthorizedUrl = new URL('/unauthorized', req.url)
       unauthorizedUrl.searchParams.set('path', path)
       unauthorizedUrl.searchParams.set('required', requiredCapabilities.join(','))
-
-      console.log('[Middleware] Redirecting to:', unauthorizedUrl.toString())
 
       const response = NextResponse.redirect(unauthorizedUrl)
       response.headers.set(CORRELATION_ID_HEADER, correlationId)

@@ -8,17 +8,22 @@
  * - Default capability assignment for new users
  * - Audit logging for capability changes
  *
- * TDD RED PHASE: Tests marked with test.skip() because feature not implemented yet
- * These tests will FAIL until Story 1.2 implementation is complete.
+ * TDD GREEN PHASE: Tests now pass with proper database setup
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeAll, afterEach } from 'vitest'
 import { prisma } from '@/lib/db'
 import * as bcrypt from 'bcryptjs'
-import { createUser, DEFAULT_CAPABILITY, NON_DEFAULT_CAPABILITIES } from '../helpers/factories'
+import { createUser, DEFAULT_CAPABILITY } from '../helpers/factories'
+import { setupCapabilities } from '../helpers/setup-capabilities'
 
-describe('Story 1.2: PBAC Capabilities System (ATDD - RED PHASE)', () => {
+describe('Story 1.2: PBAC Capabilities System (Integration Tests)', () => {
   const createdUserIds: string[] = []
+
+  // Setup: Ensure capabilities exist in database
+  beforeAll(async () => {
+    await setupCapabilities()
+  })
 
   afterEach(async () => {
     // Cleanup: Delete all test users created during this test suite
