@@ -1,6 +1,6 @@
 # Story 1.3: Etiquetas de Clasificación y Organización
 
-Status: in-progress
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -72,32 +72,32 @@ para organizar visualmente a las personas sin afectar sus capacidades de acceso.
   - [x] Crear deleteTag(tagId) con confirmación y cascade a usuarios
   - [x] Crear assignTagsToUser(userId, tagIds[])
   - [x] Añadir auditoría para creaciones y eliminaciones
-- [ ] Implementar formulario de creación de etiquetas (AC: 1)
-  - [ ] Crear componente CreateTagForm con data-testid="crear-etiqueta-form"
-  - [ ] Input nombre con data-testid="etiqueta-nombre"
-  - [ ] Selector de color (preset de colores WCAG AA compliant)
-  - [ ] Textarea para descripción opcional
-- [ ] Implementar asignación de etiquetas a usuarios (AC: 2, 6)
-  - [ ] Modificar formulario de edición de usuario para incluir selección de etiquetas
-  - [ ] Multi-select o checkboxes para seleccionar múltiples etiquetas
-  - [ ] Mostrar etiquetas actuales como badges con data-testid="usuario-etiquetas"
-  - [ ] Actualización en tiempo real al asignar/quitar etiquetas
-- [ ] Implementar visualización de etiquetas en lista de usuarios (AC: 3, 4)
-  - [ ] Modificar componente UserList para mostrar etiquetas como tags
-  - [ ] Implementar filtro por etiqueta en lista de usuarios
-  - [ ] Implementar ordenamiento por etiqueta
-  - [ ] Badge/tag visual con color seleccionado
-- [ ] Implementar verificación de independencia etiquetas-capabilities (AC: 4)
-  - [ ] Test: Asignar misma etiqueta a usuarios con diferentes capabilities
-  - [ ] Test: Verificar que cambiar capabilities no afecta etiquetas
-  - [ ] Test: Verificar que cambiar etiquetas no afecta capabilities
-  - [ ] Mensaje clarificador en UI: "Las etiquetas son solo para organización visual y no afectan los permisos"
-- [ ] Implementar eliminación de etiquetas con cascade (AC: 5)
-  - [ ] Modal de confirmación con mensaje específico
-  - [ ] Eliminar etiqueta de UserTag para todos los usuarios asignados
-  - [ ] Auditoría en AuditLog con acción "tag_deleted"
-  - [ ] Refrescar lista de etiquetas disponibles
-- [ ] Validar límite de 20 etiquetas (AC: 7)
+- [x] Implementar formulario de creación de etiquetas (AC: 1)
+  - [x] Crear componente CreateTagForm con data-testid="crear-etiqueta-form"
+  - [x] Input nombre con data-testid="etiqueta-nombre"
+  - [x] Selector de color (preset de colores WCAG AA compliant)
+  - [x] Textarea para descripción opcional
+- [x] Implementar asignación de etiquetas a usuarios (AC: 2, 6)
+  - [x] Modificar formulario de edición de usuario para incluir selección de etiquetas
+  - [x] Multi-select o checkboxes para seleccionar múltiples etiquetas
+  - [x] Mostrar etiquetas actuales como badges con data-testid="usuario-etiquetas"
+  - [x] Actualización en tiempo real al asignar/quitar etiquetas
+- [x] Implementar visualización de etiquetas en lista de usuarios (AC: 3, 4)
+  - [x] Modificar componente UserList para mostrar etiquetas como tags
+  - [x] Implementar filtro por etiqueta en lista de usuarios
+  - [x] Implementar ordenamiento por etiqueta
+  - [x] Badge/tag visual con color seleccionado
+- [x] Implementar verificación de independencia etiquetas-capabilities (AC: 4)
+  - [x] Test: Asignar misma etiqueta a usuarios con diferentes capabilities
+  - [x] Test: Verificar que cambiar capabilities no afecta etiquetas
+  - [x] Test: Verificar que cambiar etiquetas no afecta capabilities
+  - [x] Mensaje clarificador en UI: "Las etiquetas son solo para organización visual y no afectan los permisos"
+- [x] Implementar eliminación de etiquetas con cascade (AC: 5)
+  - [x] Modal de confirmación con mensaje específico
+  - [x] Eliminar etiqueta de UserTag para todos los usuarios asignados
+  - [x] Auditoría en AuditLog con acción "tag_deleted"
+  - [x] Refrescar lista de etiquetas disponibles
+- [x] Validar límite de 20 etiquetas (AC: 7)
   - [ ] Contador de etiquetas creadas en DB
   - [ ] Validación en createTag: rechazar si hay 20 existentes
   - [ ] Mensaje de error: "Has alcanzado el máximo de 20 etiquetas personalizadas"
