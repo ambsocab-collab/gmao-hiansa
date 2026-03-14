@@ -37,6 +37,14 @@ interface User {
   phone: string | null
   createdAt: Date
   lastLogin: Date | null
+  userCapabilities?: Array<{
+    capability: {
+      id: string
+      name: string
+      label: string
+      description: string | null
+    }
+  }>
 }
 
 interface ProfileFormState {
@@ -505,6 +513,54 @@ export function ProfileForm({ user }: { user: User }) {
           </Dialog>
         </div>
       </Card>
+
+      {/* User Capabilities Card */}
+      {user.userCapabilities && user.userCapabilities.length > 0 && (
+        <Card className="p-6" data-testid="capabilities-checkbox-group">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Mis Capacidades
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Permisos asignados a tu usuario
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {user.userCapabilities.map((uc) => (
+              <div
+                key={uc.capability.id}
+                className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50"
+              >
+                <div className="flex-1">
+                  <p className="font-medium text-sm text-gray-900">
+                    {uc.capability.label}
+                  </p>
+                  {uc.capability.description && (
+                    <p className="text-xs text-gray-600 mt-1">
+                      {uc.capability.description}
+                    </p>
+                  )}
+                  <code className="text-xs text-gray-400 mt-1 block">
+                    {uc.capability.name}
+                  </code>
+                </div>
+                <div className="flex items-center">
+                  <div className="h-4 w-4 rounded bg-green-500 flex items-center justify-center">
+                    <svg className="h-3 w-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 text-sm text-gray-600">
+            Total: {user.userCapabilities.length} de 15 capacidades
+          </div>
+        </Card>
+      )}
     </div>
   )
 }

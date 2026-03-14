@@ -31,13 +31,12 @@ export default async function ProfilePage() {
   // Get user data from database
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      phone: true,
-      createdAt: true,
-      lastLogin: true,
+    include: {
+      userCapabilities: {
+        include: {
+          capability: true,
+        },
+      },
     },
   })
 

@@ -21,7 +21,7 @@ export const createUser = (overrides: Partial<{
   email: overrides.email || `test-${faker.string.uuid()}@example.com`,
   name: overrides.name || faker.person.fullName(),
   password: overrides.password || 'TempPassword123!',
-  phone: overrides.phone || faker.phone.number('+34#########'),
+  phone: overrides.phone || `+34${faker.string.numeric(9)}`, // Valid Spanish phone format
 });
 
 /**
@@ -92,24 +92,24 @@ export const NON_DEFAULT_CAPABILITIES = ALL_CAPABILITIES.filter(
 
 /**
  * Spanish labels for all 15 capabilities
- * Matches the labels defined in Story 1.2
+ * Matches the labels defined in Story 1.1 seed (prisma/seed.ts)
  */
 export const CAPABILITY_LABELS: Record<string, string> = {
-  can_create_failure_report: 'Reportar averías',
-  can_create_manual_ot: 'Crear OTs manuales',
-  can_update_own_ot: 'Actualizar OTs propias',
-  can_view_own_ots: 'Ver OTs asignadas',
-  can_view_all_ots: 'Ver todas las OTs',
+  can_create_failure_report: 'Crear Reporte de Avería',
+  can_create_manual_ot: 'Crear OT Manual',
+  can_update_own_ot: 'Actualizar Mis OTs',
+  can_view_own_ots: 'Ver Mis OTs',
+  can_view_all_ots: 'Ver Todas las OTs',
   can_complete_ot: 'Completar OTs',
-  can_manage_stock: 'Gestionar stock',
-  can_assign_technicians: 'Asignar técnicos a OTs',
-  can_view_kpis: 'Ver KPIs avanzados',
-  can_manage_assets: 'Gestionar activos',
-  can_view_repair_history: 'Ver historial reparaciones',
-  can_manage_providers: 'Gestionar proveedores',
-  can_manage_routines: 'Gestionar rutinas',
-  can_manage_users: 'Gestionar usuarios',
-  can_receive_reports: 'Recibir reportes automáticos',
+  can_manage_stock: 'Gestionar Stock',
+  can_assign_technicians: 'Asignar Técnicos',
+  can_view_kpis: 'Ver KPIs',
+  can_manage_assets: 'Gestionar Activos',
+  can_view_repair_history: 'Ver Historial',
+  can_manage_providers: 'Gestionar Proveedores',
+  can_manage_routines: 'Gestionar Rutinas',
+  can_manage_users: 'Gestionar Usuarios',
+  can_receive_reports: 'Recibir Reportes',
 };
 
 /**

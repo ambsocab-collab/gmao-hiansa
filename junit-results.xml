@@ -1,10 +1,53 @@
-<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="95.229384">
-<testsuite name="story-1.1-profile.spec.ts" timestamp="2026-03-13T22:53:14.580Z" hostname="chromium" tests="3" failures="0" skipped="0" time="85.066" errors="0">
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information" classname="story-1.1-profile.spec.ts" time="10.538">
-</testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile" classname="story-1.1-profile.spec.ts" time="37.754">
-</testcase>
-<testcase name="Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile" classname="story-1.1-profile.spec.ts" time="36.774">
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="28.389231">
+<testsuite name="story-1.2-pbac-system.spec.ts" timestamp="2026-03-14T03:55:55.745Z" hostname="chromium" tests="1" failures="1" skipped="0" time="23.575" errors="0">
+<testcase name="Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-025] should allow admin to assign multiple capabilities to user" classname="story-1.2-pbac-system.spec.ts" time="23.575">
+<failure message="story-1.2-pbac-system.spec.ts:211:7 [P0-E2E-025] should allow admin to assign multiple capabilities to user" type="FAILURE">
+<![CDATA[  [chromium] › story-1.2-pbac-system.spec.ts:211:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-025] should allow admin to assign multiple capabilities to user 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/usuarios" until "load"
+    ============================================================
+
+      262 |
+      263 |     // Wait for redirect back to users list
+    > 264 |     await page.waitForURL('/usuarios', { timeout: 10000 });
+          |                ^
+      265 |
+      266 |     // Verify we're back on users list
+      267 |     await expect(page.getByRole('heading', { name: /Usuarios/i })).toBeVisible();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.2-pbac-system.spec.ts:264:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-1.2-pbac-system-Stor-7d5dd-ltiple-capabilities-to-user-chromium\trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

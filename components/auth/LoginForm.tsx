@@ -114,10 +114,6 @@ export function LoginForm() {
           description: 'Has iniciado sesión correctamente',
         })
 
-        // Refresh the router to ensure we have the latest session data
-        // Only refresh on successful login to avoid interfering with error display
-        router.refresh()
-
         // Fetch session to check if forcePasswordReset is true
         const sessionResponse = await fetch('/api/auth/session', {
           cache: 'no-store'  // Ensure we don't get a cached response
@@ -131,14 +127,12 @@ export function LoginForm() {
           if (session?.user?.forcePasswordReset) {
             console.log('[LoginForm] forcePasswordReset is true, redirecting to /cambiar-password')
             router.push('/cambiar-password')
-            router.refresh()
             return
           }
         }
 
-        // Otherwise, redirect to dashboard
-        router.push('/dashboard')
-        router.refresh()
+        // Otherwise, redirect to dashboard using window.location for reliable navigation
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       console.error('[LoginForm] Login error:', error)

@@ -333,7 +333,7 @@ export function RegisterForm({ capabilities }: { capabilities: Capability[] }) {
         </p>
 
         <div
-          data-testid="capability-checkboxes"
+          data-testid="capabilities-checkbox-group"
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           {capabilities.map((capability) => (

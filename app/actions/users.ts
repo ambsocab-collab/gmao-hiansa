@@ -471,3 +471,215 @@ export async function deleteUser(userId: string) {
     throw new InternalError('Error al eliminar usuario. Intente nuevamente.')
   }
 }
+
+/**
+ * Update User Capabilities Server Action
+ * Story 1.2: Sistema PBAC con 15 Capacidades
+ *
+ * Admin updates user capabilities:
+ * - Only users with can_manage_users can update capabilities
+ * - Old capabilities are replaced with new ones
+ * - Audit log entry created
+ * - Session updated if user edits themselves (with restrictions)
+ *
+ * @param userId - ID of user to update
+ * @param capabilities - New array of capability names
+ * @returns Success message
+ */
+export async function updateUserCapabilities(
+  userId: string,
+  capabilities: string[]
+) {
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
+  const perf = trackPerformance('update_user_capabilities', correlationId)
+
+  try {
+    // 1. Get current session and verify capability
+    const session = await auth()
+    if (!session?.user?.id) {
+      logger.warn(undefined, 'update_capabilities_unauthorized', correlationId)
+      throw new AuthenticationError('Debes iniciar sesión para actualizar capabilities')
+    }
+
+    // 2. Check can_manage_users capability
+    const hasManageUsersCapability = session.user.capabilities?.includes(
+      'can_manage_users'
+    )
+
+    if (!hasManageUsersCapability) {
+      logger.warn(session.user.id, 'update_capabilities_forbidden', correlationId)
+      throw new AuthorizationError('No tienes permiso para actualizar capabilities')
+    }
+
+    // 3. Validate capabilities array
+    if (!Array.isArray(capabilities)) {
+      logger.warn(session.user.id, 'update_capabilities_invalid_array', correlationId)
+      throw new ValidationError('Capabilities debe ser un arreglo')
+    }
+
+    // 4. Verify user exists and get current capabilities
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        userCapabilities: {
+          include: { capability: true },
+        },
+      },
+    })
+
+    if (!user) {
+      logger.warn(session.user.id, 'update_capabilities_user_not_found', correlationId)
+      throw new ValidationError('Usuario no encontrado')
+    }
+
+    // 5. Prevent self-modification of can_manage_users (security measure)
+    if (userId === session.user.id) {
+      const willLoseManageUsers = !capabilities.includes('can_manage_users')
+      const hasManageUsersCurrently = session.user.capabilities?.includes('can_manage_users')
+
+      if (hasManageUsersCurrently && willLoseManageUsers) {
+        logger.warn(session.user.id, 'update_capabilities_self_remove_admin', correlationId)
+        throw new ValidationError('No puedes quitarte a ti mismo el permiso de gestionar usuarios')
+      }
+    }
+
+    // 6. Store old capabilities for audit
+    const oldCapabilities = user.userCapabilities.map((uc) => uc.capability.name)
+
+    // 7. Delete all existing capabilities
+    await prisma.userCapability.deleteMany({
+      where: { userId },
+    })
+
+    // 8. Create new capabilities
+    if (capabilities.length > 0) {
+      // Get capability IDs for the provided capability names
+      const capabilityRecords = await prisma.capability.findMany({
+        where: {
+          name: { in: capabilities },
+        },
+        select: { id: true, name: true },
+      })
+
+      // Create UserCapability records
+      await prisma.userCapability.createMany({
+        data: capabilityRecords.map((cap) => ({
+          userId,
+          capabilityId: cap.id,
+        })),
+      })
+    }
+
+    // 9. Log audit trail
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'capability_changed',
+        targetId: userId,
+        metadata: {
+          oldCapabilities,
+          newCapabilities: capabilities,
+          targetUserEmail: user.email,
+        },
+        timestamp: new Date(),
+      },
+    })
+
+    logger.info(session.user.id, 'update_capabilities', correlationId, {
+      targetUserId: userId,
+      oldCapabilities,
+      newCapabilities: capabilities,
+    })
+
+    perf.end()
+
+    return {
+      success: true,
+      message: 'Capabilities actualizadas exitosamente',
+      oldCapabilities,
+      newCapabilities: capabilities,
+    }
+  } catch (error) {
+    perf.end()
+
+    // Handle custom errors
+    if (
+      error instanceof ValidationError ||
+      error instanceof AuthorizationError ||
+      error instanceof AuthenticationError
+    ) {
+      throw error
+    }
+
+    // Handle unexpected errors
+    const sessionForError = await auth()
+    logger.error(
+      new Error(error instanceof Error ? error.message : 'Unknown error'),
+      'update_capabilities_error',
+      correlationId,
+      sessionForError?.user?.id
+    )
+
+    throw new InternalError('Error al actualizar capabilities. Intente nuevamente.')
+  }
+}
+
+/**
+ * Log Access Denied Server Action
+ * Story 1.2: Sistema PBAC con 15 Capacidades
+ *
+ * Logs access denied events to AuditLog for security tracking.
+ * Called when user tries to access a route without required capability.
+ *
+ * @param path - The path user tried to access
+ * @param requiredCapabilities - Capabilities required for the path
+ * @returns Success message
+ */
+export async function logAccessDeniedAction(
+  path: string,
+  requiredCapabilities: string[]
+) {
+  const correlationId = (await headers()).get('x-correlation-id') || 'unknown'
+
+  try {
+    // Get current session
+    const session = await auth()
+    if (!session?.user?.id) {
+      // If no session, skip logging (shouldn't happen)
+      return { success: false, message: 'No session found' }
+    }
+
+    // Log access denied to audit trail
+    await prisma.auditLog.create({
+      data: {
+        userId: session.user.id,
+        action: 'access_denied',
+        metadata: {
+          path,
+          requiredCapabilities,
+          userCapabilities: session.user.capabilities || [],
+          reason: 'Insufficient capabilities',
+        },
+        timestamp: new Date(),
+      },
+    })
+
+    logger.warn(session.user.id, 'access_denied_logged', correlationId, {
+      path,
+      requiredCapabilities,
+    })
+
+    return { success: true, message: 'Access denied logged' }
+  } catch (error) {
+    // Don't throw - logging failures shouldn't prevent the page from loading
+    const sessionForError = await auth()
+    logger.error(
+      new Error(error instanceof Error ? error.message : 'Unknown error'),
+      'log_access_denied_error',
+      correlationId,
+      sessionForError?.user?.id
+    )
+
+    return { success: false, message: 'Failed to log access denied' }
+  }
+}

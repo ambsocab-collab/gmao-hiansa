@@ -195,11 +195,19 @@ export default withAuth(
 
     // Check if user has required capabilities
     if (!hasAllCapabilities(userCapabilities, requiredCapabilities)) {
+      console.log('[Middleware] Access denied - Path:', path, 'Required:', requiredCapabilities, 'User has:', userCapabilities)
+
       // Audit log with correlation ID
       logAccessDenied(token?.id as string, path, requiredCapabilities, correlationId)
 
-      // Redirect to /unauthorized with correlation ID
-      const response = NextResponse.redirect(new URL('/unauthorized', req.url))
+      // Redirect to /unauthorized with context about why access was denied
+      const unauthorizedUrl = new URL('/unauthorized', req.url)
+      unauthorizedUrl.searchParams.set('path', path)
+      unauthorizedUrl.searchParams.set('required', requiredCapabilities.join(','))
+
+      console.log('[Middleware] Redirecting to:', unauthorizedUrl.toString())
+
+      const response = NextResponse.redirect(unauthorizedUrl)
       response.headers.set(CORRELATION_ID_HEADER, correlationId)
       return response
     }
@@ -228,17 +236,29 @@ export default withAuth(
 export const config = {
   matcher: [
     // Protected routes requiring authentication
+    // Note: Must match both exact path and paths with sub-paths
+    '/dashboard',
     '/dashboard/:path*',
+    '/work-orders',
     '/work-orders/:path*',
+    '/assets',
     '/assets/:path*',
+    '/stock',
     '/stock/:path*',
+    '/providers',
     '/providers/:path*',
+    '/routines',
     '/routines/:path*',
+    '/users',
     '/users/:path*',
+    '/usuarios',
     '/usuarios/:path*', // Spanish routes for user management
+    '/reports',
     '/reports/:path*',
     // Change password and unauthorized routes (Story 1.1: Spanish route names)
+    '/cambiar-password',
     '/cambiar-password/:path*',
+    '/unauthorized',
     '/unauthorized/:path*'
   ]
 }
