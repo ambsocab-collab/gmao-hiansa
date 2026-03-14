@@ -12,6 +12,7 @@ import { redirect, notFound } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { DeleteUserButton } from '@/components/users/DeleteUserButton'
+import { EditTagsClient } from '../components/EditTagsClient'
 
 export const metadata = {
   title: 'Detalle de Usuario - GMAO HiRock/Ultra',
@@ -48,6 +49,11 @@ export default async function UsuarioDetailPage({
       userCapabilities: {
         include: { capability: true },
       },
+      userTags: {
+        include: {
+          tag: true,
+        },
+      },
     },
   })
 
@@ -62,7 +68,14 @@ export default async function UsuarioDetailPage({
     take: 20,
   })
 
+  // Get all available tags for editing
+  const allTags = await prisma.tag.findMany({
+    orderBy: { name: 'asc' },
+  })
+
   const capabilities = user.userCapabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
+  const initialCapabilities = user.userCapabilities.map((uc: { capability: { name: string } }) => uc.capability.name)
+  const selectedTags = user.userTags.map((ut: { tag: { id: string } }) => ut.tag.id)
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -202,7 +215,7 @@ export default async function UsuarioDetailPage({
         </div>
 
         {/* Capabilities */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
           <Card className="p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Capabilities ({capabilities.length})
@@ -225,6 +238,52 @@ export default async function UsuarioDetailPage({
               ))}
             </div>
           </Card>
+
+          {/* Tags Card - Story 1.3 */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Etiquetas ({user.userTags.length})
+            </h2>
+
+            {user.userTags.length === 0 ? (
+              <p className="text-sm text-gray-500">
+                Sin etiquetas asignadas
+              </p>
+            ) : (
+              <div
+                className="flex flex-wrap gap-2"
+                data-testid="usuario-etiquetas"
+              >
+                {user.userTags.map((userTag: { tag: { id: string; name: string; color: string } }) => (
+                  <span
+                    key={userTag.tag.id}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white"
+                    style={{
+                      backgroundColor: userTag.tag.color,
+                    }}
+                    data-testid={`usuario-tag-${userTag.tag.name}`}
+                  >
+                    {userTag.tag.name}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <p className="mt-4 text-xs text-gray-500">
+              Las etiquetas son solo para organización visual y no afectan
+              los permisos.
+            </p>
+          </Card>
+
+          {/* Edit Tags Section - Story 1.3 */}
+          <EditTagsClient
+            userId={user.id}
+            availableTags={allTags}
+            initialTags={selectedTags}
+          />
+
+          {/* Edit Capabilities Section - Story 1.2 */}
+          {/* Temporarily disabled - needs separate implementation */}
         </div>
       </div>
 

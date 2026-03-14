@@ -33,7 +33,7 @@ export default async function UsuariosListPage() {
     redirect('/dashboard')
   }
 
-  // Get all users (excluding soft-deleted)
+  // Get all users (excluding soft-deleted) with tags
   const users = await prisma.user.findMany({
     where: { deleted: false },
     select: {
@@ -46,6 +46,11 @@ export default async function UsuariosListPage() {
       lastLogin: true,
       userCapabilities: {
         include: { capability: true },
+      },
+      userTags: {
+        include: {
+          tag: true,
+        },
       },
     },
     orderBy: { createdAt: 'desc' },
@@ -61,9 +66,14 @@ export default async function UsuariosListPage() {
             Gestiona los usuarios del sistema
           </p>
         </div>
-        <Link href="/usuarios/nuevo">
-          <Button>Crear Usuario</Button>
-        </Link>
+        <div className="flex gap-3">
+          <Link href="/usuarios/etiquetas">
+            <Button variant="outline">Gestionar Etiquetas</Button>
+          </Link>
+          <Link href="/usuarios/nuevo">
+            <Button>Crear Usuario</Button>
+          </Link>
+        </div>
       </div>
 
       {/* Users List */}
@@ -95,12 +105,33 @@ export default async function UsuariosListPage() {
                           </p>
                         )}
                       </div>
-                      <div className="ml-4 flex-shrink-0 flex flex-col items-end">
+                      <div className="ml-4 flex-shrink-0 flex flex-col items-end gap-2">
+                        {/* Tags */}
+                        {user.userTags.length > 0 && (
+                          <div
+                            className="flex flex-wrap gap-1 justify-end"
+                            data-testid="usuario-etiquetas"
+                          >
+                            {user.userTags.map((userTag) => (
+                              <span
+                                key={userTag.tag.id}
+                                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+                                style={{ backgroundColor: userTag.tag.color }}
+                              >
+                                {userTag.tag.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Capabilities count */}
                         <p className="text-xs text-gray-500">
                           {capabilities.length} capabilities
                         </p>
+
+                        {/* Force password reset badge */}
                         {user.forcePasswordReset && (
-                          <span className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
                             Contraseña temporal
                           </span>
                         )}
