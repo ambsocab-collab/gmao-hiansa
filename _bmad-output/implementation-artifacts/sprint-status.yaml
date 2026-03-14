@@ -51,9 +51,12 @@ development_status:
 
   # Epic 1: Autenticación y Gestión de Usuarios (PBAC)
   epic-1: in-progress
+  1-0-sistema-de-diseno-multi-direccional: done  # Sistema de diseño con marca Hiansa #7D1220, logo SVG, sidebar variants (Story completada 2026-03-14 - 19/19 tests passing)
   1-1-login-registro-y-perfil-de-usuario: done  # Code Review Rounds 1-7 completados - 86/86 tests passing (100%) - 2 CRITICAL security bugs fixed
   1-2-sistema-pbac-con-15-capacidades: done  # Code Review Round 1 completado - 7/8 AC implementados (AC5 modo solo lectura opcional pendiente) - 3 CRITICAL/HIGH issues arreglados - Integration tests 2/2 passing - E2E tests passing
   1-3-etiquetas-de-clasificacion-y-organizacion: done  # ✅ COMPLETE: All P0+P1 E2E tests passing (11/11 - 100%). Integration tests 13/13 passing. Backend implementation complete with PBAC validation, audit logging, atomic transactions. Code Review Round 3: Fixed authenticated API calls issue. P2 tests skipped (nice-to-have).
+  1-4-landing-page-minimalista: done  # ✅ COMPLETE: Landing page minimalista con marca Hiansa #7D1220, logo 6x tamaño, GMAO elegante 30px, descripción "sistema de gestión...", gradient background, server-side auth redirect, 9/9 unit tests passing (100%). Usuario confirmó "perfecto".
+  1-5-layout-desktop-optimizado-logo-integrado: ready-for-dev  # Layout desktop optimizado con sidebar compact, logo Hiansa integrado, branding consistente (Story creada post Sprint Change Proposal 2026-03-14)
   epic-1-retrospective: optional
 
   # Epic 2: Gestión de Averías y Reportes Rápidos
