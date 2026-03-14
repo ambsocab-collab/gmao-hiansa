@@ -29,6 +29,7 @@ model User {
 
   // Relations
   userCapabilities     UserCapability[]
+  userTags             UserTag[] // Story 1.3: Classification tags (visual organization only)
   workOrderAssignments WorkOrderAssignment[]
   failureReports       FailureReport[]       @relation("FailureReports")
   activityLogs         ActivityLog[] // Story 1.1: User activity tracking
@@ -95,6 +96,37 @@ model AuditLog {
 
   @@index([userId, timestamp]) // For querying admin audit history
   @@map("auditLogs")
+}
+
+// Story 1.3: Classification Tags (visual organization, NO capabilities)
+model Tag {
+  id          String   @id @default(cuid())
+  name        String   @unique // "Operario", "Técnico", "Supervisor"
+  color       String // Hex color WCAG AA compliant
+  description String?  // Optional description
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  userTags UserTag[]
+
+  @@index([name])
+  @@map("tags")
+}
+
+// Story 1.3: Join table para User ↔ Tag (muchos a muchos)
+model UserTag {
+  userId     String   @map("userId")
+  tagId      String   @map("tagId")
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([userId, tagId])
+  @@index([userId]) // Para buscar etiquetas de un usuario
+  @@index([tagId])  // Para buscar usuarios con una etiqueta
+  @@map("userTags")
 }
 
 // ============================================

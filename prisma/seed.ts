@@ -163,6 +163,43 @@ async function main() {
   console.log('✅ Created 4 users (admin, tecnico, supervisor, new user with forcePasswordReset=true)')
 
   // ============================================
+  // Story 1.3: CREAR ETIQUETAS DE CLASIFICACIÓN
+  // ============================================
+  console.log('🏷️  Creating classification tags...')
+
+  const tags = await prisma.tag.createMany({
+    data: [
+      {
+        name: 'Operario',
+        color: '#3B82F6', // Blue
+        description: 'Personal de operaciones básicas',
+      },
+      {
+        name: 'Técnico',
+        color: '#10B981', // Green
+        description: 'Personal técnico especializado',
+      },
+      {
+        name: 'Supervisor',
+        color: '#F59E0B', // Amber
+        description: 'Personal de supervisión',
+      },
+      {
+        name: 'Mantenimiento',
+        color: '#EF4444', // Red
+        description: 'Equipo de mantenimiento',
+      },
+      {
+        name: 'Calidad',
+        color: '#8B5CF6', // Purple
+        description: 'Personal de control de calidad',
+      },
+    ],
+  })
+
+  console.log(`✅ Created ${tags.count} classification tags`)
+
+  // ============================================
   // 3. CREAR JERARQUÍA DE 5 NIVELES
   // ============================================
   console.log('🏭 Creating 5-level hierarchy...')
@@ -420,8 +457,9 @@ async function main() {
   // ============================================
   console.log('\n🎉 Seed completed successfully!')
   console.log('\n📊 Summary:')
-  console.log('   - Users: 3 (admin, tecnico, supervisor)')
+  console.log('   - Users: 4 (admin, tecnico, supervisor, new user)')
   console.log('   - Capabilities: 15')
+  console.log('   - Tags: 5 (Operario, Técnico, Supervisor, Mantenimiento, Calidad)')
   console.log('   - Plantas: 2')
   console.log('   - Lineas: 5')
   console.log('   - Equipos: 10')

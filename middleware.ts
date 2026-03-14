@@ -71,6 +71,8 @@ export const ROUTE_CAPABILITIES: Record<string, string[]> = {
   '/routines': ['can_manage_routines'],
   '/users': ['can_manage_users'],
   '/usuarios': ['can_manage_users'], // Spanish route for user management
+  '/usuarios/etiquetas': ['can_manage_users'], // Story 1.3: Tag management (visual organization only)
+  '/usuarios/editar': ['can_manage_users'], // Story 1.2 & 1.3: Edit user capabilities and tags
   '/reports': ['can_view_repair_history']
 }
 

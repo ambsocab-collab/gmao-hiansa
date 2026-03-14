@@ -52,6 +52,11 @@ export async function GET(
         userCapabilities: {
           include: { capability: true },
         },
+        userTags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     })
 
@@ -80,6 +85,12 @@ export async function GET(
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
       capabilities: user.userCapabilities.map((uc) => uc.capability.name),
+      tags: user.userTags.map((ut) => ({
+        id: ut.tag.id,
+        name: ut.tag.name,
+        color: ut.tag.color,
+        description: ut.tag.description,
+      })),
       activityLogs,
     }
 
