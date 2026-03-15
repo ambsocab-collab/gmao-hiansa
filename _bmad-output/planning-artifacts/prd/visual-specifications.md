@@ -5,9 +5,11 @@ Esta sección define las especificaciones visuales y de interfaz para el diseño
 ## Design System
 
 **Color Palette:**
-- **Primary Colors:**
-  - Main Blue: #0066CC (acciones principales, botones CTAs)
-  - Secondary Blue: #004C99 (estados hover, active)
+- **Brand Identity (Story 1.0):**
+  - Primary/Hiansa Red: #7D1220 (Rojo Burdeos) - HSL: 356° 73% 32%
+  - Primary Hover: #5A0E16 (Rojo Burdeos Oscuro) - HSL: 356° 73% 22%
+  - Accent: #7D1220 con 37% lightness
+  - **NOTA:** Contraste WCAG AA validado: blanco sobre #7D1220 = 6.3:1 ✅
 - **Status Colors (semáforo):**
   - Success/Green: #28A745 (OT completada, stock OK)
   - Warning/Orange: #FD7E14 (OT en progreso, stock bajo) - CAMBIADO de amarillo para cumplir WCAG AA
@@ -16,10 +18,29 @@ Esta sección define las especificaciones visuales y de interfaz para el diseño
 - **Neutral Colors:**
   - Text Primary: #212529 (texto principal)
   - Text Secondary: #6C757D (texto secundario, labels)
-  - Background: #F8F9FA (fondos, cards)
+  - Background: #FFFFFF (fondos, cards)
   - Border: #DEE2E6 (bordes, separadores)
 
 **NOTA:** El color Warning/Orange #FD7E14 reemplaza al amarillo #FFC107 para garantizar contraste WCAG AA (4.5:1 mínimo) con texto blanco sobre fondos de color.
+
+**Multi-Directional Design System (Story 1.0):**
+- **3 Sidebar Variants:**
+  - Default: 256px (w-64) for Dashboard clásico (Dirección 1)
+  - Compact: 200px (w-52) for Kanban First (Dirección 2)
+  - Mini: 160px (w-40) for Data Heavy (Dirección 4)
+- **Responsive Behavior:** Sidebar oculto en móvil (<768px), visible en desktop (md:flex)
+- **Brand Integration:**
+  - Logo: Hiansa SVG (viewBox 0 0 164 41, primario #7D1220)
+  - Brand Name: "GMAO" (sin "Hiansa" duplicado)
+  - Footer: "powered by hiansa BSC" (sin repetición de branding)
+
+**Logo System (Story 1.0):**
+- **Component:** `<HiansaLogo />` con size variants (sm/md/lg)
+  - sm: 96px x 24px (w-24 h-6)
+  - md: 160px x 40px (w-40 h-10) - default
+  - lg: 224px x 56px (w-56 h-14)
+- **File Location:** `_bmad-output/planning-artifacts/ux-design-specification/logo-hiemesa.svg`
+- **Accessibility:** aria-label="Hiansa Logo", role="img"
 
 **Typography:**
 - **Font Family:** System UI fonts (San Francisco, Segoe UI, Roboto)
@@ -33,11 +54,20 @@ Esta sección define las especificaciones visuales y de interfaz para el diseño
 
 **Components:**
 - **Buttons:**
-  - Primary: fondo #0066CC, texto blanco, altura 44px, radio 4px
-  - Secondary: fondo transparente, borde #0066CC, altura 44px
+  - Primary: fondo #7D1220 (Hiansa Red), texto blanco, altura 44px, radio 4px
+  - Secondary: fondo transparente, borde #7D1220, altura 44px
   - Danger: fondo #DC3545, texto blanco (acciones destructivas)
+- **Navigation Links:**
+  - Active: fondo #7D1220, texto blanco
+  - Hover: fondo accent, texto accent-foreground
+  - Icon: Lucide React icons
 - **Form Inputs:** altura 44px, borde #DEE2E6, radio 4px, padding 12px
 - **Cards:** fondo blanco, sombra sutil, borde radius 8px, padding 20px
+- **Sidebar (Story 1.0):**
+  - Background: #FFFFFF, border-right: #DEE2E6
+  - Logo: Hiansa SVG component (size md)
+  - Brand Name: "GMAO" (sin "Hiansa")
+  - Navigation: PBAC-filtered, primary color para activos
 
 ## Key Screen Specifications
 

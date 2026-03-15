@@ -170,12 +170,12 @@ module.exports = {
 
 @layer base {
   :root {
-    /* Colores según PRD Design System */
+    /* Colores según Story 1.0: Sistema de Diseño Multi-Direccional */
     --background: 0 0% 100%; /* Blanco */
     --foreground: 222.2 84% 4.9%; /* Negro suave */
 
-    --primary: 221.2 83.2% 53.3%; /* Azul Hiansa */
-    --primary-foreground: 210 40% 98%;
+    --primary: 356 73% 32%; /* #7D1220 Rojo Burdeos Hiansa (Story 1.0) */
+    --primary-foreground: 0 0% 100%; /* Blanco */
 
     --secondary: 210 40% 96.1%; /* Gris claro */
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -183,15 +183,15 @@ module.exports = {
     --muted: 210 40% 96.1%; /* Gris muy claro */
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%; /* Acento sutil */
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 356 73% 37%; /* Rojo Burdeos ligeramente más claro */
+    --accent-foreground: 0 0% 100%; /* Blanco */
 
     --destructive: 0 84.2% 60.2%; /* Rojo error */
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%; /* Borde sutil */
+    --border: 210 8% 89%; /* Borde #DEE2E6 */
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 356 73% 32%; /* #7D1220 para focus states */
 
     --radius: 0.5rem; /* 8px border radius */
   }
@@ -199,7 +199,9 @@ module.exports = {
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    /* ... modo oscuro si es necesario */
+    --primary: 356 73% 32%; /* #7D1220 también en dark mode */
+    --primary-foreground: 222.2 47.4% 11.2%;
+    /* ... resto de modo oscuro */
   }
 }
 
@@ -260,10 +262,12 @@ src/
 │   │   ├── dashboard-chart.tsx
 │   │   └── dashboard-drill-down.tsx
 │   └── layout/               # Componentes de layout
+│       ├── sidebar.tsx       # Desktop - 3 variantes (default/compact/mini)
 │       ├── app-header.tsx
 │       ├── bottom-nav.tsx    # Móvil
-│       ├── sidebar.tsx       # Desktop
 │       └── main-content.tsx
+│   └── brand/                # Story 1.0: Componentes de marca
+│       └── hiansa-logo.tsx   # Logo SVG con size variants (sm/md/lg)
 ```
 
 ---
@@ -304,20 +308,33 @@ src/
 
 ## Customization Strategy
 
-**1. Customización de Colores (Según PRD Design System)**
+**1. Customización de Colores (Story 1.0 + PRD Design System)**
 
-**Colores Semánticos:**
+**Colores de Marca (Story 1.0):**
+- 🔴 Rojo Burdeos Hiansa (#7D1220) - Color primario, HSL: 356° 73% 32%
+- 🎨 Accent (#7D1220 con 37% lightness) - Para hover states
+- ✅ WCAG AA Compliance: Blanco sobre #7D1220 = 6.3:1
+
+**Colores Semánticos (PRD):**
 - 🟢 Verde (#16a34a) - OT completada, stock OK
 - 🟠 Naranja (#ea580c) - OT en progreso, stock bajo
 - 🔴 Rojo (#dc2626) - OT vencida, stock crítico, error
-- 🔵 Azul (#2563eb) - Accent principal (Hiansa blue)
 - 🟣 Púrpura (#9333ea) - Mantenimiento reglamentario (Phase 1.5)
 
-**Implementación en Tailwind:**
+**Implementación en Tailwind (Story 1.0):**
 
 ```javascript
 // tailwind.config.js - extend colors
 colors: {
+  primary: {
+    DEFAULT: '#7D1220',      // Rojo Burdeos Hiansa
+    hover: '#5A0E16',        // Rojo Burdeos Oscuro
+    foreground: '#FFFFFF',   // Blanco
+  },
+  accent: {
+    DEFAULT: 'hsl(356, 73%, 37%)', // Rojo Burdeos ligeramente más claro
+    foreground: '#FFFFFF',
+  },
   ot: {
     completed: '#16a34a',    // Verde
     inProgress: '#ea580c',   // Naranja
@@ -376,7 +393,7 @@ fontFamily: {
 - Crear wrapper components con variantes específicas de gmao-hiansa
 - Ejemplo: `Button` de shadcn/ui → `PrimaryButton`, `SecondaryButton`, `DestructiveButton`
 
-**Ejemplo de Wrapper:**
+**Ejemplo de Wrapper (Story 1.0: Hiansa Red):**
 
 ```tsx
 // components/button-variants.tsx
@@ -386,7 +403,7 @@ import { cn } from "@/lib/utils"
 export function PrimaryButton({ children, className, ...props }) {
   return (
     <Button
-      className={cn("bg-blue-600 hover:bg-blue-700", className)}
+      className={cn("bg-primary hover:bg-primary-hover text-primary-foreground", className)}
       {...props}
     >
       {children}
@@ -411,7 +428,25 @@ export function DestructiveButton({ children, className, ...props }) {
 
 **5. Componentes 100% Custom (No en shadcn/ui)**
 
-**5.1 Kanban Board**
+**5.1 HiansaLogo (Story 1.0: Sistema de Diseño Multi-Direccional)**
+- Razón: Logo SVG oficial de Hiansa con identidad de marca #7D1220
+- Stack: SVG inline + React component
+- Customización: 3 size variants (sm: 96x24px, md: 160x40px, lg: 224x56px)
+- Ubicación: `_bmad-output/planning-artifacts/ux-design-specification/logo-hiemesa.svg`
+- Accessibility: aria-label="Hiansa Logo", role="img", viewBox="0 0 164 41"
+
+**5.2 Sidebar con 3 Variantes (Story 1.0: Sistema Multi-Direccional)**
+- Razón: Diseño adaptativo para 3 direcciones UX de GMAO
+- Stack: React component + Tailwind CSS + Navigation PBAC (Story 1.2)
+- Variantes:
+  - Default: 256px (w-64) for Dashboard clásico (Dirección 1)
+  - Compact: 200px (w-52) for Kanban First (Dirección 2)
+  - Mini: 160px (w-40) for Data Heavy (Dirección 4)
+- Branding: Logo Hiansa + texto "GMAO" (sin "Hiansa" duplicado)
+- Footer: "powered by hiansa BSC" (sin repetición)
+- Responsive: Hidden en móvil (<768px), visible en desktop (md:flex)
+
+**5.3 Kanban Board**
 - Razón: Requerimiento crítico de gmao-hiansa, no existe en shadcn/ui
 - Stack: @dnd-kit/core + shadcn/ui Card + Badge + Avatar
 - Customización: 8 columnas, código de colores, drag-and-drop, swipe gestures
@@ -516,7 +551,127 @@ export function DestructiveButton({ children, className, ...props }) {
 
 ---
 
-**10. Timeline Estimado**
+**10. Multi-Directional Design System (Story 1.0)**
+
+**Concepto:**
+
+GMAO Hiansa implementa un sistema de diseño multi-direccional que permite a cada página usar el layout óptimo según su caso de uso específico. En lugar de un layout único para toda la aplicación, cada dirección (página/contexto) utiliza la variante de sidebar y patrón de layout más apropiado.
+
+**6 Direcciones de Diseño:**
+
+| Dirección | Página/Contexto | Características | Sidebar Variant | Layout Pattern |
+|-----------|-----------------|----------------|-----------------|----------------|
+| **Dir 1: Dashboard Clásico** | `/dashboard` | Sidebar fijo, KPIs prominentes, layout enterprise | `default` (256px) | Sidebar + main content con ml-64 |
+| **Dir 2: Kanban First** | `/kanban` | Kanban 8 columnas protagonista, panel KPIs lateral | `compact` (200px) | Sidebar compact + kanban ancho |
+| **Dir 3: Mobile First** | Todas en móvil (<768px) | Touch targets grandes, bottom nav, gestos swipe | `none` (bottom nav) | Bottom navigation + contenido full width |
+| **Dir 4: Data Heavy** | `/kpis`, `/analytics` | Múltiples gráficos, tablas densas, drill-down | `mini` (160px) | Sidebar mini + contenido muy ancho |
+| **Dir 5: Minimal** | `/` (landing) | Mucho whitespace, elementos reducidos, minimalista | `none` (top nav) | Top nav minimal + contenido centrado |
+| **Dir 6: Action Oriented** | `/reportar`, acciones rápidas | CTAs prominentes, flujos simplificados | `default` (256px) | Sidebar + form centrado |
+
+**Sistema de Variants para Sidebar:**
+
+```typescript
+// Component: components/layout/sidebar.tsx
+interface SidebarProps {
+  variant?: 'default' | 'compact' | 'mini'
+  userCapabilities?: string[]
+  className?: string
+}
+
+const variantWidths = {
+  default: 'w-64',   // 256px - Dashboard clásico
+  compact: 'w-52',   // 200px - Kanban First
+  mini: 'w-40'       // 160px - Data Heavy
+}
+```
+
+**Ejemplos de Implementación por Dirección:**
+
+```typescript
+// Dirección 1: Dashboard Clásico
+<Sidebar variant="default" direction="classic" userCapabilities={userCapabilities} />
+<main className="ml-64"> {/* 256px sidebar */}
+  {/* KPIs, charts, etc */}
+</main>
+
+// Dirección 2: Kanban First
+<Sidebar variant="compact" direction="kanban" userCapabilities={userCapabilities} />
+<main className="ml-52"> {/* 200px sidebar */}
+  <KanbanBoard columns={8} />
+</main>
+
+// Dirección 3: Mobile First (bottom nav)
+<BottomNav /> {/* NO sidebar */}
+<main className="pb-16"> {/* Padding for bottom nav */}
+  {/* Mobile-optimized content */}
+</main>
+
+// Dirección 4: Data Heavy
+<Sidebar variant="mini" direction="data" userCapabilities={userCapabilities} />
+<main className="ml-40"> {/* 160px sidebar */}
+  <DataTable dense />
+  <AnalyticsCharts />
+</main>
+
+// Dirección 5: Minimal
+<TopNav minimal /> {/* NO sidebar */}
+<main className="max-w-7xl mx-auto">
+  {/* Landing page content */}
+</main>
+
+// Dirección 6: Action Oriented
+<Sidebar variant="default" direction="action" userCapabilities={userCapabilities} />
+<main className="ml-64 flex items-center justify-center">
+  <ReportFailureForm />
+</main>
+```
+
+**Responsive Behavior:**
+
+```typescript
+// Sidebar component: hidden en móvil, visible en desktop
+<aside className={`
+  ${widthClass}
+  hidden      /* <768px: oculto */
+  md:flex     /* ≥768px: visible */
+  flex-col
+  bg-background
+  h-screen
+  sticky top-0
+`}>
+```
+
+**Componentes Shadcn/UI con Variants por Dirección:**
+
+La mayoría de componentes shadcn/ui funcionan sin modificaciones mediante el uso de tokens CSS:
+
+- `Button` - Usa color `primary` (#7D1220) automáticamente
+- `Input`, `Select` - Usa `ring` color para focus states
+- `Card` - Adaptable a cualquier layout width
+- `Badge` - Útil para estados OT en Kanban
+- `Avatar` - User profiles en sidebar
+
+**Layout Strategy por Dirección:**
+
+1. **Dashboard Clásico (Dir 1):** Grid 3 columnas para KPIs, charts ancho completo
+2. **Kanban First (Dir 2):** Grid 8 columnas horizontal scroll, cards drag-drop
+3. **Mobile First (Dir 3):** Single column stack, bottom nav fixed, touch targets ≥44px
+4. **Data Heavy (Dir 4):** Tables densas con sorting/filtering, gráficos interactivos
+5. **Minimal (Dir 5):** Centered max-width container, generous whitespace
+6. **Action Oriented (Dir 6):** Form centrado, CTAs prominentes, validación en tiempo real
+
+**Brand Integration:**
+
+Todas las direcciones comparten:
+- Logo Hiansa SVG (#7D1220) en sidebar/top nav
+- Brand name "GMAO" (sin "Hiansa" duplicado)
+- Footer: "powered by hiansa BSC"
+- Primary color: #7D1220 (Rojo Burdeos)
+- Font: Inter (system UI stack)
+
+---
+
+**11. Timeline Estimado**
 
 - **Fase 1: Setup Inicial:** 1-2 días
 - **Fase 2: Componentes Base:** 3-5 días
