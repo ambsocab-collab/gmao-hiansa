@@ -1,6 +1,6 @@
 # Story 1.5: Layout Desktop Optimizado y Logo Integrado
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 <!-- Note: Esta story depende de Story 1.0 (Sistema de Diseño Multi-Direccional) -->

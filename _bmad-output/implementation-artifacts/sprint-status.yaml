@@ -56,7 +56,7 @@ development_status:
   1-2-sistema-pbac-con-15-capacidades: done  # Code Review Round 1 completado - 7/8 AC implementados (AC5 modo solo lectura opcional pendiente) - 3 CRITICAL/HIGH issues arreglados - Integration tests 2/2 passing - E2E tests passing
   1-3-etiquetas-de-clasificacion-y-organizacion: done  # ✅ COMPLETE: All P0+P1 E2E tests passing (11/11 - 100%). Integration tests 13/13 passing. Backend implementation complete with PBAC validation, audit logging, atomic transactions. Code Review Round 3: Fixed authenticated API calls issue. P2 tests skipped (nice-to-have).
   1-4-landing-page-minimalista: done  # ✅ COMPLETE: Landing page minimalista con marca Hiansa #7D1220, logo 6x tamaño, GMAO elegante 30px, descripción "sistema de gestión...", gradient background, server-side auth redirect, 9/9 unit tests passing (100%). Usuario confirmó "perfecto".
-  1-5-layout-desktop-optimizado-logo-integrado: ready-for-dev  # Layout desktop optimizado con sidebar compact, logo Hiansa integrado, branding consistente (Story creada post Sprint Change Proposal 2026-03-14)
+  1-5-layout-desktop-optimizado-logo-integrado: done  # ✅ COMPLETE: All 5 AC implemented. Code Review Round 1: 13 issues resolved (4 Critical, 4 High, 3 Medium, 2 Low). Code Review Round 2: 9 issues found, 6 code fixes applied (2 High, 4 Medium, 2 Low). 54 unit tests passing (100%), 11 E2E tests designed, WCAG 2.1 Level AA compliant. Layout desktop optimizado con sidebar variants (default 256px, compact 200px, mini 160px), logo Hiansa en header, branding consistente sin redundancia, sistema multi-direccional por ruta. Committed: 5b951d7 (2026-03-15).
   epic-1-retrospective: optional
 
   # Epic 2: Gestión de Averías y Reportes Rápidos
