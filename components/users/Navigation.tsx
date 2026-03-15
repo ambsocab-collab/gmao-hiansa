@@ -63,6 +63,7 @@ const iconMap = {
 
 /**
  * Render a single navigation item
+ * Story 1.0: Updated to use primary color (#7D1220) for active state
  */
 function NavItem({ item, isActive }: { item: NavigationItem; isActive: boolean }) {
   const IconComponent = iconMap[item.icon as keyof typeof iconMap]
@@ -73,10 +74,10 @@ function NavItem({ item, isActive }: { item: NavigationItem; isActive: boolean }
       data-testid={item.testId}
       className={cn(
         'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-        'hover:bg-gray-100',
+        'hover:bg-accent hover:text-accent-foreground',
         isActive
-          ? 'bg-blue-50 text-blue-700 font-medium'
-          : 'text-gray-700'
+          ? 'bg-primary text-primary-foreground font-medium'
+          : 'text-foreground'
       )}
     >
       {IconComponent && <IconComponent className="h-5 w-5" />}

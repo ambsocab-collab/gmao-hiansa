@@ -42,12 +42,10 @@ export default async function HomePage() {
             md:w-[840px]         /* Tablet: mediano */
             w-[90%]             /* Mobile: 90% del ancho disponible */
             max-w-[984px]       /* Máximo tamaño absoluto */
+            h-auto              /* Altura automática */
+            text-white          /* Color blanco para SVG currentColor */
+            drop-shadow-md      /* Sombra suave */
           "
-          style={{
-            height: 'auto',
-            color: 'white',
-            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
-          }}
         />
       </div>
 
