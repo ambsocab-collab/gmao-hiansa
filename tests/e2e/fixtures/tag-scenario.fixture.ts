@@ -6,12 +6,12 @@
  * Eliminates code duplication across E2E tests.
  *
  * Provides:
- * - createUserWithTag(): Create a user and assign a tag
- * - createStandardTags(): Ensure standard test tags exist
- * - cleanupTestData(): Clean up created users and tags
+ * - createTestUser(): Create a user with specified capabilities
+ * - createTag(): Create a tag via API
+ * - ensureStandardTagsExist(): Ensure standard test tags exist
  */
 
-import { test as base, Page } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { createUserWithCapabilities } from '../helpers/factories';
 import { authenticatedAPICall } from '../helpers/auth.helpers';
 
@@ -61,12 +61,8 @@ export const test = base.extend<TagScenarioFixture>({
       };
     };
 
-    // Cleanup function
-    const cleanup = async () => {
-      // Note: Cleanup happens in test.afterAll hooks, not here
-      // This fixture just tracks what was created
-    };
-
+    // Note: Cleanup happens in test.afterAll hooks, not here
+    // This fixture just provides helper functions for test setup
     await use(createTestUser);
   },
 

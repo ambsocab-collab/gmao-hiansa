@@ -14,12 +14,8 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { loginAsAdmin, loginAs, authenticatedAPICall } from '../../helpers/auth.helpers';
-import {
-  createUser,
-  createUserWithCapabilities,
-  ALL_CAPABILITIES,
-} from '../../helpers/factories';
+import { loginAs, authenticatedAPICall } from '../../helpers/auth.helpers';
+import { createUserWithCapabilities } from '../../helpers/factories';
 
 test.describe('Story 1.3 - P0: Tag Security (CRITICAL)', () => {
   // Track created users for cleanup

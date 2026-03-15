@@ -9,7 +9,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { loginAsAdmin, authenticatedAPICall } from '../../helpers/auth.helpers';
+import { authenticatedAPICall } from '../../helpers/auth.helpers';
 
 test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
   /**
@@ -167,7 +167,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
       // Verify tag still exists (we cancelled deletion)
       const finalTags = await page.locator('.bg-white').count();
       expect(finalTags).toBe(initialTags);
-    } catch (e) {
+    } catch {
       // Tag might not exist or button not found, that's ok for this test
       console.log('Calidad tag not found or delete button not accessible');
     }
@@ -181,9 +181,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
    *       Then UI muestra mensaje clarificador
    *       And message: "Las etiquetas son solo para organización visual y no afectan los permisos"
    */
-  test('[P1-E2E-007] should display clarifier message that tags do not grant permissions', async ({
-    page,
-  }) => {
+  test('[P1-E2E-007] should display clarifier message that tags do not grant permissions', async ({ page }) => {
     // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 

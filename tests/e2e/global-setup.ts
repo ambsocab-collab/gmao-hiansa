@@ -11,7 +11,7 @@
 import { FullConfig, chromium } from '@playwright/test';
 import path from 'path';
 
-async function globalSetup(config: FullConfig) {
+async function globalSetup(_config: FullConfig) {
   const baseURL = process.env.BASE_URL || 'http://localhost:3000';
   const maxRetries = 30;
   const retryDelay = 2000; // 2 seconds
@@ -34,8 +34,8 @@ async function globalSetup(config: FullConfig) {
           break;
         }
       }
-    } catch (error) {
-      // Server not ready yet, retry
+    } catch {
+      // Server not ready yet, will retry
     }
 
     console.log(`⏳ Waiting for server... (${i + 1}/${maxRetries})`);
@@ -69,7 +69,7 @@ async function globalSetup(config: FullConfig) {
       } else {
         console.log(`✅ User ${email} found`);
       }
-    } catch (error) {
+    } catch {
       allUsersFound = false;
       missingUsers.push(email);
     }
@@ -114,13 +114,12 @@ async function globalSetup(config: FullConfig) {
 
   console.log('🔐 Setting up authenticated session...\n');
 
-  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
   const authFile = path.join(__dirname, '..', '..', 'playwright', '.auth', 'admin.json');
 
   // Launch browser
   const browser = await chromium.launch();
   const context = await browser.newContext({
-    baseURL,
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
   });
 
   const page = await context.newPage();

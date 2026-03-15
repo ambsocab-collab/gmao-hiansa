@@ -15,7 +15,7 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
   const createdUserEmails: string[] = [];
   const createdTagNames: string[] = [];
 
-  test.afterAll(async ({ page, request }) => {
+  test.afterAll(async ({ page: _page, request }) => {
     // Cleanup: Delete all test users and tags created during this test suite
     for (const email of createdUserEmails) {
       try {
@@ -70,7 +70,7 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
    *       And cada etiqueta tiene: nombre, color seleccionable, descripción opcional
    *       And formulario tiene data-testid="crear-etiqueta-form"
    */
-  test('[P1-E2E-001] should create tag with name and color', async ({ page, createTag }) => {
+  test('[P1-E2E-001] should create tag with name and color', async ({ page, createTag: _createTag }) => {
     // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
@@ -151,19 +151,19 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
     // Just click the checkboxes to toggle them
     try {
       await page.getByTestId('tag-checkbox-Operario').click({ timeout: 5000 });
-    } catch (e) {
+    } catch {
       // Checkbox might already be checked, that's ok
     }
 
     try {
       await page.getByTestId('tag-checkbox-Técnico').click({ timeout: 5000 });
-    } catch (e) {
+    } catch {
       // Checkbox might already be checked, that's ok
     }
 
     try {
       await page.getByTestId('tag-checkbox-Supervisor').click({ timeout: 5000 });
-    } catch (e) {
+    } catch (_e) {
       // Checkbox might not exist or already be checked, that's ok
     }
 

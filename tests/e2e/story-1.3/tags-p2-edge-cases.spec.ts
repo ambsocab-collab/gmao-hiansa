@@ -9,7 +9,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { loginAsAdmin, authenticatedAPICall } from '../../helpers/auth.helpers';
+import { authenticatedAPICall } from '../../helpers/auth.helpers';
 
 test.describe('Story 1.3 - P2: Edge Cases & Audit Logging', () => {
   /**
