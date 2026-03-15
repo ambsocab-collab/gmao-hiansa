@@ -11,6 +11,7 @@
  */
 
 import { LoginForm } from '@/components/auth/LoginForm'
+import HiansaLogo from '@/components/brand/hiansa-logo'
 
 export const metadata = {
   title: 'Iniciar Sesión - GMAO HIANSA',
@@ -19,14 +20,12 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="max-w-md w-full space-y-4">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            GMAO HIANSA
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <HiansaLogo size="lg" className="w-56 h-14 mx-auto mb-2" />
+          <p className="mt-1 text-xs text-gray-600">
             Sistema de Gestión de Mantenimiento
           </p>
         </div>

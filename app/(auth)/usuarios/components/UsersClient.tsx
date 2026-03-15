@@ -88,11 +88,11 @@ export function UsersClient({ users, tags }: UsersClientProps) {
   return (
     <>
       {/* Filter and Sort Controls */}
-      <div className="bg-white shadow rounded-lg p-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4">
+      <div className="bg-white shadow rounded-lg p-3 mb-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           {/* Filter by Tag */}
           <div className="flex-1">
-            <label htmlFor="tag-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="tag-filter" className="block text-xs font-medium text-gray-700 mb-1">
               Filtrar por etiqueta
             </label>
             <select
@@ -100,7 +100,7 @@ export function UsersClient({ users, tags }: UsersClientProps) {
               data-testid="tag-filter"
               value={selectedTagId}
               onChange={(e) => setSelectedTagId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">Todos los usuarios</option>
               {tags.map((tag) => (
@@ -113,7 +113,7 @@ export function UsersClient({ users, tags }: UsersClientProps) {
 
           {/* Sort by */}
           <div className="flex-1">
-            <label htmlFor="sort-by" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="sort-by" className="block text-xs font-medium text-gray-700 mb-1">
               Ordenar por
             </label>
             <select
@@ -121,7 +121,7 @@ export function UsersClient({ users, tags }: UsersClientProps) {
               data-testid="sort-by"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'tagName')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="createdAt">Fecha de creación</option>
               <option value="tagName">Etiqueta</option>
@@ -131,21 +131,21 @@ export function UsersClient({ users, tags }: UsersClientProps) {
 
         {/* Active Filter Display */}
         {selectedTagId !== 'all' && selectedTag && (
-          <div className="mt-4 flex items-center gap-2">
-            <span className="text-sm text-gray-600">Filtro activo:</span>
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-xs text-gray-600">Filtro activo:</span>
             <span
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
               style={{ backgroundColor: selectedTag.color }}
             >
               {selectedTag.name}
             </span>
             <button
               onClick={() => setSelectedTagId('all')}
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-xs text-blue-600 hover:text-blue-800"
             >
               Limpiar filtro
             </button>
-            <span className="text-sm text-gray-500">
+            <span className="text-xs text-gray-500">
               ({sortedUsers.length} {sortedUsers.length === 1 ? 'usuario' : 'usuarios'}
               )
             </span>
@@ -167,17 +167,17 @@ export function UsersClient({ users, tags }: UsersClientProps) {
                   href={`/usuarios/${user.id}`}
                   className="block hover:bg-gray-50 transition"
                 >
-                  <div className="px-4 py-4 sm:px-6">
+                  <div className="px-3 py-2 sm:px-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-blue-600 truncate">
+                        <p className="text-xs font-medium text-blue-600 truncate">
                           {user.name}
                         </p>
-                        <p className="mt-1 text-sm text-gray-600 truncate">
+                        <p className="mt-1 text-xs text-gray-600 truncate">
                           {user.email}
                         </p>
                         {user.phone && (
-                          <p className="mt-1 text-sm text-gray-500 truncate">
+                          <p className="mt-1 text-xs text-gray-500 truncate">
                             {user.phone}
                           </p>
                         )}
@@ -192,7 +192,7 @@ export function UsersClient({ users, tags }: UsersClientProps) {
                             {user.userTags.map((userTag) => (
                               <span
                                 key={userTag.tag.id}
-                                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+                                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
                                 style={{ backgroundColor: userTag.tag.color }}
                               >
                                 {userTag.tag.name}

@@ -69,21 +69,21 @@ export default async function UsuariosListPage() {
   })
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Usuarios</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="text-base font-semibold text-gray-900">Usuarios</h1>
+          <p className="mt-1 text-xs text-gray-600">
             Gestiona los usuarios del sistema
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Link href="/usuarios/etiquetas">
-            <Button variant="outline">Gestionar Etiquetas</Button>
+            <Button variant="outline" size="sm">Gestionar Etiquetas</Button>
           </Link>
           <Link href="/usuarios/nuevo">
-            <Button>Crear Usuario</Button>
+            <Button size="sm">Crear Usuario</Button>
           </Link>
         </div>
       </div>

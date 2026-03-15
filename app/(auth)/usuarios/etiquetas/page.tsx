@@ -58,14 +58,14 @@ export default async function TagsManagementPage() {
   const canCreateMoreTags = tags.length < 20
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-base font-semibold text-gray-900">
             Etiquetas de Clasificación
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-1 text-xs text-gray-600">
             Gestiona las etiquetas para organizar visualmente a los usuarios
           </p>
           <p className="mt-1 text-xs text-gray-500">
@@ -75,6 +75,7 @@ export default async function TagsManagementPage() {
         <Button
           asChild
           variant="secondary"
+          size="sm"
           disabled={!canCreateMoreTags}
         >
           <a href="/usuarios">Volver a Usuarios</a>

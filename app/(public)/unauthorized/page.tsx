@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function UnauthorizedPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white shadow rounded-lg p-8 text-center">
-        <div className="mb-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white shadow rounded-lg p-6 text-center">
+        <div className="mb-3">
           <svg
-            className="mx-auto h-16 w-16 text-red-600"
+            className="mx-auto h-12 w-12 text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -28,28 +28,28 @@ export default function UnauthorizedPage() {
           </svg>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-4" data-testid="unauthorized-title">
+        <h1 className="text-base font-semibold text-gray-900 mb-2" data-testid="unauthorized-title">
           Acceso Denegado
         </h1>
 
-        <p className="text-gray-700 mb-2" data-testid="unauthorized-message">
+        <p className="text-xs text-gray-700 mb-2" data-testid="unauthorized-message">
           No tienes permiso para acceder a esta página.
         </p>
 
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-xs text-gray-500 mb-4">
           Si crees que esto es un error, contacta al administrador del sistema.
         </p>
 
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <p className="text-sm text-gray-700">
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <p className="text-xs text-gray-700">
             No tienes las capacidades necesarias para acceder a esta sección.
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Link
             href="/dashboard"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-center inline-block"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-xs text-gray-700 hover:bg-gray-50 text-center inline-block"
             data-testid="back-button"
           >
             Ir al Dashboard

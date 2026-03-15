@@ -26,10 +26,10 @@ export default async function KPIsPage() {
 
   if (!canViewKPIs) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-red-900 mb-2">Acceso Denegado</h1>
-          <p className="text-red-700" data-testid="kpi-error-message">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <h1 className="text-base font-semibold text-red-900 mb-2">Acceso Denegado</h1>
+          <p className="text-xs text-red-700" data-testid="kpi-error-message">
             No tienes permiso para ver KPIs
           </p>
         </div>
@@ -38,14 +38,14 @@ export default async function KPIsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900">KPIs - Indicadores Clave de Rendimiento</h1>
-      <p className="mt-2 text-sm text-gray-600">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <h1 className="text-base font-semibold text-gray-900">KPIs - Indicadores Clave de Rendimiento</h1>
+      <p className="mt-1 text-xs text-gray-600">
         Métricas y análisis de rendimiento
       </p>
 
-      <div className="mt-8 bg-white shadow rounded-lg p-6">
-        <p className="text-gray-700">
+      <div className="mt-4 bg-white shadow rounded-lg p-4">
+        <p className="text-sm text-gray-700">
           Página de KPIs (Próximamente)
         </p>
       </div>

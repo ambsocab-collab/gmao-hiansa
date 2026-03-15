@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { DeleteUserButton } from '@/components/users/DeleteUserButton'
 import { EditTagsClient } from '../components/EditTagsClient'
+import { EditCapabilitiesClient } from '../components/EditCapabilitiesClient'
 
 export const metadata = {
   title: 'Detalle de Usuario - GMAO HiRock/Ultra',
@@ -78,54 +79,54 @@ export default async function UsuarioDetailPage({
   const selectedTags = user.userTags.map((ut: { tag: { id: string } }) => ut.tag.id)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-4">
         <div className="flex items-center justify-between">
           <div>
             <Link
               href="/usuarios"
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-xs text-blue-600 hover:text-blue-800"
             >
               ← Volver a usuarios
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mt-2">
+            <h1 className="text-base font-semibold text-gray-900 mt-2">
               {user.name}
             </h1>
-            <p className="mt-2 text-sm text-gray-600">{user.email}</p>
+            <p className="mt-1 text-xs text-gray-600">{user.email}</p>
           </div>
           <DeleteUserButton userId={user.id} userName={user.name} />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* User Information */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4">
           {/* Personal Info Card */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Card className="p-4">
+            <h2 className="text-sm font-semibold text-gray-900 mb-2">
               Información Personal
             </h2>
-            <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-y-2 sm:grid-cols-2">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Nombre</dt>
-                <dd className="mt-1 text-sm text-gray-900">{user.name}</dd>
+                <dt className="text-xs font-medium text-gray-500">Nombre</dt>
+                <dd className="mt-1 text-xs text-gray-900">{user.name}</dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Email</dt>
-                <dd className="mt-1 text-sm text-gray-900">{user.email}</dd>
+                <dt className="text-xs font-medium text-gray-500">Email</dt>
+                <dd className="mt-1 text-xs text-gray-900">{user.email}</dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Teléfono</dt>
+                <dt className="text-xs font-medium text-gray-500">Teléfono</dt>
                 <dd className="mt-1 text-sm text-gray-900">
                   {user.phone || 'No especificado'}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-xs font-medium text-gray-500">
                   Contraseña Temporal
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900">
+                <dd className="mt-1 text-xs text-gray-900">
                   {user.forcePasswordReset ? (
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
                       Sí - debe cambiarla
@@ -136,10 +137,10 @@ export default async function UsuarioDetailPage({
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-xs font-medium text-gray-500">
                   Miembro desde
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900">
+                <dd className="mt-1 text-xs text-gray-900">
                   {new Date(user.createdAt).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'long',
@@ -148,10 +149,10 @@ export default async function UsuarioDetailPage({
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-xs font-medium text-gray-500">
                   Último acceso
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900">
+                <dd className="mt-1 text-xs text-gray-900">
                   {user.lastLogin
                     ? new Date(user.lastLogin).toLocaleDateString('es-ES', {
                         year: 'numeric',
@@ -167,12 +168,12 @@ export default async function UsuarioDetailPage({
           </Card>
 
           {/* Activity History Card */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Card className="p-4">
+            <h2 className="text-sm font-semibold text-gray-900 mb-2">
               Historial de Actividad
             </h2>
             <div
-              className="space-y-4"
+              className="space-y-3"
               data-testid="activity-history"
             >
               {activityLogs.length === 0 ? (
@@ -214,31 +215,8 @@ export default async function UsuarioDetailPage({
            */}
         </div>
 
-        {/* Capabilities */}
+        {/* Sidebar - Capabilities, Tags and Edit Sections */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Capabilities ({capabilities.length})
-            </h2>
-            <div className="space-y-3">
-              {capabilities.map((capability: { name: string; label: string }) => (
-                <div
-                  key={capability.name}
-                  className="flex items-start space-x-3 p-3 border rounded-md"
-                >
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      {capability.label}
-                    </p>
-                    <code className="text-xs text-gray-500 block mt-1">
-                      {capability.name}
-                    </code>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
           {/* Tags Card - Story 1.3 */}
           <Card className="p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -283,7 +261,10 @@ export default async function UsuarioDetailPage({
           />
 
           {/* Edit Capabilities Section - Story 1.2 */}
-          {/* Temporarily disabled - needs separate implementation */}
+          <EditCapabilitiesClient
+            userId={user.id}
+            initialCapabilities={initialCapabilities}
+          />
         </div>
       </div>
 

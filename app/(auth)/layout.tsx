@@ -16,10 +16,9 @@
 
 import { auth } from '@/lib/auth-adapter'
 import { redirect } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
-import HiansaLogo from '@/components/brand/hiansa-logo'
 import Sidebar from '@/components/layout/sidebar'
+import ScrollFollowCursor from '@/components/layout/scroll-follow-cursor'
 import { getSidebarVariant } from '@/lib/sidebar-variants'
 
 export default async function AuthLayout({
@@ -33,85 +32,34 @@ export default async function AuthLayout({
     redirect('/login')
   }
 
-  // Get user's initials for avatar
-  const initials = session.user.name
-    ?.split(' ')
-    .map((n: string) => n[0])
-    .join('')
-    .toUpperCase()
-    .substring(0, 2) || 'U'
-
   // Story 1.5 AC5: Get sidebar variant based on current route from x-pathname header
   // Note: Uses headers() which requires server-side execution
   const sidebarVariant = getSidebarVariant()
 
-  // Calculate margin-left based on sidebar variant
-  // CRITICAL Issue 4 fix: Only apply margin on desktop (md:), not mobile
-  // Sidebar is hidden on mobile, so main content should have no margin
-  const marginLeftMap = {
-    default: 'ml-0 md:ml-64',  // 0px on mobile, 256px on desktop
-    compact: 'ml-0 md:ml-52',  // 0px on mobile, 200px on desktop
-    mini: 'ml-0 md:ml-40'      // 0px on mobile, 160px on desktop
-  }
-  const marginLeft = marginLeftMap[sidebarVariant]
+  // Margin-left based on sidebar variant (FIXED sidebar on desktop)
+  // Using arbitrary values to ensure Tailwind compiles them
+  let marginLeft = 'md:ml-[160px]' // mini (default)
+  if (sidebarVariant === 'default') marginLeft = 'md:ml-[256px]'
+  else if (sidebarVariant === 'compact') marginLeft = 'md:ml-[200px]'
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Sidebar Navigation - Story 1.5 AC5: Variant based on route */}
+    <>
+      {/* Sidebar Navigation - FIXED position, outside of flex flow */}
       <Sidebar variant={sidebarVariant} userCapabilities={session.user.capabilities} />
 
-      {/* Main Content Area - Story 1.5 AC5: Margin based on sidebar variant */}
-      <div className={`flex-1 ${marginLeft}`}>
-        {/* Header - Story 1.5 AC1: HiansaLogo integrated in header */}
-        <header className="bg-background shadow-sm border-b border-border sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              {/* Story 1.5 AC1: Hiansa Logo in header */}
-              <div className="flex-shrink-0">
-                <HiansaLogo size="md" className="w-40 h-10" data-testid="header-logo" />
-              </div>
-
-              {/* User Menu */}
-              <div className="flex items-center gap-4">
-                {/* Avatar with dropdown trigger */}
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-foreground">
-                    Hola, {session.user.name}
-                  </span>
-                  <div
-                    className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-medium"
-                    data-testid="user-avatar"
-                  >
-                    {initials}
-                  </div>
-                </div>
-
-                {/* Logout Button */}
-                <form action="/api/auth/signout" method="POST">
-                  <Button type="submit" variant="outline" size="sm" data-testid="logout-button">
-                    Cerrar Sesión
-                  </Button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="p-8">{children}</main>
-
-        {/* Footer - Story 1.5 AC4: Only "powered by hiansa BSC", no repetition */}
-        <footer className="bg-background border-t border-border mt-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <p className="text-sm text-muted-foreground text-center">
-              powered by hiansa BSC
-            </p>
-          </div>
-        </footer>
+      {/* Main Content Area - with margin for fixed sidebar */}
+      <div className={`${marginLeft} bg-background`}>
+        {/* Content area with scroll - starts below header (mt-16) */}
+        <div className="h-[calc(100vh-4rem)] overflow-y-auto">
+          <ScrollFollowCursor className="min-h-full">
+            {/* Main Content - SIN header propio (el header está en el layout raíz) */}
+            <main className="w-full px-4">{children}</main>
+          </ScrollFollowCursor>
+        </div>
       </div>
 
       {/* Toast Notifications */}
       <Toaster />
-    </div>
+    </>
   )
 }

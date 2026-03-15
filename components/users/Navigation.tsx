@@ -29,6 +29,7 @@ import {
   Package,
   Box,
   Users,
+  Building,
   Clock,
   UserCog,
   FileText,
@@ -56,6 +57,7 @@ const iconMap = {
   Package,
   Box,
   Users,
+  Building,
   Clock,
   UserCog,
   FileText,
@@ -73,14 +75,14 @@ function NavItem({ item, isActive }: { item: NavigationItem; isActive: boolean }
       href={item.href}
       data-testid={item.testId}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+        'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs',
         'hover:bg-accent hover:text-accent-foreground',
         isActive
           ? 'bg-primary text-primary-foreground font-medium'
           : 'text-foreground'
       )}
     >
-      {IconComponent && <IconComponent className="h-5 w-5" />}
+      {IconComponent && <IconComponent className="h-3.5 w-3.5" />}
       <span>{item.label}</span>
     </Link>
   )

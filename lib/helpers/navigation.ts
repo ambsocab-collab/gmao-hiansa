@@ -67,7 +67,7 @@ const ALL_NAVIGATION_ITEMS: NavigationItem[] = [
   {
     label: 'Proveedores',
     href: '/providers',
-    icon: 'Users',
+    icon: 'Building',
     requiredCapability: 'can_manage_providers',
     testId: 'nav-providers',
   },
