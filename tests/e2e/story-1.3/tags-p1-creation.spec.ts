@@ -7,19 +7,15 @@
  * Test Coverage: P1-E2E-001 (create tag), P1-E2E-002 (assign multiple tags), P1-E2E-008 (max 20 tags)
  */
 
-import { test, expect } from '@playwright/test';
-import { loginAsAdmin, authenticatedAPICall } from '../../helpers/auth.helpers';
-import {
-  createUser,
-  createUserWithCapabilities,
-} from '../../helpers/factories';
+import { test, expect } from '../../fixtures/tag-scenario.fixture';
+import { authenticatedAPICall } from '../../helpers/auth.helpers';
 
 test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
-  // Track created users for cleanup
+  // Track created test data for cleanup
   const createdUserEmails: string[] = [];
-  const createdTags: string[] = [];
+  const createdTagNames: string[] = [];
 
-  test.afterAll(async ({ request }) => {
+  test.afterAll(async ({ page, request }) => {
     // Cleanup: Delete all test users and tags created during this test suite
     for (const email of createdUserEmails) {
       try {
@@ -39,8 +35,13 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
     }
     createdUserEmails.length = 0;
 
-    // Cleanup created test tags
-    for (const tagName of createdTags) {
+    // Cleanup created test tags (skip standard tags like Supervisor, Operario)
+    for (const tagName of createdTagNames) {
+      // Skip cleanup for standard seed tags
+      if (['Supervisor', 'Operario', 'Técnico', 'Gerente', 'Jefe de Planta'].includes(tagName)) {
+        continue;
+      }
+
       try {
         // Search for tag by name
         const searchResponse = await request.get(
@@ -57,7 +58,7 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
         console.warn(`Failed to cleanup test tag ${tagName}:`, error);
       }
     }
-    createdTags.length = 0;
+    createdTagNames.length = 0;
   });
 
   /**
@@ -69,9 +70,8 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
    *       And cada etiqueta tiene: nombre, color seleccionable, descripción opcional
    *       And formulario tiene data-testid="crear-etiqueta-form"
    */
-  test('[P1-E2E-001] should create tag with name and color', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+  test('[P1-E2E-001] should create tag with name and color', async ({ page, createTag }) => {
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to tags management page
@@ -87,7 +87,7 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
 
     // And: Fill tag form with unique name
     const uniqueTagName = 'TestTag_' + Date.now();
-    createdTags.push(uniqueTagName);
+    createdTagNames.push(uniqueTagName);
 
     await page.getByTestId('etiqueta-nombre').fill(uniqueTagName);
 
@@ -121,10 +121,12 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
    *       Then puedo asignar una o más etiquetas simultáneamente
    *       And selecciono etiquetas con checkboxes o multi-select
    */
-  test('[P1-E2E-002] should assign multiple tags to user', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+  test('[P1-E2E-002] should assign multiple tags to user', async ({ page, ensureStandardTagsExist }) => {
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
+
+    // Ensure standard tags exist (using fixture for cleaner code)
+    await ensureStandardTagsExist();
 
     // And: Use existing user from seed (tecnico@hiansa.com)
     // Get tecnico user ID via API (authenticated)
@@ -187,8 +189,7 @@ test.describe('Story 1.3 - P1: Tag Creation & Assignment', () => {
    *       And botón de crear deshabilitado
    */
   test('[P1-E2E-008] should prevent creating more than 20 tags', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to tags page

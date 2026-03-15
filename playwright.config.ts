@@ -44,6 +44,10 @@ export default defineConfig({
 
   // Shared settings for all tests
   use: {
+    // Reuse authenticated session (saved in global-setup)
+    // This eliminates 30+ seconds of login overhead per test suite
+    storageState: 'playwright/.auth/admin.json',
+
     // Base URL from environment or default
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
 

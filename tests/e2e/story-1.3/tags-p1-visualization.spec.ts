@@ -21,8 +21,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
    *       And data-testid="usuario-etiquetas" presente en vista de detalle
    */
   test('[P1-E2E-003] should display tags as badges in user profile and list', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // And: Use existing user from seed (tecnico@hiansa.com)
@@ -60,8 +59,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
    *       Then puedo filtrar usuarios por etiqueta
    */
   test('[P1-E2E-004] should filter users by tag', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to user list
@@ -102,8 +100,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
    *       Then puedo ordenar lista por etiqueta
    */
   test('[P1-E2E-005] should sort users by tag', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to user list
@@ -134,8 +131,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
    *       And etiqueta deja de aparecer en lista de etiquetas disponibles
    */
   test('[P1-E2E-006] should delete tag with cascade confirmation', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to tags management page
@@ -188,8 +184,7 @@ test.describe('Story 1.3 - P1: Tag Display & Navigation', () => {
   test('[P1-E2E-007] should display clarifier message that tags do not grant permissions', async ({
     page,
   }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
     await page.waitForLoadState('domcontentloaded');
 
     // When: Navigate to tags management page (where clarifier message is)

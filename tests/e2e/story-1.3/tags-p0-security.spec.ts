@@ -55,8 +55,7 @@ test.describe('Story 1.3 - P0: Tag Security (CRITICAL)', () => {
    *       And capabilities y etiquetas son completamente independientes
    */
   test('[P0-E2E-001] should not grant capabilities when tag is assigned', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
 
     // Wait for page stabilization using network-first approach
     const dashboardPromise = page.waitForResponse('**/api/dashboard').catch(() => null);
@@ -118,7 +117,7 @@ test.describe('Story 1.3 - P0: Tag Security (CRITICAL)', () => {
     await page.getByRole('button', { name: 'Sign out' }).click();
     await page.waitForURL('/login', { timeout: 5000 });
 
-    // Log in as the created user
+    // Log in as the created user (NOT using storageState - this is a different user)
     await loginAs(page, limitedUser.email, limitedUser.password);
 
     // Wait for login to complete
@@ -139,8 +138,7 @@ test.describe('Story 1.3 - P0: Tag Security (CRITICAL)', () => {
    *       And la etiqueta no sincroniza capabilities entre usuarios
    */
   test('[P0-E2E-002] should allow same tag with different capabilities', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
 
     // Wait for page stabilization
     await page.waitForLoadState('domcontentloaded');
@@ -249,8 +247,7 @@ test.describe('Story 1.3 - P0: Tag Security (CRITICAL)', () => {
    *       Then las capabilities del usuario se mantienen intactas
    */
   test('[P0-E2E-003] should preserve capabilities when tag is deleted', async ({ page }) => {
-    // Given: Admin logged in
-    await loginAsAdmin(page);
+    // Given: Admin already logged in (via storageState from global-setup)
 
     // Wait for page stabilization
     await page.waitForLoadState('domcontentloaded');
