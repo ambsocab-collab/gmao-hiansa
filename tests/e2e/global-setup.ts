@@ -11,6 +11,38 @@
 import { FullConfig, chromium } from '@playwright/test';
 import path from 'path';
 
+// Helper to extract cookies from set-cookie header
+// Works with both fetch Headers and Playwright APIResponse
+function parseCookies(headers: Headers | any): string {
+  const cookies: string[] = [];
+
+  // Handle Playwright APIResponse headers
+  if (headers.headers) {
+    // Playwright APIResponse
+    const setCookieHeaders = headers.headers()['set-cookie'];
+    if (Array.isArray(setCookieHeaders)) {
+      setCookieHeaders.forEach(cookie => {
+        cookies.push(cookie.split(';')[0].trim());
+      });
+    } else if (setCookieHeaders) {
+      // Single set-cookie header
+      setCookieHeaders.split('\n').forEach(c => {
+        cookies.push(c.split(';')[0].trim());
+      });
+    }
+  } else if (typeof headers.forEach === 'function') {
+    // Standard fetch Headers
+    headers.forEach((value: string, key: string) => {
+      if (key === 'set-cookie') {
+        const cookieValues = value.split('\n').map(c => c.split(';')[0].trim());
+        cookies.push(...cookieValues);
+      }
+    });
+  }
+
+  return cookies.join('; ');
+}
+
 async function globalSetup(_config: FullConfig) {
   const baseURL = process.env.BASE_URL || 'http://localhost:3000';
   const maxRetries = 30;
@@ -110,9 +142,10 @@ async function globalSetup(_config: FullConfig) {
 
   // ============================================================================
   // AUTHENTICATION SETUP - Save admin session for reuse across tests
+  // Uses direct API calls to avoid React form issues in Playwright
   // ============================================================================
 
-  console.log('🔐 Setting up authenticated session...\n');
+  console.log('🔐 Setting up authenticated session via API...\n');
 
   const authFile = path.join(__dirname, '..', '..', 'playwright', '.auth', 'admin.json');
 
@@ -125,22 +158,76 @@ async function globalSetup(_config: FullConfig) {
   const page = await context.newPage();
 
   try {
-    // Navigate to login page
-    await page.goto('/login');
-    await page.getByTestId('login-email').waitFor({ state: 'visible' });
+    // Store cookies to maintain session
+    let cookieStore = '';
 
-    // Fill login form with admin credentials
-    await page.getByTestId('login-email').fill('admin@hiansa.com');
-    await page.getByTestId('login-password').fill('admin123');
+    // Step 1: Get CSRF token
+    console.log('[STEP 1] Getting CSRF token...');
+    const csrfResponse = await fetch(`${baseURL}/api/auth/csrf`);
+    const csrfData = await csrfResponse.json() as { csrfToken: string };
+    console.log('[DEBUG] CSRF token:', csrfData?.csrfToken?.substring(0, 20) + '...');
 
-    // Submit login and wait for navigation
-    await Promise.all([
-      page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
-      page.getByTestId('login-submit').click(),
-    ]);
+    // Extract cookies from CSRF response
+    const csrfCookies = parseCookies(csrfResponse.headers);
+    cookieStore = csrfCookies;
+    console.log('[DEBUG] Cookies after CSRF:', cookieStore.substring(0, 100) + '...');
 
-    // Wait for page to stabilize after login
+    // Step 2: Make login request with cookies
+    console.log('[STEP 2] Making login request...');
+
+    // Use fetch from node for API calls
+    const loginResponse = await fetch(`${baseURL}/api/auth/callback/credentials`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': cookieStore
+      },
+      body: new URLSearchParams({
+        csrfToken: csrfData!.csrfToken,
+        email: 'admin@hiansa.com',
+        password: 'admin123',
+        redirect: 'false',
+        json: 'true'
+      }),
+      redirect: 'manual'
+    });
+
+    console.log('[DEBUG] Login response status:', loginResponse.status);
+    const loginBody = await loginResponse.text();
+    console.log('[DEBUG] Login response body:', loginBody);
+
+    if (loginResponse.status !== 200 && !loginBody.includes('http')) {
+      throw new Error(`Login failed with status ${loginResponse.status}: ${loginBody}`);
+    }
+
+    // Extract new cookies from login response
+    const loginCookies = parseCookies(loginResponse.headers);
+    if (loginCookies) {
+      cookieStore = loginCookies;
+      console.log('[DEBUG] Cookies after login:', cookieStore.substring(0, 100) + '...');
+    }
+
+    // Step 3: Navigate to a page to establish browser session
+    console.log('[STEP 3] Establishing browser session...');
+
+    // Set cookies in browser context
+    const cookies = cookieStore.split('; ').map(cookieStr => {
+      const [name, value] = cookieStr.split('=');
+      return { name, value, domain: 'localhost', path: '/' };
+    });
+
+    await context.addCookies(cookies);
+
+    // Navigate to dashboard to confirm session
+    await page.goto(`${baseURL}/dashboard`);
     await page.waitForLoadState('domcontentloaded');
+
+    console.log('[DEBUG] Current URL after login:', page.url());
+
+    // Verify we're not on login page
+    if (page.url().includes('/login')) {
+      throw new Error('Login failed - redirected to login page');
+    }
 
     // Save authentication state to file
     await context.storageState({ path: authFile });

@@ -12,7 +12,7 @@
 
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker/locale/es';
-import { loginAsAdmin, loginAs, logout } from '../helpers/auth.helpers';
+import { logout } from '../helpers/auth.helpers';
 
 // Helper to get base URL
 function getBaseURL(): string {
@@ -26,12 +26,6 @@ test.describe('Story 1.1: Admin User Management', () => {
   // IMPORTANT: These tests MUST run serially because they all use admin@hiansa.com
   // Running them in parallel causes race conditions when managing the same user
   test.describe.configure({ mode: 'serial' });
-
-  // Ensure clean session before each test
-  test.beforeEach(async ({ page }) => {
-    // Clear cookies to ensure clean session state
-    await page.context().clearCookies()
-  })
 
   // Track created users for cleanup
   const createdUserEmails: string[] = [];
@@ -80,11 +74,22 @@ test.describe('Story 1.1: Admin User Management', () => {
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
     createdUserEmails.push(uniqueEmail); // Track for cleanup
 
-    // Given: admin user with can_manage_users capability (from seed: admin@hiansa.com)
-    await loginAsAdmin(page);
+    // Given: admin user already authenticated (via storageState from global-setup)
+    await page.waitForLoadState('domcontentloaded');
+
+    // Debug: Check current URL and cookies before navigation
+    console.log('[DEBUG] Current URL before navigation:', page.url());
+    const cookies = await page.context().cookies();
+    console.log('[DEBUG] Cookies loaded:', cookies.length);
+    const sessionCookie = cookies.find(c => c.name === 'next-auth.session-token');
+    console.log('[DEBUG] Session cookie exists:', !!sessionCookie);
 
     // When: admin navigates to user creation page
     await page.goto(getBaseURL() + '/usuarios/nuevo');
+
+    // Debug: Check if we were redirected
+    console.log('[DEBUG] URL after navigation:', page.url());
+    console.log('[DEBUG] Page title:', await page.title());
 
     // Then: see registration form
     await expect(page.getByTestId('register-form')).toBeVisible();
@@ -116,8 +121,10 @@ test.describe('Story 1.1: Admin User Management', () => {
     const uniqueEmail = `test-${faker.string.uuid()}@example.com`;
     createdUserEmails.push(uniqueEmail); // Track for cleanup
 
-    // Given: admin user
-    await loginAsAdmin(page);
+    // Given: admin user already authenticated (via storageState from global-setup)
+    await page.waitForLoadState('domcontentloaded');
+
+    // When: admin navigates to user creation page
     await page.goto(getBaseURL() + '/usuarios/nuevo');
 
     // When: admin selects multiple capabilities
@@ -171,10 +178,10 @@ test.describe('Story 1.1: Admin User Management', () => {
     const tempPassword = 'TempPassword123';
     createdUserEmails.push(uniqueEmail); // Track for cleanup (though this test deletes the user itself)
 
-    // Given: admin user
-    await loginAsAdmin(page);
+    // Given: admin user already authenticated (via storageState from global-setup)
+    await page.waitForLoadState('domcontentloaded');
 
-    // Create a test user to delete
+    // When: Create a test user to delete
     await page.goto(getBaseURL() + '/usuarios/nuevo');
     await page.getByTestId('register-name').fill('Usuario Para Eliminar');
     await page.getByTestId('register-email').fill(uniqueEmail);
@@ -215,8 +222,8 @@ test.describe('Story 1.1: Admin User Management', () => {
   });
 
   test('[P0-E2E-015] should show users list with admin capabilities', async ({ page }) => {
-    // Given: admin user
-    await loginAsAdmin(page);
+    // Given: admin user already authenticated (via storageState from global-setup)
+    await page.waitForLoadState('domcontentloaded');
 
     // When: admin navigates to users list
     await page.goto(getBaseURL() + '/usuarios');
