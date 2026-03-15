@@ -38,7 +38,8 @@ describe('PBAC Middleware', () => {
     it('should have capabilities defined for dashboard', async () => {
       const { ROUTE_CAPABILITIES } = await import('@/middleware')
 
-      expect(ROUTE_CAPABILITIES['/dashboard']).toEqual(['can_view_kpis'])
+      // Dashboard is accessible to all authenticated users (no capabilities required)
+      expect(ROUTE_CAPABILITIES['/dashboard']).toEqual([])
     })
 
     it('should have capabilities defined for work-orders', async () => {

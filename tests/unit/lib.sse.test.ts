@@ -7,7 +7,8 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { createSSEStream, sendSSEEvent } from '@/lib/sse';
+import { createSSEStream } from '@/lib/sse';
+import { sendSSEEvent } from '@/lib/sse/utils';
 
 describe('lib/sse - SSE Utilities', () => {
   describe('createSSEStream', () => {
@@ -49,125 +50,68 @@ describe('lib/sse - SSE Utilities', () => {
   });
 
   describe('sendSSEEvent', () => {
-    it('[P0] 0.4-UNIT-005: should enqueue SSE event to controller', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
+    it('[P0] 0.4-UNIT-005: should format SSE event correctly', () => {
       const eventData = { test: 'data', id: 123 };
-      sendSSEEvent(mockController as any, 'test_event', eventData);
+      const sseEvent = sendSSEEvent('test_event', eventData);
 
-      expect(mockController.enqueue).toHaveBeenCalledWith(
-        expect.any(Uint8Array)
-      );
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: test_event');
-      expect(text).toContain('data: {"test":"data","id":123}');
+      expect(sseEvent).toContain('event: test_event');
+      expect(sseEvent).toContain('data: {"test":"data","id":123}');
+      expect(sseEvent).toContain('\n\n'); // Events end with double newline
     });
 
     it('[P1] 0.4-UNIT-006: should format event correctly', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
       const eventData = { message: 'Hello SSE' };
-      sendSSEEvent(mockController as any, 'message', eventData);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
+      const sseEvent = sendSSEEvent('message', eventData);
 
       // SSE format: event: <type>\ndata: <json>\n\n
-      expect(text).toMatch(/^event: message\n/);
-      expect(text).toMatch(/data: \{.*\}\n\n$/);
+      expect(sseEvent).toMatch(/^event: message\n/);
+      expect(sseEvent).toMatch(/data: \{.*\}\n\n$/);
     });
 
     it('[P2] 0.4-UNIT-007: should handle complex JSON data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
       const complexData = {
         user: { id: '123', name: 'Test User' },
         items: [1, 2, 3],
         nested: { a: { b: 'c' } }
       };
 
-      sendSSEEvent(mockController as any, 'complex', complexData);
+      const sseEvent = sendSSEEvent('complex', complexData);
 
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: complex');
-      expect(text).toContain('data: {');
-      expect(text).toContain('"user"');
-      expect(text).toContain('"items"');
-      expect(text).toContain('"nested"');
+      expect(sseEvent).toContain('event: complex');
+      expect(sseEvent).toContain('data: {');
+      expect(sseEvent).toContain('"user"');
+      expect(sseEvent).toContain('"items"');
+      expect(sseEvent).toContain('"nested"');
     });
 
-    it('[P2] 0.4-UNIT-008: should handle string data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+    it('[P2] 0.4-UNIT-008: should handle event ID', () => {
+      const eventData = { message: 'test' };
+      const sseEvent = sendSSEEvent('test_event', eventData, 'evt-123');
 
-      sendSSEEvent(mockController as any, 'simple', 'test string');
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: simple');
-      expect(text).toContain('data: "test string"');
+      expect(sseEvent).toContain('id: evt-123');
+      expect(sseEvent).toContain('event: test_event');
+      expect(sseEvent).toContain('data: {"message":"test"}');
     });
 
     it('[P2] 0.4-UNIT-009: should handle numeric data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+      const sseEvent = sendSSEEvent('number', 42);
 
-      sendSSEEvent(mockController as any, 'number', 42);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: number');
-      expect(text).toContain('data: 42');
+      expect(sseEvent).toContain('event: number');
+      expect(sseEvent).toContain('data: 42');
     });
 
     it('[P2] 0.4-UNIT-010: should handle boolean data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+      const sseEvent = sendSSEEvent('bool', true);
 
-      sendSSEEvent(mockController as any, 'bool', true);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: bool');
-      expect(text).toContain('data: true');
+      expect(sseEvent).toContain('event: bool');
+      expect(sseEvent).toContain('data: true');
     });
 
     it('[P2] 0.4-UNIT-011: should handle null data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+      const sseEvent = sendSSEEvent('null', null);
 
-      sendSSEEvent(mockController as any, 'null', null);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: null');
-      expect(text).toContain('data: null');
+      expect(sseEvent).toContain('event: null');
+      expect(sseEvent).toContain('data: null');
     });
   });
 
@@ -187,108 +131,65 @@ describe('lib/sse - SSE Utilities', () => {
     });
 
     it('[P2] 0.4-UNIT-013: should handle Unicode characters in data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
       const unicodeData = {
         message: 'Hola Mundo 🌍',
         emoji: '🚀🔥💻',
         special: 'ñáéíóú'
       };
 
-      sendSSEEvent(mockController as any, 'unicode', unicodeData);
+      const sseEvent = sendSSEEvent('unicode', unicodeData);
 
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('Hola Mundo 🌍');
-      expect(text).toContain('🚀🔥💻');
-      expect(text).toContain('ñáéíóú');
+      expect(sseEvent).toContain('Hola Mundo 🌍');
+      expect(sseEvent).toContain('🚀🔥💻');
+      expect(sseEvent).toContain('ñáéíóú');
     });
 
     it('[P2] 0.4-UNIT-014: should handle event names with special characters', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+      const event1 = sendSSEEvent('event-with-dash', { data: 1 });
+      const event2 = sendSSEEvent('event_with_underscore', { data: 2 });
+      const event3 = sendSSEEvent('event.with.dots', { data: 3 });
 
-      sendSSEEvent(mockController as any, 'event-with-dash', { data: 1 });
-      sendSSEEvent(mockController as any, 'event_with_underscore', { data: 2 });
-      sendSSEEvent(mockController as any, 'event.with.dots', { data: 3 });
-
-      expect(mockController.enqueue).toHaveBeenCalledTimes(3);
+      expect(event1).toContain('event: event-with-dash');
+      expect(event2).toContain('event: event_with_underscore');
+      expect(event3).toContain('event: event.with.dots');
     });
 
     it('[P2] 0.4-UNIT-015: should handle empty object data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
+      const sseEvent = sendSSEEvent('empty', {});
 
-      sendSSEEvent(mockController as any, 'empty', {});
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: empty');
-      expect(text).toContain('data: {}');
+      expect(sseEvent).toContain('event: empty');
+      expect(sseEvent).toContain('data: {}');
     });
 
     it('[P2] 0.4-UNIT-016: should handle array data', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
       const arrayData = [1, 2, 3, 'four', { five: 5 }];
+      const sseEvent = sendSSEEvent('array', arrayData);
 
-      sendSSEEvent(mockController as any, 'array', arrayData);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
-
-      expect(text).toContain('event: array');
-      expect(text).toContain('data: [');
-      expect(text).toContain('1');
-      expect(text).toContain('2');
-      expect(text).toContain('3');
+      expect(sseEvent).toContain('event: array');
+      expect(sseEvent).toContain('data: [');
+      expect(sseEvent).toContain('1');
+      expect(sseEvent).toContain('2');
+      expect(sseEvent).toContain('3');
     });
   });
 
   describe('SSE Event Format Compliance', () => {
     it('[P1] 0.4-UNIT-017: should follow SSE format specification', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
-      sendSSEEvent(mockController as any, 'test', { msg: 'hello' });
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
+      const sseEvent = sendSSEEvent('test', { msg: 'hello' });
 
       // SSE spec: each line ends with \n, final blank line
-      const lines = text.split('\n');
+      const lines = sseEvent.split('\n');
       expect(lines[0]).toBe('event: test');
       expect(lines[1]).toMatch(/^data: /);
       expect(lines[2]).toBe(''); // Empty line at end
     });
 
     it('[P2] 0.4-UNIT-018: should properly escape JSON in data field', () => {
-      const mockController = {
-        enqueue: vi.fn()
-      };
-
       const dataWithQuotes = { text: 'He said "hello"' };
-      sendSSEEvent(mockController as any, 'quoted', dataWithQuotes);
-
-      const enrolledData = mockController.enqueue.mock.calls[0][0];
-      const decoder = new TextDecoder();
-      const text = decoder.decode(enrolledData);
+      const sseEvent = sendSSEEvent('quoted', dataWithQuotes);
 
       // JSON should be properly escaped
-      expect(() => JSON.parse(text.split('\n')[1].substring(6))).not.toThrow();
+      expect(() => JSON.parse(sseEvent.split('\n')[1].substring(6))).not.toThrow();
     });
   });
 });

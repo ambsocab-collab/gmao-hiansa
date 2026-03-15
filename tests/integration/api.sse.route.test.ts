@@ -10,9 +10,10 @@
  * - Event broadcasting
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { GET } from '@/app/api/v1/sse/route'
 import { NextRequest } from 'next/server'
+import { BroadcastManager } from '@/lib/sse/broadcaster'
 
 // Mock NextAuth
 vi.mock('@/lib/auth-adapter', () => ({
@@ -200,6 +201,11 @@ describe('SSE Endpoint Integration Tests', () => {
 })
 
 describe('SSE Endpoint Reconnection Support', () => {
+  beforeEach(() => {
+    // Reset broadcaster state to ensure clean test environment
+    BroadcastManager.resetForTesting()
+  })
+
   it('[P1] 0.4-INT-008: should support replay buffer for missed events', async () => {
     // Mock auth to return session
     vi.mocked(auth).mockResolvedValueOnce({
@@ -212,7 +218,6 @@ describe('SSE Endpoint Reconnection Support', () => {
     })
 
     // Create a test event that should be in replay buffer
-    const { BroadcastManager } = await import('@/lib/sse/broadcaster')
 
     // Broadcast a test event before connection
     BroadcastManager.broadcast('work-orders', {
@@ -238,7 +243,7 @@ describe('SSE Endpoint Reconnection Support', () => {
       })
     })
 
-    // Clean up
+    // Clean up (resetForTesting is already called in beforeEach)
     BroadcastManager.resetForTesting()
   })
 

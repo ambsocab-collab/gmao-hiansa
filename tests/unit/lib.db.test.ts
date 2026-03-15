@@ -74,8 +74,8 @@ describe('lib/db - PrismaClient Singleton', () => {
     });
 
     it('[P2] 0.2-UNIT-008: should have timestamp fields', () => {
-      expect(prisma.user.fields.created_at).toBeDefined();
-      expect(prisma.user.fields.updated_at).toBeDefined();
+      expect(prisma.user.fields.createdAt).toBeDefined();
+      expect(prisma.user.fields.updatedAt).toBeDefined();
     });
 
     it('[P2] 0.2-UNIT-009: should have unique constraint on email', () => {

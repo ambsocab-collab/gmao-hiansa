@@ -53,7 +53,9 @@ class MockEventSource {
   public triggerEvent(type: string, data: unknown): void {
     const listeners = this.eventListeners.get(type)
     if (listeners) {
-      const event = new MessageEvent(type, { data })
+      // Serialize data as JSON string to match real EventSource behavior
+      const serializedData = typeof data === 'string' ? data : JSON.stringify(data)
+      const event = new MessageEvent(type, { data: serializedData })
       listeners.forEach((listener) => listener(event))
     }
   }

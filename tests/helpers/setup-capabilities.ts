@@ -104,15 +104,8 @@ const CAPABILITIES = [
  * ```
  */
 export async function setupCapabilities() {
-  // Check if capabilities already exist
-  const existingCount = await prisma.capability.count()
-
-  if (existingCount === 15) {
-    // Already seeded, skip
-    return
-  }
-
   // Create all capabilities (upsert to handle partial data)
+  // This is idempotent - safe to call multiple times
   for (const capability of CAPABILITIES) {
     await prisma.capability.upsert({
       where: { name: capability.name },
@@ -125,7 +118,9 @@ export async function setupCapabilities() {
     })
   }
 
-  console.log(`[setupCapabilities] Created 15 capabilities in test database`)
+  // Verify all 15 capabilities exist
+  const count = await prisma.capability.count()
+  console.log(`[setupCapabilities] Verified ${count} capabilities in test database`)
 }
 
 /**

@@ -7,6 +7,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { POST, GET } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth.config'
 
 describe('NextAuth Configuration', () => {
   describe('Route Handlers', () => {
@@ -23,7 +24,6 @@ describe('NextAuth Configuration', () => {
     it('[P0] 0.3-UNIT-002: should have Credentials provider configured', async () => {
       // Este test validará que el Credentials provider está configurado
       // La implementación hará pasar este test
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions).toBeDefined()
       expect(authOptions.providers).toBeInstanceOf(Array)
@@ -37,7 +37,6 @@ describe('NextAuth Configuration', () => {
     })
 
     it('[P0] 0.3-UNIT-003: should have JWT session strategy with 8 hour maxAge', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.session).toBeDefined()
       expect(authOptions.session.strategy).toBe('jwt')
@@ -45,7 +44,6 @@ describe('NextAuth Configuration', () => {
     })
 
     it('[P0] 0.3-UNIT-004: should have jwt callback configured', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks).toBeDefined()
       expect(authOptions.callbacks.jwt).toBeDefined()
@@ -53,21 +51,18 @@ describe('NextAuth Configuration', () => {
     })
 
     it('[P0] 0.3-UNIT-005: should have session callback configured', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks.session).toBeDefined()
       expect(typeof authOptions.callbacks.session).toBe('function')
     })
 
     it('[P1] 0.3-UNIT-006: should have signIn callback configured', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.callbacks.signIn).toBeDefined()
       expect(typeof authOptions.callbacks.signIn).toBe('function')
     })
 
     it('[P1] 0.3-UNIT-007: should have custom pages configured', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       expect(authOptions.pages).toBeDefined()
       expect(authOptions.pages.signIn).toBe('/login')
@@ -77,7 +72,6 @@ describe('NextAuth Configuration', () => {
 
   describe('JWT Callback Behavior', () => {
     it('[P0] 0.3-UNIT-008: should add user id and capabilities to token when user exists', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockUser = {
         id: 'user-123',
@@ -98,7 +92,6 @@ describe('NextAuth Configuration', () => {
     })
 
     it('[P1] 0.3-UNIT-009: should add forcePasswordReset to token when user has temporary password', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockUser = {
         id: 'user-123',
@@ -120,7 +113,6 @@ describe('NextAuth Configuration', () => {
     })
 
     it('[P2] 0.3-UNIT-010: should preserve existing token when user is undefined', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockToken = {
         id: 'user-123',
@@ -139,7 +131,6 @@ describe('NextAuth Configuration', () => {
 
   describe('Session Callback Behavior', () => {
     it('should add user id and capabilities from token to session', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockToken = {
         id: 'user-123',
@@ -163,7 +154,6 @@ describe('NextAuth Configuration', () => {
     })
 
     it('should add forcePasswordReset from token to session', async () => {
-      const { authOptions } = await import('@/app/api/auth/[...nextauth]/route')
 
       const mockToken = {
         id: 'user-123',

@@ -17,6 +17,7 @@ import {
   hasAllCapabilities,
   logAccessDenied
 } from '@/middleware'
+import { withAuth } from 'next-auth/middleware'
 
 // Mock NextAuth
 vi.mock('next-auth/middleware', () => ({

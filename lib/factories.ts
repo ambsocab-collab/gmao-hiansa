@@ -45,15 +45,15 @@ export async function createTestEquipo(
   overrides?: {
     name?: string
     code?: string
-    linea_id?: string
+    lineaId?: string
     estado?: EquipoEstado
     ubicacion_actual?: string
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  // Si no se proporciona linea_id, crear una línea de prueba primero
-  let lineaId = overrides?.linea_id
+  // Si no se proporciona lineaId, crear una línea de prueba primero
+  let lineaId = overrides?.lineaId
   if (!lineaId) {
     const planta = await client.planta.create({
       data: {
@@ -67,7 +67,11 @@ export async function createTestEquipo(
       data: {
         name: 'Test Línea',
         code: `TEST-LINEA-${Date.now()}`,
-        planta_id: planta.id,
+        planta: {
+          connect: {
+            id: planta.id,
+          },
+        },
       },
     })
 
@@ -78,7 +82,11 @@ export async function createTestEquipo(
     data: {
       name: overrides?.name || 'Test Equipo',
       code: overrides?.code || `TEST-EQ-${Date.now()}`,
-      linea_id: lineaId!,
+      linea: {
+        connect: {
+          id: lineaId!,
+        },
+      },
       estado: overrides?.estado || EquipoEstado.OPERATIVO,
       ubicacion_actual: overrides?.ubicacion_actual || 'Test Location',
     },
@@ -94,13 +102,13 @@ export async function createTestWorkOrder(
     tipo?: 'PREVENTIVO' | 'CORRECTIVO'
     estado?: string
     descripcion?: string
-    equipo_id?: string
+    equipoId?: string
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  // Si no se proporciona equipo_id, crear uno primero
-  let equipoId = overrides?.equipo_id
+  // Si no se proporciona equipoId, crear uno primero
+  let equipoId = overrides?.equipoId
   if (!equipoId) {
     const equipo = await createTestEquipo(undefined, tx)
     equipoId = equipo.id
@@ -112,7 +120,11 @@ export async function createTestWorkOrder(
       tipo: overrides?.tipo || 'CORRECTIVO',
       estado: (overrides?.estado as 'PENDIENTE' | 'ASIGNADA' | 'EN_PROGRESO' | 'PENDIENTE_REPUESTO' | 'PENDIENTE_PARADA' | 'REPARACION_EXTERNA' | 'COMPLETADA' | 'DESCARTADA') || 'PENDIENTE',
       descripcion: overrides?.descripcion || 'Test WorkOrder description',
-      equipo_id: equipoId!,
+      equipo: {
+        connect: {
+          id: equipoId!,
+        },
+      },
     },
   })
 }
@@ -125,20 +137,20 @@ export async function createTestFailureReport(
     numero?: string
     descripcion?: string
     foto_url?: string
-    equipo_id?: string
+    equipoId?: string
     reportado_por?: string
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  // Si no se proporciona equipo_id, crear uno primero
-  let equipoId = overrides?.equipo_id
+  // Si no se proporciona equipoId, crear uno primero
+  let equipoId = overrides?.equipoId
   if (!equipoId) {
     const equipo = await createTestEquipo(undefined, tx)
     equipoId = equipo.id
   }
 
-  // Si no se proporciona reportado_por, crear un usuario primero
+  // Si no se proporciona reportadoPor, crear un usuario primero
   let reportadoPor = overrides?.reportado_por
   if (!reportadoPor) {
     const user = await createTestUser(undefined, tx)
@@ -150,7 +162,11 @@ export async function createTestFailureReport(
       numero: overrides?.numero || `RA-TEST-${Date.now()}`,
       descripcion: overrides?.descripcion || 'Test FailureReport description',
       foto_url: overrides?.foto_url,
-      equipo_id: equipoId!,
+      equipo: {
+        connect: {
+          id: equipoId!,
+        },
+      },
       reportado_por: reportadoPor!,
     },
   })
@@ -205,13 +221,13 @@ export async function createTestLinea(
   overrides?: {
     name?: string
     code?: string
-    planta_id?: string
+    plantaId?: string
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  // Si no se proporciona planta_id, crear una primero
-  let plantaId = overrides?.planta_id
+  // Si no se proporciona plantaId, crear una primero
+  let plantaId = overrides?.plantaId
   if (!plantaId) {
     const planta = await createTestPlanta(undefined, tx)
     plantaId = planta.id
@@ -221,7 +237,11 @@ export async function createTestLinea(
     data: {
       name: overrides?.name || 'Test Línea',
       code: overrides?.code || `TEST-LINEA-${Date.now()}`,
-      planta_id: plantaId!,
+      planta: {
+        connect: {
+          id: plantaId!,
+        },
+      },
     },
   })
 }
@@ -252,15 +272,16 @@ export async function createTestRepuesto(
   overrides?: {
     name?: string
     code?: string
-    componente_id?: string
+    componenteId?: string
     stock?: number
     stock_minimo?: number
+    ubicacion_fisica?: string
   },
   tx?: PrismaTransactionClient
 ) {
   const client = tx || prisma
-  // Si no se proporciona componente_id, crear uno primero
-  let componenteId = overrides?.componente_id
+  // Si no se proporciona componenteId, crear uno primero
+  let componenteId = overrides?.componenteId
   if (!componenteId) {
     const componente = await createTestComponente(undefined, tx)
     componenteId = componente.id
@@ -270,9 +291,14 @@ export async function createTestRepuesto(
     data: {
       name: overrides?.name || 'Test Repuesto',
       code: overrides?.code || `TEST-REP-${Date.now()}`,
-      componente_id: componenteId!,
+      componente: {
+        connect: {
+          id: componenteId!,
+        },
+      },
       stock: overrides?.stock ?? 0,
       stock_minimo: overrides?.stock_minimo ?? 0,
+      ubicacion_fisica: overrides?.ubicacion_fisica || 'Estante A-10',
     },
   })
 }

@@ -171,7 +171,7 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
         const componentesCount = await prisma.componente.count()
         const repuestosCount = await prisma.repuesto.count()
 
-        expect(usersCount).toBe(3) // admin, tecnico, supervisor
+        expect(usersCount).toBe(4) // admin, tecnico, supervisor, new user (Story 1.3)
         expect(capabilitiesCount).toBe(15) // 15 PBAC capabilities
         expect(plantasCount).toBe(2) // HiRock, Ultra
         expect(lineasCount).toBe(5) // 5 production lines
@@ -182,11 +182,11 @@ describe('API /api/v1/test-data/seed - Seed Endpoint', () => {
         // Verify admin has all capabilities
         const admin = await prisma.user.findUnique({
           where: { email: 'admin@hiansa.com' },
-          include: { user_capabilities: true },
+          include: { userCapabilities: true },
         })
 
         expect(admin).not.toBeNull()
-        expect(admin?.user_capabilities.length).toBe(15)
+        expect(admin?.userCapabilities.length).toBe(15) // Admin has all capabilities
       }
 
       // Restore original env

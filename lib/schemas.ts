@@ -66,6 +66,9 @@ export const createTagSchema = z.object({
     .max(50, 'Nombre debe tener máximo 50 caracteres')
     .regex(/^[a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s\-_]+$/, {
       message: 'Nombre solo puede contener letras, números, espacios, guiones y guiones bajos',
+    })
+    .refine((val) => val.trim().length > 0, {
+      message: 'Nombre de etiqueta no puede estar vacío',
     }),
   color: hexColorSchema,
   description: z
@@ -76,7 +79,12 @@ export const createTagSchema = z.object({
 
 // Schema for assigning tags to a user
 export const assignTagsSchema = z.object({
-  userId: z.string().min(1, 'ID de usuario requerido'),
+  userId: z
+    .string()
+    .min(1, 'ID de usuario requerido')
+    .refine((val) => val.trim().length > 0, {
+      message: 'ID de usuario requerido',
+    }),
   tagIds: z
     .array(z.string())
     .min(0, 'Puede tener 0 o más etiquetas')
@@ -92,6 +100,9 @@ export const updateTagSchema = z.object({
     .regex(/^[a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s\-_]+$/, {
       message: 'Nombre solo puede contener letras, números, espacios, guiones y guiones bajos',
     })
+    .refine((val) => val.trim().length > 0, {
+      message: 'Nombre de etiqueta no puede estar vacío',
+    })
     .optional(),
   color: hexColorSchema.optional(),
   description: z
@@ -102,7 +113,12 @@ export const updateTagSchema = z.object({
 
 // Schema for deleting a tag (requires confirmation)
 export const deleteTagSchema = z.object({
-  tagId: z.string().min(1, 'ID de etiqueta requerido'),
+  tagId: z
+    .string()
+    .min(1, 'ID de etiqueta requerido')
+    .refine((val) => val.trim().length > 0, {
+      message: 'ID de etiqueta requerido',
+    }),
   confirm: z
     .boolean()
     .refine((val) => val === true, {

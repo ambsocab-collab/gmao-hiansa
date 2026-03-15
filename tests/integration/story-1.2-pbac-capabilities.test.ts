@@ -121,7 +121,7 @@ describe('Story 1.2: PBAC Capabilities System (Integration Tests)', () => {
     })
 
     if (!manageUsersCapability) {
-      throw new Error('can_manage_users capability not found')
+      throw new Error('can_manage_users capability not found - ensure setupCapabilities() was called')
     }
 
     await prisma.userCapability.create({
@@ -149,7 +149,7 @@ describe('Story 1.2: PBAC Capabilities System (Integration Tests)', () => {
     })
 
     if (!defaultCapability) {
-      throw new Error('Default capability not found')
+      throw new Error(`${DEFAULT_CAPABILITY} capability not found - ensure setupCapabilities() was called`)
     }
 
     await prisma.userCapability.create({
