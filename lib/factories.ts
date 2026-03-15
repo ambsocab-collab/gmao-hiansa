@@ -167,7 +167,11 @@ export async function createTestFailureReport(
           id: equipoId!,
         },
       },
-      reportado_por: reportadoPor!,
+      reportadoPor: {
+        connect: {
+          id: reportadoPor!,
+        },
+      },
     },
   })
 }
