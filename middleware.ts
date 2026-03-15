@@ -39,6 +39,12 @@ import { NextResponse } from 'next/server'
 export const CORRELATION_ID_HEADER = 'x-correlation-id'
 
 /**
+ * Pathname header name for sidebar variant detection (Story 1.5)
+ * Exported for testing
+ */
+export const PATHNAME_HEADER = 'x-pathname'
+
+/**
  * Generates or retrieves correlation ID for request
  * Exported for testing
  * @param request - NextRequest object
@@ -155,9 +161,10 @@ export default withAuth(
     // Story 0.5: Generate or retrieve correlation ID
     const correlationId = getOrCreateCorrelationId(req.headers)
 
-    // Create request headers with correlation ID
+    // Create request headers with correlation ID and pathname (Story 1.5)
     const requestHeaders = new Headers(req.headers)
     requestHeaders.set(CORRELATION_ID_HEADER, correlationId)
+    requestHeaders.set(PATHNAME_HEADER, path) // Story 1.5: Add pathname for sidebar variant
 
     // Check if user has temporary password that must be changed
     // If forcePasswordReset=true, force redirect to /cambiar-password (Spanish route)

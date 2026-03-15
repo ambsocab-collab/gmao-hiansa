@@ -41,7 +41,7 @@ export default defineConfig({
     '**/*.e2e.{test,spec}.{ts,tsx}',  // Exclude files with .e2e suffix
   ],
 
-  // TypeScript configuration
+  // Test matching patterns
   testMatch: [
     'tests/unit/**/*.test.{ts,tsx}',
     'tests/unit/**/*.spec.{ts,tsx}',
@@ -51,6 +51,9 @@ export default defineConfig({
 
   // Environment
   environment: 'jsdom',
+
+  // Setup files - ensure jest-dom matchers are loaded
+  setupFiles: ['./tests/setup.ts'],
 
   // Coverage
   coverage: {
@@ -77,9 +80,6 @@ export default defineConfig({
       '@/tests': path.resolve(__dirname, './tests'),
     },
   },
-
-  // Setup files
-  setupFiles: ['./tests/setup.ts'],
 
   // Global coverage thresholds (adjust after baseline)
   coverageThreshold: {
