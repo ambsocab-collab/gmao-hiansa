@@ -3,7 +3,54 @@
 **GMAO (Gestión de Mantenimiento Asistido por Ordenador)**
 
 Framework: Next.js 15.0.3 (App Router) + TypeScript
-Testing: Playwright (E2E/API) + Vitest (Unit/Integration)
+Testing: **Playwright (E2E-Primary)** + Vitest (Unit/Integration)
+
+---
+
+## ⚠️ IMPORTANT: Testing Strategy
+
+### Multi-Layered Testing Approach
+
+This project uses a **multi-layered testing strategy** with complementary test types:
+
+**E2E Tests (Playwright) - CRITICAL for User Journeys** ✅
+- Tests complete user workflows from login to completion
+- Validates UI, API routes, authentication, authorization, and error handling
+- Covers PBAC authorization checks and access control
+- **59 E2E test files** covering all epics and stories
+- **WHY CRITICAL**: Catches integration issues that unit/integration tests miss
+
+**Integration Tests (Vitest) - CRITICAL for Business Logic** ✅
+- Tests Server Actions, middleware, and business rules
+- Validates PBAC middleware logic and authorization checks
+- Tests database operations and data transformations
+- Tests state management and data fetching logic
+- **~5 integration test files** for cross-feature validation
+- **WHY CRITICAL**: Fast feedback on business logic without browser overhead
+
+**Unit Tests (Vitest) - CRITICAL for Utilities** ✅
+- Tests pure functions, validation schemas, and utilities
+- Tests formatters, transformers, and helpers
+- Tests Zod schemas and type definitions
+- **~10 unit test files** for isolated function testing
+- **WHY CRITICAL**: Fastest feedback, catches bugs at function level
+
+**API Tests (Playwright) - MINIMAL** ⚠️
+- Only **1 test file** with 7 tests for public `/api/v1/capabilities` endpoint
+- Tests endpoints that DON'T require authentication
+- **WHY MINIMAL**: NextAuth makes authenticated API testing complex:
+  - NextAuth uses JWT + CSRF tokens that are hard to manage in API-only tests
+  - Most endpoints require session management that only works in browser context
+  - E2E tests naturally handle auth flow, cookies, and session state
+  - API tests for authenticated endpoints are error-prone and brittle
+
+### What This Means
+
+- ✅ **DO**: Write E2E tests for all user-facing features
+- ✅ **DO**: Write integration tests for Server Actions, middleware, and business logic
+- ✅ **DO**: Write unit tests for pure functions, utilities, validation schemas
+- ❌ **DON'T**: Write API tests for authenticated endpoints (use E2E + Integration instead)
+- ❌ **DON'T**: Try to test NextAuth flows with API-only tests (won't work reliably)
 
 ---
 
@@ -65,7 +112,7 @@ NEXTAUTH_SECRET="test-secret-min-32-chars-for-testing"
 
 ## Running Tests
 
-### Playwright E2E Tests
+### Playwright E2E Tests (PRIMARY)
 
 **Run all E2E tests:**
 
@@ -73,10 +120,17 @@ NEXTAUTH_SECRET="test-secret-min-32-chars-for-testing"
 npx playwright test
 ```
 
-**Run specific test file:**
+**Run specific Epic tests:**
 
 ```bash
-npx playwright test tests/e2e/example-login.spec.ts
+# Epic 0 (Infrastructure)
+npx playwright test tests/e2e/story-0.*
+
+# Epic 1 (Auth & PBAC) - Requires serial execution
+npx playwright test --workers=1 tests/e2e/story-1.*
+
+# All Epic 1 tests in serial mode (recommended)
+npm run test:e2e:serial
 ```
 
 **Run with UI (headed mode):**
@@ -91,6 +145,12 @@ npx playwright test --ui
 npx playwright test --debug
 ```
 
+**Run specific test file:**
+
+```bash
+npx playwright test tests/e2e/story-1.1-login-auth.spec.ts
+```
+
 **Run specific tests by grep:**
 
 ```bash
@@ -99,6 +159,9 @@ npx playwright test -g "login"
 
 # Run only P0 tests
 npx playwright test -g "P0-"
+
+# Run only flaky tests
+npx playwright test -g "flaky"
 ```
 
 **Update snapshots:**
@@ -132,6 +195,20 @@ npm run test:coverage
 ```bash
 npm test tests/unit/example-utils.test.ts
 ```
+
+### API Tests (MINIMAL)
+
+**Run all API tests:**
+
+```bash
+npx playwright test tests/api
+```
+
+**Note:** This will only run 7 tests for the public `/api/v1/capabilities` endpoint. Authenticated endpoints are tested via E2E tests.
+
+**Why so few API tests?** See "Why Only 1 API Test File?" section above.
+
+---
 
 ### Contract Tests (Pact)
 
@@ -177,15 +254,22 @@ npm run record:consumer:deployment
 
 ```
 tests/
-├── e2e/                          # Playwright E2E tests
-│   └── example-login.spec.ts     # Sample E2E test
-├── integration/                  # Vitest integration tests
+├── e2e/                          # Playwright E2E tests (PRIMARY STRATEGY)
+│   ├── story-0.*.spec.ts          # Epic 0 E2E tests (infrastructure)
+│   ├── story-1.*.spec.ts          # Epic 1 E2E tests (auth, PBAC, profile)
+│   ├── helpers/                   # E2E test helpers
+│   │   ├── auth.helpers.ts        # Login helpers (loginAsAdmin, etc.)
+│   │   └── factories.ts           # Test data factories
+│   └── fixtures/                  # Playwright test fixtures
 ├── unit/                         # Vitest unit tests
 │   └── example-utils.test.ts     # Sample unit test
+├── integration/                  # Vitest integration tests
+│   └── pbac-middleware.test.ts   # PBAC middleware tests
+├── api/                          # Playwright API tests (MINIMAL - public endpoints only)
+│   ├── capabilities.spec.ts      # Public endpoint test (7 tests)
+│   └── README.md                 # Why no more API tests?
 ├── fixtures/                     # Playwright test fixtures
 │   └── test.fixtures.ts         # Custom fixtures (login, cleanup)
-├── helpers/                      # Test helper functions
-│   └── api.helpers.ts            # API utilities
 ├── factories/                    # Test data factories
 │   └── data.factories.ts        # Faker.js based factories
 └── contract/                     # Pact.js contract tests
@@ -195,6 +279,63 @@ tests/
         ├── pact-config.ts
         └── provider-states.ts
 ```
+
+### Test Type Breakdown
+
+| Test Type | Count | Purpose | Examples |
+|-----------|-------|---------|----------|
+| **E2E** | **59 files** | **User journeys, auth flows, UI testing** | Login, create OT, PBAC checks |
+| **Integration** | **~5 files** | **Server Actions, middleware, business logic** | PBAC middleware, auth, Server Actions |
+| **Unit** | **~10 files** | **Pure functions, utilities, schemas** | Validation, formatters, Zod schemas |
+| **API** | 1 file | Public endpoints only | Capabilities endpoint (7 tests) |
+| Performance | 3 scripts | Load testing, baselines | Login, search, create OT |
+| Contract | 1 file | Pact consumer tests | Auth API contract |
+
+**NOTE:** E2E, Integration, and Unit tests are all CRITICAL and actively maintained. Only API tests are minimal due to NextAuth complexity.
+
+### Why Only 1 API Test File?
+
+**Question:** Why are there so few API tests?
+
+**Answer:** NextAuth makes API testing complex and unreliable:
+
+**The Problem:**
+```typescript
+// Required flow for authenticated API calls:
+// 1. GET /api/auth/csrf → Get CSRF token
+// 2. POST /api/auth/callback/credentials → Login with CSRF + credentials
+// 3. Extract cookies from response headers (complex)
+// 4. Manually manage session tokens
+// 5. Handle token expiration and refresh
+// This is brittle compared to E2E tests!
+```
+
+**The Solution - E2E Tests:**
+```typescript
+// E2E tests handle auth automatically:
+test('user can create OT', async ({ page }) => {
+  await loginAsAdmin(page); // One line handles all auth complexity
+  await page.goto('/ordenes/nueva');
+  await page.fill('[data-testid="ot-title"]', 'Avería P201');
+  await page.click('[data-testid="create-ot-button"]');
+  // Done! Auth, API call, and UI all tested together
+});
+```
+
+**What Gets Tested Instead:**
+
+| Endpoint | Auth Required | E2E Tests | Integration Tests | API Tests |
+|----------|---------------|-----------|-------------------|-----------|
+| `/api/v1/capabilities` | ❌ No | ✅ | ✅ | ✅ (only this one) |
+| `/api/auth/*` | ✅ Yes (JWT) | ✅ | ✅ | ❌ (too complex) |
+| `/api/v1/users` | ✅ Yes + PBAC | ✅ | ✅ | ❌ (use E2E/Integration) |
+| `/api/v1/users/[id]` | ✅ Yes + PBAC | ✅ | ✅ | ❌ (use E2E/Integration) |
+| `/api/v1/ots` | ✅ Yes + PBAC | ✅ | ✅ | ❌ (use E2E/Integration) |
+| Server Actions | ✅ Yes + PBAC | ✅ | ✅ | ❌ (use Integration) |
+
+**Key Point:** Authenticated endpoints are tested via **both** E2E (for full user flows) **and** Integration tests (for business logic validation). This provides comprehensive coverage without the complexity of API-only tests.
+
+---
 
 ### Fixtures
 
@@ -437,6 +578,12 @@ test('flaky test', async ({ page }) => {
 
 ---
 
-**Last Updated:** 2026-03-08
+**Last Updated:** 2026-03-16
 **Generated By:** BMad TEA Agent
 **Workflow:** Test Architect - Framework Initialization
+
+**Important Notes:**
+- This project uses **E2E-first testing strategy** due to NextAuth authentication complexity
+- API tests are minimal (only public endpoints) - authenticated endpoints tested via E2E
+- See `tests/api/README.md` for detailed explanation of API testing limitations
+- See `project-context.md` for complete testing rules and patterns
