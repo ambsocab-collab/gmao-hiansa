@@ -138,6 +138,25 @@ async function globalSetup(_config: FullConfig) {
     console.log('\n✅ All required users found - seed is up to date\n');
   }
 
+  // Verificar cuántos equipos hay (siempre, no solo después del seed)
+  try {
+    const countResponse = await fetch(`${baseURL}/api/v1/test/count-equipos`, {
+      signal: AbortSignal.timeout(5000)
+    });
+
+    if (countResponse.ok) {
+      const countData = await countResponse.json();
+      console.log('📊 Equipos en DB:', countData.count || 0);
+
+      if ((countData.count || 0) === 0) {
+        console.warn('⚠️  WARNING: No equipos found in database - tests will fail!');
+        console.warn('   Run: npm run db:seed');
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️  Could not verify equipos count:', error);
+  }
+
   console.log('🎯 E2E Global Setup complete\n');
 
   // ============================================================================
