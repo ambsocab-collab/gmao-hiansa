@@ -1,0 +1,594 @@
+
+> gmao-hiansa@0.1.0 test:e2e
+> playwright test --project=chromium tests/e2e/story-1.1-forced-password-reset.spec.ts tests/e2e/story-1.1-profile.spec.ts tests/e2e/story-1.1-admin-user-management.spec.ts tests/e2e/story-1.3-tags.spec.ts --reporter=list
+
+
+🔧 E2E Global Setup: Checking database seed...
+
+✅ Server is ready and database is up
+
+✅ User admin@hiansa.com found
+✅ User tecnico@hiansa.com found
+✅ User supervisor@hiansa.com found
+✅ User new.user@example.com found
+
+✅ All required users found - seed is up to date
+
+🎯 E2E Global Setup complete
+
+🔐 Setting up authenticated session via API...
+
+[STEP 1] Getting CSRF token...
+[DEBUG] CSRF token: e475da9220129ed8de9d...
+[DEBUG] Cookies after CSRF: next-auth.csrf-token=e475da9220129ed8de9da6c2146ec8befe64d94717c4626357c5c1c4914cbbb9%7Cccecd5861cb5...
+[STEP 2] Making login request...
+[DEBUG] Login response status: 200
+[DEBUG] Login response body: {"url":"http://localhost:3000"}
+[DEBUG] Cookies after login: next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..XDebnXUfQCaD2Il9.7xs1jVns8yfmlmSxu1...
+[STEP 3] Establishing browser session...
+[DEBUG] Current URL after login: http://localhost:3000/dashboard
+✅ Admin session saved to: C:\Users\ambso\dev\gmao-hiansa\playwright\.auth\admin.json
+💡 Tests will reuse this session - no login overhead!
+
+🎯 E2E Global Setup complete (with auth)
+
+
+Running 24 tests using 4 workers
+
+[DEBUG] Current URL before navigation: about:blank
+✅ Database is available and healthy
+[DEBUG] Cookies loaded: [33m1[39m
+[DEBUG] Session cookie exists: [33mtrue[39m
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+[DEBUG] URL after navigation: http://localhost:3000/usuarios/nuevo
+[DEBUG] Page title: Nuevo Usuario - GMAO HiRock/Ultra
+After login, current URL: http://localhost:3000/dashboard
+  ✓   1 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:53:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability (25.6s)
+  ✘   4 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (23.5s)
+  -   6 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed
+  -   7 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard
+  -   8 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+  ✓   2 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (34.6s)
+✅ Test user new.user@example.com verified
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+After login, current URL: http://localhost:3000/cambiar-password
+  ✓   9 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (retry #1) (17.9s)
+  ✓   5 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user (43.9s)
+  ✘   3 [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (1.1m)
+  ✓  11 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed (retry #1) (25.4s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/api/auth/signin?csrf=true}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/api/auth/signin?csrf=true
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T08:06:26.419Z}
+Browser console: [LoginForm] forcePasswordReset value: false
+  ✓  10 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (55.5s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  ✓  12 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login (24.4s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  16 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:224:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities (4.9s)
+  ✘  14 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard (retry #1) (31.1s)
+  -  18 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change (retry #1)
+  ✓  13 [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (retry #1) (42.4s)
+✅ Database is available and healthy
+  ✘  19 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (retry #2) (3ms)
+  -  21 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard (retry #2)
+  -  22 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed (retry #2)
+  -  23 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change (retry #2)
+  ✘  15 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (41.1s)
+  ✘  17 [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (37.8s)
+  ✘  20 [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (40.1s)
+  ✘  24 [chromium] › tests\e2e\story-1.3-tags.spec.ts:600:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation (35.9s)
+  ✘  25 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (retry #1) (36.5s)
+  -  29 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (retry #1)
+  -  30 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (retry #1)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✘  26 [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (retry #1) (38.1s)
+  ✓  28 [chromium] › tests\e2e\story-1.3-tags.spec.ts:600:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation (retry #1) (14.3s)
+  ✘  31 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (retry #2) (38.6s)
+  -  34 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (retry #2)
+  -  35 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (retry #2)
+  ✓  32 [chromium] › tests\e2e\story-1.3-tags.spec.ts:650:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-007] should display clarifier message that tags do not grant permissions (35.6s)
+  -  36 [chromium] › tests\e2e\story-1.3-tags.spec.ts:684:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-001] should sort users alphabetically by tag name
+  -  37 [chromium] › tests\e2e\story-1.3-tags.spec.ts:711:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-002] should log tag creation and deletion in audit trail
+  ✘  27 [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (retry #1) (1.0m)
+  ✓  38 [chromium] › tests\e2e\story-1.3-tags.spec.ts:767:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-008] should prevent creating more than 20 tags (7.3s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✘  33 [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (retry #2) (54.2s)
+  ✓  40 [chromium] › tests\e2e\story-1.3-tags.spec.ts:484:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list (9.1s)
+  ✓  39 [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (retry #2) (24.9s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  41 [chromium] › tests\e2e\story-1.3-tags.spec.ts:525:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-004] should filter users by tag (10.0s)
+  ✓  42 [chromium] › tests\e2e\story-1.3-tags.spec.ts:286:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-003] should preserve capabilities when tag is deleted (14.7s)
+  ✓  43 [chromium] › tests\e2e\story-1.3-tags.spec.ts:567:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-005] should sort users by tag (11.5s)
+  ✓  44 [chromium] › tests\e2e\story-1.3-tags.spec.ts:367:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-001] should create tag "Operario" with name and color (10.5s)
+
+
+  1) [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard 
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()[22m
+
+
+      119 |
+      120 |     // Wait for cambiar-password page to load
+    > 121 |     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });
+          |                                                                                                      ^
+      122 |
+      123 |     // When: user fills password change form
+      124 |     await page.getByTestId('current-password').clear();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:121:102
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      192 |     // Use Promise.all for reliable navigation
+      193 |     await Promise.all([
+    > 194 |       page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+          |            ^
+      195 |       page.getByTestId('login-submit').click(),
+      196 |     ]);
+      197 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:194:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--590fe-hange-password-from-profile-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('usuario-etiquetas')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByTestId('usuario-etiquetas')[22m
+
+
+      463 |
+      464 |     // And: Tags should appear in user profile
+    > 465 |     await expect(page.getByTestId('usuario-etiquetas')).toBeVisible();
+          |                                                         ^
+      466 |
+      467 |     // Verify at least one tag is present
+      468 |     const tagsText = await page.getByTestId('usuario-etiquetas').textContent();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:465:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsAdmin (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:52:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:417:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('usuario-etiquetas')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByTestId('usuario-etiquetas')[22m
+
+
+      463 |
+      464 |     // And: Tags should appear in user profile
+    > 465 |     await expect(page.getByTestId('usuario-etiquetas')).toBeVisible();
+          |                                                         ^
+      466 |
+      467 |     // Verify at least one tag is present
+      468 |     const tagsText = await page.getByTestId('usuario-etiquetas').textContent();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:465:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-5b859-ssign-multiple-tags-to-user-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
+
+    Error: Expected to be on /cambiar-password, but on http://localhost:3000/dashboard
+
+      72 |       await expect(page.getByTestId('confirm-password')).toBeVisible();
+      73 |     } else {
+    > 74 |       throw new Error(`Expected to be on /cambiar-password, but on ${currentUrl}`);
+         |             ^
+      75 |     }
+      76 |   });
+      77 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:74:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: Database verification failed: Test user tecnico@hiansa.com not found in database. Please run: npx prisma db seed
+
+       at test-setup.ts:40
+
+      38 |     }
+      39 |   } catch (error: any) {
+    > 40 |     throw new Error(`Database verification failed: ${error.message}`);
+         |           ^
+      41 |   }
+      42 | }
+      43 |
+        at verifyDatabaseSeed (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\test-setup.ts:40:11)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:26:3
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information 
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsTecnico (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:61:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:59:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsTecnico (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:61:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:59:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--9eb89-le-with-current-information-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.waitFor: Test timeout of 60000ms exceeded.
+    Call log:
+    [2m  - waiting for getByTestId('login-email') to be visible[22m
+
+
+       at ..\helpers\auth.helpers.ts:31
+
+      29 |   const baseURL = getBaseURL();
+      30 |   await page.goto(`${baseURL}/login`);
+    > 31 |   await page.getByTestId('login-email').waitFor({ state: 'visible' });
+         |                                         ^
+      32 |   await page.getByTestId('login-email').clear();
+      33 |   await page.getByTestId('login-password').clear();
+      34 |   await page.getByTestId('login-email').fill(email);
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:31:41)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:164:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities 
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsAdmin (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:52:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:187:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-0abe5-with-different-capabilities-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests\e2e\story-1.3-tags.spec.ts:600:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation 
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsAdmin (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:52:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:602:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-b8876-g-with-cascade-confirmation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-b8876-g-with-cascade-confirmation-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-b8876-g-with-cascade-confirmation-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-b8876-g-with-cascade-confirmation-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-b8876-g-with-cascade-confirmation-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard 
+    [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile 
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user 
+  5 flaky
+    [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
+    [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information 
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned 
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities 
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:600:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation 
+  2 skipped
+  1 did not run
+  13 passed (4.9m)

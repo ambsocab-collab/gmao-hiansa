@@ -1,0 +1,2221 @@
+
+> gmao-hiansa@0.1.0 test:e2e
+> playwright test tests/e2e/auth-login.spec.ts tests/e2e/debug-login.spec.ts tests/e2e/story-0.1-nextjs-setup.spec.ts tests/e2e/story-0.5-cicd-config.spec.ts tests/e2e/story-1.1-admin-user-management.spec.ts tests/e2e/story-1.1-forced-password-reset.spec.ts tests/e2e/story-1.1-login-auth.spec.ts tests/e2e/story-1.1-profile.spec.ts tests/e2e/story-1.2-pbac-system.spec.ts tests/e2e/story-1.3-tags.spec.ts tests/e2e/story-1.4-landing-page.spec.ts tests/e2e/story-1.5-layout-optimizado.spec.ts tests/e2e/test-admin-user-detail.spec.ts tests/e2e/test-seeded-user-tags.spec.ts tests/e2e/test-user-route.spec.ts --reporter=list
+
+
+🔧 E2E Global Setup: Checking database seed...
+
+✅ Server is ready and database is up
+
+✅ User admin@hiansa.com found
+✅ User tecnico@hiansa.com found
+✅ User supervisor@hiansa.com found
+✅ User new.user@example.com found
+
+✅ All required users found - seed is up to date
+
+🎯 E2E Global Setup complete
+
+🔐 Setting up authenticated session via API...
+
+[STEP 1] Getting CSRF token...
+[DEBUG] CSRF token: 67a35dc8462d1ec320b6...
+[DEBUG] Cookies after CSRF: next-auth.csrf-token=67a35dc8462d1ec320b6a70ec0c1d002907316822c503736576990eb0144d0fb%7Ccf9c7bc76a3c...
+[STEP 2] Making login request...
+[DEBUG] Login response status: 200
+[DEBUG] Login response body: {"url":"http://localhost:3000"}
+[DEBUG] Cookies after login: next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..aDsTEU6rUofIi0ct.Lsw9AP3c3p4EmhThrE...
+[STEP 3] Establishing browser session...
+[DEBUG] Current URL after login: http://localhost:3000/dashboard
+✅ Admin session saved to: C:\Users\ambso\dev\gmao-hiansa\playwright\.auth\admin.json
+💡 Tests will reuse this session - no login overhead!
+
+🎯 E2E Global Setup complete (with auth)
+
+
+Running 97 tests using 4 workers
+
+  ✓   2 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:44:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-002: should have TypeScript 5.x in devDependencies (38ms)
+  ✓   5 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:61:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-003: should have required directory structure (9ms)
+  ✘   3 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:27:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json (37ms)
+  ✓   6 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:90:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-001: should have Prisma 5.22.0 installed (53ms)
+  ✓   7 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:113:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-002: should have NextAuth 4.24.7 installed (15ms)
+Testing tecnico@hiansa.com...
+  ✓   8 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:129:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-003: should have Zod 3.23.8 installed (26ms)
+Navigating to login page...
+  ✓   9 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:145:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-004: should have React Hook Form 7.51.5 installed (12ms)
+  ✓  10 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:161:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-005: should have TanStack Query 5.x installed (11ms)
+  ✓  11 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:178:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-006: should have Lucide React 0.344.0 installed (13ms)
+  ✓  12 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:194:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.2-007: should have bcryptjs 2.4.3 installed (10ms)
+  ✓  13 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:215:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-001: should have tailwind.config.js file (4ms)
+  ✓  14 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:229:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-002: should have custom brand colors in tailwind.config.js (157ms)
+  ✓  15 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:248:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-003: should have Inter font scale configured in tailwind.config.js (92ms)
+  ✓  16 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:262:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.3-004: should have spacing system based on 8px grid (72ms)
+  ✓  17 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:285:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-001: should have shadcn/ui Button component (7ms)
+  ✓  18 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:299:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-002: should have shadcn/ui Card component (8ms)
+  ✓  19 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:313:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-003: should have shadcn/ui Dialog component (6ms)
+  ✓  20 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:327:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-004: should have shadcn/ui Form component (10ms)
+  ✓  21 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:341:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-005: should have shadcn/ui Table component (6ms)
+  ✓  22 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:355:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-006: should have shadcn/ui Toast component (8ms)
+  ✓  23 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:369:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.4-007: should have @/components/ui path alias configured (26ms)
+  ✓  24 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:385:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-001: should have PostCSS configuration (6ms)
+  ✓  25 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:399:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-002: should have Prisma schema file (7ms)
+  ✓  26 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:413:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.5-003: should have TypeScript configuration for testing (7ms)
+  ✓  27 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:26:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-001: should have GitHub Actions workflow file (9ms)
+  ✓  28 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:40:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-002: should have workflow configured for pull requests (41ms)
+  ✓  29 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:53:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-003: should have workflow configured for main branch pushes (61ms)
+  ✓  30 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:69:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-004: should have test job in workflow (11ms)
+  ✓  31 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:82:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-005: should have Vercel project configuration (10ms)
+  ✓  32 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:96:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-006: should have preview deployment configured (8ms)
+  ✓  33 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:107:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-007: should have production deployment environment configured (9ms)
+  ✓  34 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:118:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.4-008: should have install and build steps in workflow (11ms)
+  ✓  35 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:140:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-001: should have .env.example file (4ms)
+  ✓  36 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:154:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-002: should have DATABASE_URL documented in .env.example (7ms)
+  ✓  37 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:166:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-003: should have NEXTAUTH_SECRET documented in .env.example (8ms)
+  ✓  38 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:178:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-004: should have NEXTAUTH_URL documented in .env.example (6ms)
+  ✓  39 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:190:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-005: should have SSE configuration documented in .env.example (6ms)
+  ✓  40 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:202:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-006: should have all required environment variables documented (7ms)
+  ✓  41 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:222:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-007: should have environment variable validation at startup (3ms)
+  ✓  42 [chromium] › tests\e2e\story-0.5-cicd-config.spec.ts:260:7 › @p1 Story 0.5: CI/CD Configuration Validation › E0-5.5-008: should have documentation for environment-specific variables (13ms)
+Page loaded. URL: http://localhost:3000/login
+Page title: Iniciar Sesión - GMAO HIANSA
+Attempting to login as admin...
+[DEBUG] Current URL before navigation: about:blank
+[DEBUG] Cookies loaded: [33m1[39m
+[DEBUG] Session cookie exists: [33mtrue[39m
+After tecnico login, URL: http://localhost:3000/login
+✗ tecnico@hiansa.com login failed, URL: http://localhost:3000/login
+  ✘  44 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:27:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json (retry #1) (30ms)
+  ✘  45 [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:27:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json (retry #2) (60ms)
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+[DEBUG] URL after navigation: http://localhost:3000/usuarios/nuevo
+[DEBUG] Page title: Nuevo Usuario - GMAO HiRock/Ultra
+
+Testing new.user@example.com...
+After new.user login, URL: http://localhost:3000/login
+✗ new.user@example.com login failed, stayed on login page
+  ✓   1 [chromium] › tests\e2e\debug-login.spec.ts:3:5 › Debug: Test login with both users (30.2s)
+Login completed. URL: http://localhost:3000/dashboard
+✅ Login successful!
+  ✓   4 [chromium] › tests\e2e\auth-login.spec.ts:9:7 › Authentication Test › [DEBUG] should login successfully (34.5s)
+✅ Database is available and healthy
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+  ✓  43 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:53:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability (39.7s)
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+✅ Test user new.user@example.com verified
+  ✓  47 [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:35:7 › Story 1.1: Login Authentication Flow › [P0-E2E-001] should display login form with required fields and testids (11.7s)
+  ✘  46 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (47.1s)
+  -  51 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed
+  -  52 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard
+  -  53 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change
+✅ Database is available and healthy
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+  ✘  48 [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:55:7 › Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard (44.8s)
+  ✓  50 [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:73:7 › Story 1.1: Login Authentication Flow › [P0-E2E-003] should show error message with invalid credentials (21.3s)
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+After login, current URL: http://localhost:3000/cambiar-password
+  ✓  54 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (retry #1) (33.1s)
+  ✘  49 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user (1.0m)
+  -  58 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login
+  -  59 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:224:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities
+  ✓  56 [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:55:7 › Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard (retry #1) (20.4s)
+[DEBUG] Current URL before navigation: about:blank
+[DEBUG] Cookies loaded: [33m1[39m
+[DEBUG] Session cookie exists: [33mtrue[39m
+  ✓  55 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (37.5s)
+[DEBUG] URL after navigation: http://localhost:3000/usuarios/nuevo
+[DEBUG] Page title: Nuevo Usuario - GMAO HiRock/Ultra
+  ✓  61 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:53:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability (retry #1) (21.5s)
+  ✓  60 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:85:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-020] should display 15 capability checkboxes with Spanish labels (28.2s)
+  ✓  57 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed (retry #1) (48.7s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  ✓  64 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:118:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-021] should have correct data-testid for each capability checkbox (18.8s)
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T07:33:49.439Z}
+Browser console: [LoginForm] forcePasswordReset value: true
+Browser console: [LoginForm] forcePasswordReset is true, redirecting to /cambiar-password
+Submit button enabled: [33mtrue[39m
+Change password API response status: [33m200[39m
+Change password API response body: {"success":true,"message":"Contraseña cambiada exitosamente"}
+  ✘  62 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (50.0s)
+  -  67 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  ✓  63 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user (retry #1) (44.3s)
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T07:34:06.038Z}
+Browser console: [LoginForm] forcePasswordReset value: false
+  ✘  65 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard (retry #1) (36.3s)
+  -  70 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change (retry #1)
+  ✓  66 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:145:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-023] should create new user with only can_create_failure_report checked by default (32.5s)
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+  ✓  69 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (retry #1) (23.4s)
+  ✘  68 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login (retry #1) (29.2s)
+  -  74 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:224:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities (retry #1)
+After login, current URL: http://localhost:3000/cambiar-password
+  ✓  72 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (retry #2) (22.9s)
+[DEBUG] Current URL before navigation: about:blank
+[DEBUG] Cookies loaded: [33m1[39m
+[DEBUG] Session cookie exists: [33mtrue[39m
+  ✓  71 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:212:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-025] should allow admin to assign multiple capabilities to user (33.0s)
+[DEBUG] URL after navigation: http://localhost:3000/usuarios/nuevo
+[DEBUG] Page title: Nuevo Usuario - GMAO HiRock/Ultra
+  ✓  76 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:53:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability (retry #2) (14.9s)
+  ✓  77 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:276:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-028] should deny access to /assets for users without can_manage_assets capability (25.1s)
+  ✘  73 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (retry #1) (43.3s)
+  -  80 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (retry #1)
+  ✓  75 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:78:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed (retry #2) (36.7s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/api/auth/signin?csrf=true}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/api/auth/signin?csrf=true
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T07:35:45.325Z}
+Browser console: [LoginForm] forcePasswordReset value: false
+  ✓  79 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:308:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-031] should deny access to repair history for users without can_view_repair_history (33.1s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  ✓  82 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (retry #2) (41.3s)
+  ✘  78 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user (retry #2) (1.0m)
+  -  85 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login (retry #2)
+  -  86 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:224:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities (retry #2)
+  ✓  83 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:340:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-033] should assign all 15 capabilities to initial admin user (18.1s)
+  ✘  81 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard (retry #2) (49.2s)
+  -  89 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:163:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change (retry #2)
+  ✓  87 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:373:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-035] should show only navigation items for user capabilities (14.7s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✘  91 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:418:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-037] should deny access when accessing unauthorized module via direct URL (25.8s)
+  ✘  84 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (retry #2) (39.3s)
+  -  92 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (retry #2)
+  ✓  90 [chromium] › tests\e2e\story-1.3-tags.spec.ts:415:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (35.8s)
+  ✘  88 [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (1.0m)
+  ✓  94 [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:418:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-037] should deny access when accessing unauthorized module via direct URL (retry #1) (35.6s)
+  ✓  95 [chromium] › tests\e2e\story-1.3-tags.spec.ts:600:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation (37.4s)
+  ✓  93 [chromium] › tests\e2e\story-1.3-tags.spec.ts:484:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list (43.2s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  98 [chromium] › tests\e2e\story-1.3-tags.spec.ts:650:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-007] should display clarifier message that tags do not grant permissions (21.0s)
+  -  100 [chromium] › tests\e2e\story-1.3-tags.spec.ts:684:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-001] should sort users alphabetically by tag name
+  -  101 [chromium] › tests\e2e\story-1.3-tags.spec.ts:711:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-002] should log tag creation and deletion in audit trail
+  ✓  97 [chromium] › tests\e2e\story-1.3-tags.spec.ts:767:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-008] should prevent creating more than 20 tags (23.7s)
+  ✓  99 [chromium] › tests\e2e\story-1.3-tags.spec.ts:525:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-004] should filter users by tag (22.4s)
+  ✓  102 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:16:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-001: Usuario NO autenticado ve landing page con diseño minimalista (12.9s)
+  ✓  105 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:73:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-003: Botón "Acceder al Sistema" navega a /login (7.7s)
+  ✘  106 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:89:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-004: Landing page cumple WCAG AA (contraste, touch targets) (4.3s)
+  ✓  96 [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (retry #1) (59.6s)
+  ✓  104 [chromium] › tests\e2e\story-1.3-tags.spec.ts:567:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-005] should sort users by tag (24.4s)
+  ✘  103 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:51:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-002: Usuario autenticado es redirigido a /dashboard (29.3s)
+  ✘  109 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:89:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-004: Landing page cumple WCAG AA (contraste, touch targets) (retry #1) (6.9s)
+  ✓  108 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:118:7 › Landing Page Minimalista - Story 1.4 › P1-E2E-001: Landing page es responsive en mobile, tablet, desktop (13.6s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✘  112 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:89:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-004: Landing page cumple WCAG AA (contraste, touch targets) (retry #2) (3.2s)
+  ✘  110 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:51:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-002: Usuario autenticado es redirigido a /dashboard (retry #1) (20.2s)
+  ✘  111 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:63:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-001: Logo Hiansa visible en todas las páginas autenticadas (20.0s)
+  ✓  107 [chromium] › tests\e2e\story-1.3-tags.spec.ts:185:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (42.6s)
+  ✘  113 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:99:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-002: Sidebar compact implementado por defecto (19.9s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✘  114 [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:51:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-002: Usuario autenticado es redirigido a /dashboard (retry #2) (19.1s)
+  ✓  116 [chromium] › tests\e2e\story-1.3-tags.spec.ts:286:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-003] should preserve capabilities when tag is deleted (14.3s)
+  ✘  115 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:63:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-001: Logo Hiansa visible en todas las páginas autenticadas (retry #1) (19.9s)
+  ✘  117 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:99:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-002: Sidebar compact implementado por defecto (retry #1) (19.9s)
+  ✓  119 [chromium] › tests\e2e\story-1.3-tags.spec.ts:367:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-001] should create tag "Operario" with name and color (14.6s)
+  ✘  118 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:132:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-003: Footer optimizado sin redundancia (18.7s)
+  ✘  120 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:63:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-001: Logo Hiansa visible en todas las páginas autenticadas (retry #2) (18.8s)
+  ✘  121 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:99:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-002: Sidebar compact implementado por defecto (retry #2) (18.4s)
+  ✘  122 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:159:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-004: Layout por dirección correcto en dashboard, kpis, kanban (18.1s)
+  ✘  123 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:132:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-003: Footer optimizado sin redundancia (retry #1) (18.5s)
+  ✘  124 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:209:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-001: Responsive en mobile, tablet, desktop (17.9s)
+  ✘  125 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:257:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-002: Branding consistente sin redundancia (18.2s)
+  ✘  126 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:159:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-004: Layout por dirección correcto en dashboard, kpis, kanban (retry #1) (18.7s)
+  ✘  127 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:132:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-003: Footer optimizado sin redundancia (retry #2) (18.2s)
+  ✘  128 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:209:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-001: Responsive en mobile, tablet, desktop (retry #1) (18.0s)
+  ✘  129 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:257:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-002: Branding consistente sin redundancia (retry #1) (18.1s)
+  ✘  130 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:159:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-004: Layout por dirección correcto en dashboard, kpis, kanban (retry #2) (18.9s)
+  ✘  131 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:285:7 › Story 1.5: Layout Desktop Optimizado › P2-E2E-001: Navegación entre páginas mantiene layout consistente (18.1s)
+  ✘  132 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:209:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-001: Responsive en mobile, tablet, desktop (retry #2) (18.3s)
+  ✘  133 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:257:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-002: Branding consistente sin redundancia (retry #2) (18.3s)
+  ✘  134 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:324:7 › Story 1.5: Layout Accessibility › a11y: Logo tiene alt text "Hiansa Logo" (18.6s)
+  ✘  135 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:285:7 › Story 1.5: Layout Desktop Optimizado › P2-E2E-001: Navegación entre páginas mantiene layout consistente (retry #1) (18.1s)
+  ✘  136 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:340:7 › Story 1.5: Layout Accessibility › a11y: Sidebar tiene navigation landmarks (18.3s)
+  ✘  137 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:358:7 › Story 1.5: Layout Accessibility › a11y: Footer tiene semantic HTML <footer> (18.1s)
+  ✘  138 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:324:7 › Story 1.5: Layout Accessibility › a11y: Logo tiene alt text "Hiansa Logo" (retry #1) (18.5s)
+  ✘  139 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:285:7 › Story 1.5: Layout Desktop Optimizado › P2-E2E-001: Navegación entre páginas mantiene layout consistente (retry #2) (18.3s)
+  ✘  140 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:340:7 › Story 1.5: Layout Accessibility › a11y: Sidebar tiene navigation landmarks (retry #1) (18.4s)
+  ✘  141 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:358:7 › Story 1.5: Layout Accessibility › a11y: Footer tiene semantic HTML <footer> (retry #1) (18.1s)
+  ✘  142 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:324:7 › Story 1.5: Layout Accessibility › a11y: Logo tiene alt text "Hiansa Logo" (retry #2) (18.1s)
+  ✘  143 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:372:7 › Story 1.5: Layout Accessibility › a11y: Header tiene semantic HTML <header> (18.2s)
+  ✘  144 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:340:7 › Story 1.5: Layout Accessibility › a11y: Sidebar tiene navigation landmarks (retry #2) (19.4s)
+Admin user: admin@hiansa.com ID: cmms6jmon000fhqtfjyt2smy9
+Navigating to: /usuarios/cmms6jmon000fhqtfjyt2smy9
+  ✘  145 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:358:7 › Story 1.5: Layout Accessibility › a11y: Footer tiene semantic HTML <footer> (retry #2) (19.6s)
+Current URL: http://localhost:3000/usuarios/cmms6jmon000fhqtfjyt2smy9
+Page title: Detalle de Usuario - GMAO HiRock/Ultra
+Has 404: [33m0[39m
+✅ Page loaded successfully!
+  ✓  146 [chromium] › tests\e2e\test-admin-user-detail.spec.ts:8:5 › [DEBUG] Navigate to admin user detail page (15.3s)
+Admin user ID: cmms6jmon000fhqtfjyt2smy9
+Logging in as admin...
+Current URL: http://localhost:3000/usuarios/cmms6jmon000fhqtfjyt2smy9
+Supervisor checkbox visible: [33mfalse[39m
+✅ Test completed
+  ✓  148 [chromium] › tests\e2e\test-seeded-user-tags.spec.ts:8:5 › [DEBUG-Story-1.3] Test with seeded user (12.6s)
+Logged in! URL: http://localhost:3000/dashboard
+  ✘  147 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:372:7 › Story 1.5: Layout Accessibility › a11y: Header tiene semantic HTML <header> (retry #1) (19.7s)
+API response type: object
+API response: {
+  "users": [
+    {
+      "id": "cmmsebyfl00a9t9zkokjy4d2b",
+      "email": "test-930cd411-dafa-458d-9bea-a2fe94c2edd3@example.com",
+      "name": "Benito Cortéz Sedillo",
+      "phone": "+3406536217
+Users found: [33m72[39m
+Admin user ID: cmms6jmon000fhqtfjyt2smy9
+Navigating to user detail page...
+Current URL after navigation: http://localhost:3000/usuarios/cmms6jmon000fhqtfjyt2smy9
+Page title: Detalle de Usuario - GMAO HiRock/Ultra
+✅ Successfully navigated to user detail page!
+  ✓  149 [chromium] › tests\e2e\test-user-route.spec.ts:9:7 › User Detail Route Test › [DEBUG] should navigate to admin user detail page (13.1s)
+  ✘  150 [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:372:7 › Story 1.5: Layout Accessibility › a11y: Header tiene semantic HTML <header> (retry #2) (18.2s)
+
+
+  1) [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:27:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json 
+
+    Error: Next.js version should be 15.0.3 or compatible
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected pattern: [32m/^15\.0\.3/[39m
+    Received string:  [31m"14.2.0"[39m
+
+      39 |       version,
+      40 |       'Next.js version should be 15.0.3 or compatible'
+    > 41 |     ).toMatch(/^15\.0\.3/);
+         |       ^
+      42 |   });
+      43 |
+      44 |   test('E0-1.1-002: should have TypeScript 5.x in devDependencies', async ({}) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-0.1-nextjs-setup.spec.ts:41:7
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: Next.js version should be 15.0.3 or compatible
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected pattern: [32m/^15\.0\.3/[39m
+    Received string:  [31m"14.2.0"[39m
+
+      39 |       version,
+      40 |       'Next.js version should be 15.0.3 or compatible'
+    > 41 |     ).toMatch(/^15\.0\.3/);
+         |       ^
+      42 |   });
+      43 |
+      44 |   test('E0-1.1-002: should have TypeScript 5.x in devDependencies', async ({}) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-0.1-nextjs-setup.spec.ts:41:7
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: Next.js version should be 15.0.3 or compatible
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected pattern: [32m/^15\.0\.3/[39m
+    Received string:  [31m"14.2.0"[39m
+
+      39 |       version,
+      40 |       'Next.js version should be 15.0.3 or compatible'
+    > 41 |     ).toMatch(/^15\.0\.3/);
+         |       ^
+      42 |   });
+      43 |
+      44 |   test('E0-1.1-002: should have TypeScript 5.x in devDependencies', async ({}) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-0.1-nextjs-setup.spec.ts:41:7
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-0.1-nextjs-setup--p0-c9596-t-js-15-0-3-in-package-json-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login 
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/usuarios" until "load"
+    ============================================================
+
+      208 |
+      209 |     // Then: redirected back to users list after deletion
+    > 210 |     await page.waitForURL('**/usuarios', { timeout: 10000 });
+          |                ^
+      211 |     expect(page.url()).toContain('/usuarios');
+      212 |
+      213 |     // When: deleted user attempts login
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:210:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-admin-user-manag-0919c-ft-delete-and-prevent-login-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard 
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 5000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      151 |     // Click submit and wait for navigation (Promise.all pattern)
+      152 |     await Promise.all([
+    > 153 |       page.waitForURL((url) => url.pathname !== '/login', { timeout: 5000 }),
+          |            ^
+      154 |       page.getByTestId('login-submit').click(),
+      155 |     ]);
+      156 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:153:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()[22m
+
+
+      119 |
+      120 |     // Wait for cambiar-password page to load
+    > 121 |     await expect(page.getByText('Debes cambiar tu contraseña temporal en el primer acceso').first()).toBeVisible({ timeout: 15000 });
+          |                                                                                                      ^
+      122 |
+      123 |     // When: user fills password change form
+      124 |     await page.getByTestId('current-password').clear();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:121:102
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--231d9-e-and-redirect-to-dashboard-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      103 |     // Use Promise.all for reliable navigation
+      104 |     await Promise.all([
+    > 105 |       page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+          |            ^
+      106 |       page.getByTestId('login-submit').click(),
+      107 |     ]);
+      108 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:105:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      103 |     // Use Promise.all for reliable navigation
+      104 |     await Promise.all([
+    > 105 |       page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+          |            ^
+      106 |       page.getByTestId('login-submit').click(),
+      107 |     ]);
+      108 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:105:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      103 |     // Use Promise.all for reliable navigation
+      104 |     await Promise.all([
+    > 105 |       page.waitForURL((url) => url.pathname !== '/login', { timeout: 10000 }),
+          |            ^
+      106 |       page.getByTestId('login-submit').click(),
+      107 |     ]);
+      108 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-profile.spec.ts:105:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-profile-Story-1--9c906-ow-user-to-edit-own-profile-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:51:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-002: Usuario autenticado es redirigido a /dashboard 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      54 |
+      55 |     // Fill in login form
+    > 56 |     await page.fill('input[name="email"]', 'admin@example.com')
+         |                ^
+      57 |     await page.fill('input[name="password"]', 'password123')
+      58 |
+      59 |     // Submit login form
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:56:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      54 |
+      55 |     // Fill in login form
+    > 56 |     await page.fill('input[name="email"]', 'admin@example.com')
+         |                ^
+      57 |     await page.fill('input[name="password"]', 'password123')
+      58 |
+      59 |     // Submit login form
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:56:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      54 |
+      55 |     // Fill in login form
+    > 56 |     await page.fill('input[name="email"]', 'admin@example.com')
+         |                ^
+      57 |     await page.fill('input[name="password"]', 'password123')
+      58 |
+      59 |     // Submit login form
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:56:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-70d57-o-es-redirigido-a-dashboard-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:89:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-004: Landing page cumple WCAG AA (contraste, touch targets) 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('main')
+    Expected: visible
+    Error: strict mode violation: getByRole('main') resolved to 2 elements:
+        1) <main class="">…</main> aka getByRole('main').first()
+        2) <main class=" min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-b from-[#7D1220] to-[#6a0e1b] animate-in fade-in duration-500 ease-out motion-reduce:animate-none ">…</main> aka getByText('GMAOsistema de gestión de')
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByRole('main')[22m
+
+
+      105 |     // Check for semantic HTML structure
+      106 |     const main = page.getByRole('main')
+    > 107 |     await expect(main).toBeVisible()
+          |                        ^
+      108 |
+      109 |     // Check for "GMAO" text (no h1 element)
+      110 |     const gmaoText = page.getByText('GMAO')
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:107:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('main')
+    Expected: visible
+    Error: strict mode violation: getByRole('main') resolved to 2 elements:
+        1) <main class="">…</main> aka getByRole('main').first()
+        2) <main class=" min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-b from-[#7D1220] to-[#6a0e1b] animate-in fade-in duration-500 ease-out motion-reduce:animate-none ">…</main> aka getByText('GMAOsistema de gestión de')
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByRole('main')[22m
+
+
+      105 |     // Check for semantic HTML structure
+      106 |     const main = page.getByRole('main')
+    > 107 |     await expect(main).toBeVisible()
+          |                        ^
+      108 |
+      109 |     // Check for "GMAO" text (no h1 element)
+      110 |     const gmaoText = page.getByText('GMAO')
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:107:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('main')
+    Expected: visible
+    Error: strict mode violation: getByRole('main') resolved to 2 elements:
+        1) <main class="">…</main> aka getByRole('main').first()
+        2) <main class=" min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-b from-[#7D1220] to-[#6a0e1b] animate-in fade-in duration-500 ease-out motion-reduce:animate-none ">…</main> aka getByText('GMAOsistema de gestión de')
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByRole('main')[22m
+
+
+      105 |     // Check for semantic HTML structure
+      106 |     const main = page.getByRole('main')
+    > 107 |     await expect(main).toBeVisible()
+          |                        ^
+      108 |
+      109 |     // Check for "GMAO" text (no h1 element)
+      110 |     const gmaoText = page.getByText('GMAO')
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.4-landing-page.spec.ts:107:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.4-landing-page-Lan-9e545-AA-contraste-touch-targets--chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:63:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-001: Logo Hiansa visible en todas las páginas autenticadas 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d7169-as-las-páginas-autenticadas-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:99:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-002: Sidebar compact implementado por defecto 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-a10af-ct-implementado-por-defecto-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:132:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-003: Footer optimizado sin redundancia 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-2ac62--optimizado-sin-redundancia-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:159:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-004: Layout por dirección correcto en dashboard, kpis, kanban 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-f45e7-to-en-dashboard-kpis-kanban-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:209:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-001: Responsive en mobile, tablet, desktop 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-d4f94-ve-en-mobile-tablet-desktop-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:257:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-002: Branding consistente sin redundancia 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-792f5-consistente-sin-redundancia-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:285:7 › Story 1.5: Layout Desktop Optimizado › P2-E2E-001: Navegación entre páginas mantiene layout consistente 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-0935b-mantiene-layout-consistente-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:324:7 › Story 1.5: Layout Accessibility › a11y: Logo tiene alt text "Hiansa Logo" 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-681e8-tiene-alt-text-Hiansa-Logo--chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:340:7 › Story 1.5: Layout Accessibility › a11y: Sidebar tiene navigation landmarks 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-8b951--tiene-navigation-landmarks-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:358:7 › Story 1.5: Layout Accessibility › a11y: Footer tiene semantic HTML <footer> 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-100b5-tiene-semantic-HTML-footer--chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:372:7 › Story 1.5: Layout Accessibility › a11y: Header tiene semantic HTML <header> 
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.fill: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="email"]')[22m
+
+
+      20 |
+      21 |   // Fill login form with test credentials
+    > 22 |   await page.fill('input[name="email"]', 'test@example.com')
+         |              ^
+      23 |   await page.fill('input[name="password"]', 'Test1234')
+      24 |
+      25 |   // Submit login form
+        at login (C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:22:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.5-layout-optimizado.spec.ts:313:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.5-layout-optimizad-5c7f6-tiene-semantic-HTML-header--chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.waitForURL: Test timeout of 60000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/login" until "load"
+    ============================================================
+
+      163 |
+      164 |     // After password change, user is logged out and needs to login again with new password
+    > 165 |     await page.waitForURL('/login');
+          |                ^
+      166 |     await page.getByTestId('login-email').fill(uniqueEmail);
+      167 |     await page.getByTestId('login-password').fill('NewPassword123');
+      168 |     await page.getByTestId('login-submit').click();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:165:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.waitForURL: Test timeout of 60000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/dashboard" until "load"
+    ============================================================
+
+      169 |
+      170 |     // Now should be redirected to dashboard
+    > 171 |     await page.waitForURL('/dashboard');
+          |                ^
+      172 |     // TODO: Verify user can access work orders when that feature is implemented
+      173 |   });
+      174 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-admin-user-management.spec.ts:171:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-admin-user-manag-82614-ltiple-capabilities-to-user-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsNewUser (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:72:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-forced-password-reset.spec.ts:50:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-forced-password--cc76a--forcePasswordReset-is-true-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:55:7 › Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard 
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ..\helpers\auth.helpers.ts:41
+
+      39 |   // Increased timeout to 30s for parallel test execution (server may be under load)
+      40 |   await Promise.all([
+    > 41 |     page.waitForURL((url) => url.pathname !== '/login', { timeout: 30000 }),
+         |          ^
+      42 |     page.getByTestId('login-submit').click(),
+      43 |   ]);
+      44 | }
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:41:10)
+        at loginAsTecnico (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:61:3)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.1-login-auth.spec.ts:64:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.1-login-auth-Story-47059-s-and-redirect-to-dashboard-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:418:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-037] should deny access when accessing unauthorized module via direct URL 
+
+    TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      426 |
+      427 |     // Wait for dashboard - use longer timeout
+    > 428 |     await page.waitForURL((url) => {
+          |                ^
+      429 |       const pathname = url.pathname;
+      430 |       return pathname === '/dashboard' || pathname === '/unauthorized';
+      431 |     }, { timeout: 15000 });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.2-pbac-system.spec.ts:428:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.2-pbac-system-Stor-1902e-rized-module-via-direct-URL-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.2-pbac-system-Stor-1902e-rized-module-via-direct-URL-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.2-pbac-system-Stor-1902e-rized-module-via-direct-URL-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.2-pbac-system-Stor-1902e-rized-module-via-direct-URL-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.2-pbac-system-Stor-1902e-rized-module-via-direct-URL-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.goto: Test timeout of 60000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:3000/login", waiting until "load"[22m
+
+
+       at ..\helpers\auth.helpers.ts:30
+
+      28 | ): Promise<void> {
+      29 |   const baseURL = getBaseURL();
+    > 30 |   await page.goto(`${baseURL}/login`);
+         |              ^
+      31 |   await page.getByTestId('login-email').waitFor({ state: 'visible' });
+      32 |   await page.getByTestId('login-email').clear();
+      33 |   await page.getByTestId('login-password').clear();
+        at loginAs (C:\Users\ambso\dev\gmao-hiansa\tests\helpers\auth.helpers.ts:30:14)
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:164:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-a5488-lities-when-tag-is-assigned-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17 failed
+    [chromium] › tests\e2e\story-0.1-nextjs-setup.spec.ts:27:7 › @p0 Story 0.1: Next.js Project Setup Validation › E0-1.1-001: should have Next.js 15.0.3 in package.json 
+    [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login 
+    [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:102:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard 
+    [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile 
+    [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:51:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-002: Usuario autenticado es redirigido a /dashboard 
+    [chromium] › tests\e2e\story-1.4-landing-page.spec.ts:89:7 › Landing Page Minimalista - Story 1.4 › P0-E2E-004: Landing page cumple WCAG AA (contraste, touch targets) 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:63:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-001: Logo Hiansa visible en todas las páginas autenticadas 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:99:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-002: Sidebar compact implementado por defecto 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:132:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-003: Footer optimizado sin redundancia 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:159:7 › Story 1.5: Layout Desktop Optimizado › P0-E2E-004: Layout por dirección correcto en dashboard, kpis, kanban 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:209:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-001: Responsive en mobile, tablet, desktop 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:257:7 › Story 1.5: Layout Desktop Optimizado › P1-E2E-002: Branding consistente sin redundancia 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:285:7 › Story 1.5: Layout Desktop Optimizado › P2-E2E-001: Navegación entre páginas mantiene layout consistente 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:324:7 › Story 1.5: Layout Accessibility › a11y: Logo tiene alt text "Hiansa Logo" 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:340:7 › Story 1.5: Layout Accessibility › a11y: Sidebar tiene navigation landmarks 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:358:7 › Story 1.5: Layout Accessibility › a11y: Footer tiene semantic HTML <footer> 
+    [chromium] › tests\e2e\story-1.5-layout-optimizado.spec.ts:372:7 › Story 1.5: Layout Accessibility › a11y: Header tiene semantic HTML <header> 
+  5 flaky
+    [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user 
+    [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:41:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true 
+    [chromium] › tests\e2e\story-1.1-login-auth.spec.ts:55:7 › Story 1.1: Login Authentication Flow › [P0-E2E-002] should login successfully with valid credentials and redirect to dashboard 
+    [chromium] › tests\e2e\story-1.2-pbac-system.spec.ts:418:7 › Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE) › [P0-E2E-037] should deny access when accessing unauthorized module via direct URL 
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:74:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned 
+  2 skipped
+  3 did not run
+  70 passed (11.7m)

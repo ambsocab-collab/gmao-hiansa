@@ -1,0 +1,160 @@
+
+> gmao-hiansa@0.1.0 test:e2e
+> playwright test --project=chromium --workers=1 tests/e2e/story-1.1-forced-password-reset.spec.ts tests/e2e/story-1.1-profile.spec.ts tests/e2e/story-1.1-admin-user-management.spec.ts tests/e2e/story-1.3-tags.spec.ts --reporter=list
+
+
+🔧 E2E Global Setup: Checking database seed...
+
+✅ Server is ready and database is up
+
+✅ User admin@hiansa.com found
+✅ User tecnico@hiansa.com found
+✅ User supervisor@hiansa.com found
+✅ User new.user@example.com found
+
+✅ All required users found - seed is up to date
+
+🎯 E2E Global Setup complete
+
+🔐 Setting up authenticated session via API...
+
+[STEP 1] Getting CSRF token...
+[DEBUG] CSRF token: 5a00e4ab5bf620c2ee9c...
+[DEBUG] Cookies after CSRF: next-auth.csrf-token=5a00e4ab5bf620c2ee9ce63b4b91353b3f410d0dd1dc6d8c9da7b26e161c75cf%7Ccec05630aa6f...
+[STEP 2] Making login request...
+[DEBUG] Login response status: 200
+[DEBUG] Login response body: {"url":"http://localhost:3000"}
+[DEBUG] Cookies after login: next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..3fj6xmO2dpm1xT9O.30yBRoryoJm0mxOQXj...
+[STEP 3] Establishing browser session...
+[DEBUG] Current URL after login: http://localhost:3000/dashboard
+✅ Admin session saved to: C:\Users\ambso\dev\gmao-hiansa\playwright\.auth\admin.json
+💡 Tests will reuse this session - no login overhead!
+
+🎯 E2E Global Setup complete (with auth)
+
+
+Running 24 tests using 1 worker
+
+[DEBUG] Current URL before navigation: about:blank
+[DEBUG] Cookies loaded: [33m1[39m
+[DEBUG] Session cookie exists: [33mtrue[39m
+[DEBUG] URL after navigation: http://localhost:3000/usuarios/nuevo
+[DEBUG] Page title: Nuevo Usuario - GMAO HiRock/Ultra
+  ✓   1 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:53:7 › Story 1.1: Admin User Management › [P0-E2E-012] should allow admin to create new user with default capability (9.7s)
+  ✓   2 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:119:7 › Story 1.1: Admin User Management › [P0-E2E-013] should allow admin to assign multiple capabilities to user (15.1s)
+  ✓   3 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:175:7 › Story 1.1: Admin User Management › [P0-E2E-014] should perform soft delete and prevent login (12.3s)
+  ✓   4 [chromium] › tests\e2e\story-1.1-admin-user-management.spec.ts:224:7 › Story 1.1: Admin User Management › [P0-E2E-015] should show users list with admin capabilities (2.6s)
+✅ Database is available and healthy
+✅ Test user tecnico@hiansa.com verified
+✅ Test user new.user@example.com verified
+After login, current URL: http://localhost:3000/cambiar-password
+  ✓   5 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:48:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-005] should redirect to /change-password when forcePasswordReset is true (4.2s)
+  ✓   6 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:85:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-006] should block navigation to other routes until password is changed (8.2s)
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T08:13:08.795Z}
+Browser console: [LoginForm] forcePasswordReset value: true
+Browser console: [LoginForm] forcePasswordReset is true, redirecting to /cambiar-password
+Submit button enabled: [33mtrue[39m
+Change password API response status: [33m200[39m
+Change password API response body: {"success":true,"message":"Contraseña cambiada exitosamente"}
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [next-auth][error][CLIENT_FETCH_ERROR] 
+https://next-auth.js.org/errors#client_fetch_error Failed to fetch {error: Object, url: /api/auth/session, message: Failed to fetch}
+Browser console: [next-auth][error][CLIENT_FETCH_ERROR] 
+https://next-auth.js.org/errors#client_fetch_error Failed to fetch {error: Object, url: /api/auth/session, message: Failed to fetch}
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+Browser console: [LoginForm] Attempting login with email: new.user@example.com
+Browser console: [LoginForm] Login result: {error: null, status: 200, ok: true, url: http://localhost:3000/login}
+Browser console: [LoginForm] result.ok: true result.error: null result.url: http://localhost:3000/login
+Browser console: [LoginForm] Session after login: {user: Object, expires: 2026-03-16T08:13:14.378Z}
+Browser console: [LoginForm] forcePasswordReset value: false
+Browser console: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  ✓   7 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:109:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-007] should allow password change and redirect to dashboard (10.0s)
+  ✓   8 [chromium] › tests\e2e\story-1.1-forced-password-reset.spec.ts:170:7 › Story 1.1: Forced Password Reset Flow › [P0-E2E-008] should validate password strength on change (4.3s)
+  ✓   9 [chromium] › tests\e2e\story-1.1-profile.spec.ts:56:7 › Story 1.1: User Profile Management › [P0-E2E-009] should display user profile with current information (5.7s)
+  ✓  10 [chromium] › tests\e2e\story-1.1-profile.spec.ts:76:7 › Story 1.1: User Profile Management › [P0-E2E-010] should allow user to edit own profile (19.1s)
+  ✓  11 [chromium] › tests\e2e\story-1.1-profile.spec.ts:144:7 › Story 1.1: User Profile Management › [P0-E2E-011] should allow user to change password from profile (18.4s)
+  ✓  12 [chromium] › tests\e2e\story-1.3-tags.spec.ts:77:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (21.9s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  13 [chromium] › tests\e2e\story-1.3-tags.spec.ts:188:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (23.8s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  14 [chromium] › tests\e2e\story-1.3-tags.spec.ts:289:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-003] should preserve capabilities when tag is deleted (13.2s)
+  ✓  15 [chromium] › tests\e2e\story-1.3-tags.spec.ts:370:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-001] should create tag "Operario" with name and color (9.8s)
+  ✓  16 [chromium] › tests\e2e\story-1.3-tags.spec.ts:418:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (15.3s)
+  ✘  17 [chromium] › tests\e2e\story-1.3-tags.spec.ts:487:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list (23.2s)
+  -  18 [chromium] › tests\e2e\story-1.3-tags.spec.ts:528:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-004] should filter users by tag
+  -  19 [chromium] › tests\e2e\story-1.3-tags.spec.ts:570:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-005] should sort users by tag
+  -  20 [chromium] › tests\e2e\story-1.3-tags.spec.ts:603:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation
+  -  21 [chromium] › tests\e2e\story-1.3-tags.spec.ts:653:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-007] should display clarifier message that tags do not grant permissions
+  -  22 [chromium] › tests\e2e\story-1.3-tags.spec.ts:687:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-001] should sort users alphabetically by tag name
+  -  23 [chromium] › tests\e2e\story-1.3-tags.spec.ts:714:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-002] should log tag creation and deletion in audit trail
+  -  24 [chromium] › tests\e2e\story-1.3-tags.spec.ts:770:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-008] should prevent creating more than 20 tags
+  ✓  25 [chromium] › tests\e2e\story-1.3-tags.spec.ts:77:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-001] should not grant capabilities when tag is assigned (retry #1) (16.8s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  26 [chromium] › tests\e2e\story-1.3-tags.spec.ts:188:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-002] should allow same tag with different capabilities (retry #1) (23.6s)
+Tag creation response status: [33m400[39m
+Tag creation response body: {"error":"Ya existe una etiqueta con ese nombre"}
+  ✓  27 [chromium] › tests\e2e\story-1.3-tags.spec.ts:289:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P0-E2E-003] should preserve capabilities when tag is deleted (retry #1) (11.6s)
+  ✓  28 [chromium] › tests\e2e\story-1.3-tags.spec.ts:370:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-001] should create tag "Operario" with name and color (retry #1) (9.7s)
+  ✓  29 [chromium] › tests\e2e\story-1.3-tags.spec.ts:418:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-002] should assign multiple tags to user (retry #1) (17.5s)
+  ✓  30 [chromium] › tests\e2e\story-1.3-tags.spec.ts:487:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list (retry #1) (8.2s)
+  ✓  31 [chromium] › tests\e2e\story-1.3-tags.spec.ts:528:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-004] should filter users by tag (retry #1) (8.0s)
+  ✓  32 [chromium] › tests\e2e\story-1.3-tags.spec.ts:570:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-005] should sort users by tag (retry #1) (7.4s)
+  ✓  33 [chromium] › tests\e2e\story-1.3-tags.spec.ts:603:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-006] should delete tag with cascade confirmation (retry #1) (7.9s)
+  ✓  34 [chromium] › tests\e2e\story-1.3-tags.spec.ts:653:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-007] should display clarifier message that tags do not grant permissions (retry #1) (6.0s)
+  -  35 [chromium] › tests\e2e\story-1.3-tags.spec.ts:687:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-001] should sort users alphabetically by tag name (retry #1)
+  -  36 [chromium] › tests\e2e\story-1.3-tags.spec.ts:714:8 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P2-E2E-002] should log tag creation and deletion in audit trail (retry #1)
+  ✓  37 [chromium] › tests\e2e\story-1.3-tags.spec.ts:770:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-008] should prevent creating more than 20 tags (retry #1) (6.8s)
+
+
+  1) [chromium] › tests\e2e\story-1.3-tags.spec.ts:487:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('usuario-etiquetas')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByTestId('usuario-etiquetas')[22m
+
+
+      508 |
+      509 |     // Then: Tags section should be visible
+    > 510 |     await expect(page.getByTestId('usuario-etiquetas')).toBeVisible();
+          |                                                         ^
+      511 |
+      512 |     // And: Should show tags if assigned, or show message if not
+      513 |     const tagsText = await page.getByTestId('usuario-etiquetas').textContent();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-1.3-tags.spec.ts:510:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5df0b-es-in-user-profile-and-list-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5df0b-es-in-user-profile-and-list-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\story-1.3-tags-Story-1-3-E-5df0b-es-in-user-profile-and-list-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\story-1.3-tags-Story-1-3-E-5df0b-es-in-user-profile-and-list-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\story-1.3-tags-Story-1-3-E-5df0b-es-in-user-profile-and-list-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 flaky
+    [chromium] › tests\e2e\story-1.3-tags.spec.ts:487:7 › Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE) › [P1-E2E-003] should display tags as badges in user profile and list 
+  2 skipped
+  21 passed (6.1m)
