@@ -33,9 +33,16 @@ test.describe('Story 1.1: Forced Password Reset Flow', () => {
 
   // Reset test user before each test to ensure clean state
   test.beforeEach(async ({ request }) => {
-    await request.post('http://localhost:3000/api/v1/test/reset-user', {
+    // Ensure the test user is in the correct state (forcePasswordReset=true)
+    const response = await request.post('http://localhost:3000/api/v1/test/reset-user', {
       data: { email: 'new.user@example.com' }
-    })
+    });
+
+    if (!response.ok()) {
+      const text = await response.text();
+      console.log('[WARN] Reset user failed:', text);
+      // Continue anyway - user might already be in correct state
+    }
   })
 
   test('[P0-E2E-005] should redirect to /change-password when forcePasswordReset is true', async ({ page }) => {

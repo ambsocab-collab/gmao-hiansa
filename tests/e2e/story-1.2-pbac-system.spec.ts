@@ -44,6 +44,9 @@ import {
  */
 
 test.describe('Story 1.2: PBAC System with 15 Capabilities (ATDD - RED PHASE)', () => {
+  // IMPORTANT: Run serially to avoid race conditions with user creation and login
+  test.describe.configure({ mode: 'serial' });
+
   // Track created users for cleanup
   const createdUserEmails: string[] = [];
 

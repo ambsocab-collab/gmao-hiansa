@@ -28,6 +28,9 @@ import {
 const greaterThan = (value: number) => ({ matcherName: 'greaterThan', expected: value, isNot: false });
 
 test.describe('Story 1.3: Etiquetas de Clasificación y Organización (ATDD - RED PHASE)', () => {
+  // IMPORTANT: Run serially to avoid race conditions with tag creation and user assignment
+  test.describe.configure({ mode: 'serial' });
+
   // Track created users for cleanup
   const createdUserEmails: string[] = [];
 

@@ -26,6 +26,9 @@ test.beforeAll(async ({ request }) => {
 });
 
 test.describe('Story 1.1: Login Authentication Flow', () => {
+  // IMPORTANT: Run serially to avoid race conditions with login
+  test.describe.configure({ mode: 'serial' });
+
   // Ensure clean session before each test
   test.beforeEach(async ({ page }) => {
     // Clear cookies to ensure clean session state
