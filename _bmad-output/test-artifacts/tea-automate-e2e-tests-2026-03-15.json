@@ -1,0 +1,116 @@
+{
+  "success": true,
+  "subagent": "e2e-tests",
+  "tests": [
+    {
+      "file": "tests/e2e/optimized-story-1.1-login.spec.ts",
+      "description": "Optimized E2E tests for Story 1.1 - Login, Password Reset, and Profile management. Includes P0 tests for login validation, password reset flow, forced password reset bypass prevention, and P1 test for profile updates.",
+      "priority_coverage": {
+        "P0": 8,
+        "P1": 1
+      },
+      "test_names": [
+        "[P0-E2E-001] should login successfully with valid credentials and redirect to dashboard",
+        "[P0-E2E-002] should show error message with invalid credentials",
+        "[P0-E2E-003] should allow user to request password reset",
+        "[P0-E2E-004] should allow user to reset password with valid token",
+        "[P0-E2E-005] should redirect to change-password when forcePasswordReset is true",
+        "[P0-E2E-006] should block navigation to other routes until password is changed",
+        "[P0-E2E-007] should allow password change and redirect to dashboard",
+        "[P0-E2E-008] should validate password strength on change",
+        "[P1-E2E-001] should allow user to update own profile"
+      ]
+    },
+    {
+      "file": "tests/e2e/optimized-story-1.2-pbac.spec.ts",
+      "description": "Optimized E2E tests for Story 1.2 - PBAC System. Includes P0 tests for displaying 15 capability checkboxes, assigning capabilities, access control, and admin validation. Includes P1 test for navigation filtering.",
+      "priority_coverage": {
+        "P0": 9,
+        "P1": 1
+      },
+      "test_names": [
+        "[P0-E2E-020] should display 15 capability checkboxes with Spanish labels",
+        "[P0-E2E-021] should have correct data-testid for each capability checkbox",
+        "[P0-E2E-023] should create new user with only can_create_failure_report checked by default",
+        "[P0-E2E-025] should allow admin to assign multiple capabilities to user",
+        "[P0-E2E-028] should deny access to /assets for users without can_manage_assets capability",
+        "[P0-E2E-031] should deny access to repair history for users without can_view_repair_history",
+        "[P0-E2E-033] should assign all 15 capabilities to initial admin user",
+        "[P0-E2E-035] should show only navigation items for user capabilities",
+        "[P0-E2E-037] should deny access when accessing unauthorized module via direct URL",
+        "[P1-E2E-001] should filter navigation items based on user capabilities"
+      ]
+    },
+    {
+      "file": "tests/e2e/optimized-story-1.3-tags.spec.ts",
+      "description": "Optimized E2E tests for Story 1.3 - Tags System. Includes P0 tests for critical security (tags don't grant capabilities), P1 tests for creating and visualizing tags, and P2 test for 20 tag limit validation.",
+      "priority_coverage": {
+        "P0": 3,
+        "P1": 2,
+        "P2": 1
+      },
+      "test_names": [
+        "[P0-E2E-001] should not grant capabilities when tag is assigned",
+        "[P0-E2E-002] should allow same tag with different capabilities",
+        "[P0-E2E-003] should preserve capabilities when tag is deleted",
+        "[P1-E2E-001] should create tag with name and color",
+        "[P1-E2E-002] should display tags as badges in user profile",
+        "[P2-E2E-001] should prevent creating more than 20 tags"
+      ]
+    }
+  ],
+  "fixture_needs": [
+    "authenticatedUserFixture",
+    "networkMockFixture",
+    "testDataFactoryFixture"
+  ],
+  "test_count": 25,
+  "summary": "Generated 3 optimized E2E test files for Epic 1 with 25 total tests covering Story 1.1 (Login/Profile), Story 1.2 (PBAC System), and Story 1.3 (Tags). All tests follow network-first pattern, use resilient selectors, include logging, and avoid hard-coded test data by using factories. Priority coverage: 20 P0 tests, 4 P1 tests, 1 P2 test. Tests are production-ready and follow the existing codebase patterns.",
+  "patterns_used": {
+    "network_first": "interceptNetworkCall utility captures API calls before navigation",
+    "resilient_selectors": "getByRole, getByText, getByTestId for stable element selection",
+    "logging": "log() function for clear test step documentation",
+    "fixture_composition": "Uses existing helpers (loginAs, createUser, authenticatedAPICall)",
+    "test_data_factories": "No hard-coded data - uses createUser, createUserWithCapabilities"
+  },
+  "coverage_by_story": {
+    "story_1.1": {
+      "file": "optimized-story-1.1-login.spec.ts",
+      "tests": 9,
+      "p0": 8,
+      "p1": 1,
+      "features": [
+        "Login validation",
+        "Password reset flow",
+        "Forced password reset bypass prevention",
+        "Profile update"
+      ]
+    },
+    "story_1.2": {
+      "file": "optimized-story-1.2-pbac.spec.ts",
+      "tests": 10,
+      "p0": 9,
+      "p1": 1,
+      "features": [
+        "15 capability checkboxes",
+        "Capability assignment",
+        "Access control",
+        "Admin validation",
+        "Navigation filtering"
+      ]
+    },
+    "story_1.3": {
+      "file": "optimized-story-1.3-tags.spec.ts",
+      "tests": 6,
+      "p0": 3,
+      "p1": 2,
+      "p2": 1,
+      "features": [
+        "Tags don't grant capabilities (security)",
+        "Create tag",
+        "Visualize tags",
+        "20 tag limit"
+      ]
+    }
+  }
+}
