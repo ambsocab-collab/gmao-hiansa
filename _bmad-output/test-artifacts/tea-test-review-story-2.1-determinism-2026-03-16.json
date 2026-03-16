@@ -1,0 +1,30 @@
+{
+  "dimension": "determinism",
+  "timestamp": "2026-03-16",
+  "score": 95,
+  "grade": "A",
+  "violations": [
+    {
+      "severity": "MEDIUM",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "line": 23,
+      "issue": "createdData object defined but never populated - creates confusion about test data lifecycle",
+      "recommendation": "Either populate createdData with seeded equipment IDs or remove the unused tracking object"
+    },
+    {
+      "severity": "LOW",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "line": 65,
+      "issue": "Request listener pattern for tracking API calls - could be race-prone if not properly awaited",
+      "recommendation": "Consider using page.route() to intercept and count requests more deterministically"
+    }
+  ],
+  "strengths": [
+    "No hard waits detected - all use waitForResponse() for deterministic timing",
+    "No if/else control flow in test bodies - all tests execute same path every time",
+    "No try/catch blocks for flow control - failures bubble up clearly",
+    "Network-first pattern applied correctly in all E2E tests",
+    "Explicit assertions with clear expectations"
+  ],
+  "summary": "Excellent determinism with minor improvements needed around data tracking and request interception patterns"
+}

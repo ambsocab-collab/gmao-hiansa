@@ -1,0 +1,165 @@
+{
+  "overall_score": 89,
+  "overall_grade": "B",
+  "quality_assessment": "Good quality with minor improvements needed",
+  "dimension_scores": {
+    "determinism": 95,
+    "isolation": 82,
+    "maintainability": 88,
+    "performance": 90
+  },
+  "dimension_grades": {
+    "determinism": "A",
+    "isolation": "B+",
+    "maintainability": "A-",
+    "performance": "A-"
+  },
+  "violations_summary": {
+    "total": 7,
+    "HIGH": 1,
+    "MEDIUM": 3,
+    "LOW": 3
+  },
+  "all_violations": [
+    {
+      "severity": "HIGH",
+      "dimension": "isolation",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "line": 27,
+      "issue": "No cleanup in test.afterAll() - API tests create data but never clean up",
+      "recommendation": "Add test.afterAll() to delete any equipos created during tests to prevent state pollution"
+    },
+    {
+      "severity": "MEDIUM",
+      "dimension": "determinism",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "line": 23,
+      "issue": "createdData object defined but never populated - creates confusion about test data lifecycle",
+      "recommendation": "Either populate createdData with seeded equipment IDs or remove the unused tracking object"
+    },
+    {
+      "severity": "MEDIUM",
+      "dimension": "isolation",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "lines": "all tests",
+      "issue": "No explicit cleanup - tests may leave selected equipment in UI state",
+      "recommendation": "Add test.afterEach() to clear form state and selection between tests"
+    },
+    {
+      "severity": "MEDIUM",
+      "dimension": "maintainability",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "lines": "27-51",
+      "issue": "Manual authentication logic with complex cookie parsing - should use authenticatedAPICall helper",
+      "recommendation": "Replace manual auth with authenticatedAPICall() helper from ../../helpers/auth.helpers for consistency and maintainability"
+    },
+    {
+      "severity": "LOW",
+      "dimension": "determinism",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "line": 65,
+      "issue": "Request listener pattern for tracking API calls - could be race-prone if not properly awaited",
+      "recommendation": "Consider using page.route() to intercept and count requests more deterministically"
+    },
+    {
+      "severity": "LOW",
+      "dimension": "isolation",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "line": 23,
+      "issue": "createdData tracking exists but is not populated - cleanup loop will not execute",
+      "recommendation": "Populate createdData.equipos array when seeding test data, or remove the tracking"
+    },
+    {
+      "severity": "LOW",
+      "dimension": "maintainability",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "lines": "18-19",
+      "issue": "createUserWithCapabilities imported but never used in tests",
+      "recommendation": "Either use the factory to seed test users or remove the unused import"
+    },
+    {
+      "severity": "LOW",
+      "dimension": "maintainability",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "line": "1",
+      "issue": "No helper imports - should use authenticatedAPICall and factories for consistency",
+      "recommendation": "Import authenticatedAPICall and createUserWithCapabilities to match P0 test patterns"
+    },
+    {
+      "severity": "LOW",
+      "dimension": "performance",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "lines": "27-51",
+      "issue": "Manual token extraction in test.beforeAll() adds overhead - could use storageState for faster auth",
+      "recommendation": "Use storageState: 'playwright/.auth/admin.json' for API tests to eliminate login overhead"
+    }
+  ],
+  "high_severity_violations": [
+    {
+      "severity": "HIGH",
+      "dimension": "isolation",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "line": 27,
+      "issue": "No cleanup in test.afterAll() - API tests create data but never clean up",
+      "recommendation": "Add test.afterAll() to delete any equipos created during tests to prevent state pollution"
+    }
+  ],
+  "top_recommendations": [
+    {
+      "priority": 1,
+      "severity": "HIGH",
+      "dimension": "isolation",
+      "recommendation": "Add test.afterAll() to API tests for cleanup - delete any equipos created during tests to prevent state pollution in parallel runs"
+    },
+    {
+      "priority": 2,
+      "severity": "MEDIUM",
+      "dimension": "isolation",
+      "recommendation": "Add test.afterEach() to P1 E2E tests to clear form state and equipment selection between tests"
+    },
+    {
+      "priority": 3,
+      "severity": "MEDIUM",
+      "dimension": "maintainability",
+      "recommendation": "Replace manual authentication logic in API tests with authenticatedAPICall() helper for consistency"
+    },
+    {
+      "priority": 4,
+      "severity": "MEDIUM",
+      "dimension": "determinism",
+      "recommendation": "Either populate createdData with seeded equipment IDs or remove the unused tracking object in P0 tests"
+    },
+    {
+      "priority": 5,
+      "severity": "LOW",
+      "dimension": "performance",
+      "recommendation": "Use storageState for API tests instead of manual token extraction to eliminate login overhead"
+    },
+    {
+      "priority": 6,
+      "severity": "LOW",
+      "dimension": "maintainability",
+      "recommendation": "Remove unused import createUserWithCapabilities or use it to seed test users in P0 tests"
+    },
+    {
+      "priority": 7,
+      "severity": "LOW",
+      "dimension": "maintainability",
+      "recommendation": "Import authenticatedAPICall and factories in P1 tests to match P0 test patterns for consistency"
+    }
+  ],
+  "strengths_summary": [
+    "100% test ID coverage - every test has traceable ID (P0-E2E-001, P0-API-001, P1-E2E-001, etc.)",
+    "100% priority marker coverage - all tests clearly marked P0 or P1",
+    "100% BDD format - all tests have Given-When-Then in JSDoc comments",
+    "No hard waits detected - all use waitForResponse() for deterministic timing",
+    "No if/else control flow in test bodies - all tests execute same path every time",
+    "Network-first pattern applied correctly in all E2E tests",
+    "Tests use storageState for auth - no login state pollution",
+    "All tests use test.skip() in RED phase - no wasted execution during development"
+  ],
+  "timestamp": "2026-03-16",
+  "test_files_reviewed": 3,
+  "total_tests_counted": 21,
+  "execution_mode": "sequential"
+}

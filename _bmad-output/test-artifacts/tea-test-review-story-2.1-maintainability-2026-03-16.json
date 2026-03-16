@@ -1,0 +1,38 @@
+{
+  "dimension": "maintainability",
+  "timestamp": "2026-03-16",
+  "score": 88,
+  "grade": "A-",
+  "violations": [
+    {
+      "severity": "MEDIUM",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "lines": "27-51",
+      "issue": "Manual authentication logic with complex cookie parsing - should use authenticatedAPICall helper",
+      "recommendation": "Replace manual auth with authenticatedAPICall() helper from ../../helpers/auth.helpers for consistency and maintainability"
+    },
+    {
+      "severity": "LOW",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "lines": "18-19",
+      "issue": "createUserWithCapabilities imported but never used in tests",
+      "recommendation": "Either use the factory to seed test users or remove the unused import"
+    },
+    {
+      "severity": "LOW",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "line": "1",
+      "issue": "No helper imports - should use authenticatedAPICall and factories for consistency",
+      "recommendation": "Import authenticatedAPICall and createUserWithCapabilities to match P0 test patterns"
+    }
+  ],
+  "strengths": [
+    "100% test ID coverage - every test has traceable ID (P0-E2E-001, P0-API-001, etc.)",
+    "100% priority marker coverage - all tests clearly marked P0 or P1",
+    "100% BDD format - all tests have Given-When-Then in JSDoc comments",
+    "Clear test structure with describe blocks grouping related tests",
+    "Excellent documentation - each test has clear purpose in comments",
+    "Consistent naming conventions across all test files"
+  ],
+  "summary": "Excellent maintainability with perfect test ID and priority coverage. Minor improvements needed for helper usage consistency."
+}

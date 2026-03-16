@@ -1,0 +1,37 @@
+{
+  "dimension": "isolation",
+  "timestamp": "2026-03-16",
+  "score": 82,
+  "grade": "B+",
+  "violations": [
+    {
+      "severity": "HIGH",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "line": 27,
+      "issue": "No cleanup in test.afterAll() - API tests create data but never clean up",
+      "recommendation": "Add test.afterAll() to delete any equipos created during tests to prevent state pollution"
+    },
+    {
+      "severity": "MEDIUM",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p1.spec.ts",
+      "lines": "all tests",
+      "issue": "No explicit cleanup - tests may leave selected equipment in UI state",
+      "recommendation": "Add test.afterEach() to clear form state and selection between tests"
+    },
+    {
+      "severity": "LOW",
+      "file": "tests/e2e/story-2.1/busqueda-predictiva-p0.spec.ts",
+      "line": 23,
+      "issue": "createdData tracking exists but is not populated - cleanup loop will not execute",
+      "recommendation": "Populate createdData.equipos array when seeding test data, or remove the tracking"
+    }
+  ],
+  "strengths": [
+    "P0 E2E tests have explicit cleanup structure (test.afterAll with loop)",
+    "Tests use storageState for auth - no login state pollution",
+    "No shared state variables between tests",
+    "Each test is self-contained with its own setup",
+    "Global auth state prevents login repetition across tests"
+  ],
+  "summary": "Good isolation with clear cleanup structure, but API and P1 tests need explicit cleanup implementation"
+}

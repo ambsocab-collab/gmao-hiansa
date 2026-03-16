@@ -1,0 +1,24 @@
+{
+  "dimension": "performance",
+  "timestamp": "2026-03-16",
+  "score": 90,
+  "grade": "A-",
+  "violations": [
+    {
+      "severity": "LOW",
+      "file": "tests/api/story-2.1/busqueda-predictiva-api.spec.ts",
+      "lines": "27-51",
+      "issue": "Manual token extraction in test.beforeAll() adds overhead - could use storageState for faster auth",
+      "recommendation": "Use storageState: 'playwright/.auth/admin.json' for API tests to eliminate login overhead"
+    }
+  ],
+  "strengths": [
+    "All tests use test.skip() in RED phase - no wasted execution during development",
+    "Network-first pattern with waitForResponse() eliminates hard waits - faster feedback",
+    "API tests run without browser overhead - very fast execution",
+    "E2E tests use storageState for auth - no repeated login overhead",
+    "No hardcoded timeouts or sleeps - tests proceed as fast as application allows",
+    "Tests can run in parallel with proper isolation (future optimization opportunity)"
+  ],
+  "summary": "Excellent performance characteristics. Network-first pattern and storageState auth eliminate major performance anti-patterns."
+}
