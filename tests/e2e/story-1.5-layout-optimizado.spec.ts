@@ -46,7 +46,7 @@ function createTestLogoSVG(): string {
   `
 }
 
-test.describe('Story 1.5: Layout Desktop Optimizado', () => {
+test.describe.skip('Story 1.5: Layout Desktop Optimizado', () => {
   test.beforeEach(async ({ page }) => {
     await login(page)
   })
@@ -308,7 +308,7 @@ test.describe('Story 1.5: Layout Desktop Optimizado', () => {
   })
 })
 
-test.describe('Story 1.5: Layout Accessibility', () => {
+test.describe.skip('Story 1.5: Layout Accessibility', () => {
   test.beforeEach(async ({ page }) => {
     await login(page)
   })

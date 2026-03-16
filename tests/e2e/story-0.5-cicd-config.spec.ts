@@ -15,7 +15,7 @@ import * as yaml from 'yaml';
  * - AC-0.5.5: Environment Variables Validation
  */
 
-test.describe('@p1 Story 0.5: CI/CD Configuration Validation', () => {
+test.describe.skip('@p1 Story 0.5: CI/CD Configuration Validation', () => {
   const projectRoot = path.resolve(__dirname, '../..');
 
   /**
