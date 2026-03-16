@@ -1,13 +1,14 @@
 {
-  "buildCommand": "prisma generate && npm run build",
+  "buildCommand": "npx prisma migrate deploy && npx prisma generate && npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": ".next",
   "regions": ["iad1"],
-  "env": {
-    "DATABASE_URL": "@database-url",
-    "NEXTAUTH_SECRET": "@nextauth-secret",
-    "NEXTAUTH_URL": "@nextauth-url"
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "dev": false
+    }
   }
 }

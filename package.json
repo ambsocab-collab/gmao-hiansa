@@ -31,6 +31,7 @@
     "db:push": "prisma db push",
     "db:push:reset": "prisma db push --force-reset",
     "db:seed": "prisma db seed",
+    "db:migrate:prod": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "prepare": "husky"

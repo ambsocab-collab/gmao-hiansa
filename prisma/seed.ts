@@ -83,6 +83,26 @@ async function main() {
     })),
   })
 
+  // Usuario: B. Soto (Admin con todas las capabilities)
+  const bsotoPassword = await bcrypt.hash('1112BSC08', 10)
+  const bsoto = await prisma.user.create({
+    data: {
+      email: 'bsoto@hiansa.com',
+      passwordHash: bsotoPassword,
+      name: 'B. Soto',
+      phone: '+34 600 000 010',
+      forcePasswordReset: false,
+    },
+  })
+
+  // Asignar todas las capabilities a B. Soto
+  await prisma.userCapability.createMany({
+    data: allCapabilities.map((cap) => ({
+      userId: bsoto.id,
+      capabilityId: cap.id,
+    })),
+  })
+
   // Usuario: Técnico con capacidades limitadas
   const tecnicoPassword = await bcrypt.hash('tecnico123', 10)
   const tecnico = await prisma.user.create({
@@ -160,7 +180,7 @@ async function main() {
     })),
   })
 
-  console.log('✅ Created 4 users (admin, tecnico, supervisor, new user with forcePasswordReset=true)')
+  console.log('✅ Created 5 users (admin, bsoto, tecnico, supervisor, new user with forcePasswordReset=true)')
 
   // ============================================
   // Story 1.3: CREAR ETIQUETAS DE CLASIFICACIÓN
@@ -458,7 +478,7 @@ async function main() {
   // ============================================
   console.log('\n🎉 Seed completed successfully!')
   console.log('\n📊 Summary:')
-  console.log('   - Users: 4 (admin, tecnico, supervisor, new user)')
+  console.log('   - Users: 5 (admin, bsoto, tecnico, supervisor, new user)')
   console.log('   - Capabilities: 15')
   console.log('   - Tags: 5 (Operario, Técnico, Supervisor, Mantenimiento, Calidad)')
   console.log('   - Plantas: 2')
@@ -470,6 +490,7 @@ async function main() {
   console.log('   - FailureReports: 1')
   console.log('\n🔐 Default credentials:')
   console.log('   Admin: admin@hiansa.com / admin123')
+  console.log('   B. Soto: bsoto@hiansa.com / 1112BSC08')
   console.log('   Tecnico: tecnico@hiansa.com / tecnico123')
   console.log('   Supervisor: supervisor@hiansa.com / supervisor123')
   console.log('\n✅ Passwords hashed with bcrypt (10 rounds)')
