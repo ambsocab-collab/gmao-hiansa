@@ -1,2 +1,52 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="67.947281">
+<testsuites id="" name="" tests="15" failures="0" skipped="0" errors="0" time="61.487991">
+<testsuite name="story-2.1\busqueda-predictiva-p0.spec.ts" timestamp="2026-03-21T22:24:08.440Z" hostname="chromium" tests="8" failures="0" skipped="0" time="45.424" errors="0">
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-001] should show predictive search results" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="7.331">
+<system-out>
+<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-002] should show results with complete hierarchy" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.958">
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-003] should show division tags with correct colors" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="7.186">
+<system-out>
+<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-004] should select equipo from autocomplete" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.864">
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-005] should show selected equipo as badge" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="6.254">
+<system-out>
+<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-006] should clear selection when clicking (x)" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.638">
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-007] should show no results message" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="6.815">
+<system-out>
+<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-008] should have 44px height input for mobile" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="3.378">
+</testcase>
+</testsuite>
+<testsuite name="story-2.1\busqueda-predictiva-p1.spec.ts" timestamp="2026-03-21T22:24:08.440Z" hostname="chromium" tests="7" failures="0" skipped="0" time="42.462" errors="0">
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-001] should show red border on results" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="8.045">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-002] should show correct placeholder" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="4.926">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-003] should debounce search input" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="6.632">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-004] should limit results to 10" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="6.448">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-005] should show hierarchy in correct format" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.939">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-006] should close autocomplete when clicking outside" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.237">
+</testcase>
+<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-007] should support keyboard navigation" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.235">
+</testcase>
+</testsuite>
 </testsuites>
