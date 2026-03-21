@@ -54,5 +54,8 @@ create-*.js
 verify-*.js
 reset-*.js
 
+# Claude Code local settings
+.claude/settings.local.json
+
 .vercel
 .env*.local
