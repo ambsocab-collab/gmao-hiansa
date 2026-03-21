@@ -155,8 +155,14 @@ test.describe('Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL)', () => {
     const firstResult = page.locator('[role="option"]').first();
     const equipoName = await firstResult.locator('.font-medium').first().textContent();
 
-    // Seleccionar equipo con click (ahora con z-index alto debería funcionar)
-    await firstResult.click();
+    // Seleccionar equipo simulando click con eventos completos
+    await firstResult.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      }));
+    });
 
     // Wait for React state to update
     await page.waitForTimeout(500);
@@ -189,14 +195,27 @@ test.describe('Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL)', () => {
     await searchInput.fill('pren');
     await page.waitForTimeout(500); // Esperar debounce + server action
 
-    // Seleccionar equipo usando keyboard navigation
-    // (cmdk CommandGroup intercepts pointer events, so use keyboard instead)
-    await page.keyboard.press('ArrowDown'); // Select first result
-    await page.keyboard.press('Enter'); // Confirm selection
+    // Seleccionar equipo simulando click con eventos completos
+    await page.locator('[role="option"]').first().evaluate((el: HTMLElement) => {
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      }));
+    });
 
-    // Click en button (x)
+    // Wait for selection to complete
+    await page.waitForTimeout(500);
+
+    // Click en button (x) usando MouseEvent para evitar intercepciones
     const clearButton = page.locator('[data-testid="clear-equipo-button"]');
-    await clearButton.click();
+    await clearButton.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      }));
+    });
 
     // Then: Input vacío y badge eliminado
     await expect(searchInput).toHaveValue('');

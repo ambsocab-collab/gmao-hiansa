@@ -18,7 +18,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { X, AlertCircle } from 'lucide-react'
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command'
+import { Command, CommandInput } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
 import { searchEquipos } from '@/app/actions/equipos'
 import { cn } from '@/lib/utils'
@@ -69,6 +69,8 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
   const [results, setResults] = useState<EquipoWithHierarchy[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
 
   // Debounce search query with 300ms delay (story requirement)
   const debouncedSearch = useDebounce(search, 300)
@@ -111,6 +113,8 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
       setSearch(equipo.name)
       onEquipoSelect?.(equipo)
       onChange?.(equipo)
+      setIsOpen(false) // Close dropdown after selection
+      setFocusedIndex(-1) // Reset focused index
       // Clear any errors when selection is made
       if (error) setError(null)
     },
@@ -124,6 +128,7 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
   const handleClear = useCallback(() => {
     setSearch('')
     setResults([])
+    setIsOpen(false) // Close dropdown when clearing
     onEquipoSelect?.(null as unknown as EquipoWithHierarchy)
     onChange?.(null)
     // Clear errors when clearing selection
@@ -136,8 +141,62 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
   // Validation state for query length
   const isQueryTooShort = search.length > 0 && search.length < 3
 
+  // Keyboard navigation handler
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isOpen || results.length === 0) return
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        e.stopPropagation()
+        setFocusedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev))
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        e.stopPropagation()
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : -1))
+        break
+      case 'Enter':
+        e.preventDefault()
+        e.stopPropagation()
+        if (focusedIndex >= 0 && results[focusedIndex]) {
+          handleSelect(results[focusedIndex])
+          setFocusedIndex(-1)
+        }
+        break
+      case 'Escape':
+        e.preventDefault()
+        e.stopPropagation()
+        setIsOpen(false)
+        setFocusedIndex(-1)
+        break
+    }
+  }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      const searchContainer = target.closest('[data-equipo-search-container]')
+      if (!searchContainer && isOpen) {
+        setIsOpen(false)
+        setFocusedIndex(-1)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
+  // Reset focused index when dropdown closes or results change
+  useEffect(() => {
+    if (!isOpen) {
+      setFocusedIndex(-1)
+    }
+  }, [isOpen])
+
   return (
-    <div className="w-full">
+    <div className="w-full" data-equipo-search-container>
       <div
         className={cn(
           'relative flex items-center w-full',
@@ -150,7 +209,12 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
         >
           <CommandInput
             value={displayValue}
-            onValueChange={setSearch}
+            onValueChange={(val) => {
+              setSearch(val)
+              setFocusedIndex(-1) // Reset focused index when typing
+            }}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsOpen(true)}
             placeholder="Buscar equipo..."
             data-testid="equipo-search"
             className="h-11" // 44px height for mobile (Apple HIG minimum touch target)
@@ -158,95 +222,105 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
             aria-label="Buscar equipo por nombre"
             aria-describedby="equipo-search-description"
             aria-invalid={isQueryTooShort || error !== null}
+            aria-expanded={isOpen}
+            aria-controls="equipo-listbox"
+            aria-activedescendant={focusedIndex >= 0 ? `equipo-option-${focusedIndex}` : undefined}
           />
+        </Command>
 
-          {/* Results dropdown - shown when searching or has results */}
-          <div className="relative z-50 bg-popover border rounded-md shadow-lg mt-1">
-            <CommandList className="max-h-[300px] overflow-y-auto overflow-x-hidden">
-            {/* Loading state */}
-            {isLoading && debouncedSearch.length >= 3 && (
-              <div className="py-6 text-center text-sm text-muted-foreground" role="status" aria-live="polite">
-                Buscando equipos...
-              </div>
-            )}
-
-            {/* Error state - user feedback instead of console.error */}
-            {error && (
-              <div
-                className="py-6 px-4 text-center text-sm text-red-600 bg-red-50"
-                role="alert"
-                aria-live="assertive"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <AlertCircle className="h-4 w-4" />
-                  <span>{error}</span>
+        {/* Results dropdown - outside Command for proper z-index stacking */}
+        {isOpen && (
+          <div className="absolute z-[9999] w-full bg-popover border rounded-md shadow-lg mt-1">
+            <div id="equipo-listbox" role="listbox" className="max-h-[300px] overflow-y-auto overflow-x-hidden p-1">
+              {/* Loading state */}
+              {isLoading && debouncedSearch.length >= 3 && (
+                <div className="py-6 text-center text-sm text-muted-foreground" role="status" aria-live="polite">
+                  Buscando equipos...
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Empty state when no results */}
-            {!isLoading && !error && debouncedSearch.length >= 3 && results.length === 0 && (
-              <CommandEmpty>
-                No se encontraron equipos. Intenta con otra búsqueda.
-              </CommandEmpty>
-            )}
+              {/* Error state - user feedback instead of console.error */}
+              {error && (
+                <div
+                  className="py-6 px-4 text-center text-sm text-red-600 bg-red-50"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>{error}</span>
+                  </div>
+                </div>
+              )}
 
-            {/* Search results */}
-            {!isLoading && !error && results.length > 0 && (
-              <CommandGroup role="listbox" aria-label="Resultados de búsqueda de equipos">
-                {results.map((equipo) => (
-                  <CommandItem
-                    key={equipo.id}
-                    value={equipo.name}
-                    onSelect={() => handleSelect(equipo)}
-                    className="border-l-4 border-l-[#7D1220]" // Borde izquierdo rojo burdeos Hiansa
-                    role="option"
-                    aria-selected={value?.id === equipo.id}
-                  >
-                    <div className="flex flex-col gap-1 w-full">
-                      {/* Main equipo info with division tag */}
-                      <div className="flex items-center justify-between w-full">
-                        <span className="font-medium">{equipo.name}</span>
-                        <span
-                          className="px-2 py-0.5 rounded text-xs font-medium text-foreground"
-                          style={{
-                            backgroundColor: equipo.linea.planta.division === 'HIROCK' ? '#FFD700' : '#8FBC8F'
-                          }}
-                          data-testid={`division-tag-${equipo.linea.planta.division.toLowerCase()}`}
-                        >
-                          {equipo.linea.planta.division}
-                        </span>
+              {/* Empty state when no results */}
+              {!isLoading && !error && debouncedSearch.length >= 3 && results.length === 0 && (
+                <div className="py-6 text-center text-sm text-muted-foreground">
+                  No se encontraron equipos. Intenta con otra búsqueda.
+                </div>
+              )}
+
+              {/* Search results */}
+              {!isLoading && !error && results.length > 0 && (
+                <div role="group" aria-label="Resultados de búsqueda de equipos">
+                  {results.map((equipo, index) => (
+                    <div
+                      key={equipo.id}
+                      id={`equipo-option-${index}`}
+                      onClick={() => handleSelect(equipo)}
+                      onMouseEnter={() => setFocusedIndex(index)}
+                      className={cn(
+                        "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none border-l-4 border-l-[#7D1220]",
+                        focusedIndex === index ? "bg-gray-100" : "hover:bg-gray-100"
+                      )}
+                      role="option"
+                      aria-selected={value?.id === equipo.id}
+                    >
+                      <div className="flex flex-col gap-1 w-full">
+                        {/* Main equipo info with division tag */}
+                        <div className="flex items-center justify-between w-full">
+                          <span className="font-medium">{equipo.name}</span>
+                          <span
+                            className="px-2 py-0.5 rounded text-xs font-medium text-foreground"
+                            style={{
+                              backgroundColor: equipo.linea.planta.division === 'HIROCK' ? '#FFD700' : '#8FBC8F'
+                            }}
+                            data-testid={`division-tag-${equipo.linea.planta.division.toLowerCase()}`}
+                          >
+                            {equipo.linea.planta.division}
+                          </span>
+                        </div>
+
+                        {/* Hierarchy: División → Planta → Linea → Equipo */}
+                        <p className="text-sm text-muted-foreground">
+                          {equipo.linea.planta.division} → {equipo.linea.planta.name} →{' '}
+                          {equipo.linea.name} → {equipo.name}
+                        </p>
                       </div>
-
-                      {/* Hierarchy: División → Planta → Linea → Equipo */}
-                      <p className="text-sm text-muted-foreground">
-                        {equipo.linea.planta.division} → {equipo.linea.planta.name} →{' '}
-                        {equipo.linea.name} → {equipo.name}
-                      </p>
                     </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-
-            {/* Prompt to search when query is too short - with visual feedback */}
-            {debouncedSearch.length > 0 && debouncedSearch.length < 3 && (
-              <div
-                className="py-6 px-4 text-center text-sm text-muted-foreground bg-amber-50 border border-amber-200"
-                role="status"
-                aria-live="polite"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-amber-600" />
-                  <span>Ingresa al menos 3 caracteres para buscar</span>
+                  ))}
                 </div>
-                <p className="text-xs mt-1 text-amber-700">
-                  {search.length === 1 ? 'Faltan 2 caracteres' : 'Falta 1 carácter'}
-                </p>
-              </div>
-            )}
-            </CommandList>
+              )}
+
+              {/* Prompt to search when query is too short - with visual feedback */}
+              {debouncedSearch.length > 0 && debouncedSearch.length < 3 && (
+                <div
+                  className="py-6 px-4 text-center text-sm text-muted-foreground bg-amber-50 border border-amber-200"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-amber-600" />
+                    <span>Ingresa al menos 3 caracteres para buscar</span>
+                  </div>
+                  <p className="text-xs mt-1 text-amber-700">
+                    {search.length === 1 ? 'Faltan 2 caracteres' : 'Falta 1 carácter'}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
+          )}
 
         {/* Clear button (x) when value is selected */}
         {value && (
