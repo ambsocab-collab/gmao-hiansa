@@ -14,7 +14,6 @@ describe('searchEquipos Server Action - Integration Tests', () => {
   beforeAll(async () => {
     // Verify database has test data
     const count = await prisma.equipo.count()
-    console.log(`📊 Database has ${count} equipos for testing`)
     expect(count).toBeGreaterThan(0)
   })
 

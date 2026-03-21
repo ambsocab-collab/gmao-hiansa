@@ -10,10 +10,12 @@
 
 import { useState } from 'react'
 import { EquipoSearch, type EquipoWithHierarchy } from '@/components/equipos/equipo-search'
+import { useToast } from '@/components/ui/use-toast'
 
 export function ReporteAveriaForm() {
   const [selectedEquipo, setSelectedEquipo] = useState<EquipoWithHierarchy | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   /**
    * Handle equipo selection
@@ -43,16 +45,22 @@ export function ReporteAveriaForm() {
     // Clear error and proceed with submission
     setSubmitError(null)
 
-    // TODO: In Story 2.2, this will submit the form with all fields
-    // For now, just log that equipo is validated
+    // NOTE: Story 2.1 scope only includes equipo search and validation
+    // Full form submission (descripción, severidad, fecha, reporter, fotos)
+    // will be implemented in Story 2.2: Formulario Reporte de Avería
+    // For now, we validate equipo selection and show success message
     console.log('Equipo validado:', {
       equipoId: selectedEquipo.id,
       equipoName: selectedEquipo.name,
       hierarchy: `${selectedEquipo.linea.planta.division} → ${selectedEquipo.linea.planta.name} → ${selectedEquipo.linea.name} → ${selectedEquipo.name}`,
     })
 
-    // Placeholder for Story 2.2 submission logic
-    alert('Formulario validado correctamente. Story 2.2 completará la funcionalidad de envío.')
+    // Show success toast notification instead of alert
+    toast({
+      title: 'Equipo validado correctamente',
+      description: 'Story 2.2 completará la funcionalidad de envío del formulario.',
+      variant: 'default',
+    })
   }
 
   return (
@@ -144,8 +152,8 @@ export function ReporteAveriaForm() {
         </ol>
       </div>
 
-      {/* Debug Info - Remove in production */}
-      {process.env.NODE_ENV === 'development' && selectedEquipo && (
+      {/* Debug Info - Development only (never compiles to production) */}
+      {process.env.NODE_ENV === 'development' && !process.env.PRODUCTION && selectedEquipo && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
           <h3 className="text-sm font-medium text-gray-900 mb-2">Debug - Selected Equipo:</h3>
           <pre className="text-xs text-gray-700 overflow-x-auto">

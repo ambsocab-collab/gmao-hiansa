@@ -38,7 +38,7 @@ export interface EquipoWithHierarchy {
 }
 
 interface EquipoSearchProps {
-  onEquipoSelect?: (equipo: EquipoWithHierarchy) => void
+  onEquipoSelect?: (equipo: EquipoWithHierarchy | null) => void
   value?: EquipoWithHierarchy | null
   onChange?: (equipo: EquipoWithHierarchy | null) => void
   disabled?: boolean
@@ -129,7 +129,7 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
     setSearch('')
     setResults([])
     setIsOpen(false) // Close dropdown when clearing
-    onEquipoSelect?.(null as unknown as EquipoWithHierarchy)
+    onEquipoSelect?.(null)
     onChange?.(null)
     // Clear errors when clearing selection
     if (error) setError(null)
@@ -230,7 +230,7 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
 
         {/* Results dropdown - outside Command for proper z-index stacking */}
         {isOpen && (
-          <div className="absolute z-[9999] w-full bg-popover border rounded-md shadow-lg mt-1">
+          <div className="absolute z-50 w-full bg-popover border rounded-md shadow-lg mt-1">
             <div id="equipo-listbox" role="listbox" className="max-h-[300px] overflow-y-auto overflow-x-hidden p-1">
               {/* Loading state */}
               {isLoading && debouncedSearch.length >= 3 && (
@@ -281,10 +281,12 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
                         <div className="flex items-center justify-between w-full">
                           <span className="font-medium">{equipo.name}</span>
                           <span
-                            className="px-2 py-0.5 rounded text-xs font-medium text-foreground"
-                            style={{
-                              backgroundColor: equipo.linea.planta.division === 'HIROCK' ? '#FFD700' : '#8FBC8F'
-                            }}
+                            className={cn(
+                              "px-2 py-0.5 rounded text-xs font-medium text-foreground",
+                              equipo.linea.planta.division === 'HIROCK'
+                                ? "bg-[#FFD700]" // HiRock division color (gold)
+                                : "bg-[#8FBC8F]"  // Ultra division color (dark sea green)
+                            )}
                             data-testid={`division-tag-${equipo.linea.planta.division.toLowerCase()}`}
                           >
                             {equipo.linea.planta.division}
@@ -349,10 +351,12 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
           >
             <span className="font-medium">{value.name}</span>
             <span
-              className="px-2 py-0.5 rounded text-xs font-medium text-foreground"
-              style={{
-                backgroundColor: value.linea.planta.division === 'HIROCK' ? '#FFD700' : '#8FBC8F'
-              }}
+              className={cn(
+                "px-2 py-0.5 rounded text-xs font-medium text-foreground",
+                value.linea.planta.division === 'HIROCK'
+                  ? "bg-[#FFD700]" // HiRock division color (gold)
+                  : "bg-[#8FBC8F]"  // Ultra division color (dark sea green)
+              )}
               data-testid={`division-tag-${value.linea.planta.division.toLowerCase()}`}
             >
               {value.linea.planta.division}
