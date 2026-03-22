@@ -150,38 +150,60 @@ export const auditLogFactory = (options: AuditLogFactoryOptions = {}) => ({
 
 /**
  * Asset (Equipo) Factory - 5-Level Hierarchy
+ * Story 2.3: Updated to match Prisma schema
  */
 export interface AssetFactoryOptions {
-  nombre?: string;
-  planta?: string;
-  linea?: string;
-  tipo?: string;
-  estado?: string;
+  id?: string;
+  name?: string;
+  code?: string;
+  linea?: {
+    id: string
+    name: string
+    planta?: {
+      id: string
+      name: string
+      division: string
+    }
+  }
+  estado?: string; // OPERATIVO | AVERIADO | EN_REPARACION | RETIRADO | BLOQUEADO
 }
 
 export const assetFactory = (options: AssetFactoryOptions = {}) => ({
-  nombre: options.nombre || `${faker.vehicle.type()}-${faker.string.uuid()}`,
-  planta: options.planta || 'Planta Acero Perfilado',
-  linea: options.linea || 'Línea 1',
-  tipo: options.tipo || 'Perfiladora',
-  estado: options.estado || 'Operativo',
+  id: options.id || faker.string.uuid(),
+  name: options.name || `${faker.vehicle.type()}-${faker.string.uuid()}`,
+  code: options.code || `EQ-${faker.string.alphanumeric(5).toUpperCase()}`,
+  linea: options.linea || {
+    id: faker.string.uuid(),
+    name: 'Línea 1',
+    planta: {
+      id: faker.string.uuid(),
+      name: 'Planta Acero Perfilado',
+      division: 'HIROCK',
+    },
+  },
+  estado: options.estado || 'OPERATIVO',
 });
 
 /**
  * Orden de Trabajo (OT) Factory
+ * Story 2.3: Updated to match Prisma schema
  */
 export interface OTFactoryOptions {
-  tipo_mantenimiento?: string;
-  estado?: string;
+  id?: string;
+  tipo?: string; // 'CORRECTIVO' | 'PREVENTIVO'
+  estado?: string; // 'PENDIENTE' | 'ASIGNADA' | ...
   prioridad?: string;
   descripcion?: string;
+  numero?: string; // OT-YYYY-NNN format
 }
 
 export const otFactory = (options: OTFactoryOptions = {}) => ({
-  tipo_mantenimiento: options.tipo_mantenimiento || 'Correctivo',
-  estado: options.estado || 'Pendiente',
+  id: options.id || faker.string.uuid(),
+  tipo: options.tipo || 'CORRECTIVO', // Match Prisma enum WorkOrderTipo
+  estado: options.estado || 'PENDIENTE', // Match Prisma enum WorkOrderEstado
   prioridad: options.prioridad || 'Media',
   descripcion: options.descripcion || faker.lorem.sentence(),
+  numero: options.numero || `OT-${new Date().getFullYear()}-${faker.string.numeric(3)}`,
   fecha_creacion: new Date().toISOString(),
 });
 
@@ -223,21 +245,28 @@ export const providerFactory = (options: ProviderFactoryOptions = {}) => ({
 
 /**
  * Failure Report (Avería) Factory
+ * Story 2.3: Updated to match Prisma schema with camelCase fields
  */
 export interface FailureReportFactoryOptions {
-  equipo_id?: string;
+  id?: string;
+  equipoId?: string; // camelCase to match Prisma
   descripcion?: string;
-  urgencia?: string;
-  reportado_por?: string;
+  reportadoPor?: string; // camelCase to match Prisma
+  estado?: 'NUEVO' | 'RECIBIDO' | 'AUTORIZADO' | 'EN_PROGRESO' | 'COMPLETADO' | 'CONVERTIDO' | 'DESCARTADO'; // Story 2.3: Updated enum
+  fotoUrl?: string | null; // Story 2.3: Optional photo for failure reports
+  numero?: string; // Story 2.3: Consistent format for test readability
 }
 
 export const failureReportFactory = (options: FailureReportFactoryOptions = {}) => ({
-  equipo_id: options.equipo_id || faker.string.uuid(),
+  id: options.id || faker.string.uuid(),
+  equipoId: options.equipoId || faker.string.uuid(), // camelCase
   descripcion: options.descripcion || faker.lorem.sentences(2),
-  urgencia: options.urgencia || 'Media',
-  reportado_por: options.reportado_por || faker.string.uuid(),
-  fecha_reporte: new Date().toISOString(),
-  estado: 'Recibido',
+  reportadoPor: options.reportadoPor || faker.string.uuid(), // camelCase
+  createdAt: new Date().toISOString(), // Match Prisma field name
+  updatedAt: new Date().toISOString(), // Match Prisma field name
+  estado: options.estado || 'NUEVO', // Updated default to NUEVO (Story 2.3)
+  fotoUrl: options.fotoUrl || null,
+  numero: options.numero || `AV-${new Date().getFullYear()}-${faker.string.numeric(3)}`,
 });
 
 /**
