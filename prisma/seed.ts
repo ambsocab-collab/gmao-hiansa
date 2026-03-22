@@ -455,10 +455,10 @@ async function main() {
     data: {
       numero: 'RA-2025-001',
       descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
-      foto_url: null, // TODO: Agregar URL de foto cuando se implemente upload
-      equipo_id: allEquipos[2].id, // Compresor
+      fotoUrl: null, // TODO: Agregar URL de foto cuando se implemente upload
+      equipoId: allEquipos[2].id, // Compresor
       estado: 'EN_PROGRESO',
-      reportado_por: tecnico.id,
+      reportadoPor: tecnico.id,
     },
   })
 
