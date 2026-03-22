@@ -4,13 +4,13 @@
  * Failure Report Modal Component
  * Story 2.3: Triage de Averías y Conversión a OTs
  *
- * Client Component that displays detailed failure report information
- * Features:
- * - Shows full details: foto (if exists), description, equipo hierarchy, reporter, timestamp
- * - Action buttons: "Convertir a OT", "Descartar"
+ * Client Component que muestra información detallada del reporte de avería
+ * Características:
+ * - Muestra detalles completos: foto (si existe), descripción, jerarquía de equipo, reporter, timestamp
+ * - Botones de acción: "Convertir a OT", "Descartar"
  * - shadcn/ui Dialog component
- * - data-testid attributes for E2E tests
- * - Connected to Server Actions for convert/discard functionality
+ * - data-testid attributes para E2E tests
+ * - Conectado a Server Actions para funcionalidad de convertir/descartar
  */
 
 import { useState } from 'react'

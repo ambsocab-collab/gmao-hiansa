@@ -63,6 +63,24 @@ export function setupConvertToOTMocks(overrides: {
         ...mockReport,
         estado: 'CONVERTIDO',
       } as any);
+
+      // Mock $transaction to execute callback and return result
+      prisma.$transaction = vi.fn().mockImplementation(async (callback: any) => {
+        // Simulate transaction by executing the callback with a mock tx object
+        const mockTx = {
+          failureReport: {
+            findUnique: prisma.failureReport.findUnique,
+            update: prisma.failureReport.update,
+          },
+          workOrder: {
+            findFirst: prisma.workOrder.findFirst,
+            create: prisma.workOrder.create,
+          },
+        };
+
+        const result = await callback(mockTx);
+        return result;
+      });
     },
   };
 }

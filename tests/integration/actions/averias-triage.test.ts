@@ -308,7 +308,7 @@ describe('SSE Real-time Sync Integration Tests', () => {
   });
 });
 
-describe('AC6: Re-trabajo Edge Case', () => {
+describe.skip('AC6: Re-trabajo Edge Case', () => {
   /**
    * P1-INT-012: Rechazo de reparación genera OT de re-trabajo
    *
@@ -316,14 +316,14 @@ describe('AC6: Re-trabajo Edge Case', () => {
    *       When reporta rechazo
    *       Then OT de re-trabajo creada con prioridad alta
    *       And OT vinculada a OT original
+   *
+   * NOTE: Skipped until AC6 is fully implemented with Epic 3 schema changes
+   *       - Requires prioridad field in WorkOrder model
+   *       - Requires parent_work_order_id field in WorkOrder model
+   *       - Server Action createReworkOT() already created in app/actions/averias.ts
    */
-  it('should create rework OT with high priority when repair rejected', async () => {
-    // This would be tested in a different Server Action specific to rework
-    // For Story 2.3, we focus on triage of initial failure reports
-    // Rework logic would be in Story 3.x or later
-
-    // Placeholder for future re-work functionality
-    expect(true).toBe(true);
+  it.skip('should create rework OT with high priority when repair rejected', async () => {
+    // Implementation pending Epic 3 schema coordination
   });
 
   /**
@@ -331,9 +331,10 @@ describe('AC6: Re-trabajo Edge Case', () => {
    *
    * AC6: Given OT de re-trabajo creada
    *       Then notificación enviada a supervisor
+   *
+   * NOTE: Skipped until AC6 is fully implemented
    */
-  it('should notify supervisor when rework OT created', async () => {
-    // Placeholder for future re-work notification logic
-    expect(true).toBe(true);
+  it.skip('should notify supervisor when rework OT created', async () => {
+    // Implementation pending Epic 3 schema coordination
   });
 });

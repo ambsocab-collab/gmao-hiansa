@@ -238,113 +238,132 @@ export async function convertFailureReportToOT(failureReportId: string) {
     // Start performance tracking (<1s requirement - NFR-S7 CRITICAL)
     const perf = trackPerformance('convert_failure_report_to_ot', correlationId)
 
-    // Fetch failure report with equipo
-    const failureReport = await prisma.failureReport.findUnique({
-      where: { id: failureReportId },
-      include: { equipo: true },
-    })
+    // CRITICAL FIX: Use Prisma transaction to prevent race condition
+    // If two supervisors click "Convertir a OT" simultaneously, only one OT will be created
+    const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Fetch failure report with equipo (within transaction lock)
+      const failureReport = await tx.failureReport.findUnique({
+        where: { id: failureReportId },
+        include: { equipo: true },
+      })
 
-    if (!failureReport) {
-      throw new ValidationError('Avería no encontrada', {}, correlationId)
-    }
-
-    // Check if already converted (concurrent conversion handling)
-    if (failureReport.estado === 'CONVERTIDO') {
-      throw new ValidationError('Esta avería ya ha sido convertida a OT', {}, correlationId)
-    }
-
-    // Check if discarded
-    if (failureReport.estado === 'DESCARTADO') {
-      throw new ValidationError('No se puede convertir una avería descartada', {}, correlationId)
-    }
-
-    // Validate tipo: only convert 'avería' reports (reparaciones already are OTs)
-    if (failureReport.tipo !== 'avería') {
-      throw new ValidationError(
-        `Solo se pueden convertir averías. Este reporte es tipo: ${failureReport.tipo}`,
-        {},
-        correlationId
-      )
-    }
-
-    // Generate sequential OT number (OT-YYYY-NNN)
-    // Use retry logic to handle race conditions (similar to Story 2.2)
-    let workOrder: any = null
-    let retries = 0
-    const maxRetries = 5
-
-    while (retries <= maxRetries) {
-      try {
-        const year = new Date().getFullYear()
-
-        // Get the latest OT number for this year
-        const latestOT = await prisma.workOrder.findFirst({
-          where: {
-            numero: {
-              startsWith: `OT-${year}`,
-            },
-          },
-          orderBy: {
-            numero: 'desc',
-          },
-          select: {
-            numero: true,
-          },
-        })
-
-        // Extract sequence number from latest OT or default to 0
-        let nextNumber = 1
-        if (latestOT?.numero) {
-          // Parse "OT-2026-001" -> 001 -> 1, add 1
-          const match = latestOT.numero.match(/OT-\d{4}-(\d+)/)
-          if (match) {
-            nextNumber = parseInt(match[1], 10) + 1 + retries
-          }
-        }
-
-        const numero = `OT-${year}-${String(nextNumber).padStart(3, '0')}`
-
-        // Create WorkOrder with tipo CORRECTIVO and estado PENDIENTE
-        workOrder = await prisma.workOrder.create({
-          data: {
-            numero,
-            tipo: 'CORRECTIVO', // AC3: tipo marcado como "Correctivo"
-            estado: 'PENDIENTE', // AC3: OT creada con estado "Pendiente"
-            descripcion: `Reparar: ${failureReport.equipo.name} - ${failureReport.descripcion}`,
-            equipo_id: failureReport.equipoId,
-            failure_report_id: failureReport.id,
-          },
-        })
-
-        // Success - break out of retry loop
-        break
-      } catch (error: any) {
-        // Check if it's a unique constraint violation on the numero field
-        if (error.code === 'P2002' && error.meta?.target?.includes('numero') && retries < maxRetries) {
-          // Unique constraint violation - retry with a different number
-          retries++
-          logger.warn(undefined, 'retry_ot_creation', correlationId, {
-            attempt: retries + 1,
-          })
-          continue
-        }
-        // Not a unique constraint error or max retries exceeded - rethrow
-        throw error
+      if (!failureReport) {
+        throw new ValidationError('Avería no encontrada', {}, correlationId)
       }
-    }
 
-    // Safety check: workOrder should always be created after the loop
-    if (!workOrder) {
-      throw new Error('Failed to create work order after retries')
-    }
+      // Check if already converted (concurrent conversion handling)
+      if (failureReport.estado === 'CONVERTIDO') {
+        throw new ValidationError('Esta avería ya ha sido convertida a OT', {}, correlationId)
+      }
 
-    // Update FailureReport status to CONVERTIDO
-    await prisma.failureReport.update({
-      where: { id: failureReportId },
-      data: {
-        estado: 'CONVERTIDO',
-      },
+      // Check if discarded
+      if (failureReport.estado === 'DESCARTADO') {
+        throw new ValidationError('No se puede convertir una avería descartada', {}, correlationId)
+      }
+
+      // Validate tipo: only convert 'avería' reports (reparaciones already are OTs)
+      if (failureReport.tipo !== 'avería') {
+        const tipoMap: Record<string, string> = {
+          'avería': 'Avería',
+          'reparación': 'Reparación',
+        }
+        throw new ValidationError(
+          `Solo se pueden convertir averías. Este reporte es tipo: ${tipoMap[failureReport.tipo] || failureReport.tipo}`,
+          { tipo: failureReport.tipo },
+          correlationId
+        )
+      }
+
+      // Step 2: Generate sequential OT number (OT-YYYY-NNN)
+      // Use retry logic to handle race conditions (similar to Story 2.2)
+      let workOrderCreated: {
+        id: string
+        numero: string
+        tipo: string
+        estado: string
+        descripcion: string
+      } | null = null
+      let retries = 0
+      const maxRetries = 5
+
+      while (retries <= maxRetries) {
+        try {
+          const year = new Date().getFullYear()
+
+          // Get the latest OT number for this year
+          const latestOT = await tx.workOrder.findFirst({
+            where: {
+              numero: {
+                startsWith: `OT-${year}`,
+              },
+            },
+            orderBy: {
+              numero: 'desc',
+            },
+            select: {
+              numero: true,
+            },
+          })
+
+          // Extract sequence number from latest OT or default to 0
+          let nextNumber = 1
+          if (latestOT?.numero) {
+            // Parse "OT-2026-001" -> 001 -> 1, add 1
+            const match = latestOT.numero.match(/OT-\d{4}-(\d+)/)
+            if (match) {
+              nextNumber = parseInt(match[1], 10) + 1 + retries
+            }
+          }
+
+          const numero = `OT-${year}-${String(nextNumber).padStart(3, '0')}`
+
+          // Step 3: Create WorkOrder with tipo CORRECTIVO and estado PENDIENTE
+          workOrderCreated = await tx.workOrder.create({
+            data: {
+              numero,
+              tipo: 'CORRECTIVO', // AC3: tipo marcado como "Correctivo"
+              estado: 'PENDIENTE', // AC3: OT creada con estado "Pendiente"
+              descripcion: `Reparar: ${failureReport.equipo.name} - ${failureReport.descripcion}`,
+              equipo_id: failureReport.equipoId,
+              failure_report_id: failureReport.id,
+            },
+          })
+
+          // Success - break out of retry loop
+          break
+        } catch (error: any) {
+          // Check if it's a unique constraint violation on the numero field
+          if (error.code === 'P2002' && error.meta?.target?.includes('numero') && retries < maxRetries) {
+            // Unique constraint violation - retry with a different number
+            retries++
+            logger.warn(undefined, 'retry_ot_creation', correlationId, {
+              attempt: retries + 1,
+            })
+            continue
+          }
+          // Not a unique constraint error or max retries exceeded - rethrow
+          throw error
+        }
+      }
+
+      // Safety check: workOrder should always be created after the loop
+      if (!workOrderCreated) {
+        throw new Error('Failed to create work order after retries')
+      }
+
+      // Step 4: Update FailureReport status to CONVERTIDO (atomic with transaction)
+      await tx.failureReport.update({
+        where: { id: failureReportId },
+        data: {
+          estado: 'CONVERTIDO',
+        },
+      })
+
+      return { workOrder: workOrderCreated, failureReport }
     })
+
+    // Extract values from transaction result
+    const { workOrder, failureReport } = result
 
     // Emit SSE notification to supervisors (can_view_all_ots capability)
     // NFR-S4: Notificación SSE entregada en <30s (P95)
@@ -528,8 +547,8 @@ export async function createReworkOT(originalWorkOrderId: string, motivo: string
       )
     }
 
-    // TODO: Once schema has `prioridad` field, use: prioridad: 'ALTA'
-    // TODO: Once schema has `parent_work_order_id` field, link to original OT
+    // AC6 requirement: Re-work OTs must have high priority (NFR-S101)
+    // AC6 requirement: Re-work OTs must be linked to original OT
 
     // Generate sequential OT number (OT-YYYY-NNN)
     let reworkOT: any = null
@@ -566,16 +585,16 @@ export async function createReworkOT(originalWorkOrderId: string, motivo: string
 
         const numero = `OT-${year}-${String(nextNumber).padStart(3, '0')}`
 
-        // Create re-work WorkOrder
-        // TODO: Add `prioridad: 'ALTA'` when schema supports it
-        // TODO: Add `parent_work_order_id: originalWorkOrderId` when schema supports it
+        // Create re-work WorkOrder with high priority and link to original OT
         reworkOT = await prisma.workOrder.create({
           data: {
             numero,
             tipo: 'CORRECTIVO', // Re-work is always corrective
             estado: 'PENDIENTE', // Re-work OTs start as pending
+            prioridad: 'ALTA', // NFR-S101: Re-work OTs have high priority
             descripcion: `[RE-TRABAJO] ${motivo}\n\nOT Original: ${originalOT.numero}\nDescripción original: ${originalOT.descripcion}`,
             equipo_id: originalOT.equipo_id,
+            parent_work_order_id: originalWorkOrderId, // Link to original OT (AC6)
             // NOTE: Not linking to failure_report since this is a re-work of an existing OT
           },
         })

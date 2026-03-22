@@ -2,13 +2,13 @@
  * Triage Column Component
  * Story 2.3: Triage de Averías y Conversión a OTs
  *
- * Server Component that displays new failure reports in a triage column
- * Features:
- * - Fetches FailureReports with estado "NUEVO" from Prisma
- * - Displays count badge: "Por Revisar (N)"
- * - Renders FailureReportCard for each report
+ * Server Component que muestra FailureReports nuevos en columna de triage
+ * Características:
+ * - Fetch FailureReports con estado "NUEVO" desde Prisma
+ * - Muestra badge de contador: "Por Revisar (N)"
+ * - Renderiza FailureReportCard para cada reporte
  * - Mobile First layout (single column <768px)
- * - Includes equipo hierarchy (Planta > Línea > Equipo)
+ * - Incluye jerarquía de equipo (Planta > Línea > Equipo)
  * - AC5: Filtros por fecha, reporter, equipo (URL search params)
  * - AC5: Ordenamiento por fecha y prioridad (URL search params)
  */
@@ -33,8 +33,40 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
   const ordenarFecha = params.ordenar_fecha // 'asc' | 'desc' | undefined
   const ordenarPrioridad = params.ordenar_prioridad // 'alta' | 'media' | 'baja' | undefined
 
+  // Fetch dinámico de reporters y equipos para filtros (AC5)
+  const [uniqueReporters, uniqueEquipos] = await Promise.all([
+    // Fetch usuarios únicos que han reportado averías
+    prisma.failureReport.findMany({
+      where: { estado: 'NUEVO' },
+      select: {
+        reportadoPor: true,
+        reporter: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      distinct: ['reportadoPor'],
+    }),
+    // Fetch equipos únicos con averías nuevas
+    prisma.failureReport.findMany({
+      where: { estado: 'NUEVO' },
+      select: {
+        equipoId: true,
+        equipo: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      distinct: ['equipoId'],
+    }),
+  ])
+
   // Declare failureReports variable with proper type
-  let failureReports: Array<{
+  type FailureReportWithRelations = {
     id: string
     numero: string
     descripcion: string
@@ -45,12 +77,14 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
     equipo: {
       id: string
       name: string
+      code: string
       linea: {
         id: string
         name: string
         planta: {
           id: string
           name: string
+          division: string
         }
       }
     }
@@ -59,10 +93,20 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
       name: string
       email: string
     }
-  }>
+  }
+
+  let failureReports: FailureReportWithRelations[]
 
   // Construir where clause dinámico
-  const where: any = {
+  const where: {
+    estado: 'NUEVO'
+    createdAt?: {
+      gte?: Date
+      lte?: Date
+    }
+    reportadoPor?: string
+    equipoId?: string
+  } = {
     estado: 'NUEVO',
   }
 
@@ -86,14 +130,27 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
   }
 
   // Construir orderBy dinámico
-  let orderBy: any = { createdAt: 'desc' as const } // Default: más reciente primero
+  let orderBy: { createdAt: 'asc' | 'desc' } = { createdAt: 'desc' as const } // Default: más reciente primero
 
   if (ordenarPrioridad) {
-    // Ordenamiento por prioridad: alta > media > baja
-    // Lógica de prioridad:
+    // Prioridad sorting logic: alta > media > baja
+    // Priority calculation based on type and age:
     // - ALTA: tipo = "avería" y createdAt > 24h
     // - MEDIA: tipo = "avería" y createdAt 12-24h, o tipo = "reparación" y createdAt > 24h
     // - BAJA: tipo = "avería" y createdAt < 12h, o tipo = "reparación" y createdAt < 12h
+
+    // PERFORMANCE NOTE (LOW): Current implementation fetches all reports to memory
+    // and sorts in JavaScript. This works for current data volume (<1000 reports)
+    // but may become inefficient with thousands of reports.
+    //
+    // Future optimization options:
+    // - Add computed field "prioridad" to FailureReport model
+    // - Use database view or materialized view for pre-calculated priorities
+    // - Use database-specific expression index for custom sort logic
+    // - Cache sorted results with Redis/CDN for frequent access
+    //
+    // For Story 2.3 scope, this approach is acceptable. Revisit if NFR-S7 (<1s)
+    // performance requirement is violated with production data volumes.
 
     const now = new Date()
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
@@ -167,7 +224,7 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
     })
 
     // Use sorted reports
-    failureReports = reportsWithPriority as any
+    failureReports = reportsWithPriority as FailureReportWithRelations[]
   } else if (ordenarFecha === 'asc') {
     orderBy = { createdAt: 'asc' as const }
 
@@ -232,7 +289,10 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
         </h2>
 
         {/* Filtros y Ordenamiento (AC5) */}
-        <FiltrosOrdenamiento />
+        <FiltrosOrdenamiento
+          reporters={uniqueReporters.map(r => r.reporter)}
+          equipos={uniqueEquipos.map(e => e.equipo)}
+        />
       </div>
 
       {/* Failure Report Cards */}
@@ -249,7 +309,7 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
       ) : (
         // Grid of cards (responsive: 1 column mobile, 2 columns desktop >1200px)
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {failureReports.map((report: any) => (
+          {failureReports.map((report) => (
             <FailureReportCard
               key={report.id}
               report={report}

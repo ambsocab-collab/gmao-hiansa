@@ -4,13 +4,13 @@
  * Failure Report Card Component
  * Story 2.3: Triage de Averías y Conversión a OTs
  *
- * Client Component that displays a failure report card
- * Features:
- * - Displays: número, equipo, descripción (truncada), reporter, fecha/hora
+ * Client Component que muestra una tarjeta de reporte de avería
+ * Características:
+ * - Muestra: número, equipo, descripción (truncada), reporter, fecha/hora
  * - Color coding: rosa (#FFC0CB) para avería, blanco (#FFFFFF) para reparación (NFR-S10)
- * - Click handler to open modal
+ * - Click handler para abrir modal
  * - Touch target: 44px mínimo (mobile first)
- * - data-testid attributes for E2E tests
+ * - data-testid attributes para E2E tests
  */
 
 import { useState } from 'react'

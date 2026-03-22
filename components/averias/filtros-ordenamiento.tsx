@@ -4,20 +4,35 @@
  * Filtros y Ordenamiento Component
  * Story 2.3: Triage de Averías y Conversión a OTs
  *
- * Client Component that provides filter and sort controls
- * Features:
- * - Filter by fecha (date picker)
- * - Filter by reporter (dropdown)
- * - Filter by equipo (dropdown)
- * - Sort by fecha (asc/desc toggle)
- * - Sort by prioridad (alta/media/baja)
- * - Updates URL search params for state management
+ * Client Component que provee controles de filtro y ordenamiento
+ * Características:
+ * - Filtro por fecha (date picker)
+ * - Filtro por reporter (dropdown) - datos dinámicos desde Prisma
+ * - Filtro por equipo (dropdown) - datos dinámicos desde Prisma
+ * - Ordenamiento por fecha (toggle asc/desc)
+ * - Ordenamiento por prioridad (alta/media/baja)
+ * - Actualiza URL search params para manejo de estado
  */
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
-export function FiltrosOrdenamiento() {
+interface Reporter {
+  id: string
+  name: string
+}
+
+interface Equipo {
+  id: string
+  name: string
+}
+
+interface FiltrosOrdenamientoProps {
+  reporters: Reporter[]
+  equipos: Equipo[]
+}
+
+export function FiltrosOrdenamiento({ reporters, equipos }: FiltrosOrdenamientoProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [showFilters, setShowFilters] = useState(false)
@@ -109,9 +124,11 @@ export function FiltrosOrdenamiento() {
               defaultValue={searchParams.get('filtro_reporter') || ''}
             >
               <option value="">Todos</option>
-              {/* TODO: Fetch reporters from API */}
-              <option value="user1">Juan Pérez</option>
-              <option value="user2">María García</option>
+              {reporters.map((reporter) => (
+                <option key={reporter.id} value={reporter.id}>
+                  {reporter.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -127,9 +144,11 @@ export function FiltrosOrdenamiento() {
               defaultValue={searchParams.get('filtro_equipo') || ''}
             >
               <option value="">Todos</option>
-              {/* TODO: Fetch equipos from API */}
-              <option value="equipo1">Prensa Hidráulica</option>
-              <option value="equipo2">Compresor</option>
+              {equipos.map((equipo) => (
+                <option key={equipo.id} value={equipo.id}>
+                  {equipo.name}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -264,27 +264,38 @@ enum WorkOrderEstado {
   DESCARTADA
 }
 
+enum WorkOrderPrioridad {
+  BAJA
+  MEDIA
+  ALTA
+}
+
 model WorkOrder {
-  id           String          @id @default(cuid())
-  numero       String          @unique
-  tipo         WorkOrderTipo
-  estado       WorkOrderEstado @default(PENDIENTE)
-  descripcion  String
-  equipo_id    String
-  created_at   DateTime        @default(now())
-  updated_at   DateTime        @updatedAt
-  completed_at DateTime?
+  id                  String            @id @default(cuid())
+  numero              String            @unique
+  tipo                WorkOrderTipo
+  estado              WorkOrderEstado   @default(PENDIENTE)
+  prioridad           WorkOrderPrioridad @default(MEDIA)
+  descripcion         String
+  equipo_id           String
+  created_at          DateTime          @default(now())
+  updated_at          DateTime          @updatedAt
+  completed_at        DateTime?
+  parent_work_order_id String?          @unique @map("parent_work_order_id")
 
   // Relations
   equipo         Equipo                @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
   assignments    WorkOrderAssignment[]
   failure_report FailureReport?        @relation(fields: [failure_report_id], references: [id])
+  parent_work_order   WorkOrder?        @relation("WorkOrderHierarchy", fields: [parent_work_order_id], references: [id])
+  child_work_orders   WorkOrder[]       @relation("WorkOrderHierarchy")
 
   failure_report_id String? @unique
 
   @@index([equipo_id])
   @@index([numero]) // Para búsqueda rápida
   @@index([estado]) // Para filtrar por estado (Kanban)
+  @@index([prioridad]) // Para filtrar por prioridad (Story 2.3 AC6)
   @@index([equipo_id, estado]) // Para joins con filtro de estado
   @@index([created_at]) // Para ordenamiento temporal
   @@map("work_orders")

@@ -253,6 +253,7 @@ export interface FailureReportFactoryOptions {
   descripcion?: string;
   reportadoPor?: string; // camelCase to match Prisma
   estado?: 'NUEVO' | 'RECIBIDO' | 'AUTORIZADO' | 'EN_PROGRESO' | 'COMPLETADO' | 'CONVERTIDO' | 'DESCARTADO'; // Story 2.3: Updated enum
+  tipo?: 'avería' | 'reparación'; // Story 2.3: Color coding NFR-S10
   fotoUrl?: string | null; // Story 2.3: Optional photo for failure reports
   numero?: string; // Story 2.3: Consistent format for test readability
 }
@@ -262,6 +263,7 @@ export const failureReportFactory = (options: FailureReportFactoryOptions = {}) 
   equipoId: options.equipoId || faker.string.uuid(), // camelCase
   descripcion: options.descripcion || faker.lorem.sentences(2),
   reportadoPor: options.reportadoPor || faker.string.uuid(), // camelCase
+  tipo: options.tipo || 'avería', // Story 2.3: Default to avería for color coding
   createdAt: new Date().toISOString(), // Match Prisma field name
   updatedAt: new Date().toISOString(), // Match Prisma field name
   estado: options.estado || 'NUEVO', // Updated default to NUEVO (Story 2.3)
