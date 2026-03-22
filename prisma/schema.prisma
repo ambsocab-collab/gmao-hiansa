@@ -323,23 +323,23 @@ model FailureReport {
   id            String              @id @default(cuid())
   numero        String              @unique
   descripcion   String
-  foto_url      String?
-  equipo_id     String
+  fotoUrl       String?             @map("foto_url")
+  equipoId      String              @map("equipo_id")
   estado        FailureReportEstado @default(RECIBIDO)
-  reportado_por String
-  created_at    DateTime            @default(now())
-  updated_at    DateTime            @updatedAt
+  reportadoPor  String              @map("reportado_por")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
 
   // Relations
-  equipo       Equipo     @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
-  reportadoPor User       @relation("FailureReports", fields: [reportado_por], references: [id], onDelete: Cascade)
-  work_order   WorkOrder?
+  equipo       Equipo     @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+  reporter     User       @relation("FailureReports", fields: [reportadoPor], references: [id], onDelete: Cascade)
+  workOrder    WorkOrder?
 
-  @@index([equipo_id])
+  @@index([equipoId])
   @@index([numero]) // Para búsqueda rápida
   @@index([estado]) // Para filtrar por estado
-  @@index([equipo_id, estado]) // Para joins con filtro de estado
-  @@index([reportado_por]) // Para reportes de un usuario
-  @@index([created_at]) // Para ordenamiento temporal
+  @@index([equipoId, estado]) // Para joins con filtro de estado
+  @@index([reportadoPor]) // Para reportes de un usuario
+  @@index([createdAt]) // Para ordenamiento temporal
   @@map("failureReports")
 }
