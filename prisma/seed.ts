@@ -89,7 +89,7 @@ async function main() {
 
   console.log('   ✅ Assigned', adminCaps.count, 'capabilities to admin')
 
-  // Usuario: B. Soto (Admin con todas las capabilities)
+  // Usuario: B. Soto (Operario - solo puede crear reportes)
   const bsotoPassword = await bcrypt.hash('1112BSC08', 10)
   const bsoto = await prisma.user.create({
     data: {
@@ -101,9 +101,10 @@ async function main() {
     },
   })
 
-  // Asignar todas las capabilities a B. Soto
+  // Asignar solo capabilities de operario a B. Soto
+  const operarioCapabilities = allCapabilities.filter((cap) => cap.name === 'can_create_failure_report')
   await prisma.userCapability.createMany({
-    data: allCapabilities.map((cap) => ({
+    data: operarioCapabilities.map((cap) => ({
       userId: bsoto.id,
       capabilityId: cap.id,
     })),

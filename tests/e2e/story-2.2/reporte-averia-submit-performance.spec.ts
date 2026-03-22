@@ -138,13 +138,18 @@ test.describe('Reporte Avería - Performance Requirements', () => {
   });
 
   /**
-   * P0-E2E-009: Performance - Completar reporte en <30 segundos
+   * P0-E2E-009: Performance - Completar reporte en <30 segundos (MOBILE)
    *
-   * AC2: Given que completo reporte end-to-end
+   * AC2: Given que completo reporte end-to-end en móvil (<768px)
    *       When mido tiempo
-   *       Then completa en <30 segundos
+   *       Then completa en <30 segundos (R-003 BUS score=6)
    */
-  test('[P0-E2E-009] should complete report in <30 seconds', async ({ page, loginAs }) => {
+  test('[P0-E2E-009] should complete report in <30 seconds on mobile', async ({ page, loginAs }) => {
+    // Given: Mobile viewport (<768px)
+    await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE dimensions
+
+    // Given: Usuario autenticado como operario
+    await loginAs('operario');
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
@@ -181,8 +186,11 @@ test.describe('Reporte Avería - Performance Requirements', () => {
     const endTime = Date.now();
     const duration = endTime - startTime;
 
-    // And: Completado en <30 segundos end-to-end (NFR-P2)
+    // CRITICAL: R-003 (BUS score=6) - Mobile <30s completion EXPLICIT validation
+    // This test validates the complete mobile user journey completes in <30 seconds
     expect(duration).toBeLessThan(30000);
+
+    console.log(`✅ Mobile reporte completado en ${duration}ms (${(duration/1000).toFixed(1)}s) - R-003 PASS`);
   });
 
   /**

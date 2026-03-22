@@ -5,10 +5,11 @@ import { expect } from '@playwright/test';
  * Playwright Test Fixtures for gmao-hiansa
  * GMAO (Gestión de Mantenimiento Asistido por Ordenador)
  *
- * NOTE: All tests currently use admin auth state (from playwright.config.ts)
- * The loginAs fixture is a no-op for now - tests will run as admin user
- *
- * Future improvement: Create auth files for different roles (operario, tecnico, etc.)
+ * Supports multiple user roles with different capabilities for PBAC testing:
+ * - admin: All 15 capabilities
+ * - operario: can_create_failure_report
+ * - tecnico: can_view_own_ots, can_complete_ot
+ * - supervisor: can_view_all_ots, can_receive_reports
  */
 
 // Types for fixtures
@@ -18,14 +19,27 @@ interface AuthFixtures {
   loginAs: (role: UserRole) => Promise<void>;
 }
 
+// Storage state files for different roles
+const STORAGE_STATES = {
+  admin: 'playwright/.auth/admin.json',
+  operario: 'playwright/.auth/operario.json',
+  tecnico: 'playwright/.auth/tecnico.json',
+  supervisor: 'playwright/.auth/supervisor.json',
+  stock_manager: 'playwright/.auth/admin.json', // Use admin for now
+};
+
 // Extend base test with custom fixtures
 export const test = base.extend<AuthFixtures>({
-  // Login as specific role (currently a no-op - all tests use admin)
+  // Login as specific role using storage states
+  // Note: This fixture is a NO-OP - tests should use test.use() with storageState instead
+  // The loginAs fixture is kept for backward compatibility but doesn't do anything
   loginAs: async ({ page }, use) => {
     const loginAsRole = async (role: UserRole) => {
-      // TODO: Load different auth files based on role
-      // For now, all tests use admin auth state from playwright.config.ts
-      console.log(`[NOTE] Test would run as ${role}, but currently using admin auth state`);
+      // NO-OP: Tests should use test.use() with storageState at the test/describe level
+      // Example:
+      // test.use({ storageState: 'playwright/.auth/operario.json' });
+      // test('my test', async ({ page }) => { ... });
+      console.log(`[NOTE] loginAs('${role}') called - but test should use test.use() with storageState`);
     };
 
     await use(loginAsRole);

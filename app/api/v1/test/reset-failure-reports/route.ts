@@ -53,8 +53,11 @@ export async function POST(request: Request) {
     }
 
     // 4. Re-create the 3 initial failure reports from seed.ts
-    const failureReport1 = await prisma.failureReport.create({
-      data: {
+    // Use upsert to handle case where they already exist
+    const failureReport1 = await prisma.failureReport.upsert({
+      where: { numero: 'AV-2026-001' },
+      update: {},
+      create: {
         numero: 'AV-2026-001',
         descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
         tipo: 'avería',
@@ -65,8 +68,10 @@ export async function POST(request: Request) {
       },
     })
 
-    const failureReport2 = await prisma.failureReport.create({
-      data: {
+    const failureReport2 = await prisma.failureReport.upsert({
+      where: { numero: 'AV-2026-002' },
+      update: {},
+      create: {
         numero: 'AV-2026-002',
         descripcion: 'Torno CNC presenta errores de posicionamiento en eje X',
         tipo: 'avería',
@@ -77,8 +82,10 @@ export async function POST(request: Request) {
       },
     })
 
-    const failureReport3 = await prisma.failureReport.create({
-      data: {
+    const failureReport3 = await prisma.failureReport.upsert({
+      where: { numero: 'AV-2026-003' },
+      update: {},
+      create: {
         numero: 'AV-2026-003',
         descripcion: 'Transportadora tiene banda desalineada',
         tipo: 'reparación', // For color coding tests

@@ -154,6 +154,9 @@ test.describe('Reporte Avería - Foto Opcional', () => {
    *
    * AC5: Given que subo foto
    *       Then veo preview antes de submit
+   *
+   * SKIPPED: Selector img[alt="Preview"] not found - implementation pending
+   * TODO: Fix photo preview selector or implement preview component
    */
   test.skip('[P0-E2E-005] should show photo preview after upload', async ({ page, loginAs }) => {
     // Given: Usuario autenticado como operario
