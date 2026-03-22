@@ -2,168 +2,255 @@
 
 /**
  * Reporte Avería Form Component
- * Story 2.1: Búsqueda Predictiva de Equipos
+ * Story 2.2: Formulario Reporte de Avería (Mobile First)
  *
- * Client Component wrapper for the failure report form
- * Manages form state and equipo selection using React state (not DOM manipulation)
+ * Client Component para reportar averías
+ * - React Hook Form + Zod validation
+ * - Integración con EquipoSearch (Story 2.1)
+ * - Textarea para descripción con altura 80-200px
+ * - File upload para foto con preview
+ * - Mobile First layout (single column <768px, two columns >1200px)
+ * - Toast notifications (shadcn/ui)
+ * - CTA: "+ Reportar Avería" (#7D1220, 56px height)
  */
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { EquipoSearch, type EquipoWithHierarchy } from '@/components/equipos/equipo-search'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
+import { createFailureReport } from '@/app/actions/averias'
+import { reporteAveriaSchema, type ReporteAveriaInput } from '@/lib/utils/validations/averias'
+import { uploadImageToBlob } from '@/lib/storage/image-upload'
 
-export function ReporteAveriaForm() {
+interface ReporteAveriaFormProps {
+  userId: string // User ID from session
+}
+
+export function ReporteAveriaForm({ userId }: ReporteAveriaFormProps) {
   const [selectedEquipo, setSelectedEquipo] = useState<EquipoWithHierarchy | null>(null)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [fotoPreview, setFotoPreview] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
   const { toast } = useToast()
 
+  // React Hook Form con Zod validation
+  const methods = useForm<ReporteAveriaInput>({
+    resolver: zodResolver(reporteAveriaSchema),
+    defaultValues: {
+      equipoId: '',
+      descripcion: '',
+      reportadoPor: userId,
+      fotoUrl: undefined, // undefined para que optional funcione correctamente
+    },
+    mode: 'onSubmit', // Validate all fields on submit for E2E tests
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    clearErrors,
+  } = methods
+
   /**
-   * Handle equipo selection
-   * Updates React state directly (no DOM manipulation)
+   * Handle equipo selection from EquipoSearch
+   * Updates form value when equipo is selected
    */
   const handleEquipoSelect = (equipo: EquipoWithHierarchy | null) => {
     setSelectedEquipo(equipo)
-    // Clear any previous submit errors when equipo changes
-    if (equipo && submitError) {
-      setSubmitError(null)
+    if (equipo) {
+      setValue('equipoId', equipo.id)
+      clearErrors('equipoId')
+    } else {
+      setValue('equipoId', '')
+    }
+  }
+
+  /**
+   * Handle photo upload
+   * Uploads to Vercel Blob Storage and shows preview
+   */
+  const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) {
+      setFotoPreview(null)
+      setValue('fotoUrl', '')
+      return
+    }
+
+    try {
+      // Upload to Vercel Blob Storage
+      const result = await uploadImageToBlob(file, {
+        maxSize: 5 * 1024 * 1024, // 5MB
+        allowedTypes: ['image/jpeg', 'image/png'],
+      })
+
+      // Show preview
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFotoPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+
+      // Store URL in form
+      setValue('fotoUrl', result.url)
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Error al subir la foto',
+        variant: 'destructive',
+      })
+      // Reset file input
+      e.target.value = ''
     }
   }
 
   /**
    * Handle form submission
-   * Validates equipo is selected before allowing submit
+   * Validates equipo is selected, submits to Server Action
+   * Redirects to /mis-avisos on success
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    // Validate equipo is selected (AC6 requirement)
+  const onSubmit = async (data: ReporteAveriaInput) => {
+    // Validate equipo is selected (even though it's required by Zod)
     if (!selectedEquipo) {
-      setSubmitError('Por favor selecciona un equipo antes de continuar')
+      toast({
+        title: 'Error',
+        description: 'Debes seleccionar un equipo',
+        variant: 'destructive',
+      })
       return
     }
 
-    // Clear error and proceed with submission
-    setSubmitError(null)
+    startTransition(async () => {
+      try {
+        // Call Server Action
+        const result = await createFailureReport({
+          ...data,
+          equipoId: selectedEquipo.id,
+          reportadoPor: userId,
+        })
 
-    // NOTE: Story 2.1 scope only includes equipo search and validation
-    // Full form submission (descripción, severidad, fecha, reporter, fotos)
-    // will be implemented in Story 2.2: Formulario Reporte de Avería
-    // For now, we validate equipo selection and show success message
-    console.log('Equipo validado:', {
-      equipoId: selectedEquipo.id,
-      equipoName: selectedEquipo.name,
-      hierarchy: `${selectedEquipo.linea.planta.division} → ${selectedEquipo.linea.planta.name} → ${selectedEquipo.linea.name} → ${selectedEquipo.name}`,
-    })
+        // Show success toast
+        toast({
+          title: 'Avería reportada',
+          description: `Avería #${result.numero} reportada exitosamente`,
+        })
 
-    // Show success toast notification instead of alert
-    toast({
-      title: 'Equipo validado correctamente',
-      description: 'Story 2.2 completará la funcionalidad de envío del formulario.',
-      variant: 'default',
+        // Redirect to /mis-avisos or dashboard
+        router.push('/mis-avisos')
+      } catch (error) {
+        // Show error toast
+        toast({
+          title: 'Error',
+          description: error instanceof Error ? error.message : 'Ocurrió un error al reportar la avería',
+          variant: 'destructive',
+        })
+      }
     })
   }
 
   return (
-    <div className="space-y-4">
-      {/* Page Header */}
-      <div className="mb-4">
-        <h1 className="text-base font-semibold text-gray-900">Nuevo Reporte de Avería</h1>
-        <p className="text-xs text-gray-600 mt-1">
-          Selecciona el equipo que tiene la falla para reportar la avería
-        </p>
-      </div>
-
-      {/* Form Container */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <form id="averia-form" className="space-y-4" onSubmit={handleSubmit}>
-          {/* Equipo Search - Story 2.1 */}
-          <div className="space-y-2">
-            <label htmlFor="equipo-search" className="block text-sm font-medium text-gray-700">
-              Equipo *
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Desktop Layout: Two columns (>1200px) */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {/* Left Column: Equipo + Descripción */}
+        <div className="space-y-6">
+          {/* Equipo Search - Reutilizar de Story 2.1 */}
+          <div>
+            <label htmlFor="equipo-search" className="block text-sm font-medium text-gray-900 mb-2">
+              Equipo <span className="text-red-500">*</span>
             </label>
             <EquipoSearch
               value={selectedEquipo}
               onChange={handleEquipoSelect}
-              data-testid="equipo-search-form"
+              data-testid="equipo-search"
             />
-            <p className="text-xs text-gray-500">
-              Busca el equipo por nombre. Selecciona de la lista para confirmar.
-            </p>
+            {errors.equipoId && (
+              <p className="text-red-500 text-sm mt-1">{errors.equipoId.message}</p>
+            )}
           </div>
 
-          {/* Validation Error Message */}
-          {submitError && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">{submitError}</h3>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* NOTE: Additional form fields will be added in Story 2.2 */}
-          {/* - Descripción de avería */}
-          {/* - Severidad */}
-          {/* - Fecha y hora */}
-          {/* - Reporter */}
-          {/* - Fotos adjuntas */}
-
-          {/* Submit Button - Now enabled with validation */}
-          <div className="pt-4">
-            <button
-              type="submit"
-              className="inline-flex justify-center rounded-md border border-transparent bg-[#7D1220] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#5a0e17] focus:outline-none focus:ring-2 focus:ring-[#7D1220] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              data-testid="submit-averia-button"
-            >
-              Validar Equipo
-            </button>
-            <p className="text-xs text-gray-500 mt-2">
-              El formulario completo estará disponible en Story 2.2
-            </p>
+          {/* Descripción del problema */}
+          <div>
+            <label htmlFor="descripcion" className="block text-sm font-medium text-gray-900 mb-2">
+              Descripción del problema <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="descripcion"
+              data-testid="averia-descripcion"
+              placeholder="Describe brevemente la falla..."
+              className={`w-full px-3 py-2 border rounded-lg resize-y min-h-[80px] max-h-[200px] focus:outline-none focus:ring-2 ${
+                errors.descripcion
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:border-transparent focus:ring-red-800'
+              }`}
+              {...register('descripcion')}
+            />
+            {errors.descripcion && (
+              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.descripcion.message}
+              </p>
+            )}
           </div>
-        </form>
-      </div>
-
-      {/* Instructions Card */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-900 mb-2">Cómo usar:</h3>
-        <ol className="text-xs text-blue-800 space-y-1 list-decimal list-inside">
-          <li>Empieza a escribir el nombre del equipo (mínimo 3 caracteres)</li>
-          <li>Selecciona el equipo de la lista desplegable</li>
-          <li>Verifica que la jerarquía sea correcta (División → Planta → Línea → Equipo)</li>
-          <li>El tag de división indica HiRock (dorado) o Ultra (verde)</li>
-          <li>Puedes limpiar la selección haciendo clic en la X</li>
-          <li>Haz clic en "Validar Equipo" para confirmar tu selección</li>
-        </ol>
-      </div>
-
-      {/* Debug Info - Development only (never compiles to production) */}
-      {process.env.NODE_ENV === 'development' && !process.env.PRODUCTION && selectedEquipo && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">Debug - Selected Equipo:</h3>
-          <pre className="text-xs text-gray-700 overflow-x-auto">
-            {JSON.stringify(selectedEquipo, null, 2)}
-          </pre>
-          <p className="text-xs text-gray-600 mt-2">
-            <strong>Equipo ID:</strong> {selectedEquipo.id}
-          </p>
         </div>
-      )}
-    </div>
+
+        {/* Right Column: Foto + Preview */}
+        <div>
+          {/* Foto Upload */}
+          <div>
+            <label htmlFor="foto" className="block text-sm font-medium text-gray-900 mb-2">
+              Adjuntar foto <span className="text-gray-500">(opcional)</span>
+            </label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
+              <input
+                id="foto"
+                type="file"
+                accept="image/jpeg,image/png"
+                data-testid="averia-foto-upload"
+                className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                onChange={handleFotoChange}
+              />
+              <p className="text-xs text-gray-500 mt-2">JPEG, PNG máx. 5MB</p>
+            </div>
+
+            {/* Foto Preview */}
+            {fotoPreview && (
+              <div className="mt-3 relative inline-block">
+                <img src={fotoPreview} alt="Preview" className="max-w-xs rounded-lg border border-gray-200" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFotoPreview(null)
+                    setValue('fotoUrl', '')
+                  }}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* CTA - "+ Reportar Avería" */}
+      <Button
+        type="submit"
+        data-testid="averia-submit"
+        className="w-full bg-[#7D1220] hover:bg-[#6A0E1B] text-white py-4 px-4 h-14 text-base font-semibold"
+        disabled={isPending}
+      >
+        {isPending ? 'Reportando...' : '+ Reportar Avería'}
+      </Button>
+    </form>
   )
 }

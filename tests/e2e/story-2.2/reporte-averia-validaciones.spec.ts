@@ -16,47 +16,7 @@
 
 import { test, expect } from '../../fixtures/test.fixtures';
 
-/**
- * Helper: Network-first setup for búsqueda de equipos
- *
- * Pattern: Intercept BEFORE navigate to prevent race conditions
- * Knowledge Base: timing-debugging.md (race condition prevention)
- */
-async function setupEquipoSearchMock(page) {
-  await page.route('**/api/equipos/search* pq=prensa*', (route) => {
-    route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify([
-        {
-          id: 'equipo-123',
-          name: 'Prensa Hidráulica A',
-          codigo: 'PRE-001',
-          linea: { id: 'linea-1', name: 'Línea 1', planta: { id: 'planta-1', name: 'Planta Principal' } }
-        }
-      ])
-    });
-  });
-}
-
-/**
- * Helper: Network-first setup para validación de error (equipo faltante)
- */
-async function setupAveriaValidationErrorMock(page) {
-  await page.route('**/api/averias/create', (route) => {
-    route.fulfill({
-      status: 400,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        error: 'Validation failed',
-        details: {
-          equipoId: 'Debes seleccionar un equipo',
-          descripcion: 'La descripción es obligatoria'
-        }
-      })
-    });
-  });
-}
+// NOTA: Ya no usamos mocks - usamos DB real como Story 2.1
 
 test.describe('Reporte Avería - Validaciones', () => {
   /**
@@ -64,27 +24,23 @@ test.describe('Reporte Avería - Validaciones', () => {
    *
    * AC3: Given que intento submit sin equipo
    *       When lleno descripción pero sin equipo
-   *       Then veo error: "Debes seleccionar un equipo"
+   *       Then veo error: "El equipo es requerido" (client-side Zod validation)
    */
   test('[P0-E2E-002] should validate equipo required', async ({ page, loginAs }) => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupAveriaValidationErrorMock(page);
-    await setupEquipoSearchMock(page);
-
-    // Given: Usuario en formulario
+    // Given: Usuario en formulario (NO mock - usar DB real)
     await page.goto('/averias/nuevo');
 
     // When: Lleno descripción pero sin equipo
     await page.getByTestId('averia-descripcion').fill('Fallo en motor principal');
 
-    // And: Submit sin seleccionar equipo
+    // And: Submit sin seleccionar equipo (client-side validation will prevent submission)
     await page.getByTestId('averia-submit').click();
 
-    // Then: Error visible
-    const errorMessage = page.getByText('Debes seleccionar un equipo');
+    // Then: Error visible (client-side Zod validation message)
+    const errorMessage = page.getByText('El equipo es requerido');
     await expect(errorMessage).toBeVisible();
   });
 
@@ -99,30 +55,30 @@ test.describe('Reporte Avería - Validaciones', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupAveriaValidationErrorMock(page);
-    await setupEquipoSearchMock(page);
-
-    // Given: Usuario en formulario
+    // Given: Usuario en formulario (NO mock - usar DB real como Story 2.1)
     await page.goto('/averias/nuevo');
 
     // When: Selecciono equipo pero sin descripción
-    // Setup response promise for deterministic wait
-    const searchResponse = page.waitForResponse('**/api/equipos/search*');
-
     const equipoSearch = page.getByTestId('equipo-search');
+    await equipoSearch.click(); // ← Open dropdown (triggers onFocus)
     await equipoSearch.fill('prensa');
-    await searchResponse; // ✅ Deterministic wait (no hard wait!)
+    await page.waitForTimeout(500); // Wait for debounce + Server Action (Story 2.1 pattern)
 
-    // Seleccionar primer resultado
+    // Seleccionar primer resultado usando MouseEvent nativo (patrón Story 2.1)
     const firstResult = page.locator('[role="option"]').first();
-    await firstResult.click();
+    await firstResult.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      }));
+    });
 
-    // And: Submit sin descripción
+    // And: Submit sin descripción (client-side validation will prevent submission)
     await page.getByTestId('averia-submit').click();
 
-    // Then: Error inline visible
-    const errorMessage = page.getByText('La descripción es obligatoria');
+    // Then: Error inline visible (client-side Zod validation message)
+    const errorMessage = page.getByText('La descripción debe tener al menos 10 caracteres');
     await expect(errorMessage).toBeVisible();
 
     // And: Campo marcado con borde rojo #EF4444
@@ -143,10 +99,7 @@ test.describe('Reporte Avería - Validaciones', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
-
-    // Given: Usuario en formulario
+    // Given: Usuario en formulario (NO mock - usar DB real como Story 2.1)
     await page.goto('/averias/nuevo');
 
     // Then: Textarea visible con altura correcta
@@ -177,19 +130,14 @@ test.describe('Reporte Avería - Integración Story 2.1', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
-
-    // Given: Usuario en formulario
+    // Given: Usuario en formulario (NO mock - usar DB real como Story 2.1)
     await page.goto('/averias/nuevo');
 
     // When: Digito en búsqueda de equipo
-    // Setup response promise for deterministic wait
-    const searchResponse = page.waitForResponse('**/api/equipos/search*');
-
     const equipoSearch = page.getByTestId('equipo-search');
+    await equipoSearch.click(); // ← Open dropdown (triggers onFocus)
     await equipoSearch.fill('prensa');
-    await searchResponse; // ✅ Deterministic wait (replaces waitForTimeout(500))
+    await page.waitForTimeout(500); // Wait for debounce + Server Action (Story 2.1 pattern)
 
     // Then: Resultados aparecen
     const results = page.locator('[role="option"]');
@@ -211,18 +159,16 @@ test.describe('Reporte Avería - Foto Opcional', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
-
-    // Given: Usuario en formulario
+    // Given: Usuario en formulario (NO mock - usar DB real como Story 2.1)
+    // Note: Photo upload uses real Vercel Blob API
     await page.goto('/averias/nuevo');
 
     // When: Subo foto
     const fileInput = page.getByTestId('averia-foto-upload');
     await fileInput.setInputFiles('tests/fixtures/test-photo.jpg');
 
-    // Then: Preview visible
-    const preview = page.locator('img[alt*="preview"]');
+    // Then: Preview visible (alt="Preview" with capital P)
+    const preview = page.locator('img[alt="Preview"]');
     await expect(preview).toBeVisible();
   });
 });

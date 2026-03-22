@@ -24,7 +24,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
  * Knowledge Base: timing-debugging.md (race condition prevention)
  */
 async function setupEquipoSearchMock(page) {
-  await page.route('**/api/equipos/search* pq=prensa*', (route) => {
+  await page.route('**/api/equipos/search**', (route) => {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -32,8 +32,14 @@ async function setupEquipoSearchMock(page) {
         {
           id: 'equipo-123',
           name: 'Prensa Hidráulica A',
-          codigo: 'PRE-001',
-          linea: { id: 'linea-1', name: 'Línea 1', planta: { id: 'planta-1', name: 'Planta Principal' } }
+          code: 'PRE-001',
+          linea: {
+            name: 'Línea 1',
+            planta: {
+              name: 'Planta Principal',
+              division: 'HIROCK'
+            }
+          }
         }
       ])
     });
@@ -85,9 +91,6 @@ test.describe('Reporte Avería - Mobile First UI', () => {
   test('[P0-E2E-001] should show prominent CTA button on mobile', async ({ page, loginAs }) => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
-
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
 
     // Given: Usuario en móvil (<768px)
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE

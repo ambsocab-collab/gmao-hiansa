@@ -1,52 +1,274 @@
-<testsuites id="" name="" tests="15" failures="0" skipped="0" errors="0" time="61.487991">
-<testsuite name="story-2.1\busqueda-predictiva-p0.spec.ts" timestamp="2026-03-21T22:24:08.440Z" hostname="chromium" tests="8" failures="0" skipped="0" time="45.424" errors="0">
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-001] should show predictive search results" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="7.331">
+<testsuites id="" name="" tests="14" failures="1" skipped="1" errors="0" time="107.744212">
+<testsuite name="story-2.2\reporte-averia-desktop.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="2" failures="0" skipped="0" time="18.427" errors="0">
+<testcase name="Reporte Avería - Desktop Layout › [P0-E2E-010] should show desktop layout with 2 columns" classname="story-2.2\reporte-averia-desktop.spec.ts" time="9.22">
 <system-out>
-<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-002] should show results with complete hierarchy" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.958">
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-003] should show division tags with correct colors" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="7.186">
+<testcase name="Reporte Avería - Desktop Layout › [P1-E2E-003] should validate equally on desktop" classname="story-2.2\reporte-averia-desktop.spec.ts" time="9.207">
 <system-out>
-<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
 ]]>
 </system-out>
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-004] should select equipo from autocomplete" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.864">
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-005] should show selected equipo as badge" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="6.254">
-<system-out>
-<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-006] should clear selection when clicking (x)" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="4.638">
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-007] should show no results message" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="6.815">
-<system-out>
-<![CDATA[✅ E2E Tests ENABLED: All P0 tests now active
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 2.1 - P0: Búsqueda Predictiva Core (CRITICAL) › [P0-E2E-008] should have 44px height input for mobile" classname="story-2.1\busqueda-predictiva-p0.spec.ts" time="3.378">
 </testcase>
 </testsuite>
-<testsuite name="story-2.1\busqueda-predictiva-p1.spec.ts" timestamp="2026-03-21T22:24:08.440Z" hostname="chromium" tests="7" failures="0" skipped="0" time="42.462" errors="0">
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-001] should show red border on results" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="8.045">
+<testsuite name="story-2.2\reporte-averia-mobile.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="3" failures="0" skipped="0" time="21.054" errors="0">
+<testcase name="Reporte Avería - Mobile First UI › [P0-E2E-001] should show prominent CTA button on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="8.24">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-002] should show correct placeholder" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="4.926">
+<testcase name="Reporte Avería - Mobile First UI › [P1-E2E-001] should have optimized touch targets on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="8.529">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-003] should debounce search input" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="6.632">
+<testcase name="Reporte Avería - Mobile First UI › [P1-E2E-002] should use single column layout on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="4.285">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-004] should limit results to 10" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="6.448">
+</testsuite>
+<testsuite name="story-2.2\reporte-averia-submit-performance.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="4" failures="0" skipped="1" time="64.19" errors="0">
+<testcase name="Reporte Avería - Submit Exitoso › [P0-E2E-006] should create report without photo" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="21.669">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\trace.zip]]
+[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-005] should show hierarchy in correct format" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.939">
+<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-007] should show confirmation with number in &lt;3 seconds" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="28.197">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\trace.zip]]
+[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\trace.zip]]
+[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-006] should close autocomplete when clicking outside" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.237">
+<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-009] should complete report in &lt;30 seconds" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="14.324">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 2.1 - P1: Búsqueda Predictiva Additional › [P1-E2E-007] should support keyboard navigation" classname="story-2.1\busqueda-predictiva-p1.spec.ts" time="5.235">
+<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-008] should send SSE notification to supervisors" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-2.2\reporte-averia-validaciones.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="5" failures="1" skipped="0" time="70.424" errors="0">
+<testcase name="Reporte Avería - Validaciones › [P0-E2E-002] should validate equipo required" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="2.132">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
+</testcase>
+<testcase name="Reporte Avería - Validaciones › [P0-E2E-003] should validate descripcion required" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="5.366">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
+</testcase>
+<testcase name="Reporte Avería - Validaciones › [P0-E2E-004] should have textarea with correct height" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="3.18">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
+</testcase>
+<testcase name="Reporte Avería - Integración Story 2.1 › [P0-E2E-011] should show predictive search results for equipos" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="7.215">
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+]]>
+</system-out>
+</testcase>
+<testcase name="Reporte Avería - Foto Opcional › [P0-E2E-005] should show photo preview after upload" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="52.531">
+<failure message="reporte-averia-validaciones.spec.ts:158:7 [P0-E2E-005] should show photo preview after upload" type="FAILURE">
+<![CDATA[  [chromium] › story-2.2\reporte-averia-validaciones.spec.ts:158:7 › Reporte Avería - Foto Opcional › [P0-E2E-005] should show photo preview after upload 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('img[alt="Preview"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('img[alt="Preview"]')
+
+
+      170 |     // Then: Preview visible (alt="Preview" with capital P)
+      171 |     const preview = page.locator('img[alt="Preview"]');
+    > 172 |     await expect(preview).toBeVisible();
+          |                           ^
+      173 |   });
+      174 | });
+      175 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('img[alt="Preview"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('img[alt="Preview"]')
+
+
+      170 |     // Then: Preview visible (alt="Preview" with capital P)
+      171 |     const preview = page.locator('img[alt="Preview"]');
+    > 172 |     await expect(preview).toBeVisible();
+          |                           ^
+      173 |   });
+      174 | });
+      175 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('img[alt="Preview"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('img[alt="Preview"]')
+
+
+      170 |     // Then: Preview visible (alt="Preview" with capital P)
+      171 |     const preview = page.locator('img[alt="Preview"]');
+    > 172 |     await expect(preview).toBeVisible();
+          |                           ^
+      173 |   });
+      174 | });
+      175 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip]]
+[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip]]
+[NOTE] Test would run as operario, but currently using admin auth state
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

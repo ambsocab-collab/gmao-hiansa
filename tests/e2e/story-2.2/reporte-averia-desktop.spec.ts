@@ -19,7 +19,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
  * Helper: Network-first setup for búsqueda de equipos
  */
 async function setupEquipoSearchMock(page) {
-  await page.route('**/api/equipos/search* pq=prensa*', (route) => {
+  await page.route('**/api/equipos/search**', (route) => {
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -27,8 +27,14 @@ async function setupEquipoSearchMock(page) {
         {
           id: 'equipo-123',
           name: 'Prensa Hidráulica A',
-          codigo: 'PRE-001',
-          linea: { id: 'linea-1', name: 'Línea 1', planta: { id: 'planta-1', name: 'Planta Principal' } }
+          code: 'PRE-001',
+          linea: {
+            name: 'Línea 1',
+            planta: {
+              name: 'Planta Principal',
+              division: 'HIROCK'
+            }
+          }
         }
       ])
     });
@@ -47,9 +53,6 @@ test.describe('Reporte Avería - Desktop Layout', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
-
     // Given: Usuario en desktop (>1200px)
     await page.setViewportSize({ width: 1400, height: 900 });
 
@@ -58,15 +61,15 @@ test.describe('Reporte Avería - Desktop Layout', () => {
     await page.goto('/averias/nuevo');
     await loadPromise;
 
-    // Then: Layout de 2 columnas visible
+    // Then: Layout de 2 columnas visible (using actual Tailwind class xl:grid-cols-2)
     // Columna izquierda: equipo + descripción
-    const leftColumn = page.locator('.grid-cols-2 > div:first-child');
+    const leftColumn = page.locator('.xl\\:grid-cols-2 > div:first-child');
     await expect(leftColumn).toContainText('Equipo');
     await expect(leftColumn).toContainText('Descripción');
 
     // Columna derecha: foto + preview
-    const rightColumn = page.locator('.grid-cols-2 > div:nth-child(2)');
-    await expect(rightColumn).toContainText('Foto');
+    const rightColumn = page.locator('.xl\\:grid-cols-2 > div:nth-child(2)');
+    await expect(rightColumn).toContainText('Adjuntar foto');
 
     // And: Ambas columnas visibles
     await expect(leftColumn).toBeVisible();
@@ -84,9 +87,6 @@ test.describe('Reporte Avería - Desktop Layout', () => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 
-    // Network-first: Setup mocks BEFORE navigation
-    await setupEquipoSearchMock(page);
-
     // Given: Usuario en desktop
     await page.setViewportSize({ width: 1400, height: 900 });
     await page.goto('/averias/nuevo');
@@ -95,8 +95,8 @@ test.describe('Reporte Avería - Desktop Layout', () => {
     await page.getByTestId('averia-descripcion').fill('Fallo en motor principal');
     await page.getByTestId('averia-submit').click();
 
-    // Then: Misma validación que móvil
-    const errorMessage = page.getByText('Debes seleccionar un equipo');
+    // Then: Misma validación que móvil (client-side Zod validation)
+    const errorMessage = page.getByText('El equipo es requerido');
     await expect(errorMessage).toBeVisible();
   });
 });

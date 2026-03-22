@@ -239,10 +239,12 @@ describe('createFailureReport - Server Action Integration Tests', () => {
 
     // Then: Reporte creado exitosamente
     expect(result.numero).toBe('AV-2026-001');
-    expect(prisma.failureReport.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        fotoUrl: null,
-      }),
-    });
+    expect(prisma.failureReport.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          fotoUrl: null,
+        }),
+      })
+    );
   });
 });

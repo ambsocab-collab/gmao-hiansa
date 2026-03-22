@@ -1,14 +1,12 @@
 /**
  * Nuevo Reporte de Avería Page
- * Story 2.1: Búsqueda Predictiva de Equipos
+ * Story 2.2: Formulario Reporte de Avería (Mobile First)
  *
  * Page for reporting equipment failures
  * Features:
- * - Integrates EquipoSearch component
- * - Stores selected equipoId in form state
- * - Validates equipo selection before submit
- *
- * NOTE: Full form will be implemented in Story 2.2
+ * - Server Component wrapper with auth protection
+ * - Passes userId to ReporteAveriaForm
+ * - Mobile First layout (handled by form component)
  */
 
 import { auth } from '@/lib/auth-adapter'
@@ -27,5 +25,20 @@ export default async function NuevoAveriaPage() {
     redirect('/login')
   }
 
-  return <ReporteAveriaForm />
+  return (
+    <div className="container mx-auto px-4 py-6 max-w-4xl">
+      {/* Page Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Reportar Avería</h1>
+        <p className="text-gray-600 mt-2">
+          Completa el formulario para reportar una falla en un equipo
+        </p>
+      </div>
+
+      {/* Form Component */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <ReporteAveriaForm userId={session.user.id} />
+      </div>
+    </div>
+  )
 }
