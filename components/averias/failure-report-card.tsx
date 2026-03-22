@@ -21,6 +21,7 @@ export interface FailureReportWithRelations {
   id: string
   numero: string
   descripcion: string
+  tipo: string // 'avería' | 'reparación' (NFR-S10)
   fotoUrl: string | null
   createdAt: Date
   equipo: {
@@ -47,13 +48,17 @@ export interface FailureReportWithRelations {
 interface FailureReportCardProps {
   report: FailureReportWithRelations
   tipo: 'avería' | 'reparación' // Determines color coding (NFR-S10)
+  userId: string
 }
 
-export function FailureReportCard({ report, tipo }: FailureReportCardProps) {
+export function FailureReportCard({ report, tipo, userId }: FailureReportCardProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
-  // Color coding (NFR-S10): rosa #FFC0CB (bg-pink-100) para avería, blanco #FFFFFF para reparación
-  const bgColor = tipo === 'avería' ? 'bg-pink-100' : 'bg-white'
+  // Color coding (NFR-S10): rosa #FFC0CB para avería, blanco #FFFFFF para reparación
+  const bgColor = tipo === 'avería' ? 'bg-white' : 'bg-white' // Base color
+  const customStyle = tipo === 'avería'
+    ? { backgroundColor: '#FFC0CB' }  // Rosa exacto #FFC0CB
+    : { backgroundColor: '#FFFFFF' } // Blanco exacto #FFFFFF
 
   // Format date for display
   const formatDate = (date: Date) => {
@@ -76,6 +81,7 @@ export function FailureReportCard({ report, tipo }: FailureReportCardProps) {
     <>
       <Card
         className={`${bgColor} p-4 cursor-pointer hover:shadow-md transition-shadow min-h-[120px] flex flex-col justify-between`}
+        style={customStyle}
         data-testid={`failure-report-card-${report.id}`}
         onClick={() => setModalOpen(true)}
       >
@@ -129,6 +135,7 @@ export function FailureReportCard({ report, tipo }: FailureReportCardProps) {
           tipo={tipo}
           open={modalOpen}
           onClose={() => setModalOpen(false)}
+          userId={userId}
         />
       )}
     </>

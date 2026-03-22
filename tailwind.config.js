@@ -89,6 +89,9 @@ module.exports = {
           blue: '#0066CC',
           DEFAULT: '#0066CC',
         },
+        // Failure Report colors (NFR-S10)
+        averia: '#FFC0CB', // Rosa para averías
+        reparacion: '#FFFFFF', // Blanco para reparaciones
         warning: {
           orange: '#FD7E14',
           DEFAULT: '#FD7E14',

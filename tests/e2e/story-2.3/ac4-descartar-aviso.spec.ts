@@ -14,6 +14,8 @@
 import { test, expect } from '../../fixtures/test.fixtures';
 
 test.describe('Triage de Averías - AC4: Descartar Aviso', () => {
+  // Run serially to avoid conflicts with database state
+  test.describe.configure({ mode: 'serial' });
   /**
    * P0-E2E-011: Descartar muestra confirmación
    *
@@ -63,7 +65,7 @@ test.describe('Triage de Averías - AC4: Descartar Aviso', () => {
     await page.getByTestId('descartar-confirm-btn').click();
 
     // Then: Toast de éxito
-    await expect(page.getByText('Aviso descartado')).toBeVisible();
+    await expect(page.getByText('Aviso descartado').first()).toBeVisible();
 
     // And: Modal cerrado
     await expect(page.getByTestId('modal-averia-info')).not.toBeVisible();

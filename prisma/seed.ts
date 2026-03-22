@@ -76,12 +76,18 @@ async function main() {
   })
 
   // Asignar todas las capabilities al admin
-  await prisma.userCapability.createMany({
+  console.log('🔐 Assigning capabilities to admin...')
+  console.log('   Admin ID:', admin.id)
+  console.log('   Capabilities to assign:', allCapabilities.length)
+
+  const adminCaps = await prisma.userCapability.createMany({
     data: allCapabilities.map((cap) => ({
       userId: admin.id,
       capabilityId: cap.id,
     })),
   })
+
+  console.log('   ✅ Assigned', adminCaps.count, 'capabilities to admin')
 
   // Usuario: B. Soto (Admin con todas las capabilities)
   const bsotoPassword = await bcrypt.hash('1112BSC08', 10)
@@ -455,6 +461,7 @@ async function main() {
     data: {
       numero: 'AV-2026-001',
       descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
+      tipo: 'avería', // NFR-S10: avería
       fotoUrl: null,
       equipoId: allEquipos[2].id, // Compresor
       estado: 'NUEVO',
@@ -466,6 +473,7 @@ async function main() {
     data: {
       numero: 'AV-2026-002',
       descripcion: 'Torno CNC presenta errores de posicionamiento en eje X',
+      tipo: 'avería', // NFR-S10: avería
       fotoUrl: null,
       equipoId: allEquipos[1].id, // Torno CNC
       estado: 'NUEVO',
@@ -477,6 +485,7 @@ async function main() {
     data: {
       numero: 'AV-2026-003',
       descripcion: 'Transportadora tiene banda desalineada',
+      tipo: 'reparación', // NFR-S10: reparación (para probar color coding)
       fotoUrl: null,
       equipoId: allEquipos[3].id, // Transportadora
       estado: 'NUEVO',
@@ -489,6 +498,7 @@ async function main() {
     data: {
       numero: 'AV-2026-004',
       descripcion: 'Motor eléctrico sobrecalentado - requiere reemplazo',
+      tipo: 'avería', // NFR-S10: avería
       fotoUrl: null,
       equipoId: allEquipos[0].id, // Prensa Hidráulica
       estado: 'EN_PROGRESO',

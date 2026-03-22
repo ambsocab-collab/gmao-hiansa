@@ -69,24 +69,33 @@ test.describe('Triage de Averías - AC1: Columna Por Revisar', () => {
     // And: En página de triage
     await page.goto('/averias/triage');
 
-    // When: Inspecciono tarjeta de avería
-    const averiaCard = page.locator('[data-testid^="failure-report-card-"].bg-pink-100').first();
+    // When: Busco tarjeta de avería y reparación
+    const cards = page.locator('[data-testid^="failure-report-card"]');
+    const count = await cards.count();
 
-    // Then: Fondo rosa #FFC0CB (bg-pink-100 es aproximado)
-    const backgroundColor = await averiaCard.evaluate((el) => {
-      return window.getComputedStyle(el).backgroundColor;
-    });
-    // bg-pink-100 ≈ rgb(255, 192, 203) ≈ #FFC0CB
-    expect(backgroundColor).toBe('rgb(255, 192, 203)');
+    // Necesitamos al menos 2 tarjetas para probar ambos tipos
+    expect(count).toBeGreaterThanOrEqual(2);
 
-    // When: Inspecciono tarjeta de reparación (si existe)
-    const reparacionCard = page.locator('[data-testid^="failure-report-card-"].bg-white').first();
+    // Verificar que existe al menos una tarjeta de avería (rosa #FFC0CB)
+    let foundAveria = false
+    let foundReparacion = false
 
-    // Then: Fondo blanco #FFFFFF
-    const backgroundColorWhite = await reparacionCard.evaluate((el) => {
-      return window.getComputedStyle(el).backgroundColor;
-    });
-    expect(backgroundColorWhite).toBe('rgb(255, 255, 255)');
+    for (let i = 0; i < count; i++) {
+      const card = cards.nth(i)
+      const bgColor = await card.evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor
+      })
+
+      if (bgColor === 'rgb(255, 192, 203)') { // Rosa #FFC0CB
+        foundAveria = true
+      } else if (bgColor === 'rgb(255, 255, 255)') { // Blanco #FFFFFF
+        foundReparacion = true
+      }
+    }
+
+    // Then: Debe haber al menos una tarjeta de cada tipo
+    expect(foundAveria).toBe(true)
+    expect(foundReparacion).toBe(true)
   });
 
   /**

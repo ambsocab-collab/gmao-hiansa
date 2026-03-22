@@ -325,6 +325,7 @@ model FailureReport {
   id            String              @id @default(cuid())
   numero        String              @unique
   descripcion   String
+  tipo          String              @default("avería") // "avería" o "reparación" (NFR-S10)
   fotoUrl       String?             @map("foto_url")
   equipoId      String              @map("equipo_id")
   estado        FailureReportEstado @default(NUEVO)

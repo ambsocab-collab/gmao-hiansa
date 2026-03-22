@@ -10,11 +10,11 @@
  * - Action buttons: "Convertir a OT", "Descartar"
  * - shadcn/ui Dialog component
  * - data-testid attributes for E2E tests
- *
- * TODO: Story 2.3 - Add Server Actions for convert/discard functionality
+ * - Connected to Server Actions for convert/discard functionality
  */
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Dialog,
   DialogContent,
@@ -24,18 +24,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import type { FailureReportWithRelations } from './failure-report-card'
+import { convertFailureReportToOT, discardFailureReport } from '@/app/actions/averias'
 
 interface FailureReportModalProps {
   report: FailureReportWithRelations
   tipo: 'avería' | 'reparación'
   open: boolean
   onClose: () => void
+  userId: string
 }
 
-export function FailureReportModal({ report, tipo: _tipo, open, onClose }: FailureReportModalProps) {
+export function FailureReportModal({ report, tipo: _tipo, open, onClose, userId }: FailureReportModalProps) {
   const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   // Format full timestamp for display
   const formatFullDate = (date: Date) => {
@@ -51,29 +54,31 @@ export function FailureReportModal({ report, tipo: _tipo, open, onClose }: Failu
 
   /**
    * Handle "Convertir a OT" button click
-   * TODO: Implement convertFailureReportToOT Server Action
    * AC3: Convertir aviso a OT en <1s, crear OT con estado "Pendiente", tipo "Correctivo"
    */
   const handleConvertToOT = async () => {
     setIsSubmitting(true)
     try {
-      // TODO: Call Server Action when implemented
-      // await convertFailureReportToOT(report.id)
+      // Call Server Action to convert failure report to work order
+      await convertFailureReportToOT(report.id)
 
       toast({
         variant: 'default',
-        title: 'Función no implementada aún',
-        description: 'La conversión a OT se implementará en la siguiente fase',
+        title: '✅ Conversión Exitosa',
+        description: `La avería #${report.numero} ha sido convertida a Orden de Trabajo`,
       })
 
-      // Temporary - close modal
+      // Close modal and refresh page to show updated list
       onClose()
+      router.refresh()
     } catch (error) {
       console.error('Error converting to OT:', error)
+      const errorMessage = error instanceof Error ? error.message : 'No se pudo convertir el reporte a OT'
+
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudo convertir el reporte a OT',
+        title: 'Error en conversión',
+        description: errorMessage,
       })
     } finally {
       setIsSubmitting(false)
@@ -91,30 +96,32 @@ export function FailureReportModal({ report, tipo: _tipo, open, onClose }: Failu
 
   /**
    * Confirm discard action
-   * TODO: Implement discardFailureReport Server Action
    * AC4: Marcar como "Descartado", log auditoría, notificar reporter vía SSE
    */
   const handleConfirmDiscard = async () => {
     setIsSubmitting(true)
     try {
-      // TODO: Call Server Action when implemented
-      // await discardFailureReport(report.id, userId)
+      // Call Server Action to discard failure report
+      await discardFailureReport(report.id, userId)
 
       toast({
         variant: 'default',
-        title: 'Función no implementada aún',
-        description: 'El descarte se implementará en la siguiente fase',
+        title: '✅ Aviso descartado',
+        description: `La avería #${report.numero} ha sido descartada`,
       })
 
-      // Temporary - close modals
+      // Close modals and refresh page to show updated list
       setDiscardConfirmOpen(false)
       onClose()
+      router.refresh()
     } catch (error) {
       console.error('Error discarding report:', error)
+      const errorMessage = error instanceof Error ? error.message : 'No se pudo descartar el reporte'
+
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudo descartar el reporte',
+        title: 'Error al descartar',
+        description: errorMessage,
       })
     } finally {
       setIsSubmitting(false)
@@ -132,7 +139,7 @@ export function FailureReportModal({ report, tipo: _tipo, open, onClose }: Failu
     <>
       {/* Main Modal */}
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" data-testid="modal-averia-info">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">
               Detalles de Avería #{report.numero}

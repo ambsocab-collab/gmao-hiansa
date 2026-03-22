@@ -18,6 +18,7 @@
 import { prisma } from '@/lib/db'
 import { ValidationError } from '@/lib/utils/errors'
 import { trackPerformance } from '@/lib/observability/performance'
+import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/observability/logger'
 import { reporteAveriaSchema, type ReporteAveriaInput } from '@/lib/utils/validations/averias'
 import { emitSSEEvent } from '@/lib/sse/server'
@@ -337,6 +338,9 @@ export async function convertFailureReportToOT(failureReportId: string) {
       },
     })
 
+    // Revalidate /averias/triage to update Server Component
+    revalidatePath('/averias/triage', 'page')
+
     // Emit SSE notification to supervisors (can_view_all_ots capability)
     // NFR-S4: Notificación SSE entregada en <30s (P95)
     emitSSEEvent({
@@ -428,6 +432,9 @@ export async function discardFailureReport(failureReportId: string, userId: stri
         estado: 'DESCARTADO',
       },
     })
+
+    // Revalidate /averias/triage to update Server Component
+    revalidatePath('/averias/triage', 'page')
 
     // Audit log (AC4)
     logger.info(userId, 'discard_failure_report', correlationId, {
