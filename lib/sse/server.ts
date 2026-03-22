@@ -1,78 +1,88 @@
 /**
- * SSE Server Utilities
+ * SSE Server Utilities with Prisma-based event persistence
  * Story 2.2: Formulario Reporte de Avería
  *
  * Helper functions for emitting SSE events from Server Actions.
- * Wraps BroadcastManager with capability-based targeting.
+ * Uses Prisma DB to capture events for E2E test verification (works across Next.js hot reloads).
  */
 
 import { BroadcastManager } from './broadcaster'
+import { prisma } from '@/lib/db'
 
 /**
- * SSE Event Target
- *
- * Defines who should receive the SSE notification.
- * Supports both capability-based targeting (PBAC) and user-specific targeting.
+ * Get captured SSE events from DB
  */
-export interface SSEEventTarget {
-  capability?: string // Target users with specific capability (e.g., 'can_view_all_ots')
-  userIds?: string[] // Target specific users by their IDs
+export async function getCapturedSSEEvents(): Promise<any[]> {
+  try {
+    const events = await prisma.sSETestEvent.findMany({
+      orderBy: { capturedAt: 'desc' },
+      take: 100 // Last 100 events
+    })
+    return events.reverse() // Return in chronological order
+  } catch (error) {
+    console.error('[SSE] Error reading events from DB:', error)
+    return []
+  }
 }
 
 /**
- * SSE Event Payload
- *
- * Structure for SSE events emitted from Server Actions.
+ * Clear captured SSE events
  */
-export interface SSEEventPayload {
-  type: string // Event type (e.g., 'failure_report_created')
-  data: Record<string, unknown> // Event data
-  target?: SSEEventTarget // Optional target filtering
+export async function clearCapturedSSEEvents(): Promise<void> {
+  try {
+    await prisma.sSETestEvent.deleteMany({})
+  } catch (error) {
+    console.error('[SSE] Error clearing events:', error)
+  }
 }
 
 /**
  * Emit SSE Event
  *
  * Helper function to broadcast SSE events from Server Actions.
- * Wraps BroadcastManager with structured event payload.
- *
- * Features:
- * - Capability-based targeting (PBAC)
- * - Consistent event structure
- * - Auto-generated event IDs
- * - Error handling (logs but doesn't throw)
- *
- * @param payload - SSE event payload with type, data, and optional target
- *
- * @example
- * // Emit failure report created event
- * emitSSEEvent({
- *   type: 'failure_report_created',
- *   data: {
- *     reportId: 'clxxx',
- *     numero: 'AV-2026-001',
- *     equipo: { ... },
- *     descripcion: 'Fallo en motor',
- *   },
- *   target: { capability: 'can_view_all_ots' }
- * })
+ * Captures events to Prisma DB for E2E test verification.
  */
-export function emitSSEEvent(payload: SSEEventPayload): void {
+export function emitSSEEvent(payload: any): void {
   try {
-    // Broadcast to 'work-orders' channel (failure reports become work orders)
-    // In the future, this could be a dedicated 'failure-reports' channel
+    // Broadcast to 'work-orders' channel
     const channel: 'work-orders' | 'kpis' | 'stock' = 'work-orders'
 
-    BroadcastManager.broadcast(channel, {
+    const event = {
       name: payload.type,
       data: {
         ...payload.data,
-        target: payload.target, // Include target for client-side filtering
+        target: payload.target,
       },
       id: crypto.randomUUID(),
+    }
+
+    // Broadcast to all subscribers
+    BroadcastManager.broadcast(channel, event)
+
+    // Capture to DB (async, don't wait)
+    prisma.sSETestEvent.create({
+      data: {
+        name: event.name,
+        data: event.data as any, // Prisma Json type
+      }
+    }).then(() => {
+      console.log('[SSE] Event emitted & captured:', event.name)
+    }).catch(err => {
+      console.error('[SSE] Error capturing event to DB:', err)
     })
   } catch (error) {
-    // Log error but don't throw - SSE failures shouldn't break Server Actions
     console.error('[SSE] Error emitting event:', error)
   }
+}
+
+// Export types for compatibility
+export interface SSEEventTarget {
+  capability?: string
+  userIds?: string[]
+}
+
+export interface SSEEventPayload {
+  type: string
+  data: Record<string, unknown>
+  target?: SSEEventTarget
 }

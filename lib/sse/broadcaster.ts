@@ -186,6 +186,9 @@ export const BroadcastManager = BroadcastManagerClass.getInstance()
  *
  * Helper function to broadcast work order updates with proper payload structure.
  *
+ * NOTE: This function is kept for backwards compatibility.
+ * New code should use broadcastWorkOrderUpdated() instead.
+ *
  * @param workOrder - Work order data to broadcast
  */
 export function broadcastWorkOrderUpdate(workOrder: {
@@ -195,10 +198,10 @@ export function broadcastWorkOrderUpdate(workOrder: {
   updatedAt: Date
 }): void {
   BroadcastManager.broadcast('work-orders', {
-    name: 'work_order_updated',
+    name: 'work-order-updated',
     data: {
       workOrderId: workOrder.id,
-      numero: workOrder.numero,
+      otNumero: workOrder.numero,
       estado: workOrder.estado,
       updatedAt: workOrder.updatedAt.toISOString()
     },
@@ -227,6 +230,93 @@ export function broadcastKPIsUpdate(kpis: {
       otsAbiertas: kpis.otsAbiertas,
       disponibilidad: kpis.disponibilidad,
       timestamp: new Date().toISOString()
+    },
+    id: crypto.randomUUID()
+  })
+}
+
+/**
+ * Broadcast failure report created event
+ *
+ * Helper function to broadcast when a new avería is created.
+ * Notifies all supervisors connected to the work-orders channel.
+ *
+ * @param failureReport - Failure report data to broadcast
+ */
+export function broadcastFailureReportCreated(failureReport: {
+  id: string
+  numero: string
+  descripcion: string
+  equipoNombre: string
+  equipoId: string
+  reportadoPor: string
+  createdAt: Date
+}): void {
+  BroadcastManager.broadcast('work-orders', {
+    name: 'failure-report-created',
+    data: {
+      id: failureReport.id,
+      numero: failureReport.numero,
+      descripcion: failureReport.descripcion,
+      equipoNombre: failureReport.equipoNombre,
+      equipoId: failureReport.equipoId,
+      reportadoPor: failureReport.reportadoPor,
+      createdAt: failureReport.createdAt.toISOString()
+    },
+    id: crypto.randomUUID()
+  })
+}
+
+/**
+ * Broadcast work order updated event
+ *
+ * Helper function to broadcast when a work order is created or updated.
+ *
+ * @param workOrder - Work order data to broadcast
+ */
+export function broadcastWorkOrderUpdated(workOrder: {
+  id: string
+  numero: string
+  estado: string
+  updatedAt: Date
+}): void {
+  BroadcastManager.broadcast('work-orders', {
+    name: 'work-order-updated',
+    data: {
+      workOrderId: workOrder.id,
+      otNumero: workOrder.numero,
+      estado: workOrder.estado,
+      updatedAt: workOrder.updatedAt.toISOString()
+    },
+    id: crypto.randomUUID()
+  })
+}
+
+/**
+ * Broadcast technician assigned event
+ *
+ * Helper function to broadcast when a technician is assigned to a work order.
+ * Notifies the technician and all supervisors.
+ *
+ * @param assignment - Assignment data to broadcast
+ */
+export function broadcastTechnicianAssigned(assignment: {
+  otNumero: string
+  otId: string
+  tecnicoId: string
+  tecnicoNombre: string
+  assignedAt: Date
+  estado: string
+}): void {
+  BroadcastManager.broadcast('work-orders', {
+    name: 'technician-assigned',
+    data: {
+      otNumero: assignment.otNumero,
+      otId: assignment.otId,
+      tecnicoId: assignment.tecnicoId,
+      tecnicoNombre: assignment.tecnicoNombre,
+      assignedAt: assignment.assignedAt.toISOString(),
+      estado: assignment.estado
     },
     id: crypto.randomUUID()
   })

@@ -357,3 +357,13 @@ model FailureReport {
   @@index([createdAt]) // Para ordenamiento temporal
   @@map("failureReports")
 }
+
+// Test-only model for capturing SSE events in E2E tests
+model SSETestEvent {
+  id        String   @id @default(cuid())
+  name      String
+  data      Json
+  capturedAt DateTime @default(now())
+  
+  @@map("sse_test_events")
+}

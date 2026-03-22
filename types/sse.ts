@@ -54,6 +54,33 @@ export interface KPIsUpdatedPayload {
 }
 
 /**
+ * Failure report created event payload
+ * Sent when a new avería is created by operario
+ */
+export interface FailureReportCreatedPayload {
+  id: string
+  numero: string // e.g., "AV-2026-001"
+  descripcion: string
+  equipoNombre: string
+  equipoId: string
+  reportadoPor: string
+  createdAt: string // ISO 8601 date string
+}
+
+/**
+ * Technician assigned event payload
+ * Sent when a technician is assigned to a work order
+ */
+export interface TechnicianAssignedPayload {
+  otNumero: string // e.g., "OT-2026-001"
+  otId: string
+  tecnicoId: string
+  tecnicoNombre: string
+  assignedAt: string // ISO 8601 date string
+  estado: string // New state after assignment
+}
+
+/**
  * Heartbeat event payload
  * Sent every 30 seconds to keep connection alive
  */
@@ -88,7 +115,9 @@ export interface SSEMessage {
 export const SSE_EVENT_NAMES = {
   HEARTBEAT: 'heartbeat',
   WORK_ORDER_UPDATED: 'work_order_updated',
-  KPIS_UPDATED: 'kpis_updated'
+  KPIS_UPDATED: 'kpis_updated',
+  FAILURE_REPORT_CREATED: 'failure-report-created',
+  TECHNICIAN_ASSIGNED: 'technician-assigned'
 } as const
 
 /**

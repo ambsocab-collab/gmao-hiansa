@@ -144,28 +144,16 @@ export async function createFailureReport(data: ReporteAveriaInput) {
     }
 
     // Emit SSE notification to supervisors (can_view_all_ots capability)
-    // NFR-S4: Notificación SSE entregada en <30s (P0-E2E-008)
+    // NFR-S4: Notificación SSE entregada en <30s (P0-E2E-SSE-001, R-002 score=6)
     emitSSEEvent({
-      type: 'failure_report_created',
+      type: 'failure-report-created',
       data: {
-        reportId: report.id,
+        id: report.id,
         numero: report.numero,
-        equipo: report.equipo?.id ? {
-          id: report.equipo.id,
-          name: report.equipo.name,
-          code: report.equipo.code,
-          // Build hierarchy safely (handle incomplete mock data in tests)
-          jerarquia: report.equipo.linea?.planta
-            ? `${report.equipo.linea.planta.division} → ${report.equipo.linea.planta.name} → ${report.equipo.linea.name} → ${report.equipo.name}`
-            : report.equipo.name,
-        } : undefined,
+        equipoNombre: report.equipo?.name || 'Desconocido',
+        equipoId: report.equipo?.id || '',
         descripcion: report.descripcion,
-        fotoUrl: report.fotoUrl,
-        reporter: report.reporter?.id ? {
-          id: report.reporter.id,
-          name: report.reporter.name,
-          email: report.reporter.email,
-        } : undefined,
+        reportadoPor: report.reporter?.name || 'Desconocido',
         createdAt: report.createdAt.toISOString(),
       },
       target: { capability: 'can_view_all_ots' },
@@ -368,13 +356,12 @@ export async function convertFailureReportToOT(failureReportId: string) {
     // Emit SSE notification to supervisors (can_view_all_ots capability)
     // NFR-S4: Notificación SSE entregada en <30s (P95)
     emitSSEEvent({
-      type: 'failure_report_converted',
+      type: 'work-order-updated',
       data: {
-        reportId: failureReport.id,
-        reportNumero: failureReport.numero,
         workOrderId: workOrder.id,
-        workOrderNumero: workOrder.numero,
-        equipo: failureReport.equipo.name,
+        otNumero: workOrder.numero,
+        estado: workOrder.estado,
+        updatedAt: new Date().toISOString(),
       },
       target: { capability: 'can_view_all_ots' },
     })
