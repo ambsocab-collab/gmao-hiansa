@@ -12,10 +12,11 @@ import { BroadcastManager } from './broadcaster'
  * SSE Event Target
  *
  * Defines who should receive the SSE notification.
- * Currently supports capability-based targeting (PBAC).
+ * Supports both capability-based targeting (PBAC) and user-specific targeting.
  */
 export interface SSEEventTarget {
   capability?: string // Target users with specific capability (e.g., 'can_view_all_ots')
+  userIds?: string[] // Target specific users by their IDs
 }
 
 /**

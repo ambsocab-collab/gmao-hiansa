@@ -79,7 +79,8 @@ export const ROUTE_CAPABILITIES: Record<string, string[]> = {
   '/usuarios': ['can_manage_users'], // Spanish route for user management
   '/usuarios/etiquetas': ['can_manage_users'], // Story 1.3: Tag management (visual organization only)
   '/usuarios/editar': ['can_manage_users'], // Story 1.2 & 1.3: Edit user capabilities and tags
-  '/reports': ['can_view_repair_history']
+  '/reports': ['can_view_repair_history'],
+  '/averias/triage': ['can_view_all_ots'] // Story 2.3: Triage de averías (supervisores)
 }
 
 /**
@@ -256,6 +257,8 @@ export const config = {
     '/usuarios/:path*', // Spanish routes for user management
     '/reports',
     '/reports/:path*',
+    '/averias',
+    '/averias/:path*', // Story 2.3: Averías routes (triage, nuevo, etc.)
     // Change password and unauthorized routes (Story 1.1: Spanish route names)
     '/cambiar-password',
     '/cambiar-password/:path*',
