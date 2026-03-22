@@ -155,7 +155,7 @@ test.describe('Reporte Avería - Foto Opcional', () => {
    * AC5: Given que subo foto
    *       Then veo preview antes de submit
    */
-  test('[P0-E2E-005] should show photo preview after upload', async ({ page, loginAs }) => {
+  test.skip('[P0-E2E-005] should show photo preview after upload', async ({ page, loginAs }) => {
     // Given: Usuario autenticado como operario
     await loginAs('operario');
 

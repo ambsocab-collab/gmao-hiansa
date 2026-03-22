@@ -20,6 +20,7 @@ vi.mock('@/lib/db', () => ({
   prisma: {
     failureReport: {
       create: vi.fn(),
+      findFirst: vi.fn(),
       count: vi.fn(),
     },
   },
@@ -91,8 +92,11 @@ describe('createFailureReport - Server Action Integration Tests', () => {
    * AC6: Número formato AV-YYYY-NNN, sequential por año
    */
   it('should generate sequential AV numbers per year', async () => {
-    // Given: Mock de count retorna 2 (ya hay 2 reportes este año)
-    vi.mocked(prisma.failureReport.count).mockResolvedValueOnce(2);
+    // Given: Mock de findFirst retorna último reporte "AV-2026-002"
+    const mockLatestReport = {
+      numero: 'AV-2026-002',
+    };
+    vi.mocked(prisma.failureReport.findFirst).mockResolvedValueOnce(mockLatestReport as any);
 
     // Mock de create retorna reporte con número
     const mockReport = {
@@ -105,7 +109,7 @@ describe('createFailureReport - Server Action Integration Tests', () => {
       equipo: {},
       reporter: {},
     };
-    vi.mocked(prisma.failureReport.create).mockResolvedValueOnce(mockReport);
+    vi.mocked(prisma.failureReport.create).mockResolvedValueOnce(mockReport as any);
 
     const inputData = {
       equipoId: 'equipo-123',
@@ -118,8 +122,16 @@ describe('createFailureReport - Server Action Integration Tests', () => {
 
     // Then: Número generado correctamente
     expect(result.numero).toBe('AV-2026-003');
-    expect(prisma.failureReport.count).toHaveBeenCalledWith({
-      where: { numero: { startsWith: 'AV-2026' } },
+    expect(prisma.failureReport.findFirst).toHaveBeenCalledWith({
+      where: {
+        numero: { startsWith: 'AV-2026' },
+      },
+      orderBy: {
+        numero: 'desc',
+      },
+      select: {
+        numero: true,
+      },
     });
   });
 
@@ -150,17 +162,16 @@ describe('createFailureReport - Server Action Integration Tests', () => {
     await createFailureReport(inputData);
 
     // Then: Prisma create llamado con data correcta
-    expect(prisma.failureReport.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        descripcion: 'Fallo en motor principal',
-        equipoId: 'equipo-123',
-        reportadoPor: 'user-123',
-      }),
-      include: expect.objectContaining({
-        equipo: expect.any(Object),
-        reporter: expect.any(Object),
-      }),
+    const createCall = vi.mocked(prisma.failureReport.create).mock.calls[0][0];
+    expect(createCall.data).toMatchObject({
+      descripcion: 'Fallo en motor principal',
+      equipoId: 'equipo-123',
+      reportadoPor: 'user-123',
     });
+    expect(createCall.data.numero).toMatch(/^AV-\d{4}-\d{3}$/);
+    expect(createCall.include).toBeDefined();
+    expect(createCall.include.equipo).toBeDefined();
+    expect(createCall.include.reporter).toBeDefined();
   });
 
   /**
