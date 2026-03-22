@@ -1,0 +1,122 @@
+/**
+ * E2E Tests: Story 2.3 - AC3: Convertir a OT
+ * TDD RED PHASE: All tests will FAIL until implementation is complete
+ *
+ * Tests cover:
+ * - Conversión a OT con performance <1s
+ * - Etiqueta "Correctivo" visible
+ * - OT aparece en Kanban
+ *
+ * Storage State: Uses admin auth from playwright.config.ts
+ * Auth Fixture: loginAs (no-op, runs as admin with can_view_all_ots)
+ */
+
+import { test, expect } from '../../fixtures/test.fixtures';
+
+test.describe('Triage de Averías - AC3: Convertir a OT', () => {
+  /**
+   * P0-E2E-008: Convertir aviso a OT (performance <1s)
+   *
+   * AC3: Given modal de avería abierto
+   *       When click "Convertir a OT"
+   *       Then aviso convertido a OT en <1s
+   *       And OT creada con estado "Pendiente"
+   *       And tipo marcado como "Correctivo"
+   *       And OT aparece en Kanban columna "Pendiente"
+   *
+   * NFR-S7: Performance <1s CRITICAL
+   */
+  test('[P0-E2E-008] should convert failure report to OT in less than 1 second', async ({ page, loginAs }) => {
+    // Given: Supervisor en triage con modal abierto
+    await loginAs('supervisor');
+    await page.goto('/averias/triage');
+
+    const firstCard = page.locator('[data-testid^="failure-report-card-"]').first();
+    await firstCard.click();
+
+    // When: Click "Convertir a OT" y medir tiempo
+    const startTime = Date.now();
+    await page.getByTestId('convertir-a-ot-btn').click();
+
+    // Then: OT creada (toast de éxito)
+    const successToast = page.getByText('OT creada exitosamente');
+    await expect(successToast).toBeVisible({ timeout: 5000 });
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+
+    // CRITICAL: Performance <1s (1000ms)
+    expect(duration).toBeLessThan(1000);
+
+    // And: Modal cerrado
+    await expect(page.getByTestId('modal-averia-info')).not.toBeVisible();
+
+    // And: Tarjeta removida de columna "Por Revisar"
+    await expect(firstCard).not.toBeVisible();
+
+    // Then: Navegar a Kanban para verificar OT creada
+    await page.goto('/kanban');
+    const pendingColumn = page.getByTestId('kanban-pendiente');
+    await expect(pendingColumn).toBeVisible();
+
+    // And: OT nueva visible en columna Pendiente
+    const newOT = pendingColumn.locator('[data-testid^="work-order-"]').first();
+    await expect(newOT).toBeVisible();
+
+    // And: Etiqueta "Correctivo" visible
+    await expect(newOT.getByText('Correctivo')).toBeVisible();
+  });
+
+  /**
+   * P1-E2E-009: Etiqueta "Correctivo" visible en tarjeta OT
+   *
+   * AC3: Given OT creada desde avería
+   *       Then etiqueta "Correctivo" visible en tarjeta OT
+   */
+  test('[P1-E2E-009] should show Correctivo label on OT card', async ({ page, loginAs }) => {
+    // Given: Supervisor convierte avería a OT
+    await loginAs('supervisor');
+    await page.goto('/averias/triage');
+
+    const firstCard = page.locator('[data-testid^="failure-report-card-"]').first();
+    await firstCard.click();
+    await page.getByTestId('convertir-a-ot-btn').click();
+
+    // Wait for success
+    await expect(page.getByText('OT creada exitosamente')).toBeVisible();
+
+    // When: Navega a Kanban
+    await page.goto('/kanban');
+
+    // Then: Etiqueta "Correctivo" visible
+    const pendingColumn = page.getByTestId('kanban-pendiente');
+    await expect(pendingColumn.getByText('Correctivo')).toBeVisible();
+  });
+
+  /**
+   * P1-E2E-010: OT aparece en Kanban columna "Pendiente"
+   *
+   * AC3: Given OT creada desde avería
+   *       Then OT aparece en Kanban columna "Pendiente"
+   */
+  test('[P1-E2E-010] should show OT in Pendiente column', async ({ page, loginAs }) => {
+    // Given: Supervisor convierte avería a OT
+    await loginAs('supervisor');
+    await page.goto('/averias/triage');
+
+    const firstCard = page.locator('[data-testid^="failure-report-card-"]').first();
+    await firstCard.click();
+    await page.getByTestId('convertir-a-ot-btn').click();
+
+    // Wait for success
+    await expect(page.getByText('OT creada exitosamente')).toBeVisible();
+
+    // When: Navega a Kanban
+    await page.goto('/kanban');
+
+    // Then: OT visible en columna Pendiente
+    const pendingColumn = page.getByTestId('kanban-pendiente');
+    const newOT = pendingColumn.locator('[data-testid^="work-order-"]').first();
+    await expect(newOT).toBeVisible();
+  });
+});
