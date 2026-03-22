@@ -55,7 +55,6 @@ export function FailureReportCard({ report, tipo, userId }: FailureReportCardPro
   const [modalOpen, setModalOpen] = useState(false)
 
   // Color coding (NFR-S10): rosa #FFC0CB para avería, blanco #FFFFFF para reparación
-  const bgColor = tipo === 'avería' ? 'bg-white' : 'bg-white' // Base color
   const customStyle = tipo === 'avería'
     ? { backgroundColor: '#FFC0CB' }  // Rosa exacto #FFC0CB
     : { backgroundColor: '#FFFFFF' } // Blanco exacto #FFFFFF
@@ -80,7 +79,7 @@ export function FailureReportCard({ report, tipo, userId }: FailureReportCardPro
   return (
     <>
       <Card
-        className={`${bgColor} p-4 cursor-pointer hover:shadow-md transition-shadow min-h-[120px] flex flex-col justify-between`}
+        className="p-4 cursor-pointer hover:shadow-md transition-shadow min-h-[120px] flex flex-col justify-between"
         style={customStyle}
         data-testid={`failure-report-card-${report.id}`}
         onClick={() => setModalOpen(true)}

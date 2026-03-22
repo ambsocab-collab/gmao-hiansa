@@ -43,6 +43,22 @@ const ALL_NAVIGATION_ITEMS: NavigationItem[] = [
     requiredCapability: '', // No capability required - all authenticated users
     testId: 'nav-dashboard',
   },
+  // Epic 2: Gestión de Averías y Reportes Rápidos
+  {
+    label: 'Reportar Avería',
+    href: '/averias/nuevo',
+    icon: 'AlertCircle',
+    requiredCapability: 'can_create_failure_report', // Story 2.2: Formulario Reporte (incluye Story 2.1 búsqueda predictiva)
+    testId: 'nav-create-failure-report',
+  },
+  {
+    label: 'Triage de Averías',
+    href: '/averias/triage',
+    icon: 'ClipboardList',
+    requiredCapability: 'can_view_all_ots', // Story 2.3: Triage y Conversión a OTs
+    testId: 'nav-triage',
+  },
+  // Epic 3: Órdenes de Trabajo (Kanban)
   {
     label: 'Órdenes de Trabajo',
     href: '/work-orders',

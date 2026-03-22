@@ -1,12 +1,8 @@
 /**
- * E2E Tests: Story 2.3 - AC1: Columna Por Revisar
- * TDD RED PHASE: All tests will FAIL until implementation is complete
+ * E2E Tests: Story 2.3 - AC1: Columna "Por Revisar"
  *
  * Tests cover:
- * - Columna "Por Revisar" con avisos nuevos
- * - Color coding (rosa para avería, blanco para reparación)
- * - Datos de tarjeta correctos
- * - Count badge en columna
+ * - AC1: Columna "Por Revisar" con avisos nuevos (color coding)
  *
  * Storage State: Uses admin auth from playwright.config.ts
  * Auth Fixture: loginAs (no-op, runs as admin with can_view_all_ots)
@@ -16,6 +12,21 @@ import { test, expect } from '../../fixtures/test.fixtures';
 
 // NOTA: Tests usan storageState global (playwright/.auth/admin.json)
 // loginAs fixture es no-op por ahora - todos corren como admin
+
+/**
+ * Reset failure reports before each test to ensure test independence
+ */
+test.beforeEach(async ({ request }) => {
+  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
+  const response = await request.post(`${baseURL}/api/v1/test/reset-failure-reports`);
+
+  if (!response.ok()) {
+    const error = await response.text();
+    throw new Error(`Failed to reset failure reports: ${error}`);
+  }
+
+  console.log('✅ Database reset: Failure reports restored to initial state');
+});
 
 test.describe('Triage de Averías - AC1: Columna Por Revisar', () => {
   /**
@@ -69,33 +80,39 @@ test.describe('Triage de Averías - AC1: Columna Por Revisar', () => {
     // And: En página de triage
     await page.goto('/averias/triage');
 
-    // When: Busco tarjeta de avería y reparación
-    const cards = page.locator('[data-testid^="failure-report-card"]');
+    // When: Obtengo todas las tarjetas
+    const cards = page.locator('[data-testid^="failure-report-card-"]');
     const count = await cards.count();
 
-    // Necesitamos al menos 2 tarjetas para probar ambos tipos
-    expect(count).toBeGreaterThanOrEqual(2);
+    // Then: Verifico que hay tarjetas
+    expect(count).toBeGreaterThan(0);
 
-    // Verificar que existe al menos una tarjeta de avería (rosa #FFC0CB)
-    let foundAveria = false
-    let foundReparacion = false
+    // When: Busco una tarjeta de avería (rosa #FFC0CB)
+    let averiaFound = false;
+    let reparacionFound = false;
 
     for (let i = 0; i < count; i++) {
-      const card = cards.nth(i)
-      const bgColor = await card.evaluate((el) => {
-        return window.getComputedStyle(el).backgroundColor
-      })
+      const card = cards.nth(i);
+      const backgroundColor = await card.evaluate((el) => {
+        return window.getComputedStyle(el).backgroundColor;
+      });
 
-      if (bgColor === 'rgb(255, 192, 203)') { // Rosa #FFC0CB
-        foundAveria = true
-      } else if (bgColor === 'rgb(255, 255, 255)') { // Blanco #FFFFFF
-        foundReparacion = true
+      // rgb(255, 192, 203) = #FFC0CB (avería)
+      if (backgroundColor === 'rgb(255, 192, 203)') {
+        averiaFound = true;
+      }
+
+      // rgb(255, 255, 255) = #FFFFFF (reparación)
+      if (backgroundColor === 'rgb(255, 255, 255)') {
+        reparacionFound = true;
       }
     }
 
-    // Then: Debe haber al menos una tarjeta de cada tipo
-    expect(foundAveria).toBe(true)
-    expect(foundReparacion).toBe(true)
+    // Then: Verifico que hay al menos una tarjeta de avería
+    expect(averiaFound).toBe(true);
+
+    // And: Verifico que hay al menos una tarjeta de reparación
+    expect(reparacionFound).toBe(true);
   });
 
   /**

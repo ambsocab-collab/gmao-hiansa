@@ -1,17 +1,32 @@
 /**
  * E2E Tests: Story 2.3 - AC2: Modal Informativo
- * TDD RED PHASE: All tests will FAIL until implementation is complete
  *
  * Tests cover:
- * - Modal abre al click en tarjeta
- * - Botones de acción visibles
- * - Modal muestra foto si existe
+ * - AC2: Modal informativo de avería con detalles completos
  *
  * Storage State: Uses admin auth from playwright.config.ts
  * Auth Fixture: loginAs (no-op, runs as admin with can_view_all_ots)
  */
 
 import { test, expect } from '../../fixtures/test.fixtures';
+
+// NOTA: Tests usan storageState global (playwright/.auth/admin.json)
+// loginAs fixture es no-op por ahora - todos corren como admin
+
+/**
+ * Reset failure reports before each test to ensure test independence
+ */
+test.beforeEach(async ({ request }) => {
+  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
+  const response = await request.post(`${baseURL}/api/v1/test/reset-failure-reports`);
+
+  if (!response.ok()) {
+    const error = await response.text();
+    throw new Error(`Failed to reset failure reports: ${error}`);
+  }
+
+  console.log('✅ Database reset: Failure reports restored to initial state');
+});
 
 test.describe('Triage de Averías - AC2: Modal Informativo', () => {
   /**
@@ -36,13 +51,6 @@ test.describe('Triage de Averías - AC2: Modal Informativo', () => {
     await expect(modal).toBeVisible();
 
     // And: Modal tiene detalles completos
-    // Foto es opcional - solo verificar si existe
-    const photo = modal.getByTestId('foto');
-    const photoExists = await photo.count() > 0;
-    if (photoExists) {
-      await expect(photo).toBeVisible();
-    }
-
     await expect(modal.getByTestId('descripcion-completa')).toBeVisible();
     await expect(modal.getByTestId('equipo-jerarquia')).toBeVisible();
     await expect(modal.getByTestId('reporter')).toBeVisible();

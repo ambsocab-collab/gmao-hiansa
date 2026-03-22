@@ -64,7 +64,7 @@ export function FailureReportModal({ report, tipo: _tipo, open, onClose, userId 
 
       toast({
         variant: 'default',
-        title: '✅ Conversión Exitosa',
+        title: '✅ OT creada exitosamente',
         description: `La avería #${report.numero} ha sido convertida a Orden de Trabajo`,
       })
 

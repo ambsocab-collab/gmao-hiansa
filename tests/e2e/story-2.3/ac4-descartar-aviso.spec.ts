@@ -1,11 +1,8 @@
 /**
  * E2E Tests: Story 2.3 - AC4: Descartar Aviso
- * TDD RED PHASE: All tests will FAIL until implementation is complete
  *
  * Tests cover:
- * - Confirmación modal visible
- * - Descartar confirma y remueve aviso
- * - Cancelar descarte cierra modal
+ * - AC4: Descartar aviso (confirmación + auditoría)
  *
  * Storage State: Uses admin auth from playwright.config.ts
  * Auth Fixture: loginAs (no-op, runs as admin with can_view_all_ots)
@@ -13,9 +10,25 @@
 
 import { test, expect } from '../../fixtures/test.fixtures';
 
+// NOTA: Tests usan storageState global (playwright/.auth/admin.json)
+// loginAs fixture es no-op por ahora - todos corren como admin
+
+/**
+ * Reset failure reports before each test to ensure test independence
+ */
+test.beforeEach(async ({ request }) => {
+  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
+  const response = await request.post(`${baseURL}/api/v1/test/reset-failure-reports`);
+
+  if (!response.ok()) {
+    const error = await response.text();
+    throw new Error(`Failed to reset failure reports: ${error}`);
+  }
+
+  console.log('✅ Database reset: Failure reports restored to initial state');
+});
+
 test.describe('Triage de Averías - AC4: Descartar Aviso', () => {
-  // Run serially to avoid conflicts with database state
-  test.describe.configure({ mode: 'serial' });
   /**
    * P0-E2E-011: Descartar muestra confirmación
    *

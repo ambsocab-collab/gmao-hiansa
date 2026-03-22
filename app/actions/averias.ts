@@ -18,7 +18,6 @@
 import { prisma } from '@/lib/db'
 import { ValidationError } from '@/lib/utils/errors'
 import { trackPerformance } from '@/lib/observability/performance'
-import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/observability/logger'
 import { reporteAveriaSchema, type ReporteAveriaInput } from '@/lib/utils/validations/averias'
 import { emitSSEEvent } from '@/lib/sse/server'
@@ -259,6 +258,15 @@ export async function convertFailureReportToOT(failureReportId: string) {
       throw new ValidationError('No se puede convertir una avería descartada', {}, correlationId)
     }
 
+    // Validate tipo: only convert 'avería' reports (reparaciones already are OTs)
+    if (failureReport.tipo !== 'avería') {
+      throw new ValidationError(
+        `Solo se pueden convertir averías. Este reporte es tipo: ${failureReport.tipo}`,
+        {},
+        correlationId
+      )
+    }
+
     // Generate sequential OT number (OT-YYYY-NNN)
     // Use retry logic to handle race conditions (similar to Story 2.2)
     let workOrder: any = null
@@ -337,9 +345,6 @@ export async function convertFailureReportToOT(failureReportId: string) {
         estado: 'CONVERTIDO',
       },
     })
-
-    // Revalidate /averias/triage to update Server Component
-    revalidatePath('/averias/triage', 'page')
 
     // Emit SSE notification to supervisors (can_view_all_ots capability)
     // NFR-S4: Notificación SSE entregada en <30s (P95)
@@ -433,9 +438,6 @@ export async function discardFailureReport(failureReportId: string, userId: stri
       },
     })
 
-    // Revalidate /averias/triage to update Server Component
-    revalidatePath('/averias/triage', 'page')
-
     // Audit log (AC4)
     logger.info(userId, 'discard_failure_report', correlationId, {
       failureReportId,
@@ -469,6 +471,172 @@ export async function discardFailureReport(failureReportId: string, userId: stri
     } else {
       const syntheticError = new Error(String(error))
       logger.error(syntheticError, 'discard_failure_report', correlationId)
+    }
+
+    // Re-throw errors
+    throw error
+  }
+}
+
+/**
+ * Create Rework Work Order (AC6: Re-trabajo edge case)
+ *
+ * Creates a high-priority re-work OT when an operario rejects a completed repair.
+ * This OT is linked to the original OT for traceability.
+ *
+ * @param originalWorkOrderId - The ID of the original WorkOrder that failed
+ * @param motivo - Reason for the re-work request
+ * @returns Object with success status and the new re-work WorkOrder
+ *
+ * @example
+ * const result = await createReworkOT('clxxx', 'La reparación no funciona después de 24h')
+ * // Returns: { success: true, workOrder: { numero: 'OT-2026-002', tipo: 'CORRECTIVO', ... } }
+ *
+ * **NOTE:** This function requires schema changes to WorkOrder model:
+ * - Add `prioridad` field (ALTA/MEDIA/BAJA)
+ * - Add `parent_work_order_id` field to link to original OT
+ * - These changes should be coordinated with Epic 3 (Kanban) implementation
+ *
+ * **AC6 Requirements:**
+ * - OT de re-trabajo con prioridad alta (NFR-S101)
+ * - OT vinculada a la OT original
+ * - Notificación enviada a supervisor para revisión
+ */
+export async function createReworkOT(originalWorkOrderId: string, motivo: string) {
+  const correlationId = crypto.randomUUID()
+
+  try {
+    // Fetch original WorkOrder
+    const originalOT = await prisma.workOrder.findUnique({
+      where: { id: originalWorkOrderId },
+      include: {
+        equipo: true,
+        failure_report: true,
+      },
+    })
+
+    if (!originalOT) {
+      throw new ValidationError('Orden de Trabajo original no encontrada', {}, correlationId)
+    }
+
+    // Validate that original OT is completed (only completed OTs can be rejected)
+    if (originalOT.estado !== 'COMPLETADA') {
+      throw new ValidationError(
+        'Solo se pueden crear OTs de re-trabajo para OTs completadas',
+        {},
+        correlationId
+      )
+    }
+
+    // TODO: Once schema has `prioridad` field, use: prioridad: 'ALTA'
+    // TODO: Once schema has `parent_work_order_id` field, link to original OT
+
+    // Generate sequential OT number (OT-YYYY-NNN)
+    let reworkOT: any = null
+    let retries = 0
+    const maxRetries = 5
+
+    while (retries <= maxRetries) {
+      try {
+        const year = new Date().getFullYear()
+
+        // Get the latest OT number for this year
+        const latestOT = await prisma.workOrder.findFirst({
+          where: {
+            numero: {
+              startsWith: `OT-${year}`,
+            },
+          },
+          orderBy: {
+            numero: 'desc',
+          },
+          select: {
+            numero: true,
+          },
+        })
+
+        // Extract sequence number from latest OT or default to 0
+        let nextNumber = 1
+        if (latestOT?.numero) {
+          const match = latestOT.numero.match(/OT-\d{4}-(\d+)/)
+          if (match) {
+            nextNumber = parseInt(match[1], 10) + 1 + retries
+          }
+        }
+
+        const numero = `OT-${year}-${String(nextNumber).padStart(3, '0')}`
+
+        // Create re-work WorkOrder
+        // TODO: Add `prioridad: 'ALTA'` when schema supports it
+        // TODO: Add `parent_work_order_id: originalWorkOrderId` when schema supports it
+        reworkOT = await prisma.workOrder.create({
+          data: {
+            numero,
+            tipo: 'CORRECTIVO', // Re-work is always corrective
+            estado: 'PENDIENTE', // Re-work OTs start as pending
+            descripcion: `[RE-TRABAJO] ${motivo}\n\nOT Original: ${originalOT.numero}\nDescripción original: ${originalOT.descripcion}`,
+            equipo_id: originalOT.equipo_id,
+            // NOTE: Not linking to failure_report since this is a re-work of an existing OT
+          },
+        })
+
+        // Success - break out of retry loop
+        break
+      } catch (error: any) {
+        // Check if it's a unique constraint violation on the numero field
+        if (error.code === 'P2002' && error.meta?.target?.includes('numero') && retries < maxRetries) {
+          // Unique constraint violation - retry with a different number
+          retries++
+          logger.warn(undefined, 'retry_rework_ot_creation', correlationId, {
+            attempt: retries + 1,
+          })
+          continue
+        }
+        // Not a unique constraint error or max retries exceeded - rethrow
+        throw error
+      }
+    }
+
+    // Safety check: reworkOT should always be created after the loop
+    if (!reworkOT) {
+      throw new Error('Failed to create re-work OT after retries')
+    }
+
+    // Emit SSE notification to supervisors (can_view_all_ots capability)
+    // NFR-S4: Notificación SSE entregada en <30s (P95)
+    emitSSEEvent({
+      type: 'rework_ot_created',
+      data: {
+        reworkOTId: reworkOT.id,
+        reworkOTNumero: reworkOT.numero,
+        originalOTId: originalOT.id,
+        originalOTNumero: originalOT.numero,
+        equipo: originalOT.equipo.name,
+        motivo,
+      },
+      target: { capability: 'can_view_all_ots' },
+    })
+
+    // Audit log
+    logger.info(undefined, 'create_rework_ot', correlationId, {
+      originalWorkOrderId,
+      originalOTNumero: originalOT.numero,
+      reworkOTId: reworkOT.id,
+      reworkOTNumero: reworkOT.numero,
+      motivo,
+    })
+
+    return {
+      success: true,
+      workOrder: reworkOT,
+    }
+  } catch (error) {
+    // Log error with correlation ID
+    if (error instanceof Error) {
+      logger.error(error, 'create_rework_ot', correlationId)
+    } else {
+      const syntheticError = new Error(String(error))
+      logger.error(syntheticError, 'create_rework_ot', correlationId)
     }
 
     // Re-throw errors

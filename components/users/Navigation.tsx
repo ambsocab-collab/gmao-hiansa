@@ -33,6 +33,8 @@ import {
   Clock,
   UserCog,
   FileText,
+  AlertCircle,
+  ClipboardList,
 } from 'lucide-react'
 
 interface NavigationProps {
@@ -61,6 +63,8 @@ const iconMap = {
   Clock,
   UserCog,
   FileText,
+  AlertCircle,
+  ClipboardList,
 }
 
 /**
