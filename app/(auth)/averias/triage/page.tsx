@@ -10,6 +10,7 @@
  * - Mobile First layout (handled by TriageColumn component)
  */
 
+import { auth } from '@/lib/auth-adapter'
 import { TriageColumn } from '@/components/averias/triage-column'
 
 export const metadata = {
@@ -17,7 +18,15 @@ export const metadata = {
   description: 'Revisar y convertir reportes de avería en órdenes de trabajo',
 }
 
-export default async function TriagePage() {
+export default async function TriagePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  // Get session to extract userId for discard audit log
+  const session = await auth()
+  const userId = session?.user?.id || ''
+
   // Note: Middleware handles auth + capability check (can_view_all_ots)
   // If user doesn't have capability, they get redirected to /unauthorized
 
@@ -32,7 +41,7 @@ export default async function TriagePage() {
       </div>
 
       {/* Triage Column Component */}
-      <TriageColumn />
+      <TriageColumn userId={userId} searchParams={searchParams} />
     </div>
   )
 }
