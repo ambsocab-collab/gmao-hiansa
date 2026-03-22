@@ -63,7 +63,7 @@ export async function createFailureReport(data: ReporteAveriaInput) {
 
     // 🟢 GREEN PHASE: Generate sequential number (AV-YYYY-NNN)
     // Use retry logic to handle race conditions in parallel test execution
-    let report
+    let report: any = null
     let retries = 0
     const maxRetries = 5
 
@@ -128,8 +128,7 @@ export async function createFailureReport(data: ReporteAveriaInput) {
         if (error.code === 'P2002' && error.meta?.target?.includes('numero') && retries < maxRetries) {
           // Unique constraint violation - retry with a different number
           retries++
-          logger.warn('Retrying report creation due to unique constraint conflict', {
-            correlationId,
+          logger.warn(undefined, 'retry_report_creation', correlationId, {
             attempt: retries + 1,
           })
           continue
@@ -137,6 +136,11 @@ export async function createFailureReport(data: ReporteAveriaInput) {
         // Not a unique constraint error or max retries exceeded - rethrow
         throw error
       }
+    }
+
+    // Safety check: report should always be created after the loop
+    if (!report) {
+      throw new Error('Failed to create failure report after retries')
     }
 
     // Emit SSE notification to supervisors (can_view_all_ots capability)
@@ -170,12 +174,11 @@ export async function createFailureReport(data: ReporteAveriaInput) {
     // End performance tracking (logs warning if >3000ms)
     perf.end()
 
-    logger.info('Failure report created', {
+    logger.info(undefined, 'create_failure_report', correlationId, {
       reportId: report.id,
       numero: report.numero,
       equipoId: report.equipoId,
       reportadoPor: report.reportadoPor,
-      correlationId,
     })
 
     return report
@@ -200,6 +203,268 @@ export async function createFailureReport(data: ReporteAveriaInput) {
     }
 
     // Re-throw other errors
+    throw error
+  }
+}
+
+/**
+ * Convert Failure Report to Work Order
+ * Story 2.3: Triage de Averías y Conversión a OTs
+ *
+ * Convierte un reporte de avería en una orden de trabajo
+ * - Validación que FailureReport existe y está en estado "NUEVO"
+ * - Generación de número único sequential: OT-YYYY-NNN
+ * - Creación de WorkOrder con tipo "CORRECTIVO" y estado "PENDIENTE"
+ * - Actualización de FailureReport a estado "CONVERTIDO"
+ * - SSE notification a usuarios con capability 'can_view_all_ots'
+ * - Performance tracking (warning si >1s) - NFR-S7 CRITICAL
+ *
+ * AC3: Convertir aviso a OT en <1s
+ *
+ * @param failureReportId - ID del reporte a convertir
+ * @returns Created work order with relations
+ *
+ * @throws {ValidationError} If report not found or already converted
+ * @throws {Error} If database operation fails
+ *
+ * @example
+ * const result = await convertFailureReportToOT('clxxx')
+ * // Returns: { success: true, workOrder: { numero: 'OT-2026-001', tipo: 'CORRECTIVO', estado: 'PENDIENTE', ... } }
+ */
+export async function convertFailureReportToOT(failureReportId: string) {
+  const correlationId = crypto.randomUUID()
+
+  try {
+    // Start performance tracking (<1s requirement - NFR-S7 CRITICAL)
+    const perf = trackPerformance('convert_failure_report_to_ot', correlationId)
+
+    // Fetch failure report with equipo
+    const failureReport = await prisma.failureReport.findUnique({
+      where: { id: failureReportId },
+      include: { equipo: true },
+    })
+
+    if (!failureReport) {
+      throw new ValidationError('Avería no encontrada', {}, correlationId)
+    }
+
+    // Check if already converted (concurrent conversion handling)
+    if (failureReport.estado === 'CONVERTIDO') {
+      throw new ValidationError('Esta avería ya ha sido convertida a OT', {}, correlationId)
+    }
+
+    // Check if discarded
+    if (failureReport.estado === 'DESCARTADO') {
+      throw new ValidationError('No se puede convertir una avería descartada', {}, correlationId)
+    }
+
+    // Generate sequential OT number (OT-YYYY-NNN)
+    // Use retry logic to handle race conditions (similar to Story 2.2)
+    let workOrder: any = null
+    let retries = 0
+    const maxRetries = 5
+
+    while (retries <= maxRetries) {
+      try {
+        const year = new Date().getFullYear()
+
+        // Get the latest OT number for this year
+        const latestOT = await prisma.workOrder.findFirst({
+          where: {
+            numero: {
+              startsWith: `OT-${year}`,
+            },
+          },
+          orderBy: {
+            numero: 'desc',
+          },
+          select: {
+            numero: true,
+          },
+        })
+
+        // Extract sequence number from latest OT or default to 0
+        let nextNumber = 1
+        if (latestOT?.numero) {
+          // Parse "OT-2026-001" -> 001 -> 1, add 1
+          const match = latestOT.numero.match(/OT-\d{4}-(\d+)/)
+          if (match) {
+            nextNumber = parseInt(match[1], 10) + 1 + retries
+          }
+        }
+
+        const numero = `OT-${year}-${String(nextNumber).padStart(3, '0')}`
+
+        // Create WorkOrder with tipo CORRECTIVO and estado PENDIENTE
+        workOrder = await prisma.workOrder.create({
+          data: {
+            numero,
+            tipo: 'CORRECTIVO', // AC3: tipo marcado como "Correctivo"
+            estado: 'PENDIENTE', // AC3: OT creada con estado "Pendiente"
+            descripcion: `Reparar: ${failureReport.equipo.name} - ${failureReport.descripcion}`,
+            equipo_id: failureReport.equipoId,
+            failure_report_id: failureReport.id,
+          },
+        })
+
+        // Success - break out of retry loop
+        break
+      } catch (error: any) {
+        // Check if it's a unique constraint violation on the numero field
+        if (error.code === 'P2002' && error.meta?.target?.includes('numero') && retries < maxRetries) {
+          // Unique constraint violation - retry with a different number
+          retries++
+          logger.warn(undefined, 'retry_ot_creation', correlationId, {
+            attempt: retries + 1,
+          })
+          continue
+        }
+        // Not a unique constraint error or max retries exceeded - rethrow
+        throw error
+      }
+    }
+
+    // Safety check: workOrder should always be created after the loop
+    if (!workOrder) {
+      throw new Error('Failed to create work order after retries')
+    }
+
+    // Update FailureReport status to CONVERTIDO
+    await prisma.failureReport.update({
+      where: { id: failureReportId },
+      data: {
+        estado: 'CONVERTIDO',
+      },
+    })
+
+    // Emit SSE notification to supervisors (can_view_all_ots capability)
+    // NFR-S4: Notificación SSE entregada en <30s (P95)
+    emitSSEEvent({
+      type: 'failure_report_converted',
+      data: {
+        reportId: failureReport.id,
+        reportNumero: failureReport.numero,
+        workOrderId: workOrder.id,
+        workOrderNumero: workOrder.numero,
+        equipo: failureReport.equipo.name,
+      },
+      target: { capability: 'can_view_all_ots' },
+    })
+
+    // End performance tracking (logs warning if >1000ms - NFR-S7 CRITICAL)
+    perf.end()
+
+    logger.info(undefined, 'convert_failure_report_to_ot', correlationId, {
+      failureReportId,
+      reportNumero: failureReport.numero,
+      workOrderId: workOrder.id,
+      workOrderNumero: workOrder.numero,
+    })
+
+    return {
+      success: true,
+      workOrder,
+    }
+  } catch (error) {
+    // Log error with correlation ID
+    if (error instanceof Error) {
+      logger.error(error, 'convert_failure_report_to_ot', correlationId)
+    } else {
+      const syntheticError = new Error(String(error))
+      logger.error(syntheticError, 'convert_failure_report_to_ot', correlationId)
+    }
+
+    // Re-throw errors
+    throw error
+  }
+}
+
+/**
+ * Discard Failure Report
+ * Story 2.3: Triage de Averías y Conversión a OTs
+ *
+ * Descarta un reporte de avería (no requiere acción)
+ * - Validación que FailureReport existe
+ * - Actualización a estado "DESCARTADO"
+ * - Auditoría: log con userId y motivo
+ * - SSE notification al reporter
+ *
+ * AC4: Descartar aviso con confirmación y auditoría
+ *
+ * @param failureReportId - ID del reporte a descartar
+ * @param userId - ID del usuario que está descartando (supervisor)
+ * @returns Success status
+ *
+ * @throws {ValidationError} If report not found
+ * @throws {Error} If database operation fails
+ *
+ * @example
+ * const result = await discardFailureReport('clxxx', 'user-123')
+ * // Returns: { success: true }
+ */
+export async function discardFailureReport(failureReportId: string, userId: string) {
+  const correlationId = crypto.randomUUID()
+
+  try {
+    // Fetch failure report with reporter
+    const failureReport = await prisma.failureReport.findUnique({
+      where: { id: failureReportId },
+      include: { reporter: true },
+    })
+
+    if (!failureReport) {
+      throw new ValidationError('Avería no encontrada', {}, correlationId)
+    }
+
+    // Check if already converted
+    if (failureReport.estado === 'CONVERTIDO') {
+      throw new ValidationError('No se puede descartar una avería ya convertida a OT', {}, correlationId)
+    }
+
+    // Update status to DESCARTADO
+    await prisma.failureReport.update({
+      where: { id: failureReportId },
+      data: {
+        estado: 'DESCARTADO',
+      },
+    })
+
+    // Audit log (AC4)
+    logger.info(userId, 'discard_failure_report', correlationId, {
+      failureReportId,
+      numero: failureReport.numero,
+    })
+
+    // Emit SSE notification to reporter
+    emitSSEEvent({
+      type: 'failure_report_discarded',
+      data: {
+        reportId: failureReport.id,
+        numero: failureReport.numero,
+        motivo: 'No requiere acción',
+      },
+      target: { userIds: [failureReport.reportadoPor] },
+    })
+
+    logger.info(userId, 'discard_failure_report_success', correlationId, {
+      failureReportId,
+      numero: failureReport.numero,
+      reporterId: failureReport.reportadoPor,
+    })
+
+    return {
+      success: true,
+    }
+  } catch (error) {
+    // Log error with correlation ID
+    if (error instanceof Error) {
+      logger.error(error, 'discard_failure_report', correlationId)
+    } else {
+      const syntheticError = new Error(String(error))
+      logger.error(syntheticError, 'discard_failure_report', correlationId)
+    }
+
+    // Re-throw errors
     throw error
   }
 }
