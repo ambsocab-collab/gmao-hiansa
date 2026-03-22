@@ -161,17 +161,9 @@ export async function createTestFailureReport(
     data: {
       numero: overrides?.numero || `RA-TEST-${Date.now()}`,
       descripcion: overrides?.descripcion || 'Test FailureReport description',
-      foto_url: overrides?.foto_url,
-      equipo: {
-        connect: {
-          id: equipoId!,
-        },
-      },
-      reportadoPor: {
-        connect: {
-          id: reportadoPor!,
-        },
-      },
+      fotoUrl: overrides?.foto_url,
+      equipoId: equipoId!,
+      reportadoPor: reportadoPor!,
     },
   })
 }

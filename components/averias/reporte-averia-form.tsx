@@ -135,13 +135,15 @@ export function ReporteAveriaForm({ userId }: ReporteAveriaFormProps) {
         })
 
         // Show success toast
-        toast({
-          title: 'Avería reportada',
-          description: `Avería #${result.numero} reportada exitosamente`,
-        })
+        if (result?.numero) {
+          toast({
+            title: 'Avería reportada',
+            description: `Avería #${result.numero} reportada exitosamente`,
+          })
 
-        // Redirect to /mis-avisos or dashboard
-        router.push('/mis-avisos')
+          // Redirect to dashboard (mis-avisos route doesn't exist yet)
+          router.push('/dashboard')
+        }
       } catch (error) {
         // Show error toast
         toast({
