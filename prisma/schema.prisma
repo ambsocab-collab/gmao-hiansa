@@ -312,10 +312,12 @@ model WorkOrderAssignment {
 }
 
 enum FailureReportEstado {
+  NUEVO
   RECIBIDO
   AUTORIZADO
   EN_PROGRESO
   COMPLETADO
+  CONVERTIDO
   DESCARTADO
 }
 
@@ -325,7 +327,7 @@ model FailureReport {
   descripcion   String
   fotoUrl       String?             @map("foto_url")
   equipoId      String              @map("equipo_id")
-  estado        FailureReportEstado @default(RECIBIDO)
+  estado        FailureReportEstado @default(NUEVO)
   reportadoPor  String              @map("reportado_por")
   createdAt     DateTime            @default(now()) @map("created_at")
   updatedAt     DateTime            @updatedAt @map("updated_at")

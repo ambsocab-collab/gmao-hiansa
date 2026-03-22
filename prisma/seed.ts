@@ -450,27 +450,61 @@ async function main() {
     },
   })
 
-  // Crear un FailureReport de ejemplo
-  const failureReport = await prisma.failureReport.create({
+  // Crear FailureReports de ejemplo con estado NUEVO (para Story 2.3 - Triage)
+  const failureReport1 = await prisma.failureReport.create({
     data: {
-      numero: 'RA-2025-001',
+      numero: 'AV-2026-001',
       descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
-      fotoUrl: null, // TODO: Agregar URL de foto cuando se implemente upload
+      fotoUrl: null,
       equipoId: allEquipos[2].id, // Compresor
+      estado: 'NUEVO',
+      reportadoPor: tecnico.id,
+    },
+  })
+
+  const failureReport2 = await prisma.failureReport.create({
+    data: {
+      numero: 'AV-2026-002',
+      descripcion: 'Torno CNC presenta errores de posicionamiento en eje X',
+      fotoUrl: null,
+      equipoId: allEquipos[1].id, // Torno CNC
+      estado: 'NUEVO',
+      reportadoPor: tecnico.id,
+    },
+  })
+
+  const failureReport3 = await prisma.failureReport.create({
+    data: {
+      numero: 'AV-2026-003',
+      descripcion: 'Transportadora tiene banda desalineada',
+      fotoUrl: null,
+      equipoId: allEquipos[3].id, // Transportadora
+      estado: 'NUEVO',
+      reportadoPor: tecnico.id,
+    },
+  })
+
+  // Crear un FailureReport en progreso (vinculado a WorkOrder existente)
+  const failureReportInProgress = await prisma.failureReport.create({
+    data: {
+      numero: 'AV-2026-004',
+      descripcion: 'Motor eléctrico sobrecalentado - requiere reemplazo',
+      fotoUrl: null,
+      equipoId: allEquipos[0].id, // Prensa Hidráulica
       estado: 'EN_PROGRESO',
       reportadoPor: tecnico.id,
     },
   })
 
-  // Vincular el FailureReport con la WorkOrder
+  // Vincular el FailureReport en progreso con la WorkOrder
   await prisma.workOrder.update({
     where: { id: workOrder.id },
-    data: { failure_report_id: failureReport.id },
+    data: { failure_report_id: failureReportInProgress.id },
   })
 
   console.log('✅ Created sample operations:')
   console.log('   - 1 WorkOrder (OT-2025-001)')
-  console.log('   - 1 FailureReport (RA-2025-001)')
+  console.log('   - 4 FailureReports (3 NUEVO, 1 EN_PROGRESO)')
   console.log('   - 1 Assignment (Tecnico asignado)')
 
   // ============================================
