@@ -7,10 +7,15 @@
 
 import { afterEach, vi, expect } from 'vitest'
 import { cleanup } from '@testing-library/react'
-import * as matchers from '@testing-library/jest-dom/matchers'
 
-// Extend Vitest's expect with jest-dom matchers
-expect.extend(matchers)
+// Debug: Verify setup is being executed
+console.log('[setup.ts] Loading jest-dom matchers...')
+
+// Import jest-dom matchers as side effect (automatically extends vitest expect)
+import '@testing-library/jest-dom/vitest'
+
+// Debug: Verify matchers are loaded
+console.log('[setup.ts] jest-dom matchers loaded, toBeInTheDocument:', typeof expect('').toBeInTheDocument)
 
 // Cleanup after each test
 afterEach(() => {

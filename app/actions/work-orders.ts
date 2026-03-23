@@ -6,6 +6,7 @@ import { trackPerformance } from '@/lib/observability/performance'
 import { revalidatePath } from 'next/cache'
 import { WorkOrderEstado } from '@prisma/client'
 import { ValidationError, AuthorizationError, AuthenticationError } from '@/lib/utils/errors'
+import { broadcastWorkOrderUpdated } from '@/lib/sse/broadcaster'
 
 /**
  * Actualiza el estado de una Orden de Trabajo
@@ -106,8 +107,12 @@ export async function updateWorkOrderStatus(
     })
 
     // Emit evento SSE para real-time sync (R-002: <30s delivery)
-    // Nota: La emisión SSE se maneja en lib/sse/broadcaster.ts
-    // El evento 'work_order_updated' será escuchado por KanbanBoard
+    broadcastWorkOrderUpdated({
+      id: updatedWorkOrder.id,
+      numero: updatedWorkOrder.numero,
+      estado: updatedWorkOrder.estado,
+      updatedAt: updatedWorkOrder.updated_at
+    })
 
     // Revalidar rutas para actualizar Server Components
     revalidatePath('/ots/kanban')

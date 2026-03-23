@@ -24,12 +24,17 @@ import { Loader2 } from 'lucide-react'
 interface OTDetailsModalProps {
   workOrder: WorkOrder & {
     equipo?: {
-      numero: string
-      nombre: string
+      id: string
+      name: string
+      code: string
       linea?: {
-        nombre: string
+        id: string
+        name: string
+        code: string
         planta?: {
-          nombre: string
+          id: string
+          name: string
+          code: string
           division: string
         }
       }
@@ -153,9 +158,9 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
           {workOrder.equipo && (
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Equipo</p>
-              <p className="font-medium">{workOrder.equipo.nombre}</p>
+              <p className="font-medium">{workOrder.equipo.name}</p>
               <p className="text-xs text-muted-foreground">
-                {workOrder.equipo.linea?.planta?.nombre} → {workOrder.equipo.linea?.nombre} → {workOrder.equipo.numero}
+                {workOrder.equipo.linea?.planta?.name} → {workOrder.equipo.linea?.name} → {workOrder.equipo.code}
               </p>
             </div>
           )}
@@ -185,10 +190,10 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
           </div>
 
           {/* División */}
-          {workOrder.equipo?.linea?.planta?.nombre && (
+          {workOrder.equipo?.linea?.planta?.name && (
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">División</p>
-              <DivisionTag division={workOrder.equipo.linea.planta.nombre as 'HiRock' | 'Ultra'} />
+              <DivisionTag division={workOrder.equipo.linea.planta.name as 'HiRock' | 'Ultra'} />
             </div>
           )}
 

@@ -16,6 +16,7 @@
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import { prisma } from '@/lib/db';
 import { WorkOrderEstado, WorkOrderTipo, WorkOrderPrioridad } from '@prisma/client';
+import { BroadcastManager } from '@/lib/sse/broadcaster';
 
 // Mock observability to avoid side effects
 vi.mock('@/lib/observability/logger', () => ({
@@ -30,6 +31,26 @@ vi.mock('@/lib/observability/performance', () => ({
     end: vi.fn(),
   })),
   generateCorrelationId: vi.fn(() => 'corr-123'),
+}));
+
+// Mock BroadcastManager to track SSE broadcasts
+const broadcastMock = vi.fn();
+vi.mock('@/lib/sse/broadcaster', () => ({
+  BroadcastManager: {
+    broadcast: broadcastMock,
+  },
+  broadcastWorkOrderUpdated: vi.fn((workOrder) => {
+    broadcastMock('work-orders', {
+      name: 'work-order-updated',
+      data: {
+        workOrderId: workOrder.id,
+        otNumero: workOrder.numero,
+        estado: workOrder.estado,
+        updatedAt: workOrder.updatedAt.toISOString()
+      },
+      id: expect.any(String)
+    });
+  }),
 }));
 
 describe('Story 3.1 - Integration Tests: Work Orders (P0)', () => {
@@ -226,5 +247,43 @@ describe('Story 3.1 - Integration Tests: Work Orders (P0)', () => {
       where: { id: ot.id }
     });
     expect(fromDb?.estado).toBe(WorkOrderEstado.EN_PROGRESO);
+  });
+
+  /**
+   * P0-019: broadcastWorkOrderUpdated llamado cuando cambia estado
+   */
+  it('P0-019: broadcastWorkOrderUpdated llamado cuando cambia estado', async () => {
+    const { broadcastWorkOrderUpdated } = await import('@/lib/sse/broadcaster');
+
+    // Spy on broadcastWorkOrderUpdated
+    const broadcastSpy = vi.spyOn(await import('@/lib/sse/broadcaster'), 'broadcastWorkOrderUpdated');
+
+    const ot = await createTestWorkOrder({
+      estado: WorkOrderEstado.PENDIENTE,
+      equipo: { create: { data: {
+        id: 'eq-test',
+        name: 'Test Equipo',
+        code: 'EQ-001',
+        linea_id: 'line-test',
+        estado: 'OPERATIVO'
+      }}}
+    });
+
+    // Call Server Action to update status
+    const { updateWorkOrderStatus } = await import('@/app/actions/work-orders');
+    await updateWorkOrderStatus(ot.id, WorkOrderEstado.EN_PROGRESO);
+
+    // Verify broadcastWorkOrderUpdated was called by Server Action
+    expect(broadcastSpy).toHaveBeenCalledWith({
+      id: ot.id,
+      numero: ot.numero,
+      estado: WorkOrderEstado.EN_PROGRESO,
+      updatedAt: expect.any(Date)
+    });
+    expect(broadcastSpy).toHaveBeenCalledTimes(1);
+
+    // Verify work order was actually updated in DB
+    const updated = await prisma.workOrder.findUnique({ where: { id: ot.id } });
+    expect(updated?.estado).toBe(WorkOrderEstado.EN_PROGRESO);
   });
 });

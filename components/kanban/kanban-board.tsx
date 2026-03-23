@@ -14,7 +14,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { DndContext, DragEndEvent, DragOverEvent, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DragOverEvent, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { WorkOrder, WorkOrderEstado } from '@prisma/client'
 import { KanbanColumn } from './kanban-column'
 import { OTDetailsModal } from './ot-details-modal'
@@ -62,12 +62,17 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
   const [isUpdating, setIsUpdating] = useState(false)
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder & {
     equipo?: {
-      numero: string
-      nombre: string
+      id: string
+      name: string
+      code: string
       linea?: {
-        nombre: string
+        id: string
+        name: string
+        code: string
         planta?: {
-          nombre: string
+          id: string
+          name: string
+          code: string
           division: string
         }
       }
@@ -123,13 +128,14 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     return () => window.removeEventListener('resize', calculateVisibleColumns)
   }, [])
 
-  // Configurar sensores de drag & drop con opciones de touch
+  // Configurar sensores de drag & drop con opciones de touch y teclado
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8, // 8px de movimiento para iniciar drag
       },
-    })
+    }),
+    useSensor(KeyboardSensor, {})
   )
 
   /**
@@ -253,12 +259,17 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     // Convertir WorkOrder al formato esperado por el modal
     const modalWorkOrder = workOrder as WorkOrder & {
       equipo?: {
-        numero: string
-        nombre: string
+        id: string
+        name: string
+        code: string
         linea?: {
-          nombre: string
+          id: string
+          name: string
+          code: string
           planta?: {
-            nombre: string
+            id: string
+            name: string
+            code: string
             division: string
           }
         }
