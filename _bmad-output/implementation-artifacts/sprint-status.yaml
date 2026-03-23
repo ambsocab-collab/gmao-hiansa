@@ -67,8 +67,8 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3: Órdenes de Trabajo (Kanban Multi-Dispositivo)
-  epic-3: backlog
-  3-1-kanban-de-8-columnas-con-drag-drop: backlog
+  epic-3: in-progress
+  3-1-kanban-de-8-columnas-con-drag-drop: in-progress  # 🚀 Started implementation - 45 tests created (TDD Red Phase complete)
   3-2-gestion-de-ots-asignadas-mis-ots: backlog
   3-3-asignacion-de-tecnicos-y-proveedores: backlog
   3-4-vista-de-listado-con-filtros-y-sync-real-time: backlog
