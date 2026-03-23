@@ -437,21 +437,70 @@ async function main() {
   // ============================================
   console.log('📝 Creating sample operations...')
 
-  // Crear un WorkOrder de ejemplo
-  const workOrder = await prisma.workOrder.create({
+  // Crear WorkOrders de ejemplo en diferentes estados para Story 3.1 (Kanban)
+  const workOrder1 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-001',
       tipo: 'CORRECTIVO',
-      estado: 'EN_PROGRESO',
-      descripcion: 'Reparacion de Compresor CP-01 - Reemplazar rodamiento',
-      equipo_id: allEquipos[2].id, // Compresor averiado
+      estado: 'PENDIENTE',
+      descripcion: 'Revisión de Transportadora - Mantenimiento Preventivo',
+      equipo_id: allEquipos[3].id, // Transportadora
     },
   })
 
-  // Asignar el técnico a la OT
+  const workOrder2 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-002',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Cambio de aceite en Torno CNC',
+      equipo_id: allEquipos[1].id, // Torno CNC
+    },
+  })
+
+  const workOrder3 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-003',
+      tipo: 'CORRECTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Reparacion de Compresor CP-01 - Reemplazar rodamiento',
+      equipo_id: allEquipos[2].id, // Compresor
+    },
+  })
+
+  const workOrder4 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-004',
+      tipo: 'PREVENTIVO',
+      estado: 'PENDIENTE_REPUESTO',
+      descripcion: 'Cambio de filtros en Prensa Hidráulica',
+      equipo_id: allEquipos[0].id, // Prensa Hidráulica
+    },
+  })
+
+  const workOrder5 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-005',
+      tipo: 'CORRECTIVO',
+      estado: 'COMPLETADA',
+      descripcion: 'Reparación de Motor Eléctrico - Finalizado',
+      equipo_id: allEquipos[4].id, // Motor Eléctrico
+      completed_at: new Date(),
+    },
+  })
+
+  // Asignar técnicos a las OTs
   await prisma.workOrderAssignment.create({
     data: {
-      work_order_id: workOrder.id,
+      work_order_id: workOrder3.id,
+      userId: tecnico.id,
+      role: 'TECNICO',
+    },
+  })
+
+  await prisma.workOrderAssignment.create({
+    data: {
+      work_order_id: workOrder2.id,
       userId: tecnico.id,
       role: 'TECNICO',
     },
@@ -507,16 +556,21 @@ async function main() {
     },
   })
 
-  // Vincular el FailureReport en progreso con la WorkOrder
+  // Vincular el FailureReport en progreso con la WorkOrder EN_PROGRESO
   await prisma.workOrder.update({
-    where: { id: workOrder.id },
+    where: { id: workOrder3.id },
     data: { failure_report_id: failureReportInProgress.id },
   })
 
   console.log('✅ Created sample operations:')
-  console.log('   - 1 WorkOrder (OT-2025-001)')
+  console.log('   - 5 WorkOrders (diferentes estados para Kanban testing)')
+  console.log('     • OT-2025-001: PENDIENTE (Correctivo - Transportadora)')
+  console.log('     • OT-2025-002: ASIGNADA (Preventivo - Torno CNC)')
+  console.log('     • OT-2025-003: EN_PROGRESO (Correctivo - Compresor)')
+  console.log('     • OT-2025-004: PENDIENTE_REPUESTO (Preventivo - Prensa)')
+  console.log('     • OT-2025-005: COMPLETADA (Correctivo - Motor Eléctrico)')
   console.log('   - 4 FailureReports (3 NUEVO, 1 EN_PROGRESO)')
-  console.log('   - 1 Assignment (Tecnico asignado)')
+  console.log('   - 2 Assignments (Técnicos asignados)')
 
   // ============================================
   // RESUMEN FINAL
@@ -531,8 +585,8 @@ async function main() {
   console.log('   - Equipos: 10')
   console.log('   - Componentes: 8')
   console.log('   - Repuestos: 5')
-  console.log('   - WorkOrders: 1')
-  console.log('   - FailureReports: 1')
+  console.log('   - WorkOrders: 5')
+  console.log('   - FailureReports: 4')
   console.log('\n🔐 Default credentials:')
   console.log('   Admin: admin@hiansa.com / admin123')
   console.log('   B. Soto: bsoto@hiansa.com / 1112BSC08')
