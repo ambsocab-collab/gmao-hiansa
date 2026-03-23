@@ -438,56 +438,342 @@ async function main() {
   console.log('📝 Creating sample operations...')
 
   // Crear WorkOrders de ejemplo en diferentes estados para Story 3.1 (Kanban)
+  // Seed ampliado con muchas OTs para E2E testing - evita que los tests se afecten entre sí
+
+  // PENDIENTE (5 OTs)
   const workOrder1 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-001',
       tipo: 'CORRECTIVO',
       estado: 'PENDIENTE',
       descripcion: 'Revisión de Transportadora - Mantenimiento Preventivo',
-      equipo_id: allEquipos[3].id, // Transportadora
+      equipo_id: allEquipos[3].id,
     },
   })
 
+  const workOrder6 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-006',
+      tipo: 'PREVENTIVO',
+      estado: 'PENDIENTE',
+      descripcion: 'Inspección de Bomba Hidráulica',
+      equipo_id: allEquipos[6].id,
+    },
+  })
+
+  const workOrder7 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-007',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE',
+      descripcion: 'Revisión de Sistema Eléctrico',
+      equipo_id: allEquipos[7].id,
+    },
+  })
+
+  const workOrder8 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-008',
+      tipo: 'PREVENTIVO',
+      estado: 'PENDIENTE',
+      descripcion: 'Mantenimiento de Compresor de Aire',
+      equipo_id: allEquipos[8].id,
+    },
+  })
+
+  const workOrder9 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-009',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE',
+      descripcion: 'Ajuste de Rodillos Transportadora',
+      equipo_id: allEquipos[9].id,
+    },
+  })
+
+  // ASIGNADA (5 OTs)
   const workOrder2 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-002',
       tipo: 'PREVENTIVO',
       estado: 'ASIGNADA',
       descripcion: 'Cambio de aceite en Torno CNC',
-      equipo_id: allEquipos[1].id, // Torno CNC
+      equipo_id: allEquipos[1].id,
     },
   })
 
+  const workOrder10 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-010',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reparación de Sensor de Proximidad',
+      equipo_id: allEquipos[0].id,
+    },
+  })
+
+  const workOrder11 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-011',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Calibración de Instrumentos',
+      equipo_id: allEquipos[3].id,
+    },
+  })
+
+  const workOrder12 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-012',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reemplazo de Filtros de Aire',
+      equipo_id: allEquipos[5].id,
+    },
+  })
+
+  const workOrder13 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-013',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Lubricación de Rodamientos',
+      equipo_id: allEquipos[7].id,
+    },
+  })
+
+  // EN_PROGRESO (5 OTs)
   const workOrder3 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-003',
       tipo: 'CORRECTIVO',
       estado: 'EN_PROGRESO',
       descripcion: 'Reparacion de Compresor CP-01 - Reemplazar rodamiento',
-      equipo_id: allEquipos[2].id, // Compresor
+      equipo_id: allEquipos[2].id,
     },
   })
 
+  const workOrder3b = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-003b',
+      tipo: 'CORRECTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Mantenimiento de Robot Industrial - Revisión programada',
+      equipo_id: allEquipos[5].id,
+    },
+  })
+
+  const workOrder14 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-014',
+      tipo: 'PREVENTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Alineación de Ejes Motor',
+      equipo_id: allEquipos[4].id,
+    },
+  })
+
+  const workOrder15 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-015',
+      tipo: 'CORRECTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Reparación de Control Lógico PLC',
+      equipo_id: allEquipos[6].id,
+    },
+  })
+
+  const workOrder16 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-016',
+      tipo: 'PREVENTIVO',
+      estado: 'EN_PROGRESO',
+      descripcion: 'Balanceo de Turbina',
+      equipo_id: allEquipos[8].id,
+    },
+  })
+
+  // PENDIENTE_REPUESTO (4 OTs)
   const workOrder4 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-004',
       tipo: 'PREVENTIVO',
       estado: 'PENDIENTE_REPUESTO',
       descripcion: 'Cambio de filtros en Prensa Hidráulica',
-      equipo_id: allEquipos[0].id, // Prensa Hidráulica
+      equipo_id: allEquipos[0].id,
     },
   })
 
+  const workOrder17 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-017',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE_REPUESTO',
+      descripcion: 'Reemplazo de Rodamiento Dañado',
+      equipo_id: allEquipos[1].id,
+    },
+  })
+
+  const workOrder18 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-018',
+      tipo: 'PREVENTIVO',
+      estado: 'PENDIENTE_REPUESTO',
+      descripcion: 'Cambio de Correa Trapecial',
+      equipo_id: allEquipos[2].id,
+    },
+  })
+
+  const workOrder19 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-019',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE_REPUESTO',
+      descripcion: 'Reemplazo de Sensor de Temperatura',
+      equipo_id: allEquipos[9].id,
+    },
+  })
+
+  // PENDIENTE_PARADA (3 OTs)
+  const workOrder20 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-020',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE_PARADA',
+      descripcion: 'Reparación Mayor de Motor Principal',
+      equipo_id: allEquipos[4].id,
+    },
+  })
+
+  const workOrder21 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-021',
+      tipo: 'PREVENTIVO',
+      estado: 'PENDIENTE_PARADA',
+      descripcion: 'Overhaul de Compresor',
+      equipo_id: allEquipos[2].id,
+    },
+  })
+
+  const workOrder22 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-022',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE_PARADA',
+      descripcion: 'Reemplazo de Sistema de Transmisión',
+      equipo_id: allEquipos[6].id,
+    },
+  })
+
+  // REPARACION_EXTERNA (3 OTs)
+  const workOrder23 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-023',
+      tipo: 'CORRECTIVO',
+      estado: 'REPARACION_EXTERNA',
+      descripcion: 'Envío de Motor para Reparación Externa',
+      equipo_id: allEquipos[4].id,
+    },
+  })
+
+  const workOrder24 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-024',
+      tipo: 'PREVENTIVO',
+      estado: 'REPARACION_EXTERNA',
+      descripcion: 'Calibración Externa de Instrumentos',
+      equipo_id: allEquipos[7].id,
+    },
+  })
+
+  const workOrder25 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-025',
+      tipo: 'CORRECTIVO',
+      estado: 'REPARACION_EXTERNA',
+      descripcion: 'Reconstrucción de Bomba Hidráulica',
+      equipo_id: allEquipos[0].id,
+    },
+  })
+
+  // COMPLETADA (5 OTs)
   const workOrder5 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-005',
       tipo: 'CORRECTIVO',
       estado: 'COMPLETADA',
       descripcion: 'Reparación de Motor Eléctrico - Finalizado',
-      equipo_id: allEquipos[4].id, // Motor Eléctrico
+      equipo_id: allEquipos[4].id,
       completed_at: new Date(),
     },
   })
+
+  const workOrder26 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-026',
+      tipo: 'PREVENTIVO',
+      estado: 'COMPLETADA',
+      descripcion: 'Mantenimiento Completo de Torno',
+      equipo_id: allEquipos[1].id,
+      completed_at: new Date(),
+    },
+  })
+
+  const workOrder27 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-027',
+      tipo: 'CORRECTIVO',
+      estado: 'COMPLETADA',
+      descripcion: 'Reparación de Sistema Hidráulico',
+      equipo_id: allEquipos[0].id,
+      completed_at: new Date(),
+    },
+  })
+
+  const workOrder28 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-028',
+      tipo: 'PREVENTIVO',
+      estado: 'COMPLETADA',
+      descripcion: 'Inspección de Robot Industrial',
+      equipo_id: allEquipos[5].id,
+      completed_at: new Date(),
+    },
+  })
+
+  const workOrder29 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-029',
+      tipo: 'CORRECTIVO',
+      estado: 'COMPLETADA',
+      descripcion: 'Ajuste de Controladores',
+      equipo_id: allEquipos[8].id,
+      completed_at: new Date(),
+    },
+  })
+
+  // DESCARTADA (2 OTs)
+  const workOrder30 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-030',
+      tipo: 'CORRECTIVO',
+      estado: 'DESCARTADA',
+      descripcion: 'Cancelada - Equipo reemplazado',
+      equipo_id: allEquipos[3].id,
+    },
+  })
+
+  const workOrder31 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-031',
+      tipo: 'PREVENTIVO',
+      estado: 'DESCARTADA',
+      descripcion: 'Cancelada - No necesaria',
+      equipo_id: allEquipos[6].id,
+    },
+  })
+
+  // Total: 37 WorkOrders (5+5+5+4+3+3+5+2 = 32, + workOrders 1-5 = 37)
 
   // Asignar técnicos a las OTs
   await prisma.workOrderAssignment.create({
@@ -563,12 +849,15 @@ async function main() {
   })
 
   console.log('✅ Created sample operations:')
-  console.log('   - 5 WorkOrders (diferentes estados para Kanban testing)')
-  console.log('     • OT-2025-001: PENDIENTE (Correctivo - Transportadora)')
-  console.log('     • OT-2025-002: ASIGNADA (Preventivo - Torno CNC)')
-  console.log('     • OT-2025-003: EN_PROGRESO (Correctivo - Compresor)')
-  console.log('     • OT-2025-004: PENDIENTE_REPUESTO (Preventivo - Prensa)')
-  console.log('     • OT-2025-005: COMPLETADA (Correctivo - Motor Eléctrico)')
+  console.log('   - 37 WorkOrders (distribuidos en 8 estados para Kanban testing)')
+  console.log('     • PENDIENTE: 5 OTs')
+  console.log('     • ASIGNADA: 5 OTs')
+  console.log('     • EN_PROGRESO: 5 OTs')
+  console.log('     • PENDIENTE_REPUESTO: 4 OTs')
+  console.log('     • PENDIENTE_PARADA: 3 OTs')
+  console.log('     • REPARACION_EXTERNA: 3 OTs')
+  console.log('     • COMPLETADA: 5 OTs')
+  console.log('     • DESCARTADA: 2 OTs')
   console.log('   - 4 FailureReports (3 NUEVO, 1 EN_PROGRESO)')
   console.log('   - 2 Assignments (Técnicos asignados)')
 
@@ -585,7 +874,7 @@ async function main() {
   console.log('   - Equipos: 10')
   console.log('   - Componentes: 8')
   console.log('   - Repuestos: 5')
-  console.log('   - WorkOrders: 5')
+  console.log('   - WorkOrders: 37')
   console.log('   - FailureReports: 4')
   console.log('\n🔐 Default credentials:')
   console.log('   Admin: admin@hiansa.com / admin123')
