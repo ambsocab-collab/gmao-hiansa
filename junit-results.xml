@@ -1,274 +1,328 @@
-<testsuites id="" name="" tests="14" failures="1" skipped="1" errors="0" time="107.744212">
-<testsuite name="story-2.2\reporte-averia-desktop.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="2" failures="0" skipped="0" time="18.427" errors="0">
-<testcase name="Reporte Avería - Desktop Layout › [P0-E2E-010] should show desktop layout with 2 columns" classname="story-2.2\reporte-averia-desktop.spec.ts" time="9.22">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Desktop Layout › [P1-E2E-003] should validate equally on desktop" classname="story-2.2\reporte-averia-desktop.spec.ts" time="9.207">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="story-2.2\reporte-averia-mobile.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="3" failures="0" skipped="0" time="21.054" errors="0">
-<testcase name="Reporte Avería - Mobile First UI › [P0-E2E-001] should show prominent CTA button on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="8.24">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Mobile First UI › [P1-E2E-001] should have optimized touch targets on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="8.529">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Mobile First UI › [P1-E2E-002] should use single column layout on mobile" classname="story-2.2\reporte-averia-mobile.spec.ts" time="4.285">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="story-2.2\reporte-averia-submit-performance.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="4" failures="0" skipped="1" time="64.19" errors="0">
-<testcase name="Reporte Avería - Submit Exitoso › [P0-E2E-006] should create report without photo" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="21.669">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-086ae-create-report-without-photo-chromium\trace.zip]]
-[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-007] should show confirmation with number in &lt;3 seconds" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="28.197">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium\trace.zip]]
-[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-s-06b45-on-with-number-in-3-seconds-chromium-retry1\trace.zip]]
-[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-009] should complete report in &lt;30 seconds" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="14.324">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
-</testcase>
-<testcase name="Reporte Avería - Performance Requirements › [P0-E2E-008] should send SSE notification to supervisors" classname="story-2.2\reporte-averia-submit-performance.spec.ts" time="0">
+<testsuites id="" name="" tests="34" failures="0" skipped="30" errors="0" time="125.69516400000002">
+<testsuite name="story-3.1\P0-ac1-kanban-desktop.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="0" time="188.311" errors="0">
+<testcase name="Story 3.1 - AC1: Kanban Desktop View (P0) › P0-001: Kanban de 8 columnas visible en desktop" classname="story-3.1\P0-ac1-kanban-desktop.spec.ts" time="46.095">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-776c3-columnas-visible-en-desktop-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-776c3-columnas-visible-en-desktop-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-776c3-columnas-visible-en-desktop-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-776c3-columnas-visible-en-desktop-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.1 - AC1: Kanban Desktop View (P0) › P0-002: Columnas con colores correctos" classname="story-3.1\P0-ac1-kanban-desktop.spec.ts" time="47.422">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-00b97-umnas-con-colores-correctos-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-00b97-umnas-con-colores-correctos-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-00b97-umnas-con-colores-correctos-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-00b97-umnas-con-colores-correctos-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.1 - AC1: Kanban Desktop View (P0) › P0-003: Cada columna tiene count badge" classname="story-3.1\P0-ac1-kanban-desktop.spec.ts" time="47.043">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-ddf93-a-columna-tiene-count-badge-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-ddf93-a-columna-tiene-count-badge-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-ddf93-a-columna-tiene-count-badge-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-ddf93-a-columna-tiene-count-badge-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.1 - AC1: Kanban Desktop View (P0) › P0-004: Board responsive en desktop" classname="story-3.1\P0-ac1-kanban-desktop.spec.ts" time="47.751">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-9f2e5-Board-responsive-en-desktop-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-9f2e5-Board-responsive-en-desktop-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-9f2e5-Board-responsive-en-desktop-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.1-P0-ac1-kanban-de-9f2e5-Board-responsive-en-desktop-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P0-ac2-ot-cards.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="34.764" errors="0">
+<testcase name="Story 3.1 - AC2: OT Cards Information (P0) › P0-005: OT cards muestran información completa" classname="story-3.1\P0-ac2-ot-cards.spec.ts" time="8.739">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC2: OT Cards Information (P0) › P0-006: Tarjeta tiene borde izquierdo coloreado por estado" classname="story-3.1\P0-ac2-ot-cards.spec.ts" time="8.583">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC2: OT Cards Information (P0) › P0-007: División tag tiene color correcto" classname="story-3.1\P0-ac2-ot-cards.spec.ts" time="8.783">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC2: OT Cards Information (P0) › P0-008: Tarjeta tiene data-testid=&quot;ot-card-{id}&quot;" classname="story-3.1\P0-ac2-ot-cards.spec.ts" time="8.659">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
 </testsuite>
-<testsuite name="story-2.2\reporte-averia-validaciones.spec.ts" timestamp="2026-03-22T01:19:47.353Z" hostname="chromium" tests="5" failures="1" skipped="0" time="70.424" errors="0">
-<testcase name="Reporte Avería - Validaciones › [P0-E2E-002] should validate equipo required" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="2.132">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
+<testsuite name="story-3.1\P0-ac3-drag-drop.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="16.809" errors="0">
+<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-009: Drag OT de &quot;Por Revisar&quot; a &quot;En Progreso&quot;" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="4.273">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Reporte Avería - Validaciones › [P0-E2E-003] should validate descripcion required" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="5.366">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
+<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-010: SSE enviado tras drag &amp; drop" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="4.285">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Reporte Avería - Validaciones › [P0-E2E-004] should have textarea with correct height" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="3.18">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
+<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-011: Auditoría logged tras drag &amp; drop" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="4.1">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Reporte Avería - Integración Story 2.1 › [P0-E2E-011] should show predictive search results for equipos" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="7.215">
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-]]>
-</system-out>
+<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-012: Drag &amp; drop en todas las columnas" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="4.151">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Reporte Avería - Foto Opcional › [P0-E2E-005] should show photo preview after upload" classname="story-2.2\reporte-averia-validaciones.spec.ts" time="52.531">
-<failure message="reporte-averia-validaciones.spec.ts:158:7 [P0-E2E-005] should show photo preview after upload" type="FAILURE">
-<![CDATA[  [chromium] › story-2.2\reporte-averia-validaciones.spec.ts:158:7 › Reporte Avería - Foto Opcional › [P0-E2E-005] should show photo preview after upload 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('img[alt="Preview"]')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for locator('img[alt="Preview"]')
-
-
-      170 |     // Then: Preview visible (alt="Preview" with capital P)
-      171 |     const preview = page.locator('img[alt="Preview"]');
-    > 172 |     await expect(preview).toBeVisible();
-          |                           ^
-      173 |   });
-      174 | });
-      175 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('img[alt="Preview"]')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for locator('img[alt="Preview"]')
-
-
-      170 |     // Then: Preview visible (alt="Preview" with capital P)
-      171 |     const preview = page.locator('img[alt="Preview"]');
-    > 172 |     await expect(preview).toBeVisible();
-          |                           ^
-      173 |   });
-      174 | });
-      175 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('img[alt="Preview"]')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for locator('img[alt="Preview"]')
-
-
-      170 |     // Then: Preview visible (alt="Preview" with capital P)
-      171 |     const preview = page.locator('img[alt="Preview"]');
-    > 172 |     await expect(preview).toBeVisible();
-          |                           ^
-      173 |   });
-      174 | });
-      175 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-2.2\reporte-averia-validaciones.spec.ts:172:27
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium\trace.zip]]
-[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry1\trace.zip]]
-[NOTE] Test would run as operario, but currently using admin auth state
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\video.webm]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\error-context.md]]
-
-[[ATTACHMENT|test-results\story-2.2-reporte-averia-v-c7e24--photo-preview-after-upload-chromium-retry2\trace.zip]]
-]]>
-</system-out>
+</testsuite>
+<testsuite name="story-3.1\P0-ac7-ot-types.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="3" failures="0" skipped="3" time="11.408" errors="0">
+<testcase name="Story 3.1 - AC7: OT Type Labels (P0) › P0-013: OT preventiva muestra etiqueta verde" classname="story-3.1\P0-ac7-ot-types.spec.ts" time="3.808">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC7: OT Type Labels (P0) › P0-014: OT correctiva muestra etiqueta rojiza" classname="story-3.1\P0-ac7-ot-types.spec.ts" time="3.824">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC7: OT Type Labels (P0) › P0-015: Etiqueta de tipo visible en todas las tarjetas" classname="story-3.1\P0-ac7-ot-types.spec.ts" time="3.776">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P1-ac4-tablet-view.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="15.546" errors="0">
+<testcase name="Story 3.1 - AC4: Tablet View (P1) › P1-001: Tablet muestra 2 columnas visibles" classname="story-3.1\P1-ac4-tablet-view.spec.ts" time="3.948">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC4: Tablet View (P1) › P1-002: Swipe horizontal para ver más columnas" classname="story-3.1\P1-ac4-tablet-view.spec.ts" time="3.864">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC4: Tablet View (P1) › P1-003: Indicador de columnas visibles" classname="story-3.1\P1-ac4-tablet-view.spec.ts" time="3.888">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC4: Tablet View (P1) › P1-004: Panel lateral KPIs colapsable visible" classname="story-3.1\P1-ac4-tablet-view.spec.ts" time="3.846">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P1-ac5-mobile-view.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="13.971" errors="0">
+<testcase name="Story 3.1 - AC5: Mobile View (P1) › P1-005: Móvil muestra 1 columna visible" classname="story-3.1\P1-ac5-mobile-view.spec.ts" time="3.138">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC5: Mobile View (P1) › P1-006: Swipe horizontal en móvil" classname="story-3.1\P1-ac5-mobile-view.spec.ts" time="2.909">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC5: Mobile View (P1) › P1-007: OT cards simplificadas en móvil" classname="story-3.1\P1-ac5-mobile-view.spec.ts" time="3.992">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC5: Mobile View (P1) › P1-008: Touch targets &gt;= 44x44px en móvil" classname="story-3.1\P1-ac5-mobile-view.spec.ts" time="3.932">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P1-ac6-mobile-modal.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="3" failures="0" skipped="3" time="16.108" errors="0">
+<testcase name="Story 3.1 - AC6: Mobile Modal (P1) › P1-009: Touch en OT card abre modal en móvil" classname="story-3.1\P1-ac6-mobile-modal.spec.ts" time="3.902">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC6: Mobile Modal (P1) › P1-010: Modal tiene botones de acción" classname="story-3.1\P1-ac6-mobile-modal.spec.ts" time="6.835">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC6: Mobile Modal (P1) › P1-011: Cambiar estado desde modal en móvil" classname="story-3.1\P1-ac6-mobile-modal.spec.ts" time="5.371">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P1-ac8-toggle-sync.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="17.073" errors="0">
+<testcase name="Story 3.1 - AC8: Toggle Kanban ↔ Listado (P1) › P1-012: Toggle entre Kanban y Listado" classname="story-3.1\P1-ac8-toggle-sync.spec.ts" time="5.604">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC8: Toggle Kanban ↔ Listado (P1) › P1-013: Sincronización mantenida entre vistas" classname="story-3.1\P1-ac8-toggle-sync.spec.ts" time="5.582">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC8: Toggle Kanban ↔ Listado (P1) › P1-014: Preferencia de vista guardada por usuario" classname="story-3.1\P1-ac8-toggle-sync.spec.ts" time="2.952">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - AC8: Toggle Kanban ↔ Listado (P1) › P1-015: Toggle tiene data-testid=&quot;vista-toggle&quot;" classname="story-3.1\P1-ac8-toggle-sync.spec.ts" time="2.935">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.1\P2-ui-details.spec.ts" timestamp="2026-03-23T18:43:19.535Z" hostname="chromium" tests="4" failures="0" skipped="4" time="3.655" errors="0">
+<testcase name="Story 3.1 - P2: UI Details › Desktop - Count Badges › P2-001: Count badges por columna" classname="story-3.1\P2-ui-details.spec.ts" time="1.078">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - P2: UI Details › Desktop - Count Badges › P2-002: Panel lateral KPIs visible" classname="story-3.1\P2-ui-details.spec.ts" time="1.147">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - P2: UI Details › Tablet - Column Indicator › P2-003: Indicador de columnas visibles &quot;1-2 de 8&quot;" classname="story-3.1\P2-ui-details.spec.ts" time="0.734">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.1 - P2: UI Details › Desktop - Toggle Test ID › P2-004: Toggle tiene data-testid=&quot;vista-toggle&quot;" classname="story-3.1\P2-ui-details.spec.ts" time="0.696">
+<properties>
+<property name="skip" value="Feature not implemented yet - TDD Red Phase">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>

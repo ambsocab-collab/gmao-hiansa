@@ -1,0 +1,44 @@
+{
+  "dimension": "Determinism",
+  "timestamp": "2026-03-23T12-00-00-000Z",
+  "review_id": "test-review-3.1",
+  "score": 85,
+  "grade": "B+",
+  "violations": [
+    {
+      "severity": "HIGH",
+      "file": "tests/e2e/story-3.1/P0-ac3-drag-drop.spec.ts",
+      "line": 101,
+      "criterion": "Hard Waits - Polling Loop",
+      "issue": "waitForTimeout(1000) en loop for (let i = 0; i < 30; i++) crea polling manual no determinista",
+      "recommendation": "Usar waitForSelector() con timeout o waitForResponse() para SSE events. Reemplazar loop con: await expect(page2.locator(`[data-testid=\"${otId}\"]`)).toBeVisible({ timeout: 30000 })",
+      "code_reference": " Líneas 99-107"
+    },
+    {
+      "severity": "MEDIUM",
+      "file": "tests/e2e/story-3.1/P0-ac3-drag-drop.spec.ts",
+      "line": 47,
+      "criterion": "Hard Waits - Arbitrary Delay",
+      "issue": "waitForTimeout(100) es hard wait para animación de drag & drop",
+      "recommendation": "Reemplazar con wait explícito: await page.waitForLoadState('networkidle') o await expect(movedCard).toBeVisible()",
+      "code_reference": "Línea 47"
+    },
+    {
+      "severity": "MEDIUM",
+      "file": "tests/e2e/story-3.1/P0-ac3-drag-drop.spec.ts",
+      "line": 41,
+      "criterion": "Time Dependency - Date.now()",
+      "issue": "Date.now() usado para medir performance sin fake timers",
+      "recommendation": "Usar performance.mark() y performance.measure() APIs o aceptar que tests pueden fallar en CI lento",
+      "code_reference": "Líneas 41, 88"
+    }
+  ],
+  "strengths": [
+    "✅ No hay conditionals (if/else) controlando flujo de tests",
+    "✅ No hay try/catch para flow control (failures propagan correctamente)",
+    "✅ Tests tienen paths deterministas - cada test ejecuta mismo código siempre",
+    "✅ No hay Math.random() - datos de tests son controlados",
+    "✅ Test.skip() usado correctamente para TDD Red Phase"
+  ],
+  "summary": "Tests son mayormente deterministas con violations menores en hard waits. No hay control flow no determinista. Hard waits en SSE polling necesitan refactorización a waitForSelector con timeout."
+}
