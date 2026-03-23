@@ -24,7 +24,7 @@ export const reporteAveriaSchema = z.object({
   equipoId: z.string().min(1, 'El equipo es requerido'),
   descripcion: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
   reportadoPor: z.string().min(1, 'El reportado por es requerido'),
-  fotoUrl: z.string().url('La foto debe ser una URL válida').optional(),
+  fotoUrl: z.string().url('La foto debe ser una URL válida').nullable().optional(),
 });
 
 /**
