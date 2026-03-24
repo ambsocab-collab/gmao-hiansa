@@ -92,8 +92,14 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
 
   // Detectar vista móvil (<768px) para deshabilitar drag & drop
   useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout
+
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      // Debounce: esperar 250ms después del último resize
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768)
+      }, 250)
     }
 
     // Check inicial
@@ -102,30 +108,42 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     // Listener para resize
     window.addEventListener('resize', checkMobile)
 
-    return () => window.removeEventListener('resize', checkMobile)
+    return () => {
+      clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   // Calcular columnas visibles basado en viewport (AC4)
   useEffect(() => {
-    const calculateVisibleColumns = () => {
-      const width = window.innerWidth
+    let resizeTimeout: NodeJS.Timeout
 
-      if (width < 768) {
-        // Mobile: 1 columna
-        setVisibleColumnRange({ start: 1, end: 1 })
-      } else if (width >= 768 && width < 1200) {
-        // Tablet: 2 columnas visibles (aprox)
-        setVisibleColumnRange({ start: 1, end: 2 })
-      } else {
-        // Desktop: todas las columnas
-        setVisibleColumnRange({ start: 1, end: 8 })
-      }
+    const calculateVisibleColumns = () => {
+      // Debounce: esperar 250ms después del último resize
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        const width = window.innerWidth
+
+        if (width < 768) {
+          // Mobile: 1 columna
+          setVisibleColumnRange({ start: 1, end: 1 })
+        } else if (width >= 768 && width < 1200) {
+          // Tablet: 2 columnas visibles (aprox)
+          setVisibleColumnRange({ start: 1, end: 2 })
+        } else {
+          // Desktop: todas las columnas
+          setVisibleColumnRange({ start: 1, end: 8 })
+        }
+      }, 250)
     }
 
     calculateVisibleColumns()
     window.addEventListener('resize', calculateVisibleColumns)
 
-    return () => window.removeEventListener('resize', calculateVisibleColumns)
+    return () => {
+      clearTimeout(resizeTimeout)
+      window.removeEventListener('resize', calculateVisibleColumns)
+    }
   }, [])
 
   // Configurar sensores de drag & drop con opciones de touch y teclado
@@ -227,18 +245,6 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
   }
 
   /**
-   * Handle drag over - feedback visual
-   */
-  const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event
-
-    // Feedback visual cuando se arrastra sobre una columna
-    if (over && active.id !== over.id) {
-      // La columna mostrará highlight via isOver en KanbanColumn
-    }
-  }
-
-  /**
    * Handle click en OT card - abrir modal en móvil
    */
   const handleOTCardClick = (workOrder: WorkOrder & {
@@ -336,7 +342,6 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
         >
           {/* Desktop: 8 columnas visibles */}
           <div className="hidden lg:flex gap-4 p-6 min-h-full">

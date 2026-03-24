@@ -34,8 +34,8 @@ test.describe('Story 3.1 - AC5: Mobile View (P1)', () => {
     const board = page.getByTestId('ot-kanban-board');
     await expect(board).toBeVisible();
 
-    // Mobile uses .flex md:hidden container
-    const mobileContainer = board.locator('.flex.md\\:hidden').first();
+    // Mobile uses flex md:hidden container
+    const mobileContainer = board.locator('.flex.md\\:hidden').or(board.locator('[class*="md:hidden"]')).first();
     await expect(mobileContainer).toBeVisible();
 
     // Verify mobile shows columns
@@ -52,7 +52,7 @@ test.describe('Story 3.1 - AC5: Mobile View (P1)', () => {
     // THEN: veo siguiente columna
 
     const board = page.getByTestId('ot-kanban-board');
-    const mobileContainer = board.locator('.flex.md\\:hidden').first();
+    const mobileContainer = board.locator('.flex.md\\:hidden').or(board.locator('[class*="md:hidden"]')).first();
 
     // Verify first column is visible
     const firstColumn = mobileContainer.locator('[data-testid^="kanban-column-"]').first();
@@ -79,7 +79,7 @@ test.describe('Story 3.1 - AC5: Mobile View (P1)', () => {
     // THEN: información simplificada (menos detalles)
 
     const board = page.getByTestId('ot-kanban-board');
-    const mobileContainer = board.locator('.flex.md\\:hidden').first();
+    const mobileContainer = board.locator('.flex.md\\:hidden').or(board.locator('[class*="md:hidden"]')).first();
 
     const card = mobileContainer.locator('[data-testid^="ot-card-"]').first();
 
@@ -119,7 +119,7 @@ test.describe('Story 3.1 - AC5: Mobile View (P1)', () => {
 
     // Find type badge which is interactive
     const board = page.getByTestId('ot-kanban-board');
-    const mobileContainer = board.locator('.flex.md\\:hidden').first();
+    const mobileContainer = board.locator('.flex.md\\:hidden').or(board.locator('[class*="md:hidden"]')).first();
 
     const card = mobileContainer.locator('[data-testid^="ot-card-"]').first();
 

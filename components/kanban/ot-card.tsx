@@ -86,7 +86,7 @@ const tipoColors: Record<WorkOrderTipo, { bg: string; text: string; label: strin
 
 export function OTCard({ workOrder, onClick, disableDrag = false, compact = false }: OTCardProps) {
   // Solo usar drag & drop si no está deshabilitado (para móvil)
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef: draggableSetNodeRef, isDragging } = useDraggable({
     id: workOrder.id,
     data: {
       type: 'work-order',
@@ -94,6 +94,9 @@ export function OTCard({ workOrder, onClick, disableDrag = false, compact = fals
     },
     disabled: disableDrag
   })
+
+  // Conditionally use the draggable ref to avoid event capture when disabled
+  const setNodeRef = disableDrag ? undefined : draggableSetNodeRef
 
   const borderColor = estadoBorderColors[workOrder.estado]
   const tipoInfo = tipoColors[workOrder.tipo]
@@ -189,7 +192,7 @@ export function OTCard({ workOrder, onClick, disableDrag = false, compact = fals
   return (
     <Card
       ref={setNodeRef}
-      {...(!disableDrag && listeners)}
+      {...listeners}
       {...(!disableDrag && attributes)}
       data-testid={`ot-card-${workOrder.id}`}
       onClick={handleClick}
@@ -247,9 +250,11 @@ export function OTCard({ workOrder, onClick, disableDrag = false, compact = fals
         </div>
 
         {/* División tag */}
-        <div>
-          <DivisionTag division={workOrder.equipo.linea.planta.division} />
-        </div>
+        {workOrder.equipo?.linea?.planta?.division && (
+          <div>
+            <DivisionTag division={workOrder.equipo.linea.planta.division} />
+          </div>
+        )}
 
         {/* Técnicos asignados */}
         <div className="flex items-center gap-2 text-xs text-gray-600">

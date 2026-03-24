@@ -18,8 +18,9 @@ import { Badge } from '@/components/ui/badge'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { DivisionTag } from '@/components/ui/division-tag'
 import { updateWorkOrderStatus } from '@/app/actions/work-orders'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
+import { VALID_TRANSITIONS, ACTION_BUTTONS } from '@/lib/constants/work-orders'
 
 interface OTDetailsModalProps {
   workOrder: WorkOrder & {
@@ -53,81 +54,40 @@ interface OTDetailsModalProps {
   onOpenChange: (open: boolean) => void
 }
 
-/**
- * Mapeo de transiciones de estado válidas
- * Define qué estados son alcanzables desde el estado actual
- * TODO: Implementar validación de transiciones antes de llamar Server Action
- */
-const _VALID_TRANSITIONS: Record<WorkOrderEstado, WorkOrderEstado[]> = {
-  PENDIENTE: ['ASIGNADA', 'EN_PROGRESO', 'DESCARTADA'],
-  ASIGNADA: ['EN_PROGRESO', 'PENDIENTE_REPUESTO', 'DESCARTADA'],
-  EN_PROGRESO: ['COMPLETADA', 'PENDIENTE_PARADA', 'PENDIENTE_REPUESTO', 'DESCARTADA'],
-  PENDIENTE_PARADA: ['EN_PROGRESO', 'COMPLETADA', 'DESCARTADA'],
-  PENDIENTE_REPUESTO: ['EN_PROGRESO', 'DESCARTADA'],
-  REPARACION_EXTERNA: ['COMPLETADA', 'DESCARTADA'],
-  COMPLETADA: [], // Estado terminal
-  DESCARTADA: [], // Estado terminal
-}
-
-/**
- * Mapeo de estados a etiquetas de botón
- */
-const ACTION_BUTTONS: Record<WorkOrderEstado, Array<{ label: string; estado: WorkOrderEstado; variant: 'default' | 'destructive' }>> = {
-  PENDIENTE: [
-    { label: 'Asignar', estado: 'ASIGNADA', variant: 'default' },
-    { label: 'Iniciar', estado: 'EN_PROGRESO', variant: 'default' },
-  ],
-  ASIGNADA: [
-    { label: 'Iniciar', estado: 'EN_PROGRESO', variant: 'default' },
-  ],
-  EN_PROGRESO: [
-    { label: 'Completar', estado: 'COMPLETADA', variant: 'default' },
-    { label: 'Pausar', estado: 'PENDIENTE_PARADA', variant: 'default' },
-  ],
-  PENDIENTE_PARADA: [
-    { label: 'Reanudar', estado: 'EN_PROGRESO', variant: 'default' },
-    { label: 'Completar', estado: 'COMPLETADA', variant: 'default' },
-  ],
-  PENDIENTE_REPUESTO: [
-    { label: 'Reanudar', estado: 'EN_PROGRESO', variant: 'default' },
-  ],
-  REPARACION_EXTERNA: [
-    { label: 'Completar', estado: 'COMPLETADA', variant: 'default' },
-  ],
-  COMPLETADA: [],
-  DESCARTADA: [
-    { label: 'Reactivar', estado: 'PENDIENTE', variant: 'default' },
-  ],
-}
-
 export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModalProps) {
   const [isUpdating, setIsUpdating] = useState(false)
-  const { toast } = useToast()
 
   /**
    * Maneja el cambio de estado de la OT
+   * Valida la transición antes de llamar al Server Action
    */
   async function handleStatusChange(newEstado: WorkOrderEstado) {
     setIsUpdating(true)
 
+    // Validar transición de estado
+    const allowedTransitions = VALID_TRANSITIONS[workOrder.estado] || []
+    if (allowedTransitions.length > 0 && !allowedTransitions.includes(newEstado)) {
+      toast.error(
+        `Transición inválida: ${workOrder.estado} → ${newEstado}. ` +
+        `Transiciones permitidas: ${allowedTransitions.join(', ')}`
+      )
+      setIsUpdating(false)
+      return
+    }
+
     try {
       await updateWorkOrderStatus(workOrder.id, newEstado)
 
-      toast({
-        title: 'Estado actualizado',
-        description: `OT ${workOrder.numero} movida a ${newEstado.replace(/_/g, ' ')}`,
-      })
+      toast.success(`OT ${workOrder.numero} movida a ${newEstado.replace(/_/g, ' ')}`)
 
       // Cerrar modal después de actualizar
       onOpenChange(false)
     } catch (error) {
       console.error('Error updating work order status:', error)
 
-      toast({
-        variant: 'destructive',
-        title: 'Error al actualizar estado',
-        description: error instanceof Error ? error.message : 'Error desconocido',
-      })
+      toast.error(
+        error instanceof Error ? error.message : 'Error desconocido al actualizar estado'
+      )
     } finally {
       setIsUpdating(false)
     }
@@ -140,7 +100,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" data-testid="ot-details-modal">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>OT {workOrder.numero}</span>
@@ -190,10 +150,10 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
           </div>
 
           {/* División */}
-          {workOrder.equipo?.linea?.planta?.name && (
+          {workOrder.equipo?.linea?.planta?.division && (
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">División</p>
-              <DivisionTag division={workOrder.equipo.linea.planta.name as 'HiRock' | 'Ultra'} />
+              <DivisionTag division={workOrder.equipo.linea.planta.division} />
             </div>
           )}
 

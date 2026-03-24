@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { WorkOrderEstado } from '@prisma/client'
 import { ValidationError, AuthorizationError, AuthenticationError } from '@/lib/utils/errors'
 import { broadcastWorkOrderUpdated } from '@/lib/sse/broadcaster'
+import { VALID_TRANSITIONS } from '@/lib/constants/work-orders'
 
 /**
  * Actualiza el estado de una Orden de Trabajo
@@ -63,19 +64,8 @@ export async function updateWorkOrderStatus(
         throw new ValidationError('OT no existe')
       }
 
-      // Validar transición de estados (opcional - según reglas de negocio)
-      const validTransitions: Record<WorkOrderEstado, WorkOrderEstado[]> = {
-        PENDIENTE: ['ASIGNADA', 'DESCARTADA'],
-        ASIGNADA: ['EN_PROGRESO', 'PENDIENTE', 'DESCARTADA'],
-        EN_PROGRESO: ['COMPLETADA', 'PENDIENTE_REPUESTO', 'PENDIENTE_PARADA', 'REPARACION_EXTERNA', 'DESCARTADA'],
-        PENDIENTE_REPUESTO: ['EN_PROGRESO', 'DESCARTADA'],
-        PENDIENTE_PARADA: ['EN_PROGRESO', 'DESCARTADA'],
-        REPARACION_EXTERNA: ['COMPLETADA', 'EN_PROGRESO', 'DESCARTADA'],
-        COMPLETADA: [], // Estado terminal
-        DESCARTADA: [] // Estado terminal
-      }
-
-      const allowedTransitions = validTransitions[workOrder.estado] || []
+      // Validar transición de estados
+      const allowedTransitions = VALID_TRANSITIONS[workOrder.estado] || []
       if (allowedTransitions.length > 0 && !allowedTransitions.includes(newEstado)) {
         throw new ValidationError(
           `Transición inválida: ${workOrder.estado} → ${newEstado}. ` +
@@ -139,6 +129,8 @@ export async function updateWorkOrderStatus(
       error: error instanceof Error ? error.message : 'Unknown error'
     })
 
-    throw new ValidationError('Error al actualizar estado de OT')
+    // Preservar contexto original del error
+    const originalMessage = error instanceof Error ? error.message : 'Error desconocido'
+    throw new ValidationError(`Error al actualizar estado de OT: ${originalMessage}`)
   }
 }
