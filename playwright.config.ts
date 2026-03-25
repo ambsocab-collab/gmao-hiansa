@@ -30,7 +30,8 @@ export default defineConfig({
   },
 
   // Retry on CI and locally (for flaky tests in parallel mode)
-  retries: 2,
+  // DISABLED until tests are stable in GREEN phase
+  retries: 0,
 
   // Parallel workers - Fixed to 4 workers
   workers: 4,

@@ -58,7 +58,14 @@ const ALL_NAVIGATION_ITEMS: NavigationItem[] = [
     requiredCapability: 'can_view_all_ots', // Story 2.3: Triage y Conversión a OTs
     testId: 'nav-triage',
   },
-  // Epic 3: Órdenes de Trabajo (Kanban)
+  // Epic 3: Órdenes de Trabajo (Kanban + Mis OTs)
+  {
+    label: 'Mis OTs',
+    href: '/mis-ots',
+    icon: 'CheckSquare',
+    requiredCapability: 'can_view_own_ots', // Story 3.2: Gestión de OTs Asignadas (técnicos)
+    testId: 'nav-my-ots',
+  },
   {
     label: 'Órdenes de Trabajo',
     href: '/work-orders',

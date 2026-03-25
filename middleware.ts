@@ -72,6 +72,7 @@ export const ROUTE_CAPABILITIES: Record<string, string[]> = {
   '/dashboard': [], // No capabilities required - all authenticated users can access
   '/work-orders': ['can_view_all_ots'],
   '/ots': ['can_view_all_ots'], // Story 3.1: Kanban de 8 columnas (supervisores)
+  '/mis-ots': ['can_view_own_ots'], // Story 3.2: Gestión de OTs asignadas (técnicos)
   '/assets': ['can_manage_assets'],
   '/stock': ['can_manage_stock'],
   '/providers': ['can_manage_providers'],
@@ -246,6 +247,8 @@ export const config = {
     '/work-orders/:path*',
     '/ots',
     '/ots/:path*', // Story 3.1: OTs routes (kanban, listado, etc.)
+    '/mis-ots',
+    '/mis-ots/:path*', // Story 3.2: Mis OTs routes (técnicos)
     '/assets',
     '/assets/:path*',
     '/stock',

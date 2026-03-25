@@ -35,6 +35,7 @@ import {
   FileText,
   AlertCircle,
   ClipboardList,
+  CheckSquare,
 } from 'lucide-react'
 
 interface NavigationProps {
@@ -65,6 +66,7 @@ const iconMap = {
   FileText,
   AlertCircle,
   ClipboardList,
+  CheckSquare,
 }
 
 /**

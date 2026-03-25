@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import AuthHeader from '@/components/layout/auth-header'
+import MobileBottomNav from '@/components/layout/mobile-bottom-nav'
 import Providers from '@/components/providers'
 
 // Configuración de fuente Inter con escala completa (12px a 36px)
@@ -38,7 +39,7 @@ export default function RootLayout({
             {!isLandingPage && <AuthHeader />}
 
             {/* Main content */}
-            <main className={isLandingPage ? '' : 'flex-1'}>
+            <main className={isLandingPage ? '' : 'flex-1 pb-16 md:pb-0'}>
               {children}
             </main>
 
@@ -54,6 +55,9 @@ export default function RootLayout({
 
           {/* Toast notification container */}
           <Toaster />
+
+          {/* Mobile bottom navigation - Solo en páginas autenticadas y mobile */}
+          {!isLandingPage && <MobileBottomNav />}
         </Providers>
       </body>
     </html>
