@@ -32,6 +32,7 @@ model User {
   userTags             UserTag[] // Story 1.3: Classification tags (visual organization only)
   workOrderAssignments WorkOrderAssignment[]
   failureReports       FailureReport[]       @relation("FailureReports")
+  workOrderComments    WorkOrderComment[]    @relation("WorkOrderComments") // AC7
   activityLogs         ActivityLog[] // Story 1.1: User activity tracking
   auditLogs            AuditLog[] // Story 1.1: Audit trail for critical actions
 
@@ -237,7 +238,8 @@ model Repuesto {
   created_at       DateTime @default(now())
 
   // Relations
-  componente Componente @relation(fields: [componente_id], references: [id], onDelete: Cascade)
+  componente  Componente      @relation(fields: [componente_id], references: [id], onDelete: Cascade)
+  usedIn      UsedRepuesto[]  @relation("RepuestoUsage") // AC4
 
   @@index([componente_id])
   @@index([code])
@@ -281,6 +283,7 @@ model WorkOrder {
   created_at          DateTime          @default(now())
   updated_at          DateTime          @updatedAt
   completed_at        DateTime?
+  verificacion_at     DateTime?         @map("verificacion_at") // AC6: Verificación por operario
   parent_work_order_id String?          @unique @map("parent_work_order_id")
 
   // Relations
@@ -289,6 +292,9 @@ model WorkOrder {
   failure_report FailureReport?        @relation(fields: [failure_report_id], references: [id])
   parent_work_order   WorkOrder?        @relation("WorkOrderHierarchy", fields: [parent_work_order_id], references: [id])
   child_work_orders   WorkOrder[]       @relation("WorkOrderHierarchy")
+  comments            WorkOrderComment[]    @relation("WorkOrderComments") // AC7
+  photos              WorkOrderPhoto[]      @relation("WorkOrderPhotos") // AC8
+  usedRepuestos       UsedRepuesto[]        @relation("UsedRepuestos") // AC4
 
   failure_report_id String? @unique
 
@@ -356,6 +362,65 @@ model FailureReport {
   @@index([reportadoPor]) // Para reportes de un usuario
   @@index([createdAt]) // Para ordenamiento temporal
   @@map("failureReports")
+}
+
+// ============================================
+// MODELOS DE STORY 3.2: GESTIÓN DE OTS ASIGNADAS
+// ============================================
+
+// AC7: Comentarios en OTs
+model WorkOrderComment {
+  id            String   @id @default(cuid())
+  work_order_id String
+  user_id       String
+  texto         String   @db.Text
+  created_at    DateTime @default(now())
+
+  // Relations
+  work_order WorkOrder @relation("WorkOrderComments", fields: [work_order_id], references: [id], onDelete: Cascade)
+  user       User      @relation("WorkOrderComments", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([work_order_id])
+  @@index([created_at])
+  @@map("work_order_comments")
+}
+
+// AC8: Fotos de OTs (antes/después)
+enum PhotoTipo {
+  ANTES
+  DESPUES
+}
+
+model WorkOrderPhoto {
+  id            String     @id @default(cuid())
+  work_order_id String
+  tipo          PhotoTipo
+  url           String     // Vercel Blob URL
+  created_at    DateTime   @default(now())
+
+  // Relations
+  work_order WorkOrder @relation("WorkOrderPhotos", fields: [work_order_id], references: [id], onDelete: Cascade)
+
+  @@index([work_order_id])
+  @@index([tipo])
+  @@map("work_order_photos")
+}
+
+// AC4: Repuestos usados en OTs
+model UsedRepuesto {
+  id            String   @id @default(cuid())
+  work_order_id String
+  repuesto_id   String
+  cantidad      Int      // Cantidad usada
+  created_at    DateTime @default(now())
+
+  // Relations
+  work_order WorkOrder @relation("UsedRepuestos", fields: [work_order_id], references: [id], onDelete: Cascade)
+  repuesto   Repuesto @relation("RepuestoUsage", fields: [repuesto_id], references: [id], onDelete: Cascade)
+
+  @@index([work_order_id])
+  @@index([repuesto_id])
+  @@map("used_repuestos")
 }
 
 // Test-only model for capturing SSE events in E2E tests

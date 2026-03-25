@@ -142,6 +142,36 @@ export function useSSEConnection({
           }
         })
 
+        // Work order comment added event (Story 3.2)
+        eventSource.addEventListener('work-order-comment-added', (event) => {
+          try {
+            const data = JSON.parse(event.data)
+            onMessage?.({ type: 'work-order-comment-added', data })
+          } catch (error) {
+            console.error('Error parsing work-order-comment-added:', error)
+          }
+        })
+
+        // Work order photo added event (Story 3.2)
+        eventSource.addEventListener('work-order-photo-added', (event) => {
+          try {
+            const data = JSON.parse(event.data)
+            onMessage?.({ type: 'work-order-photo-added', data })
+          } catch (error) {
+            console.error('Error parsing work-order-photo-added:', error)
+          }
+        })
+
+        // Work order repuesto added event (Story 3.2)
+        eventSource.addEventListener('work-order-repuesto-added', (event) => {
+          try {
+            const data = JSON.parse(event.data)
+            onMessage?.({ type: 'work-order-repuesto-added', data })
+          } catch (error) {
+            console.error('Error parsing work-order-repuesto-added:', error)
+          }
+        })
+
       } catch (error) {
         console.error('Error connecting to SSE:', error)
         setError(error as Event)
