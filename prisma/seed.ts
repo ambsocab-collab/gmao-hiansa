@@ -1051,6 +1051,36 @@ async function main() {
     })
   }
 
+  // ============================================
+  // ADDITIONAL EN_PROGRESO OTs FOR E2E TESTS (120-149)
+  // Created to ensure enough test data when tests run in parallel
+  // Each test needs its own EN_PROGRESO OT to avoid conflicts
+  // ============================================
+  const additionalEnProgresoOTs = []
+  for (let i = 120; i <= 149; i++) {
+    const wo = await prisma.workOrder.create({
+      data: {
+        numero: `OT-2025-${i}`,
+        tipo: i % 2 === 0 ? 'CORRECTIVO' : 'PREVENTIVO',
+        estado: 'EN_PROGRESO',
+        descripcion: `OT de prueba para E2E testing - #${i}`,
+        equipo_id: allEquipos[i % 10].id,
+      },
+    })
+    additionalEnProgresoOTs.push(wo)
+  }
+
+  // Assign all additional EN_PROGRESO OTs to technician
+  for (const wo of additionalEnProgresoOTs) {
+    await prisma.workOrderAssignment.create({
+      data: {
+        work_order_id: wo.id,
+        userId: tecnico.id,
+        role: 'TECNICO',
+      },
+    })
+  }
+
   // Crear FailureReports de ejemplo con estado NUEVO (para Story 2.3 - Triage)
   const failureReport1 = await prisma.failureReport.create({
     data: {
@@ -1108,10 +1138,10 @@ async function main() {
   })
 
   console.log('✅ Created sample operations:')
-  console.log('   - 57 WorkOrders (distribuidos en 8 estados para Kanban testing)')
+  console.log('   - 87 WorkOrders (distribuidos en 8 estados para Kanban testing)')
   console.log('     • PENDIENTE: 5 OTs')
   console.log('     • ASIGNADA: 15 OTs')
-  console.log('     • EN_PROGRESO: 15 OTs')
+  console.log('     • EN_PROGRESO: 45 OTs (15 originales + 30 adicionales para E2E parallel testing)')
   console.log('     • PENDIENTE_REPUESTO: 4 OTs')
   console.log('     • PENDIENTE_PARADA: 3 OTs')
   console.log('     • REPARACION_EXTERNA: 3 OTs')
@@ -1133,7 +1163,7 @@ async function main() {
   console.log('   - Equipos: 10')
   console.log('   - Componentes: 8')
   console.log('   - Repuestos: 5')
-  console.log('   - WorkOrders: 57')
+  console.log('   - WorkOrders: 87')
   console.log('   - FailureReports: 4')
   console.log('\n🔐 Default credentials:')
   console.log('   Admin: admin@hiansa.com / admin123')

@@ -90,7 +90,7 @@ interface Repuesto {
   id: string
   name: string
   stock: number
-  ubicacion_fisica: string
+  ubicacion_fisica: string | null
 }
 
 interface OTDetailsModalProps {
@@ -139,58 +139,67 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
     channel: 'work-orders',
     onMessage: (message) => {
       // Handle repuesto added event
-      if (message.type === 'work-order-repuesto-added' && message.data.workOrderId === ot.id) {
+      if (message.type === 'work-order-repuesto-added') {
         const data = message.data as {
+          workOrderId?: string
           usedRepuestoId: string
           repuestoNombre: string
           cantidad: number
         }
-        setLocalUsedRepuestos((prev) => [
-          ...prev,
-          {
-            id: data.usedRepuestoId,
-            cantidad: data.cantidad,
-            repuesto: { name: data.repuestoNombre }
-          }
-        ])
+        if (data.workOrderId === ot.id) {
+          setLocalUsedRepuestos((prev) => [
+            ...prev,
+            {
+              id: data.usedRepuestoId,
+              cantidad: data.cantidad,
+              repuesto: { name: data.repuestoNombre }
+            }
+          ])
+        }
       }
 
       // Handle comment added event
-      if (message.type === 'work-order-comment-added' && message.data.workOrderId === ot.id) {
+      if (message.type === 'work-order-comment-added') {
         const data = message.data as {
+          workOrderId?: string
           commentId: string
           texto: string
           createdAt: string
           userName: string
         }
-        setLocalComments((prev) => [
-          ...prev,
-          {
-            id: data.commentId,
-            texto: data.texto,
-            created_at: new Date(data.createdAt),
-            user: { name: data.userName }
-          }
-        ])
+        if (data.workOrderId === ot.id) {
+          setLocalComments((prev) => [
+            ...prev,
+            {
+              id: data.commentId,
+              texto: data.texto,
+              created_at: new Date(data.createdAt),
+              user: { name: data.userName }
+            }
+          ])
+        }
       }
 
       // Handle photo added event
-      if (message.type === 'work-order-photo-added' && message.data.workOrderId === ot.id) {
+      if (message.type === 'work-order-photo-added') {
         const data = message.data as {
+          workOrderId?: string
           photoId: string
           tipo: 'ANTES' | 'DESPUES'
           url: string
           createdAt: string
         }
-        setLocalPhotos((prev) => [
-          ...prev,
-          {
-            id: data.photoId,
-            tipo: data.tipo,
-            url: data.url,
-            created_at: new Date(data.createdAt)
-          }
-        ])
+        if (data.workOrderId === ot.id) {
+          setLocalPhotos((prev) => [
+            ...prev,
+            {
+              id: data.photoId,
+              tipo: data.tipo,
+              url: data.url,
+              created_at: new Date(data.createdAt)
+            }
+          ])
+        }
       }
     }
   })
@@ -412,7 +421,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
                       <option value="">-- Seleccionar repuesto --</option>
                       {allRepuestos.map((repuesto) => (
                         <option key={repuesto.id} value={repuesto.id}>
-                          {repuesto.name} (Stock: {repuesto.stock}) - {repuesto.ubicacion_fisica}
+                          {repuesto.name} (Stock: {repuesto.stock}) - {repuesto.ubicacion_fisica || 'Sin ubicación'}
                         </option>
                       ))}
                     </select>

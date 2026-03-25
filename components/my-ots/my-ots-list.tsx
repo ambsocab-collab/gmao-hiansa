@@ -63,7 +63,7 @@ interface Repuesto {
   id: string
   name: string
   stock: number
-  ubicacion_fisica: string
+  ubicacion_fisica: string | null
 }
 
 interface MyWorkOrdersListProps {

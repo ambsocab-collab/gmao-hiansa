@@ -1,12 +1,76 @@
-<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="36.926991">
-<testsuite name="story-3.1\P0-ac3-drag-drop.spec.ts" timestamp="2026-03-23T21:42:40.724Z" hostname="chromium" tests="4" failures="0" skipped="0" time="32.859" errors="0">
-<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-009: Drag OT de &quot;EN_PROGRESO&quot; a &quot;COMPLETADA&quot;" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="8.773">
+<testsuites id="" name="" tests="6" failures="1" skipped="1" errors="0" time="66.20775900000001">
+<testsuite name="story-3.2\P0-ac1-mis-ots-view.spec.ts" timestamp="2026-03-25T19:37:21.468Z" hostname="chromium" tests="6" failures="1" skipped="1" time="86.059" errors="0">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-001] should show Mis OTs view for assigned technician" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="11.942">
 </testcase>
-<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-010: SSE enviado tras drag &amp; drop" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="11.147">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-002] should show OT card with required information" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="9.538">
 </testcase>
-<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-011: Auditoría logged tras drag &amp; drop" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="5.037">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-003] should NOT show OTs assigned to other technicians" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="14.067">
 </testcase>
-<testcase name="Story 3.1 - AC3: Drag &amp; Drop (P0) › P0-012: Drag &amp; drop en todas las columnas" classname="story-3.1\P0-ac3-drag-drop.spec.ts" time="7.902">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-004] should show bottom nav tab &quot;Mis OTs&quot; on mobile" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="13.528">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="27.45">
+<failure message="P0-ac1-mis-ots-view.spec.ts:120:7 [P1-AC1-005] should filter OTs by technician assignment" type="FAILURE">
+<![CDATA[  [chromium] › story-3.2\P0-ac1-mis-ots-view.spec.ts:120:7 › Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('mis-ots-lista')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for getByTestId('mis-ots-lista')
+
+
+      129 |     // Verify list is filtered by current user's assignments
+      130 |     // Current user is tecnico@hiansa.com (from storage state)
+    > 131 |     await expect(misOtsList).toBeVisible();
+          |                              ^
+      132 |
+      133 |     // All visible OTs should have current user in assignments
+      134 |     // This requires database validation - for now, just verify list loads
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.2\P0-ac1-mis-ots-view.spec.ts:131:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P2-AC1-006] should show empty state when no OTs assigned" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="9.534">
+<properties>
+<property name="skip" value="Requires user with no OTs assigned - test data setup needed">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>
