@@ -310,6 +310,11 @@ export async function addUsedRepuesto(
     })
 
     // Emit evento SSE para work-orders (para actualizar lista de repuestos usados)
+    console.log('[SSE Broadcast] Emitting work-order-repuesto-added:', {
+      workOrderId: validated.workOrderId,
+      usedRepuestoId: result.usedRepuesto.id,
+      repuestoNombre: result.repuestoNombre
+    })
     BroadcastManager.broadcast('work-orders', {
       name: 'work-order-repuesto-added',
       data: {
