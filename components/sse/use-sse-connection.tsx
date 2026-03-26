@@ -65,6 +65,9 @@ export function useSSEConnection({
   const eventSourceRef = useRef<EventSource | null>(null)
   const retryCountRef = useRef(0)
 
+  // Log when hook is used
+  console.log('[SSE Hook] Connecting to channel:', channel)
+
   useEffect(() => {
     let eventSource: EventSource | null = null
     let reconnectTimer: NodeJS.Timeout | null = null
@@ -166,6 +169,7 @@ export function useSSEConnection({
         eventSource.addEventListener('work-order-repuesto-added', (event) => {
           try {
             const data = JSON.parse(event.data)
+            console.log('[SSE Hook] Received work-order-repuesto-added:', data)
             onMessage?.({ type: 'work-order-repuesto-added', data })
           } catch (error) {
             console.error('Error parsing work-order-repuesto-added:', error)
