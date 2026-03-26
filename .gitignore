@@ -59,3 +59,10 @@ reset-*.js
 
 .vercel
 .env*.local
+
+# E2E test artifacts
+junit-results.xml
+playwright/.auth/
+tests/e2e/generate-auth.ts
+tests/e2e/temp-auth.ts
+tests/e2e/story-3.2/tests/
