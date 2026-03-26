@@ -112,7 +112,7 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
       // Optimistic update: work-order-comment-added
       if (message.type === 'work-order-comment-added') {
         const data = message.data as {
-          workOrderId: string
+          workOrderId?: string
           commentId: string
           texto: string
           createdAt: string
@@ -120,8 +120,8 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
         }
         setWorkOrders((prevOrders) =>
           prevOrders.map((ot) => {
-            if (ot.id === data.workOrderId) {
-              return {
+            if (data.workOrderId === ot.id) {
+              const updatedOt = {
                 ...ot,
                 comments: [
                   ...ot.comments,
@@ -133,6 +133,10 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
                   }
                 ]
               }
+              if (selectedOT?.id === ot.id) {
+                setSelectedOT(updatedOt)
+              }
+              return updatedOt
             }
             return ot
           })
@@ -142,7 +146,7 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
       // Optimistic update: work-order-photo-added
       if (message.type === 'work-order-photo-added') {
         const data = message.data as {
-          workOrderId: string
+          workOrderId?: string
           photoId: string
           tipo: 'ANTES' | 'DESPUES'
           url: string
@@ -150,8 +154,8 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
         }
         setWorkOrders((prevOrders) =>
           prevOrders.map((ot) => {
-            if (ot.id === data.workOrderId) {
-              return {
+            if (data.workOrderId === ot.id) {
+              const updatedOt = {
                 ...ot,
                 photos: [
                   ...ot.photos,
@@ -163,6 +167,10 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
                   }
                 ]
               }
+              if (selectedOT?.id === ot.id) {
+                setSelectedOT(updatedOt)
+              }
+              return updatedOt
             }
             return ot
           })
@@ -172,15 +180,15 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
       // Optimistic update: work-order-repuesto-added
       if (message.type === 'work-order-repuesto-added') {
         const data = message.data as {
-          workOrderId: string
+          workOrderId?: string
           usedRepuestoId: string
           repuestoNombre: string
           cantidad: number
         }
         setWorkOrders((prevOrders) =>
           prevOrders.map((ot) => {
-            if (ot.id === data.workOrderId) {
-              return {
+            if (data.workOrderId === ot.id) {
+              const updatedOt = {
                 ...ot,
                 usedRepuestos: [
                   ...ot.usedRepuestos,
@@ -191,6 +199,11 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
                   }
                 ]
               }
+              // Also update selectedOT if it's the same OT
+              if (selectedOT?.id === ot.id) {
+                setSelectedOT(updatedOt)
+              }
+              return updatedOt
             }
             return ot
           })

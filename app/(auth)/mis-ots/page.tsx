@@ -11,28 +11,13 @@
  * - Layout responsive: Sidebar (desktop), bottom nav (mobile)
  */
 
-import { auth } from '@/lib/auth-adapter'
-import { redirect } from 'next/navigation'
 import { getMyWorkOrders } from '@/app/actions/my-work-orders'
 import { MyWorkOrdersList } from '@/components/my-ots/my-ots-list'
 import { prisma } from '@/lib/db'
 
 export default async function MyWorkOrdersPage() {
-  const session = await auth()
-
-  // Verificar autenticación
-  if (!session?.user) {
-    redirect('/login')
-  }
-
-  // Verificar capability can_view_own_ots
-  const hasCapability = session.user.capabilities.includes('can_view_own_ots')
-  if (!hasCapability) {
-    // Si no tiene permiso, redirect a home o mostrar error
-    redirect('/')
-  }
-
-  // Fetch OTs del usuario
+  // getMyWorkOrders() handles authentication and capability checks internally
+  // The layout also already redirects unauthenticated users
   const workOrders = await getMyWorkOrders()
 
   // Fetch all repuestos for the dropdown

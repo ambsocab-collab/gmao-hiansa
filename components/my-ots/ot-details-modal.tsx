@@ -15,7 +15,7 @@
  * - Sección de fotos antes/después
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import {
@@ -118,12 +118,41 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
   const [localComments, setLocalComments] = useState(ot.comments)
   const [localPhotos, setLocalPhotos] = useState(ot.photos)
 
-  // Update local state when ot data changes (e.g., modal reopened)
+  // Use ref to always have current ot.id for SSE handlers (avoids stale closure issues)
+  const otIdRef = useRef(ot.id)
   useEffect(() => {
-    setLocalUsedRepuestos(ot.usedRepuestos)
-    setLocalComments(ot.comments)
-    setLocalPhotos(ot.photos)
-  }, [ot.id, ot.usedRepuestos, ot.comments, ot.photos])
+    otIdRef.current = ot.id
+    console.log('[Modal] otIdRef updated to:', ot.id)
+  }, [ot.id])
+
+  // Update local state when ot data changes (modal reopened OR selectedOT updated via SSE)
+  // This ensures the modal reflects changes made by the user via SSE events in the parent
+  useEffect(() => {
+    console.log('[Modal] Syncing local state with ot prop updates', {
+      otId: ot.id,
+      isOpen,
+      usedRepuestos: ot.usedRepuestos?.length,
+      comments: ot.comments?.length,
+      photos: ot.photos?.length
+    })
+
+    // Only sync if the lengths are different (parent got SSE update before we did)
+    // This prevents overwriting local state if we're ahead of parent
+    if (isOpen) {
+      if (ot.usedRepuestos?.length !== localUsedRepuestos.length) {
+        console.log('[Modal] Syncing usedRepuestos from parent')
+        setLocalUsedRepuestos(ot.usedRepuestos)
+      }
+      if (ot.comments?.length !== localComments.length) {
+        console.log('[Modal] Syncing comments from parent')
+        setLocalComments(ot.comments)
+      }
+      if (ot.photos?.length !== localPhotos.length) {
+        console.log('[Modal] Syncing photos from parent')
+        setLocalPhotos(ot.photos)
+      }
+    }
+  }, [isOpen, ot.usedRepuestos, ot.comments, ot.photos, ot.id])
 
   // Estados para dialogs de confirmación
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false)
@@ -134,10 +163,20 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
    *
    * NOTA: No usamos router.refresh() aquí para evitar loop infinito.
    * Las actualizaciones se manejan cuando el usuario cierra el modal o después de acciones.
+   *
+   * Usa ref para evitar stale closures - siempre compara con el ot.id actual.
    */
   useSSEConnection({
     channel: 'work-orders',
     onMessage: (message) => {
+      const currentOtId = otIdRef.current
+
+      console.log('[SSE Modal] Received message:', {
+        type: message.type,
+        currentOtId,
+        isOpen
+      })
+
       // Handle repuesto added event
       if (message.type === 'work-order-repuesto-added') {
         const data = message.data as {
@@ -146,15 +185,28 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           repuestoNombre: string
           cantidad: number
         }
-        if (data.workOrderId === ot.id) {
-          setLocalUsedRepuestos((prev) => [
-            ...prev,
-            {
-              id: data.usedRepuestoId,
-              cantidad: data.cantidad,
-              repuesto: { name: data.repuestoNombre }
-            }
-          ])
+        console.log('[SSE Modal] Repuesto event:', {
+          currentOtId,
+          eventWorkOrderId: data.workOrderId,
+          match: data.workOrderId === currentOtId,
+          data
+        })
+        if (data.workOrderId === currentOtId) {
+          console.log('[SSE Modal] ✓ Adding repuesto to local state:', data.repuestoNombre)
+          setLocalUsedRepuestos((prev) => {
+            const updated = [
+              ...prev,
+              {
+                id: data.usedRepuestoId,
+                cantidad: data.cantidad,
+                repuesto: { name: data.repuestoNombre }
+              }
+            ]
+            console.log('[SSE Modal] New localUsedRepuestos count:', updated.length)
+            return updated
+          })
+        } else {
+          console.log('[SSE Modal] ✗ WorkOrderId mismatch - ignoring event')
         }
       }
 
@@ -167,16 +219,26 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           createdAt: string
           userName: string
         }
-        if (data.workOrderId === ot.id) {
-          setLocalComments((prev) => [
-            ...prev,
-            {
-              id: data.commentId,
-              texto: data.texto,
-              created_at: new Date(data.createdAt),
-              user: { name: data.userName }
-            }
-          ])
+        console.log('[SSE Modal] Comment event:', {
+          currentOtId,
+          eventWorkOrderId: data.workOrderId,
+          match: data.workOrderId === currentOtId
+        })
+        if (data.workOrderId === currentOtId) {
+          console.log('[SSE Modal] ✓ Adding comment to local state')
+          setLocalComments((prev) => {
+            const updated = [
+              ...prev,
+              {
+                id: data.commentId,
+                texto: data.texto,
+                created_at: new Date(data.createdAt),
+                user: { name: data.userName }
+              }
+            ]
+            console.log('[SSE Modal] New localComments count:', updated.length)
+            return updated
+          })
         }
       }
 
@@ -189,16 +251,29 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           url: string
           createdAt: string
         }
-        if (data.workOrderId === ot.id) {
-          setLocalPhotos((prev) => [
-            ...prev,
-            {
-              id: data.photoId,
-              tipo: data.tipo,
-              url: data.url,
-              created_at: new Date(data.createdAt)
-            }
-          ])
+        console.log('[SSE Modal] Photo event:', {
+          currentOtId,
+          eventWorkOrderId: data.workOrderId,
+          match: data.workOrderId === currentOtId,
+          tipo: data.tipo
+        })
+        if (data.workOrderId === currentOtId) {
+          console.log('[SSE Modal] ✓ Adding photo to local state:', data.tipo)
+          setLocalPhotos((prev) => {
+            const updated = [
+              ...prev,
+              {
+                id: data.photoId,
+                tipo: data.tipo,
+                url: data.url,
+                created_at: new Date(data.createdAt)
+              }
+            ]
+            console.log('[SSE Modal] New localPhotos count:', updated.length)
+            return updated
+          })
+        } else {
+          console.log('[SSE Modal] ✗ Photo WorkOrderId mismatch')
         }
       }
     }
