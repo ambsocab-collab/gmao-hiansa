@@ -386,40 +386,40 @@ async function main() {
         name: 'Motor Electrico 5HP (Repuesto)',
         code: 'REP-ME-5HP-01',
         componente_id: allComponentes[0].id,
-        stock: 3,
-        stock_minimo: 1,
+        stock: 50,
+        stock_minimo: 5,
         ubicacion_fisica: 'Almacen A - Estante 1',
       },
       {
         name: 'Bomba Hidraulica (Repuesto)',
         code: 'REP-BH-001-01',
         componente_id: allComponentes[1].id,
-        stock: 2,
-        stock_minimo: 1,
+        stock: 50,
+        stock_minimo: 5,
         ubicacion_fisica: 'Almacen A - Estante 2',
       },
       {
         name: 'Rodamiento SKF-6002 (Repuesto)',
         code: 'REP-RB-6002-01',
         componente_id: allComponentes[3].id,
-        stock: 10,
-        stock_minimo: 5,
+        stock: 100,
+        stock_minimo: 10,
         ubicacion_fisica: 'Almacen B - Estante 3',
       },
       {
         name: 'Correa de Transmision (Repuesto)',
         code: 'REP-CT-001-01',
         componente_id: allComponentes[4].id,
-        stock: 5,
-        stock_minimo: 2,
+        stock: 75,
+        stock_minimo: 10,
         ubicacion_fisica: 'Almacen B - Estante 4',
       },
       {
         name: 'Filtro de Aire (Repuesto)',
         code: 'REP-FA-001-01',
         componente_id: allComponentes[7].id,
-        stock: 8,
-        stock_minimo: 3,
+        stock: 60,
+        stock_minimo: 10,
         ubicacion_fisica: 'Almacen A - Estante 5',
       },
     ],
@@ -640,6 +640,157 @@ async function main() {
       estado: 'ASIGNADA',
       descripcion: 'Mantenimiento de Sistema de Refrigeración',
       equipo_id: allEquipos[9].id,
+    },
+  })
+
+  // Additional ASIGNADA OTs for E2E testing (15 more to prevent parallel test contention)
+  const workOrder150 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-150',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reparación de Sistema Hidráulico',
+      equipo_id: allEquipos[0].id,
+    },
+  })
+
+  const workOrder151 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-151',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Lubricación de Rodamientos',
+      equipo_id: allEquipos[1].id,
+    },
+  })
+
+  const workOrder152 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-152',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Cambio de Filtros de Aire',
+      equipo_id: allEquipos[2].id,
+    },
+  })
+
+  const workOrder153 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-153',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Inspección de Bandas Transportadoras',
+      equipo_id: allEquipos[3].id,
+    },
+  })
+
+  const workOrder154 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-154',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reemplazo de Sensores de Proximidad',
+      equipo_id: allEquipos[4].id,
+    },
+  })
+
+  const workOrder155 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-155',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Ajuste de Tensiones Eléctricas',
+      equipo_id: allEquipos[5].id,
+    },
+  })
+
+  const workOrder156 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-156',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reparación de Compresor de Aire',
+      equipo_id: allEquipos[6].id,
+    },
+  })
+
+  const workOrder157 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-157',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Calibración de Instrumentos de Medición',
+      equipo_id: allEquipos[7].id,
+    },
+  })
+
+  const workOrder158 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-158',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Mantenimiento de Tablero Eléctrico',
+      equipo_id: allEquipos[8].id,
+    },
+  })
+
+  const workOrder159 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-159',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Limpieza de Condensadores',
+      equipo_id: allEquipos[9].id,
+    },
+  })
+
+  const workOrder160 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-160',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reemplazo de Fusibles',
+      equipo_id: allEquipos[0].id,
+    },
+  })
+
+  const workOrder161 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-161',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Inspección de Motores Eléctricos',
+      equipo_id: allEquipos[1].id,
+    },
+  })
+
+  const workOrder162 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-162',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Reparación de Válvulas de Control',
+      equipo_id: allEquipos[2].id,
+    },
+  })
+
+  const workOrder163 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-163',
+      tipo: 'PREVENTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Alineación de Poleas',
+      equipo_id: allEquipos[3].id,
+    },
+  })
+
+  const workOrder164 = await prisma.workOrder.create({
+    data: {
+      numero: 'OT-2025-164',
+      tipo: 'CORRECTIVO',
+      estado: 'ASIGNADA',
+      descripcion: 'Mantenimiento de Sistema Neumático',
+      equipo_id: allEquipos[4].id,
     },
   })
 
@@ -1039,6 +1190,19 @@ async function main() {
     })
   }
 
+  // Assign additional ASIGNADA OTs (150-164) to technician for E2E testing
+  for (const wo of [workOrder150, workOrder151, workOrder152, workOrder153, workOrder154,
+                     workOrder155, workOrder156, workOrder157, workOrder158, workOrder159,
+                     workOrder160, workOrder161, workOrder162, workOrder163, workOrder164]) {
+    await prisma.workOrderAssignment.create({
+      data: {
+        work_order_id: wo.id,
+        userId: tecnico.id,
+        role: 'TECNICO',
+      },
+    })
+  }
+
   // Assign additional EN_PROGRESO OTs (110-119) to technician
   for (const wo of [workOrder110, workOrder111, workOrder112, workOrder113, workOrder114,
                      workOrder115, workOrder116, workOrder117, workOrder118, workOrder119]) {
@@ -1079,6 +1243,48 @@ async function main() {
         role: 'TECNICO',
       },
     })
+  }
+
+  // ============================================
+  // ASSIGN OTs TO ADMIN USER for E2E testing
+  // Assign admin to some ASIGNADA and EN_PROGRESO OTs
+  // This allows tests running as admin to see OTs in "Mis OTs"
+  // ============================================
+
+  // Assign admin to ASIGNADA OTs (100-104)
+  for (const wo of [workOrder100, workOrder101, workOrder102, workOrder103, workOrder104]) {
+    await prisma.workOrderAssignment.create({
+      data: {
+        work_order_id: wo.id,
+        userId: admin.id,
+        role: 'TECNICO',
+      },
+    })
+  }
+
+  // Assign admin to EN_PROGRESO OTs (110-114 and 120-124)
+  for (const wo of [workOrder110, workOrder111, workOrder112, workOrder113, workOrder114]) {
+    await prisma.workOrderAssignment.create({
+      data: {
+        work_order_id: wo.id,
+        userId: admin.id,
+        role: 'TECNICO',
+      },
+    })
+  }
+
+  // Assign admin to additional EN_PROGRESO OTs (120-124)
+  for (let i = 120; i <= 124; i++) {
+    const wo = additionalEnProgresoOTs.find(w => w.numero === `OT-2025-${i}`)
+    if (wo) {
+      await prisma.workOrderAssignment.create({
+        data: {
+          work_order_id: wo.id,
+          userId: admin.id,
+          role: 'TECNICO',
+        },
+      })
+    }
   }
 
   // Crear FailureReports de ejemplo con estado NUEVO (para Story 2.3 - Triage)
