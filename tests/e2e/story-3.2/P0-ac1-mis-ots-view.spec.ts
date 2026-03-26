@@ -19,7 +19,6 @@ import { test, expect } from '../../fixtures/test.fixtures';
  */
 
 test.describe('Story 3.2 - AC1: Vista Mis OTs Filtrada (P0)', () => {
-  // Use tecnico auth storage state
   test.use({ storageState: 'playwright/.auth/tecnico.json' });
 
   test.beforeEach(async ({ page }) => {
@@ -29,10 +28,6 @@ test.describe('Story 3.2 - AC1: Vista Mis OTs Filtrada (P0)', () => {
   });
 
   test('[P0-AC1-001] should show Mis OTs view for assigned technician', async ({ page }) => {
-    // THIS TEST WILL FAIL - /mis-ots returns 404
-    // Expected: Page loads with data-testid="mis-ots-lista"
-    // Actual: 404 Not Found
-
     await page.waitForLoadState('domcontentloaded');
 
     // Verify Mis OTs list is visible
