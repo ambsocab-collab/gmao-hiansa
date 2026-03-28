@@ -15,10 +15,17 @@ import { getMyWorkOrders } from '@/app/actions/my-work-orders'
 import { MyWorkOrdersList } from '@/components/my-ots/my-ots-list'
 import { prisma } from '@/lib/db'
 
-export default async function MyWorkOrdersPage() {
+export default async function MyWorkOrdersPage({
+  searchParams
+}: {
+  searchParams: { page?: string }
+}) {
+  // Parse page from URL query params (default: 1)
+  const page = searchParams.page ? parseInt(searchParams.page) : 1
+
   // getMyWorkOrders() handles authentication and capability checks internally
   // The layout also already redirects unauthenticated users
-  const workOrders = await getMyWorkOrders()
+  const { workOrders, pagination } = await getMyWorkOrders(page)
 
   // Fetch all repuestos for the dropdown
   const allRepuestos = await prisma.repuesto.findMany({
@@ -41,12 +48,16 @@ export default async function MyWorkOrdersPage() {
           Mis Órdenes de Trabajo
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          OTs asignadas para su gestión
+          OTs asignadas para su gestión ({pagination.total} total)
         </p>
       </div>
 
       {/* Lista de OTs */}
-      <MyWorkOrdersList initialWorkOrders={workOrders} allRepuestos={allRepuestos} />
+      <MyWorkOrdersList
+        initialWorkOrders={workOrders}
+        initialPagination={pagination}
+        allRepuestos={allRepuestos}
+      />
     </div>
   )
 }

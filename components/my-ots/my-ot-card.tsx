@@ -107,6 +107,16 @@ export function MyOTCard({ ot, onClick }: MyOTCardProps) {
             <StatusBadge estado={ot.estado} />
           </div>
 
+          {/* AC6: Badge "Verificada" */}
+          {ot.verificacion_at && (
+            <span
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+              data-testid="ot-verified-badge"
+            >
+              ✓ Verificada
+            </span>
+          )}
+
           {/* División Tag */}
           {division && <DivisionTag division={division} />}
         </div>

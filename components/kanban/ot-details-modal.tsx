@@ -21,6 +21,17 @@ import { updateWorkOrderStatus } from '@/app/actions/work-orders'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { VALID_TRANSITIONS, ACTION_BUTTONS } from '@/lib/constants/work-orders'
+import { verifyWorkOrder } from '@/app/actions/my-work-orders'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 interface OTDetailsModalProps {
   workOrder: WorkOrder & {
@@ -56,6 +67,8 @@ interface OTDetailsModalProps {
 
 export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModalProps) {
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(false)
 
   /**
    * Maneja el cambio de estado de la OT
@@ -94,9 +107,73 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
   }
 
   /**
+   * Verifica que la reparación funciona
+   */
+  async function handleVerifyFunciona() {
+    setIsVerifying(true)
+
+    try {
+      const result = await verifyWorkOrder(workOrder.id, true)
+
+      if (result.success) {
+        toast.success(result.message || `OT ${workOrder.numero} verificada - Reparación confirmada`)
+        setIsVerificationDialogOpen(false)
+        onOpenChange(false)
+        // Refresh page to show updated data
+        window.location.reload()
+      } else {
+        toast.error(result.error || 'Error al verificar OT')
+      }
+    } catch (error) {
+      console.error('Error verifying work order:', error)
+      toast.error('Error al verificar OT')
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  /**
+   * Crea OT de re-trabajo cuando la reparación no funciona
+   */
+  async function handleVerifyNoFunciona() {
+    setIsVerifying(true)
+
+    try {
+      const result = await verifyWorkOrder(
+        workOrder.id,
+        false,
+        'Reparación no funcionó - se requiere re-trabajo'
+      )
+
+      if (result.success) {
+        toast.success(
+          result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`
+        )
+        setIsVerificationDialogOpen(false)
+        onOpenChange(false)
+        // Refresh page to show new rework OT
+        window.location.reload()
+      } else {
+        toast.error(result.error || 'Error al crear OT de re-trabajo')
+      }
+    } catch (error) {
+      console.error('Error creating rework OT:', error)
+      toast.error('Error al crear OT de re-trabajo')
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  /**
    * Determina qué botones de acción mostrar según estado actual
    */
   const actionButtons = ACTION_BUTTONS[workOrder.estado] || []
+
+  /**
+   * AC6: Show verification button for completed OTs that haven't been verified yet
+   */
+  const showVerifyButton =
+    workOrder.estado === 'COMPLETADA' && !workOrder.verificacion_at
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -211,7 +288,80 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
               </div>
             </div>
           )}
+
+          {/* AC6: Botón de verificación para OTs completadas */}
+          {showVerifyButton && (
+            <div className="space-y-2 pt-4 border-t">
+              <p className="text-sm font-medium">Verificación</p>
+              <Button
+                onClick={() => setIsVerificationDialogOpen(true)}
+                className="w-full bg-purple-600 hover:bg-purple-700"
+                data-testid="verificar-reparacion-btn"
+              >
+                Verificar Reparación
+              </Button>
+            </div>
+          )}
+
+          {/* AC6: Badge de OT verificada */}
+          {workOrder.verificacion_at && (
+            <div className="space-y-2 pt-4 border-t">
+              <p className="text-sm font-medium">Estado de verificación</p>
+              <div
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                data-testid="ot-verified-badge"
+              >
+                ✓ Verificada el {new Date(workOrder.verificacion_at).toLocaleDateString('es-ES')}
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* AC6: Diálogo de verificación */}
+        <AlertDialog open={isVerificationDialogOpen} onOpenChange={setIsVerificationDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Verificar Reparación - OT {workOrder.numero}</AlertDialogTitle>
+              <AlertDialogDescription>
+                ¿La reparación funcionó correctamente? Si no funciona, se creará automáticamente una
+                OT de re-trabajo con prioridad ALTA.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isVerifying}>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleVerifyNoFunciona}
+                disabled={isVerifying}
+                className="bg-red-600 hover:bg-red-700"
+                data-testid="verificacion-no-funciona-option"
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Procesando...
+                  </>
+                ) : (
+                  'No Funciona'
+                )}
+              </AlertDialogAction>
+              <AlertDialogAction
+                onClick={handleVerifyFunciona}
+                disabled={isVerifying}
+                className="bg-green-600 hover:bg-green-700"
+                data-testid="verificacion-funciona-option"
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Procesando...
+                  </>
+                ) : (
+                  'Funciona'
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DialogContent>
     </Dialog>
   )

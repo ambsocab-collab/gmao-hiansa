@@ -146,33 +146,33 @@ export function useSSEConnection({
         })
 
         // Work order comment added event (Story 3.2)
-        eventSource.addEventListener('work-order-comment-added', (event) => {
+        eventSource.addEventListener('work_order_comment_added', (event) => {
           try {
             const data = JSON.parse(event.data)
-            onMessage?.({ type: 'work-order-comment-added', data })
+            onMessage?.({ type: 'work_order_comment_added', data })
           } catch (error) {
-            console.error('Error parsing work-order-comment-added:', error)
+            console.error('Error parsing work_order_comment_added:', error)
           }
         })
 
         // Work order photo added event (Story 3.2)
-        eventSource.addEventListener('work-order-photo-added', (event) => {
+        eventSource.addEventListener('work_order_photo_added', (event) => {
           try {
             const data = JSON.parse(event.data)
-            onMessage?.({ type: 'work-order-photo-added', data })
+            onMessage?.({ type: 'work_order_photo_added', data })
           } catch (error) {
-            console.error('Error parsing work-order-photo-added:', error)
+            console.error('Error parsing work_order_photo_added:', error)
           }
         })
 
         // Work order repuesto added event (Story 3.2)
-        eventSource.addEventListener('work-order-repuesto-added', (event) => {
+        eventSource.addEventListener('work_order_repuesto_added', (event) => {
           try {
             const data = JSON.parse(event.data)
-            console.log('[SSE Hook] Received work-order-repuesto-added:', data)
-            onMessage?.({ type: 'work-order-repuesto-added', data })
+            console.log('[SSE Hook] Received work_order_repuesto_added:', data)
+            onMessage?.({ type: 'work_order_repuesto_added', data })
           } catch (error) {
-            console.error('Error parsing work-order-repuesto-added:', error)
+            console.error('Error parsing work_order_repuesto_added:', error)
           }
         })
 

@@ -42,7 +42,8 @@ import {
   completeWorkOrder,
   addComment,
   uploadPhoto,
-  addUsedRepuesto
+  addUsedRepuesto,
+  verifyWorkOrder
 } from '@/app/actions/my-work-orders'
 import type { WorkOrder } from '@prisma/client'
 
@@ -157,6 +158,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
   // Estados para dialogs de confirmación
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false)
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false)
+  const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false)
 
   /**
    * SSE Connection para updates en tiempo real
@@ -178,7 +180,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
       })
 
       // Handle repuesto added event
-      if (message.type === 'work-order-repuesto-added') {
+      if (message.type === 'work_order_repuesto_added') {
         const data = message.data as {
           workOrderId?: string
           usedRepuestoId: string
@@ -211,7 +213,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
       }
 
       // Handle comment added event
-      if (message.type === 'work-order-comment-added') {
+      if (message.type === 'work_order_comment_added') {
         const data = message.data as {
           workOrderId?: string
           commentId: string
@@ -243,7 +245,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
       }
 
       // Handle photo added event
-      if (message.type === 'work-order-photo-added') {
+      if (message.type === 'work_order_photo_added') {
         const data = message.data as {
           workOrderId?: string
           photoId: string
@@ -326,6 +328,61 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
       onClose()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al completar OT')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  /**
+   * AC6: Verificar Reparación (COMPLETADA → Verificada o Rework)
+   * Abre dialog de verificación
+   */
+  const handleVerifyOTClick = () => {
+    setIsVerificationDialogOpen(true)
+  }
+
+  /**
+   * Confirma verificación positiva - Reparación funciona
+   */
+  const handleVerifyFunciona = async () => {
+    setIsSubmitting(true)
+    setIsVerificationDialogOpen(false)
+    try {
+      const result = await verifyWorkOrder(ot.id, true)
+
+      if (result.success) {
+        toast.success(result.message || `OT ${ot.numero} verificada - Reparación confirmada`)
+        router.refresh()
+        onClose()
+      } else {
+        toast.error(result.error || 'Error al verificar OT')
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Error al verificar OT')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  /**
+   * Confirma verificación negativa - Reparación NO funciona
+   * Crea OT de re-trabajo con prioridad ALTA
+   */
+  const handleVerifyNoFunciona = async () => {
+    setIsSubmitting(true)
+    setIsVerificationDialogOpen(false)
+    try {
+      const result = await verifyWorkOrder(ot.id, false, 'Reparación no funcionó. Revisar y corregir.')
+
+      if (result.success) {
+        toast.success(result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`)
+        router.refresh()
+        onClose()
+      } else {
+        toast.error(result.error || 'Error al crear OT de re-trabajo')
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Error al crear OT de re-trabajo')
     } finally {
       setIsSubmitting(false)
     }
@@ -421,6 +478,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
    */
   const showStartButton = ot.estado === 'ASIGNADA'
   const showCompleteButton = ot.estado === 'EN_PROGRESO'
+  const showVerifyButton = ot.estado === 'COMPLETADA' && !ot.verificacion_at
 
   // Separar fotos por tipo
   const fotosAntes = localPhotos.filter(p => p.tipo === 'ANTES')
@@ -749,6 +807,18 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
             </Button>
           )}
 
+          {/* AC6: Botón Verificar Reparación */}
+          {showVerifyButton && (
+            <Button
+              onClick={handleVerifyOTClick}
+              disabled={isSubmitting}
+              className="bg-purple-600 hover:bg-purple-700"
+              data-testid="verificar-reparacion-btn"
+            >
+              Verificar Reparación
+            </Button>
+          )}
+
           {/* Botón cerrar */}
           <Button
             variant="outline"
@@ -800,6 +870,37 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
                 className="bg-green-600 hover:bg-green-700"
               >
                 Confirmar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* AC6: Dialog de Verificación de Reparación */}
+        <AlertDialog open={isVerificationDialogOpen} onOpenChange={setIsVerificationDialogOpen}>
+          <AlertDialogContent data-testid="verificacion-dialog">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Verificar Reparación</AlertDialogTitle>
+              <AlertDialogDescription>
+                ¿La reparación de la OT #{ot.numero} funciona correctamente?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel data-testid="cancel-verificacion-btn">Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleVerifyNoFunciona}
+                disabled={isSubmitting}
+                data-testid="verificacion-no-funciona-option"
+                className="bg-red-600 hover:bg-red-700"
+              >
+                No Funciona
+              </AlertDialogAction>
+              <AlertDialogAction
+                onClick={handleVerifyFunciona}
+                disabled={isSubmitting}
+                data-testid="verificacion-funciona-option"
+                className="bg-green-600 hover:bg-green-700"
+              >
+                Funciona
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

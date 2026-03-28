@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/test.fixtures';
+import { findOTCardByState } from '../helpers/pagination-helper';
 
 /**
  * P1 E2E Tests for Story 3.2 AC8: Adjuntar fotos antes/después de reparación
@@ -27,16 +28,11 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   });
 
   test('[P1-AC8-001] should show "Adjuntar foto antes" button', async ({ page }) => {
-    // THIS TEST WILL FAIL - Photo buttons don't exist
-    // Expected: Button visible for uploading "antes" photo
-    // Actual: Button doesn't exist
-
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-
-    await firstCard.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Verify "Adjuntar foto antes" button is visible
     const antesBtn = page.getByTestId('adjuntar-foto-antes-btn');
@@ -44,16 +40,11 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   });
 
   test('[P1-AC8-002] should show "Adjuntar foto después" button', async ({ page }) => {
-    // THIS TEST WILL FAIL - Photo buttons don't exist
-    // Expected: Button visible for uploading "despues" photo
-    // Actual: Button doesn't exist
-
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-
-    await firstCard.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Verify "Adjuntar foto después" button is visible
     const despuesBtn = page.getByTestId('adjuntar-foto-despues-btn');
@@ -63,46 +54,21 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   test('[P1-AC8-003] should upload "antes" photo to Vercel Blob', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with EN_PROGRESO status
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    let enProgresoCardFound = false;
-    let cardToUse = cards.first();
-
-    // Find EN_PROGRESO card
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        cardToUse = card;
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
-
-    await cardToUse.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Wait for modal
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
 
-    // Click "Adjuntar foto antes" button
     const antesBtn = page.getByTestId('adjuntar-foto-antes-btn');
 
-    // Wait for button to be enabled
+    // Verify button is enabled
     await expect(antesBtn).toBeEnabled();
     await antesBtn.click();
 
-    // Trigger file input (create a fake file for testing)
+    // Trigger file input
     const fileInput = page.getByTestId('foto-antes-file-input');
-
-    // Create a small test image buffer
     const testFile = Buffer.from('fake-image-data');
 
     await fileInput.setInputFiles({
@@ -119,8 +85,8 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
     await page.waitForTimeout(2000);
 
     // Open modal again
-    const updatedCards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    await updatedCards.first().click();
+    const misOtsList = page.getByTestId('mis-ots-lista');
+    await misOtsList.locator('[data-testid^="my-ot-card-"]').first().click();
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
 
     // Check if the section exists (it might not if upload failed)
@@ -138,34 +104,16 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   test('[P1-AC8-004] should upload "después" photo to Vercel Blob', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with EN_PROGRESO status
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    let enProgresoCardFound = false;
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Wait for modal
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
 
-    // Click "Adjuntar foto después" button
     const despuesBtn = page.getByTestId('adjuntar-foto-despues-btn');
 
-    // Wait for button to be enabled
+    // Verify button is enabled
     await expect(despuesBtn).toBeEnabled();
     await despuesBtn.click();
 
@@ -187,8 +135,8 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
     await page.waitForTimeout(2000);
 
     // Open modal again
-    const updatedCards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    await updatedCards.first().click();
+    const misOtsList = page.getByTestId('mis-ots-lista');
+    await misOtsList.locator('[data-testid^="my-ot-card-"]').first().click();
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
 
     // Check if the section exists (it might not if upload failed)
@@ -206,10 +154,9 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   test('[P1-AC8-005] should show photos in separate lists: Antes and Después', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-
-    await firstCard.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Verify "Fotos" section is visible
     const fotosSection = page.getByText('Fotos');
@@ -217,32 +164,11 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   });
 
   test('[P1-AC8-006] should validate file type (only jpeg/png)', async ({ page }) => {
-    // THIS TEST WILL FAIL - Validation not implemented
-    // Expected: Error if not image/jpeg or image/png
-    // Actual: No validation or 404
-
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with EN_PROGRESO status
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    let enProgresoCardFound = false;
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     const antesBtn = page.getByTestId('adjuntar-foto-antes-btn');
     await antesBtn.click();
@@ -250,14 +176,14 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
     // Get initial photo count
     const initialCount = await page.locator('[data-testid^="foto-antes-preview"]').count();
 
-    // Try to upload PDF (invalid type)
+    // Try to upload invalid file type (.txt)
     const fileInput = page.getByTestId('foto-antes-file-input');
-    const pdfFile = Buffer.from('fake-pdf-data');
+    const textFile = Buffer.from('not an image');
 
     await fileInput.setInputFiles({
-      name: 'document.pdf',
-      mimeType: 'application/pdf',
-      buffer: pdfFile
+      name: 'test-file.txt',
+      mimeType: 'text/plain',
+      buffer: textFile
     });
 
     // Wait for validation
@@ -269,32 +195,11 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   });
 
   test('[P1-AC8-007] should validate file size (max 5MB)', async ({ page }) => {
-    // THIS TEST WILL FAIL - Validation not implemented
-    // Expected: Error if file > 5MB
-    // Actual: No validation or 404
-
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with EN_PROGRESO status
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    let enProgresoCardFound = false;
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     const antesBtn = page.getByTestId('adjuntar-foto-antes-btn');
     await antesBtn.click();
@@ -321,33 +226,11 @@ test.describe('Story 3.2 - AC8: Fotos Antes/Después (P1)', () => {
   });
 
   test('[P2-AC8-008] should show multiple photos in each section', async ({ page }) => {
-    // Multiple photos ARE supported - can upload unlimited photos per type
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with EN_PROGRESO status (buttons are only enabled in this state)
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    let enProgresoCardFound = false;
-    let cardToUse = cards.first();
-
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        cardToUse = card;
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
-
-    await cardToUse.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     // Wait for modal
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();

@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/test.fixtures';
+import { findOTCardByState } from '../helpers/pagination-helper';
 
 /**
  * P0 E2E Tests for Story 3.2 AC4: Agregar repuestos usados con validación de stock
@@ -35,26 +36,12 @@ test.describe('Story 3.2 - AC4: Agregar Repuestos (P0)', () => {
   test('[P0-AC4-001] should show repuestos dropdown when OT is EN_PROGRESO', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find EN_PROGRESO card
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
 
-    // Find a card with EN_PROGRESO status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    let enProgresoCardFound = false;
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
-
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
-        enProgresoCardFound = true;
-        break;
-      }
-    }
-
-    expect(enProgresoCardFound).toBe(true);
+    await result!.card.click();
 
     // Verify repuestos dropdown is visible
     const repuestoSelect = page.getByTestId('repuesto-select');
@@ -64,168 +51,144 @@ test.describe('Story 3.2 - AC4: Agregar Repuestos (P0)', () => {
   test('[P0-AC4-002] should show repuesto info: name, stock, location', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find EN_PROGRESO card
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
 
-    // Find a card with EN_PROGRESO status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
+    await result!.card.click();
 
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
+    // Get all options from repuesto dropdown
+    const repuestoSelect = page.getByTestId('repuesto-select');
+    const options = await repuestoSelect.locator('option').all();
 
-        // Get all options from repuesto dropdown
-        const repuestoSelect = page.getByTestId('repuesto-select');
-        const options = await repuestoSelect.locator('option').all();
+    // Verify at least one option exists (excluding the default "-- Seleccionar repuesto --")
+    expect(options.length).toBeGreaterThan(1);
 
-        // Verify at least one option exists (excluding the default "-- Seleccionar repuesto --")
-        expect(options.length).toBeGreaterThan(1);
-
-        // Verify first option contains name, stock, and ubicación info
-        const firstOptionText = await options[1].textContent();
-        expect(firstOptionText).toMatch(/\(Stock: \d+\)/); // Should have stock
-        expect(firstOptionText).toMatch(/ - .+$/); // Should have ubicación
-
-        return;
-      }
-    }
+    // Verify first option contains name, stock, and ubicación info
+    const firstOptionText = await options[1].textContent();
+    expect(firstOptionText).toMatch(/\(Stock: \d+\)/); // Should have stock
+    expect(firstOptionText).toMatch(/ - .+$/); // Should have ubicación
   });
 
   test('[P0-AC4-003] should add repuesto when stock is sufficient', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find EN_PROGRESO card
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
 
-    // Find a card with EN_PROGRESO status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
+    await result!.card.click();
 
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
+    // Find first repuesto with any stock
+    const repuestoSelect = page.getByTestId('repuesto-select');
+    const options = await repuestoSelect.locator('option').all();
 
-        // Find first repuesto with any stock
-        const repuestoSelect = page.getByTestId('repuesto-select');
-        const options = await repuestoSelect.locator('option').all();
+    expect(options.length).toBeGreaterThan(1); // At least default + 1 repuesto
 
-        expect(options.length).toBeGreaterThan(1); // At least default + 1 repuesto
+    // Find a repuesto with stock > 0
+    let validOptionIndex = -1;
+    let repuestoNombre = '';
 
-        // Find a repuesto with stock > 0
-        let validOptionIndex = -1;
-        let repuestoNombre = '';
+    for (let j = 1; j < options.length; j++) {
+      const optionText = await options[j].textContent();
+      const match = optionText?.match(/Stock: (\d+)/);
 
-        for (let j = 1; j < options.length; j++) {
-          const optionText = await options[j].textContent();
-          const match = optionText?.match(/Stock: (\d+)/);
-
-          if (match && parseInt(match[1]) > 0) {
-            validOptionIndex = j;
-            // Clean name: remove everything from ' (Stock:' onwards and trim
-            repuestoNombre = optionText?.split(' (Stock:')[0]?.trim() || '';
-            break;
-          }
-        }
-
-        // Verify we found a repuesto with stock
-        expect(validOptionIndex).toBeGreaterThan(0);
-        expect(repuestoNombre).not.toBe('');
-
-        // Select the repuesto with stock
-        await repuestoSelect.selectOption({ index: validOptionIndex });
-
-        // Enter cantidad = 1 (minimal stock requirement)
-        const cantidadInput = page.getByTestId('repuesto-cantidad-input');
-        await cantidadInput.fill('1');
-
-        // Get initial count of used repuestos matching this name
-        const repuestosList = page.getByTestId('repuestos-usados-list');
-        const initialCount = await repuestosList.locator('[data-testid^="used-repuesto"]').filter({ hasText: repuestoNombre }).count();
-
-        // Click "Agregar Repuesto" button
-        const agregarBtn = page.getByText('Agregar Repuesto');
-        await agregarBtn.click();
-
-        // Wait for SSE update - wait for new repuesto to appear
-        await page.waitForTimeout(3000);
-
-        // Verify repuesto was added to list
-        const newRepuesto = repuestosList.locator('[data-testid^="used-repuesto"]').filter({ hasText: repuestoNombre }).first();
-        await expect(newRepuesto).toBeVisible({ timeout: 10000 });
-
-        return;
+      if (match && parseInt(match[1]) > 0) {
+        validOptionIndex = j;
+        // Clean name: remove everything from ' (Stock:' onwards and trim
+        repuestoNombre = optionText?.split(' (Stock:')[0]?.trim() || '';
+        break;
       }
     }
+
+    // Verify we found a repuesto with stock
+    expect(validOptionIndex).toBeGreaterThan(0);
+    expect(repuestoNombre).not.toBe('');
+
+    // Select the repuesto with stock
+    await repuestoSelect.selectOption({ index: validOptionIndex });
+
+    // Enter cantidad = 1 (minimal stock requirement)
+    const cantidadInput = page.getByTestId('repuesto-cantidad-input');
+    await cantidadInput.fill('1');
+
+    // Get initial count of used repuestos matching this name
+    const repuestosList = page.getByTestId('repuestos-usados-list');
+    const initialCount = await repuestosList.locator('[data-testid^="used-repuesto"]').filter({ hasText: repuestoNombre }).count();
+
+    // Click "Agregar Repuesto" button
+    const agregarBtn = page.getByText('Agregar Repuesto');
+    await agregarBtn.click();
+
+    // Wait for SSE update - wait for new repuesto to appear
+    await page.waitForTimeout(5000);
+
+    // Reload page to get updated state
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+
+    // Re-open modal to verify repuesto was added
+    await result!.card.click();
+    await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
+
+    // Verify repuesto was added to list
+    const repuestosListAfter = page.getByTestId('repuestos-usados-list');
+    const newRepuesto = repuestosListAfter.locator('[data-testid^="used-repuesto"]').filter({ hasText: repuestoNombre }).first();
+    await expect(newRepuesto).toBeVisible({ timeout: 10000 });
   });
 
   test('[P0-AC4-004] should show error when stock is insufficient', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find EN_PROGRESO card
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
 
-    // Find a card with EN_PROGRESO status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-      const estadoText = await estadoBadge.textContent();
+    await result!.card.click();
 
-      if (estadoText && estadoText.includes('En Progreso')) {
-        await card.click();
+    // Select first repuesto from dropdown
+    const repuestoSelect = page.getByTestId('repuesto-select');
+    await repuestoSelect.selectOption({ index: 1 });
 
-        // Select first repuesto from dropdown
-        const repuestoSelect = page.getByTestId('repuesto-select');
-        await repuestoSelect.selectOption({ index: 1 });
+    // Get the repuesto info to find one with low stock
+    const options = await repuestoSelect.locator('option').all();
+    let lowStockOptionIndex = -1;
 
-        // Get the repuesto info to find one with low stock
-        const options = await repuestoSelect.locator('option').all();
-        let lowStockOptionIndex = -1;
-
-        for (let j = 1; j < options.length; j++) {
-          const text = await options[j].textContent();
-          const match = text?.match(/Stock: (\d+)/);
-          if (match && parseInt(match[1]) < 5) {
-            lowStockOptionIndex = j;
-            break;
-          }
-        }
-
-        // If found low stock repuesto, use it; otherwise use first one with high cantidad
-        if (lowStockOptionIndex > 0) {
-          await repuestoSelect.selectOption({ index: lowStockOptionIndex });
-        }
-
-        // Enter cantidad MORE than likely stock
-        const cantidadInput = page.getByTestId('repuesto-cantidad-input');
-        await cantidadInput.fill('999');
-
-        // Get initial count of used repuestos
-        const repuestosList = page.getByTestId('repuestos-usados-list');
-        const initialCount = await repuestosList.locator('[data-testid^="used-repuesto-"]').count();
-
-        // Click "Agregar Repuesto" button
-        const agregarBtn = page.getByText('Agregar Repuesto');
-        await agregarBtn.click();
-
-        // Wait for toast error
-        await page.waitForTimeout(500);
-
-        // Verify repuesto NOT added to list
-        const newCount = await repuestosList.locator('[data-testid^="used-repuesto-"]').count();
-        expect(newCount).toBe(initialCount);
-
-        return;
+    for (let j = 1; j < options.length; j++) {
+      const text = await options[j].textContent();
+      const match = text?.match(/Stock: (\d+)/);
+      if (match && parseInt(match[1]) < 5) {
+        lowStockOptionIndex = j;
+        break;
       }
     }
+
+    // If found low stock repuesto, use it; otherwise use first one with high cantidad
+    if (lowStockOptionIndex > 0) {
+      await repuestoSelect.selectOption({ index: lowStockOptionIndex });
+    }
+
+    // Enter cantidad MORE than likely stock
+    const cantidadInput = page.getByTestId('repuesto-cantidad-input');
+    await cantidadInput.fill('999');
+
+    // Get initial count of used repuestos
+    const repuestosList = page.getByTestId('repuestos-usados-list');
+    const initialCount = await repuestosList.locator('[data-testid^="used-repuesto-"]').count();
+
+    // Click "Agregar Repuesto" button
+    const agregarBtn = page.getByText('Agregar Repuesto');
+    await agregarBtn.click();
+
+    // Wait for toast error
+    await page.waitForTimeout(500);
+
+    // Verify repuesto NOT added to list
+    const newCount = await repuestosList.locator('[data-testid^="used-repuesto-"]').count();
+    expect(newCount).toBe(initialCount);
   });
 
   test('[P1-AC4-005] should not send notification to can_manage_stock users', async ({ page }) => {

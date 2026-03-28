@@ -1,76 +1,238 @@
-<testsuites id="" name="" tests="6" failures="1" skipped="1" errors="0" time="66.20775900000001">
-<testsuite name="story-3.2\P0-ac1-mis-ots-view.spec.ts" timestamp="2026-03-25T19:37:21.468Z" hostname="chromium" tests="6" failures="1" skipped="1" time="86.059" errors="0">
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-001] should show Mis OTs view for assigned technician" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="11.942">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-002] should show OT card with required information" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="9.538">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-003] should NOT show OTs assigned to other technicians" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="14.067">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-004] should show bottom nav tab &quot;Mis OTs&quot; on mobile" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="13.528">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="27.45">
-<failure message="P0-ac1-mis-ots-view.spec.ts:120:7 [P1-AC1-005] should filter OTs by technician assignment" type="FAILURE">
-<![CDATA[  [chromium] › story-3.2\P0-ac1-mis-ots-view.spec.ts:120:7 › Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: getByTestId('mis-ots-lista')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for getByTestId('mis-ots-lista')
-
-
-      129 |     // Verify list is filtered by current user's assignments
-      130 |     // Current user is tecnico@hiansa.com (from storage state)
-    > 131 |     await expect(misOtsList).toBeVisible();
-          |                              ^
-      132 |
-      133 |     // All visible OTs should have current user in assignments
-      134 |     // This requires database validation - for now, just verify list loads
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.2\P0-ac1-mis-ots-view.spec.ts:131:30
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuites id="" name="" tests="55" failures="0" skipped="7" errors="0" time="188.948386">
+<testsuite name="story-3.2\debug-mis-ots-page.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="1" failures="0" skipped="0" time="5.059" errors="0">
+<testcase name="DEBUG - Mis OTs Page › debug: check page content after navigation" classname="story-3.2\debug-mis-ots-page.spec.ts" time="5.059">
 <system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\test-failed-1.png]]
+<![CDATA[Current URL: http://localhost:3000/mis-ots
+Page title: GMAO Hiansa - Gestión de Mantenimiento Asistido por Ordenador
+Page content (first 500 chars): Hola,
+U
+Cerrar Sesión
+Dashboard
+Reportar Avería
+Mis OTs
+Mis Órdenes de Trabajo
 
-[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\video.webm]]
+OTs asignadas para su gestión (71 total)
 
-[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-3.2-P0-ac1-mis-ots-v-ff90b-Ts-by-technician-assignment-chromium\trace.zip]]
+OT-2025-002
+Asignada
+HiRock
+Torno CNC TC-01
+•
+hace un momento
+OT-2025-010
+Asignada
+HiRock
+Prensa Hidraulica PH-01
+•
+hace un momento
+OT-2025-011
+Asignada
+HiRock
+Transportadora TR-01
+•
+hace un momento
+OT-2025-012
+Asignada
+HiRock
+Brazo Mecanico BM-01
+•
+hace un momento
+OT-2025-013
+Asignada
+Ultra
+Horno HR-01
+•
+hace un momento
+OT-2025-100
+Asignada
+HiRock
+Prensa Hidraulica PH-01
+•
+h
+Is login page: [33mtrue[39m
+Error elements found: [33m0[39m
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P2-AC1-006] should show empty state when no OTs assigned" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="9.534">
+</testsuite>
+<testsuite name="story-3.2\debug-ot-states.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="1" failures="0" skipped="0" time="7.928" errors="0">
+<testcase name="DEBUG - OT States › debug: print all OT states" classname="story-3.2\debug-ot-states.spec.ts" time="7.928">
+<system-out>
+<![CDATA[
+=== Total OT cards: 20 ===
+
+OT 1: OT-2025-002 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 2: OT-2025-010 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 3: OT-2025-011 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 4: OT-2025-012 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 5: OT-2025-013 - Estado: "Asignada" - Includes ASIGNADA: true
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac1-mis-ots-view.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="1" time="34.546" errors="0">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-001] should show Mis OTs view for assigned technician" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="7.691">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-002] should show OT card with required information" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.274">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-003] should NOT show OTs assigned to other technicians" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.516">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-004] should show bottom nav tab &quot;Mis OTs&quot; on mobile" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.262">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.715">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P2-AC1-006] should show empty state when no OTs assigned" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.088">
 <properties>
 <property name="skip" value="Requires user with no OTs assigned - test data setup needed">
 </property>
 </properties>
 <skipped>
 </skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac3-iniciar-ot.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="2" time="55.295" errors="0">
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-001] should show &quot;Iniciar OT&quot; button when OT is ASIGNADA" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.633">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-002] should show confirmation dialog when clicking &quot;Iniciar OT&quot;" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.565">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-003] should change OT status to EN_PROGRESO when confirmed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="24.625">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-004] should emit SSE event when OT is started" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.209">
+<properties>
+<property name="skip" value="SSE event verification requires SSE listener setup - verified in integration tests">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-005] should cancel iniciar OT when confirmation dismissed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="7.619">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-006] should show error if iniciar OT fails" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="6.644">
+<properties>
+<property name="skip" value="Requires mock failure scenario - error handling not implemented">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac4-agregar-repuestos.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="1" time="58.953" errors="0">
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-001] should show repuestos dropdown when OT is EN_PROGRESO" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="14.628">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-002] should show repuesto info: name, stock, location" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="7.186">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-003] should add repuesto when stock is sufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="16.773">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-004] should show error when stock is insufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="8.24">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P1-AC4-005] should not send notification to can_manage_stock users" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="6.909">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P2-AC4-006] should handle race condition with optimistic locking" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="5.217">
+<properties>
+<property name="skip" value="Optimistic locking not implemented - requires concurrent requests with Promise.all()">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac5-completar-ot.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="8" failures="0" skipped="0" time="96.232" errors="0">
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-001] should show &quot;Completar OT&quot; button when OT is EN_PROGRESO" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="4.833">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-002] should show confirmation dialog when clicking &quot;Completar OT&quot;" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.316">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-003] should change OT status to COMPLETADA when confirmed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="15.767">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-004] should record completedAt timestamp" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="27.759">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-005] should emit SSE event when OT is completed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="18.397">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-006] should cancel completar OT when confirmation dismissed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="9.263">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-007] should show error if completar OT fails" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.947">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P2-AC5-008] should only allow completion from valid states" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.95">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac2-modal-detalles.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="7" failures="0" skipped="0" time="44.236" errors="0">
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-001] should open modal when clicking on OT card" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="5.831">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-002] should show complete OT information in modal" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="4.704">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-003] should close modal with X button" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="7.158">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-004] should close modal with ESC key" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="5.567">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-005] should close modal when clicking outside" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.532">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-006] should show repuestos sugeridos if exist" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.972">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P2-AC2-007] should trap focus within modal when open" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="7.472">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac7-comentarios.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="7" failures="0" skipped="0" time="94.562" errors="0">
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-001] should show comment input in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="14.076">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-002] should add comment with timestamp when submitted" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="17.897">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-003] should show all comments in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="6.34">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-004] should emit SSE event when comment added" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="10.969">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-005] should auto-scroll to latest comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="23.125">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-006] should clear input after submitting comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="10.022">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-007] should show commenter name and timestamp" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="12.133">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac8-fotos.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="8" failures="0" skipped="0" time="151.286" errors="0">
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-001] should show &quot;Adjuntar foto antes&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="14.405">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-002] should show &quot;Adjuntar foto después&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="18.017">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-003] should upload &quot;antes&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="28.758">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-004] should upload &quot;después&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="27.621">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-005] should show photos in separate lists: Antes and Después" classname="story-3.2\P1-ac8-fotos.spec.ts" time="18.819">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-006] should validate file type (only jpeg/png)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="15.172">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-007] should validate file size (max 5MB)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="17.028">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P2-AC8-008] should show multiple photos in each section" classname="story-3.2\P1-ac8-fotos.spec.ts" time="11.466">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P2-ac6-verificacion.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="5" failures="0" skipped="3" time="17.175" errors="0">
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-001] should show verification option for completed OTs" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="2.255">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-002] should mark OT as verified when repair works" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="3.276">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-003] should create rework OT when repair does not work" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="3.938">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-004] should notify technicians when rework OT created" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="4.903">
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-005] should show confirmation message with aviso number" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="2.803">
 </testcase>
 </testsuite>
 </testsuites>

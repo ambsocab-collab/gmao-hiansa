@@ -66,8 +66,18 @@ interface Repuesto {
   ubicacion_fisica: string | null
 }
 
+interface PaginationMetadata {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+  hasNext: boolean
+  hasPrev: boolean
+}
+
 interface MyWorkOrdersListProps {
   initialWorkOrders: WorkOrderWithRelations[]
+  initialPagination?: PaginationMetadata
   allRepuestos?: Repuesto[]
 }
 
@@ -77,11 +87,29 @@ interface MyWorkOrdersListProps {
  * - Muestra lista de OT cards
  * - SSE subscription para actualizaciones
  * - Modal de detalles al hacer click
+ * - Paginación con navegación
  */
-export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWorkOrdersListProps) {
+export function MyWorkOrdersList({
+  initialWorkOrders,
+  initialPagination,
+  allRepuestos = []
+}: MyWorkOrdersListProps) {
   const [workOrders, setWorkOrders] = useState<WorkOrderWithRelations[]>(initialWorkOrders)
   const [selectedOT, setSelectedOT] = useState<WorkOrderWithRelations | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Paginación: usar initialPagination si está disponible
+  const [currentPage, setCurrentPage] = useState(initialPagination?.page || 1)
+  const pagination = initialPagination || {
+    page: 1,
+    limit: 20,
+    total: workOrders.length,
+    totalPages: 1,
+    hasNext: false,
+    hasPrev: false
+  }
+
+  const router = useRouter()
 
   /**
    * SSE Connection para real-time sync (R-002: <1s sync)
@@ -109,8 +137,8 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
         )
       }
 
-      // Optimistic update: work-order-comment-added
-      if (message.type === 'work-order-comment-added') {
+      // Optimistic update: work_order_comment_added
+      if (message.type === 'work_order_comment_added') {
         const data = message.data as {
           workOrderId?: string
           commentId: string
@@ -143,8 +171,8 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
         )
       }
 
-      // Optimistic update: work-order-photo-added
-      if (message.type === 'work-order-photo-added') {
+      // Optimistic update: work_order_photo_added
+      if (message.type === 'work_order_photo_added') {
         const data = message.data as {
           workOrderId?: string
           photoId: string
@@ -177,8 +205,8 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
         )
       }
 
-      // Optimistic update: work-order-repuesto-added
-      if (message.type === 'work-order-repuesto-added') {
+      // Optimistic update: work_order_repuesto_added
+      if (message.type === 'work_order_repuesto_added') {
         const data = message.data as {
           workOrderId?: string
           usedRepuestoId: string
@@ -229,6 +257,30 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
   }
 
   /**
+   * Cambiar a la página anterior
+   */
+  const handlePreviousPage = () => {
+    if (pagination.hasPrev) {
+      const newPage = currentPage - 1
+      setCurrentPage(newPage)
+      // Update URL without full page reload
+      router.push(`/mis-ots?page=${newPage}`)
+    }
+  }
+
+  /**
+   * Cambiar a la página siguiente
+   */
+  const handleNextPage = () => {
+    if (pagination.hasNext) {
+      const newPage = currentPage + 1
+      setCurrentPage(newPage)
+      // Update URL without full page reload
+      router.push(`/mis-ots?page=${newPage}`)
+    }
+  }
+
+  /**
    * Empty state cuando no hay OTs asignadas
    */
   if (workOrders.length === 0) {
@@ -263,6 +315,81 @@ export function MyWorkOrdersList({ initialWorkOrders, allRepuestos = [] }: MyWor
           />
         ))}
       </div>
+
+      {/* Paginación */}
+      {pagination.totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-between">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Página {pagination.page} de {pagination.totalPages} ({pagination.total} total)
+          </div>
+
+          <div className="flex gap-2">
+            {/* Botón Previous */}
+            <button
+              onClick={handlePreviousPage}
+              disabled={!pagination.hasPrev}
+              className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600
+                         bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300
+                         hover:bg-gray-50 dark:hover:bg-gray-700
+                         disabled:opacity-50 disabled:cursor-not-allowed
+                         transition-colors"
+              aria-label="Página anterior"
+            >
+              Anterior
+            </button>
+
+            {/* Page numbers (simplified) */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(pagination.totalPages, 5) }, (_, i) => {
+                let pageNum
+                if (pagination.totalPages <= 5) {
+                  pageNum = i + 1
+                } else if (pagination.page <= 3) {
+                  pageNum = i + 1
+                } else if (pagination.page >= pagination.totalPages - 2) {
+                  pageNum = pagination.totalPages - 4 + i
+                } else {
+                  pageNum = pagination.page - 2 + i
+                }
+
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => {
+                      setCurrentPage(pageNum)
+                      router.push(`/mis-ots?page=${pageNum}`)
+                    }}
+                    disabled={pageNum === pagination.page}
+                    className={`px-3 py-2 text-sm font-medium rounded-md border transition-colors ${
+                      pageNum === pagination.page
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    aria-label={`Página ${pageNum}`}
+                    aria-current={pageNum === pagination.page ? 'page' : undefined}
+                  >
+                    {pageNum}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Botón Next */}
+            <button
+              onClick={handleNextPage}
+              disabled={!pagination.hasNext}
+              className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600
+                         bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300
+                         hover:bg-gray-50 dark:hover:bg-gray-700
+                         disabled:opacity-50 disabled:cursor-not-allowed
+                         transition-colors"
+              aria-label="Página siguiente"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modal de detalles */}
       {selectedOT && (

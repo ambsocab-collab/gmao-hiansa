@@ -78,64 +78,55 @@ async function globalSetup(_config: FullConfig) {
     throw new Error('❌ Server failed to start after maximum retries');
   }
 
-  // Verify seed users exist
-  const requiredUsers = [
-    'admin@hiansa.com',
-    'tecnico@hiansa.com',
-    'supervisor@hiansa.com',
-    'new.user@example.com'
-  ];
+  // ============================================
+  // ALWAYS RUN SEED FOR E2E TESTS
+  // This ensures fresh test data for every test run
+  // and prevents conflicts between parallel tests
+  // ============================================
+  console.log('\n🌱 Running database seed for E2E tests (always fresh data)...\n');
 
-  let allUsersFound = true;
-  const missingUsers: string[] = [];
-
-  for (const email of requiredUsers) {
-    try {
-      const response = await fetch(`${baseURL}/api/v1/test/check-user?email=${email}`, {
-        signal: AbortSignal.timeout(5000)
-      });
-
-      if (!response.ok) {
-        allUsersFound = false;
-        missingUsers.push(email);
-      } else {
-        console.log(`✅ User ${email} found`);
-      }
-    } catch {
-      allUsersFound = false;
-      missingUsers.push(email);
-    }
+  // IMPORTANT: Delete old auth sessions before seeding
+  // The seed recreates users with new IDs, so old sessions become invalid
+  const authDir = path.join(__dirname, '..', '..', 'playwright', '.auth');
+  const fs = await import('fs');
+  if (fs.existsSync(authDir)) {
+    const authFiles = fs.readdirSync(authDir);
+    console.log(`🗑️  Deleting ${authFiles.length} old auth session(s) before seed...`);
+    authFiles.forEach(file => {
+      const filePath = path.join(authDir, file);
+      fs.unlinkSync(filePath);
+    });
+    console.log('✅ Old auth sessions deleted\n');
   }
 
-  // If any users are missing, run seed automatically
-  if (!allUsersFound) {
-    console.log('\n⚠️  Missing users:', missingUsers);
-    console.log('🌱 Running database seed...\n');
+  try {
+    // Run seed command directly using spawn (more reliable than API endpoint)
+    const { spawn } = require('child_process');
 
-    try {
-      // Call the seed endpoint
-      const seedResponse = await fetch(`${baseURL}/api/v1/test/seed`, {
-        method: 'POST',
-        headers: {
-          'x-playwright-test': '1'
-        },
-        signal: AbortSignal.timeout(120000) // 2 minutes timeout
+    const seedProcess = spawn('npx', ['prisma', 'db', 'seed'], {
+      env: process.env,
+      shell: true,
+      stdio: 'inherit' // Direct output to console
+    });
+
+    // Wait for seed to complete
+    await new Promise<void>((resolve, reject) => {
+      seedProcess.on('close', (code: number) => {
+        if (code === 0) {
+          console.log('✅ Database seeded successfully\n');
+          resolve();
+        } else {
+          reject(new Error(`Seed failed with exit code ${code}`));
+        }
       });
 
-      if (!seedResponse.ok) {
-        const errorText = await seedResponse.text();
-        throw new Error(`Seed failed (${seedResponse.status}): ${errorText}`);
-      }
-
-      const result = await seedResponse.json();
-      console.log('✅ Database seeded successfully\n');
-      console.log('📊 Seed summary:', result.summary || 'Complete');
-    } catch (error) {
-      console.error('❌ Failed to seed database:', error);
-      throw new Error(`Database seed failed: ${error}`);
-    }
-  } else {
-    console.log('\n✅ All required users found - seed is up to date\n');
+      seedProcess.on('error', (err: Error) => {
+        reject(new Error(`Seed process error: ${err.message}`));
+      });
+    });
+  } catch (error) {
+    console.error('❌ Failed to seed database:', error);
+    throw new Error(`Database seed failed: ${error}`);
   }
 
   // Verificar cuántos equipos hay (siempre, no solo después del seed)
@@ -167,8 +158,7 @@ async function globalSetup(_config: FullConfig) {
 
   console.log('🔐 Setting up authenticated sessions via API...\n');
 
-  const authDir = path.join(__dirname, '..', '..', 'playwright', '.auth');
-  const fs = await import('fs');
+  // Note: authDir and fs are already declared above (before seed section)
 
   // Define all users that need authenticated sessions
   const usersToAuthenticate = [

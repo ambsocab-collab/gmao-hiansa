@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/test.fixtures';
+import { findOTCardByState } from '../helpers/pagination-helper';
 
 /**
  * P0 E2E Tests for Story 3.2 AC3: Iniciar OT desde estado "ASIGNADA"
@@ -31,30 +32,14 @@ test.describe('Story 3.2 - AC3: Iniciar OT (P0)', () => {
   test('[P0-AC3-001] should show "Iniciar OT" button when OT is ASIGNADA', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-
-    // Find a card with ASIGNADA status badge (case-insensitive)
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
-
-    // Iterate through cards to find one with ASIGNADA status
-    let asignadaCardFound = false;
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.locator('[data-testid="ot-estado-badge"]');
-
-      // Get text content and check case-insensitive
-      const estadoText = await estadoBadge.textContent();
-      if (estadoText && estadoText.toUpperCase().includes('ASIGNADA')) {
-        // Click on OT card to open modal
-        await card.click();
-        asignadaCardFound = true;
-        break;
-      }
-    }
+    // Use pagination helper to find ASIGNADA card across multiple pages
+    const result = await findOTCardByState(page, 'ASIGNADA');
 
     // Verify we found an ASIGNADA card
-    expect(asignadaCardFound).toBe(true);
+    expect(result).not.toBeNull();
+
+    // Click on OT card to open modal
+    await result!.card.click();
 
     // Wait for modal to open
     const modal = page.getByTestId(/ot-detalles-/);
@@ -68,95 +53,90 @@ test.describe('Story 3.2 - AC3: Iniciar OT (P0)', () => {
   test('[P0-AC3-002] should show confirmation dialog when clicking "Iniciar OT"', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find ASIGNADA card
+    const result = await findOTCardByState(page, 'ASIGNADA');
 
-    // Find a card with ASIGNADA status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    // Iterate through cards to find one with ASIGNADA status
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.getByTestId('ot-estado-badge');
-      const estadoText = await estadoBadge.textContent();
+    await result!.card.click();
 
-      if (estadoText?.includes('Asignada')) {
-        await card.click();
+    // Click "Iniciar OT" button
+    const iniciarBtn = page.getByTestId('ot-iniciar-btn');
+    await iniciarBtn.click();
 
-        // Click "Iniciar OT" button
-        const iniciarBtn = page.getByTestId('ot-iniciar-btn');
-        await iniciarBtn.click();
+    // Verify confirmation dialog is visible
+    const confirmDialog = page.getByTestId('confirm-iniciar-ot-dialog');
+    await expect(confirmDialog).toBeVisible();
 
-        // Verify confirmation dialog is visible
-        const confirmDialog = page.getByTestId('confirm-iniciar-ot-dialog');
-        await expect(confirmDialog).toBeVisible();
-
-        // Verify confirmation message
-        await expect(confirmDialog.getByText(/¿Iniciar OT #/)).toBeVisible();
-        return; // Exit test after finding first ASIGNADA card
-      }
-    }
+    // Verify confirmation message
+    await expect(confirmDialog.getByText(/¿Iniciar OT #/)).toBeVisible();
   });
 
   test('[P0-AC3-003] should change OT status to EN_PROGRESO when confirmed', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find ASIGNADA card
+    const result = await findOTCardByState(page, 'ASIGNADA');
 
-    // Find a card with ASIGNADA status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    // Iterate through cards to find one with ASIGNADA status
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.getByTestId('ot-estado-badge');
-      const estadoText = await estadoBadge.textContent();
+    // Get OT number before starting
+    const otNumero = await result!.card.getByTestId('ot-numero').textContent();
 
-      if (estadoText?.includes('Asignada')) {
-        // Get OT number before starting
-        const otNumero = await card.getByTestId('ot-numero').textContent();
+    await result!.card.click();
 
-        await card.click();
+    // Click "Iniciar OT" button
+    const iniciarBtn = page.getByTestId('ot-iniciar-btn');
+    await iniciarBtn.click();
 
-        // Click "Iniciar OT" button
-        const iniciarBtn = page.getByTestId('ot-iniciar-btn');
-        await iniciarBtn.click();
+    // Confirm the action
+    const confirmBtn = page.getByTestId('confirm-iniciar-ot-btn');
+    await confirmBtn.click();
 
-        // Confirm the action
-        const confirmBtn = page.getByTestId('confirm-iniciar-ot-btn');
-        await confirmBtn.click();
+    // Wait for modal to close (it closes after starting)
+    await expect(page.getByTestId(/ot-detalles-/)).not.toBeVisible();
 
-        // Wait for modal to close (it closes after starting)
-        await expect(page.getByTestId(/ot-detalles-/)).not.toBeVisible();
+    // Force page reload to get updated state (router.refresh() might not trigger hard reload)
+    await page.reload();
 
-        // Force page reload to get updated state (router.refresh() might not trigger hard reload)
-        await page.reload();
+    // Find the card again by OT number (it may be on a different page now)
+    // Search through all pages
+    const baseURL = process.env.BASE_URL || 'http://localhost:3000';
+    let foundCard = false;
 
-        // Find the card again by OT number
-        const updatedCards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-        const updatedCardCount = await updatedCards.count();
+    for (let pageNum = 1; pageNum <= 10; pageNum++) {
+      await page.goto(`${baseURL}/mis-ots?page=${pageNum}`);
+      await page.waitForLoadState('domcontentloaded');
 
-        for (let j = 0; j < updatedCardCount; j++) {
-          const updatedCard = updatedCards.nth(j);
-          const cardNumero = await updatedCard.getByTestId('ot-numero').textContent();
+      const misOtsList = page.getByTestId('mis-ots-lista');
+      const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
+      const cardCount = await cards.count();
 
-          if (cardNumero === otNumero) {
-            // Verify estado changed to EN_PROGRESO (UI shows "En Progreso")
-            await expect(updatedCard.getByTestId('ot-estado-badge')).toContainText('En Progreso', { timeout: 5000 });
+      for (let i = 0; i < cardCount; i++) {
+        const card = cards.nth(i);
+        const cardNumero = await card.getByTestId('ot-numero').textContent();
 
-            // Click to open modal and verify "Completar" button
-            await updatedCard.click();
-            const completarBtn = page.getByTestId('ot-completar-btn');
-            await expect(completarBtn).toBeVisible({ timeout: 5000 });
+        if (cardNumero === otNumero) {
+          // Verify estado changed to EN_PROGRESO (UI shows "En Progreso")
+          await expect(card.getByTestId('ot-estado-badge')).toContainText('En Progreso', { timeout: 5000 });
 
-            // Verify "Iniciar" button is no longer visible
-            await expect(page.getByTestId('ot-iniciar-btn')).not.toBeVisible();
-            return; // Exit test after finding and verifying the OT
-          }
+          // Click to open modal and verify "Completar" button
+          await card.click();
+          const completarBtn = page.getByTestId('ot-completar-btn');
+          await expect(completarBtn).toBeVisible({ timeout: 5000 });
+
+          // Verify "Iniciar" button is no longer visible
+          await expect(page.getByTestId('ot-iniciar-btn')).not.toBeVisible();
+
+          foundCard = true;
+          break;
         }
       }
+
+      if (foundCard) break;
     }
+
+    expect(foundCard).toBe(true);
   });
 
   test('[P0-AC3-004] should emit SSE event when OT is started', async ({ page }) => {
@@ -172,37 +152,26 @@ test.describe('Story 3.2 - AC3: Iniciar OT (P0)', () => {
   test('[P1-AC3-005] should cancel iniciar OT when confirmation dismissed', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
+    // Use pagination helper to find ASIGNADA card
+    const result = await findOTCardByState(page, 'ASIGNADA');
 
-    // Find a card with ASIGNADA status badge
-    const cards = misOtsList.locator('[data-testid^="my-ot-card-"]');
-    const cardCount = await cards.count();
+    expect(result).not.toBeNull();
 
-    // Iterate through cards to find one with ASIGNADA status
-    for (let i = 0; i < cardCount; i++) {
-      const card = cards.nth(i);
-      const estadoBadge = card.getByTestId('ot-estado-badge');
-      const estadoText = await estadoBadge.textContent();
+    await result!.card.click();
 
-      if (estadoText?.includes('Asignada')) {
-        await card.click();
+    // Click "Iniciar OT" button
+    const iniciarBtn = page.getByTestId('ot-iniciar-btn');
+    await iniciarBtn.click();
 
-        // Click "Iniciar OT" button
-        const iniciarBtn = page.getByTestId('ot-iniciar-btn');
-        await iniciarBtn.click();
+    // Cancel the action (click "X" or "Cancel")
+    const cancelBtn = page.getByTestId('cancel-iniciar-ot-btn');
+    await cancelBtn.click();
 
-        // Cancel the action (click "X" or "Cancel")
-        const cancelBtn = page.getByTestId('cancel-iniciar-ot-btn');
-        await cancelBtn.click();
+    // Verify estado is still ASIGNADA (UI shows "Asignada")
+    await expect(result!.card.getByTestId('ot-estado-badge')).toContainText('Asignada');
 
-        // Verify estado is still ASIGNADA (UI shows "Asignada")
-        await expect(card.getByTestId('ot-estado-badge')).toContainText('Asignada');
-
-        // Verify "Iniciar" button is still visible
-        await expect(iniciarBtn).toBeVisible();
-        return; // Exit test after finding first ASIGNADA card
-      }
-    }
+    // Verify "Iniciar" button is still visible
+    await expect(iniciarBtn).toBeVisible();
   });
 
   test('[P1-AC3-006] should show error if iniciar OT fails', async ({ page }) => {

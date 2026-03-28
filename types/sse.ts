@@ -115,9 +115,12 @@ export interface SSEMessage {
 export const SSE_EVENT_NAMES = {
   HEARTBEAT: 'heartbeat',
   WORK_ORDER_UPDATED: 'work_order_updated',
+  WORK_ORDER_COMMENT_ADDED: 'work_order_comment_added',
+  WORK_ORDER_PHOTO_ADDED: 'work_order_photo_added',
+  WORK_ORDER_REPUESTO_ADDED: 'work_order_repuesto_added',
   KPIS_UPDATED: 'kpis_updated',
-  FAILURE_REPORT_CREATED: 'failure-report-created',
-  TECHNICIAN_ASSIGNED: 'technician-assigned'
+  FAILURE_REPORT_CREATED: 'failure_report_created',
+  TECHNICIAN_ASSIGNED: 'technician_assigned'
 } as const
 
 /**

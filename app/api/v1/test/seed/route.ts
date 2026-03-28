@@ -7,10 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import { spawn } from 'child_process';
 
 export async function POST(request: NextRequest) {
   // Security: Only allow in test/development environments
@@ -33,22 +30,51 @@ export async function POST(request: NextRequest) {
   try {
     console.log('[seed] Starting database seed...');
 
-    // Run Prisma seed command
-    const { stdout, stderr } = await execAsync('npx prisma db seed', {
+    // Run Prisma seed command using spawn for better control
+    const seedProcess = spawn('npx', ['prisma', 'db', 'seed'], {
       env: {
         ...process.env,
+      },
+      shell: true,
+      windowsHide: true
+    });
+
+    // Collect stdout and stderr
+    let stdout = '';
+    let stderr = '';
+
+    seedProcess.stdout?.on('data', (data) => {
+      const text = data.toString();
+      stdout += text;
+      console.log('[seed] stdout:', text.slice(-200)); // Log last 200 chars
+    });
+
+    seedProcess.stderr?.on('data', (data) => {
+      const text = data.toString();
+      stderr += text;
+      if (!text.includes('warning')) {
+        console.error('[seed] stderr:', text);
       }
     });
 
-    if (stderr && !stderr.includes('warning')) {
-      console.error('[seed] stderr:', stderr);
-    }
+    // Wait for process to complete
+    await new Promise<void>((resolve, reject) => {
+      seedProcess.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`Seed process exited with code ${code}\nstdout: ${stdout}\nstderr: ${stderr}`));
+        }
+      });
+
+      seedProcess.on('error', (err) => {
+        reject(new Error(`Seed process error: ${err.message}`));
+      });
+    });
 
     console.log('[seed] Seed completed successfully');
-    console.log('[seed] stdout:', stdout);
 
     // Verify seed was successful by checking for required users
-    // Note: We import prisma here to avoid issues during build
     const { prisma } = await import('@/lib/db');
 
     const userCount = await prisma.user.count();

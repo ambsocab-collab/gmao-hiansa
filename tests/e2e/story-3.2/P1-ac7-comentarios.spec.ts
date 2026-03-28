@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/test.fixtures';
+import { findOTCardByState } from '../helpers/pagination-helper';
 
 /**
  * P1 E2E Tests for Story 3.2 AC7: Comentarios y comunicación en tiempo real
@@ -26,21 +27,13 @@ test.describe('Story 3.2 - AC7: Comentarios en Tiempo Real (P1)', () => {
   });
 
   test('[P1-AC7-001] should show comment input in modal', async ({ page }) => {
-    // THIS TEST WILL FAIL - Comment input doesn't exist
-    // Expected: Textarea visible for entering comments
-    // Actual: Comment section doesn't exist
-
     await page.waitForLoadState('domcontentloaded');
-
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-
-    await firstCard.click();
-
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
     // Verify comment input is visible
     const commentInput = page.getByTestId('comentario-input');
     await expect(commentInput).toBeVisible();
-
     // Verify submit button
     const submitBtn = page.getByTestId('submit-comentario-btn');
     await expect(submitBtn).toBeVisible();
@@ -48,11 +41,9 @@ test.describe('Story 3.2 - AC7: Comentarios en Tiempo Real (P1)', () => {
 
   test('[P1-AC7-002] should add comment with timestamp when submitted', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
-
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-    await firstCard.click();
-
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
     // Wait for modal to be fully loaded
     await expect(page.getByTestId(/ot-detalles-/)).toBeVisible();
 
@@ -160,10 +151,9 @@ test.describe('Story 3.2 - AC7: Comentarios en Tiempo Real (P1)', () => {
   test('[P2-AC7-005] should auto-scroll to latest comment', async ({ page }) => {
     await page.waitForLoadState('domcontentloaded');
 
-    const misOtsList = page.getByTestId('mis-ots-lista');
-    const firstCard = misOtsList.locator('[data-testid^="my-ot-card-"]').first();
-
-    await firstCard.click();
+    const result = await findOTCardByState(page, 'EN_PROGRESO');
+    expect(result).not.toBeNull();
+    await result!.card.click();
 
     const commentsList = page.getByTestId('comentarios-list');
     const commentInput = page.getByTestId('comentario-input');
@@ -173,7 +163,7 @@ test.describe('Story 3.2 - AC7: Comentarios en Tiempo Real (P1)', () => {
     for (let i = 0; i < 3; i++) {
       await commentInput.fill(`Auto-scroll test comment ${i + 1}`);
       await submitBtn.click();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(1500);
     }
 
     // Wait for all comments to be added

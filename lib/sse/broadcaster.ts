@@ -198,7 +198,7 @@ export function broadcastWorkOrderUpdate(workOrder: {
   updatedAt: Date
 }): void {
   BroadcastManager.broadcast('work-orders', {
-    name: 'work-order-updated',
+    name: 'work_order_updated',
     data: {
       workOrderId: workOrder.id,
       otNumero: workOrder.numero,
@@ -281,7 +281,7 @@ export function broadcastWorkOrderUpdated(workOrder: {
   updatedAt: Date
 }): void {
   BroadcastManager.broadcast('work-orders', {
-    name: 'work-order-updated',
+    name: 'work_order_updated',
     data: {
       workOrderId: workOrder.id,
       otNumero: workOrder.numero,

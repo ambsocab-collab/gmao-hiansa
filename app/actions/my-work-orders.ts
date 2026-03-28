@@ -11,7 +11,7 @@ import { auth } from '@/lib/auth-adapter'
 import { prisma } from '@/lib/db'
 import { trackPerformance } from '@/lib/observability/performance'
 import { revalidatePath } from 'next/cache'
-import { WorkOrderEstado, PhotoTipo } from '@prisma/client'
+import { WorkOrder, WorkOrderEstado, PhotoTipo, AssignmentRole } from '@prisma/client'
 import { z } from 'zod'
 import { ValidationError, AuthorizationError, AuthenticationError, InsufficientStockError } from '@/lib/utils/errors'
 import { broadcastWorkOrderUpdated, BroadcastManager } from '@/lib/sse/broadcaster'
@@ -34,7 +34,12 @@ const AddUsedRepuestoSchema = z.object({
 })
 
 const CompleteWorkOrderSchema = z.object({
-  workOrderId: z.string().cuid2('ID de OT inválido'),
+  workOrderId: z.string().cuid2('ID de OT inválido')
+})
+
+const GetMyWorkOrdersSchema = z.object({
+  page: z.number().int().positive('Page debe ser positivo').default(1),
+  limit: z.number().int().positive('Limit debe ser positivo').max(100, 'Limit máximo es 100').default(20)
 })
 
 const AddCommentSchema = z.object({
@@ -310,13 +315,13 @@ export async function addUsedRepuesto(
     })
 
     // Emit evento SSE para work-orders (para actualizar lista de repuestos usados)
-    console.log('[SSE Broadcast] Emitting work-order-repuesto-added:', {
+    console.log('[SSE Broadcast] Emitting work_order_repuesto_added:', {
       workOrderId: validated.workOrderId,
       usedRepuestoId: result.usedRepuesto.id,
       repuestoNombre: result.repuestoNombre
     })
     BroadcastManager.broadcast('work-orders', {
-      name: 'work-order-repuesto-added',
+      name: 'work_order_repuesto_added',
       data: {
         workOrderId: validated.workOrderId,
         usedRepuestoId: result.usedRepuesto.id,
@@ -544,7 +549,7 @@ export async function addComment(workOrderId: string, texto: string) {
 
     // Emit evento SSE para notificar a otros asignados (NFR-S19: <30s delivery)
     BroadcastManager.broadcast('work-orders', {
-      name: 'work-order-comment-added',
+      name: 'work_order_comment_added',
       data: {
         workOrderId: validated.workOrderId,
         commentId: comment.id,
@@ -653,7 +658,7 @@ export async function uploadPhoto(
 
     // Emit evento SSE para notificar (NFR-S19: <30s delivery)
     BroadcastManager.broadcast('work-orders', {
-      name: 'work-order-photo-added',
+      name: 'work_order_photo_added',
       data: {
         workOrderId: validated.workOrderId,
         photoId: photo.id,
@@ -683,12 +688,17 @@ export async function uploadPhoto(
  */
 
 /**
- * Obtener las OTs asignadas al usuario actual
+ * Obtener las OTs asignadas al usuario actual con paginación
  *
- * @returns Lista de OTs donde el usuario está asignado
+ * @param page - Número de página (empezando en 1)
+ * @param limit - Cantidad de OTs por página (default: 20, max: 100)
+ * @returns Objeto con workOrders array y metadata de paginación
  * @throws AuthenticationError si no hay sesión
  */
-export async function getMyWorkOrders() {
+export async function getMyWorkOrders(
+  page: number = 1,
+  limit: number = 20
+) {
   const session = await auth()
 
   // Validación de autenticación
@@ -702,72 +712,334 @@ export async function getMyWorkOrders() {
     throw new AuthorizationError('Sin permisos para ver OTs propias')
   }
 
-  // Fetch OTs donde el usuario está asignado
-  const workOrders = await prisma.workOrder.findMany({
-    where: {
-      assignments: {
-        some: {
-          userId: session.user.id
-        }
+  // Validar parámetros de paginación
+  const validated = GetMyWorkOrdersSchema.parse({ page, limit })
+
+  // Calcular skip para paginación
+  const skip = (validated.page - 1) * validated.limit
+
+  // Ejecutar queries en paralelo para mejor performance
+  const [workOrders, total] = await Promise.all([
+    // Query para obtener OTs de la página actual
+    prisma.workOrder.findMany({
+      where: {
+        assignments: {
+          some: {
+            userId: session.user.id
+          }
+        },
+        // NOTA: NO filtrar COMPLETADA aquí - dejar que el componente decida
+        // El componente MyWorkOrdersList puede mostrar OTs completadas
       },
-      // NOTA: NO filtrar COMPLETADA aquí - dejar que el componente decida
-      // El componente MyWorkOrdersList puede mostrar OTs completadas
-    },
-    include: {
-      equipo: {
-        select: {
-          id: true,
-          name: true,
-          linea: {
-            select: {
-              name: true,
-              planta: {
-                select: {
-                  division: true
+      include: {
+        equipo: {
+          select: {
+            id: true,
+            name: true,
+            linea: {
+              select: {
+                name: true,
+                planta: {
+                  select: {
+                    division: true
+                  }
                 }
               }
             }
           }
+        },
+        assignments: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+        photos: {
+          orderBy: {
+            created_at: 'desc'
+          }
+        },
+        comments: {
+          include: {
+            user: {
+              select: {
+                name: true
+              }
+            }
+          },
+          orderBy: {
+            created_at: 'desc'
+          },
+          take: 5 // Últimos 5 comentarios
+        },
+        usedRepuestos: {
+          include: {
+            repuesto: true
+          }
         }
       },
-      assignments: {
+      orderBy: {
+        created_at: 'asc' // Oldest first - ensures ASIGNADA/EN_PROGRESO appear before COMPLETADA (seed order)
+      },
+      skip,
+      take: validated.limit
+    }),
+
+    // Query para obtener el total de OTs (para metadata)
+    prisma.workOrder.count({
+      where: {
+        assignments: {
+          some: {
+            userId: session.user.id
+          }
+        }
+      }
+    })
+  ])
+
+  // Calcular metadata de paginación
+  const totalPages = Math.ceil(total / validated.limit)
+  const hasNext = validated.page < totalPages
+  const hasPrev = validated.page > 1
+
+  return {
+    workOrders,
+    pagination: {
+      page: validated.page,
+      limit: validated.limit,
+      total,
+      totalPages,
+      hasNext,
+      hasPrev
+    }
+  }
+}
+
+/**
+ * Verify Work Order - AC6: Verificación por Operario
+ *
+ * Permite al operario confirmar si la reparación funciona correctamente.
+ * Si NO funciona, genera una OT de re-trabajo con prioridad ALTA.
+ * Si funciona, marca la OT como verificada.
+ *
+ * @param workOrderId - ID de la OT a verificar
+ * @param funciona - true si la reparación funciona, false si no
+ * @param comentario - Comentario opcional explicando por qué no funciona
+ * @returns OT actualizada o nueva OT de re-trabajo
+ */
+export async function verifyWorkOrder(
+  workOrderId: string,
+  funciona: boolean,
+  comentario?: string
+): Promise<
+  | { success: true; workOrder: WorkOrder; message: string }
+  | { success: false; error: string }
+> {
+  const session = await auth()
+  if (!session?.user) {
+    return { success: false, error: 'No autenticado' }
+  }
+
+  // PBAC validation: capability para verificar OTs
+  const hasCapability = session.user.capabilities.includes('can_verify_ot')
+  if (!hasCapability) {
+    return { success: false, error: 'Sin permisos para verificar OTs' }
+  }
+
+  // Validar input con Zod
+  const VerifyWorkOrderSchema = z.object({
+    workOrderId: z.string().cuid2('ID de OT inválido'),
+    funciona: z.boolean(),
+    comentario: z.string().optional()
+  })
+
+  const validated = VerifyWorkOrderSchema.parse({ workOrderId, funciona, comentario })
+
+  // Performance tracking (NFR-S3: <1s threshold)
+  const perf = trackPerformance('verify_work_order', validated.workOrderId)
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      // 1. Fetch OT actual
+      const workOrder = await tx.workOrder.findUnique({
+        where: { id: validated.workOrderId },
         include: {
-          user: {
+          assignments: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true
+                }
+              }
+            }
+          },
+          equipo: {
             select: {
               id: true,
               name: true
             }
           }
         }
-      },
-      photos: {
-        orderBy: {
-          created_at: 'desc'
-        }
-      },
-      comments: {
-        include: {
-          user: {
-            select: {
-              name: true
+      })
+
+      if (!workOrder) {
+        return { success: false, error: 'OT no encontrada' }
+      }
+
+      // 2. Verificar que la OT esté completada
+      if (workOrder.estado !== 'COMPLETADA') {
+        return { success: false, error: 'Solo se pueden verificar OTs completadas' }
+      }
+
+      // 3. Verificar que la OT no haya sido verificada previamente
+      if (workOrder.verificacion_at) {
+        return { success: false, error: 'Esta OT ya ha sido verificada' }
+      }
+
+      if (validated.funciona) {
+        // 3a. CASO: La reparación funciona → marcar como verificada
+        const updated = await tx.workOrder.update({
+          where: { id: validated.workOrderId },
+          data: {
+            verificacion_at: new Date()
+          }
+        })
+
+        // Registrar auditoría
+        await tx.auditLog.create({
+          data: {
+            userId: session.user.id,
+            action: 'work_order_verified',
+            targetId: validated.workOrderId,
+            metadata: {
+              otNumero: workOrder.numero,
+              funciona: true
             }
           }
-        },
-        orderBy: {
-          created_at: 'desc'
-        },
-        take: 5 // Últimos 5 comentarios
-      },
-      usedRepuestos: {
-        include: {
-          repuesto: true
+        })
+
+        // Emit evento SSE
+        BroadcastManager.broadcast('work-orders', {
+          name: 'work_order_updated',
+          data: {
+            workOrderId: updated.id,
+            otNumero: updated.numero,
+            estado: updated.estado,
+            updatedAt: updated.updated_at.toISOString()
+          },
+          id: crypto.randomUUID()
+        })
+
+        perf.end(1000)
+
+        return {
+          success: true,
+          workOrder: updated,
+          message: `OT ${workOrder.numero} verificada exitosamente. La reparación funciona correctamente.`
+        }
+      } else {
+        // 3b. CASO: La reparación NO funciona → crear OT de re-trabajo
+        const ultimoNumero = await tx.workOrder.findFirst({
+          orderBy: { numero: 'desc' }
+        })
+
+        // Extraer número base y calcular siguiente
+        const numeroActual = ultimoNumero?.numero || 'OT-2026-000'
+        const match = numeroActual.match(/OT-2026-(\d+)/)
+        const siguienteNumero = match ? parseInt(match[1]) + 1 : 1
+        const nuevoNumero = `OT-2026-${String(siguienteNumero).padStart(3, '0')}`
+
+        // Crear OT de re-trabajo con prioridad ALTA
+        const reworkOrder = await tx.workOrder.create({
+          data: {
+            numero: nuevoNumero,
+            tipo: 'CORRECTIVO', // Re-trabajo es siempre correctivo
+            estado: 'ASIGNADA', // Re-trabajo empieza directamente en ASIGNADA
+            prioridad: 'ALTA', // Re-trabajo tiene prioridad ALTA
+            descripcion: `[RE-TRABAJO] ${validated.comentario || 'Reparación no funcionó. Revisar y corregir.'}`,
+            equipo_id: workOrder.equipo_id,
+            parent_work_order_id: workOrder.id, // Vincular con OT original
+            failure_report_id: workOrder.failure_report_id // Mantener vinculación con avería original
+          }
+        })
+
+        // Copiar asignaciones de la OT original a la OT de re-trabajo
+        await tx.workOrderAssignment.createMany({
+          data: workOrder.assignments.map((assignment) => ({
+            work_order_id: reworkOrder.id,
+            userId: assignment.userId,
+            role: assignment.role
+          }))
+        })
+
+        // Marcar la OT original con verificacion_at (aunque fue negativa)
+        await tx.workOrder.update({
+          where: { id: validated.workOrderId },
+          data: {
+            verificacion_at: new Date()
+          }
+        })
+
+        // Registrar auditoría
+        await tx.auditLog.create({
+          data: {
+            userId: session.user.id,
+            action: 'work_order_rework_created',
+            targetId: reworkOrder.id,
+            metadata: {
+              otNumero: reworkOrder.numero,
+              parentOtNumero: workOrder.numero,
+              funciona: false,
+              comentario: validated.comentario
+            }
+          }
+        })
+
+        // Emit eventos SSE
+        BroadcastManager.broadcast('work-orders', {
+          name: 'work_order_updated',
+          data: {
+            workOrderId: workOrder.id,
+            otNumero: workOrder.numero,
+            estado: workOrder.estado,
+            updatedAt: new Date().toISOString()
+          },
+          id: crypto.randomUUID()
+        })
+
+        BroadcastManager.broadcast('work-orders', {
+          name: 'technician_assigned',
+          data: {
+            otNumero: reworkOrder.numero,
+            otId: reworkOrder.id,
+            tecnicoId: workOrder.assignments[0]?.userId || '',
+            tecnicoNombre: workOrder.assignments[0]?.user?.name || '',
+            assignedAt: new Date().toISOString(),
+            estado: reworkOrder.estado
+          },
+          id: crypto.randomUUID()
+        })
+
+        perf.end(1000)
+
+        return {
+          success: true,
+          workOrder: reworkOrder,
+          message: `La reparación no funcionó. Se ha creado OT de re-trabajo ${reworkOrder.numero} con prioridad ALTA.`
         }
       }
-    },
-    orderBy: {
-      created_at: 'desc' // Más recientes primero
+    })
+  } catch (error) {
+    console.error('[verifyWorkOrder] Error:', error)
+    if (error instanceof z.ZodError) {
+      return { success: false, error: 'Datos inválidos' }
     }
-  })
-
-  return workOrders
+    return { success: false, error: 'Error al verificar OT' }
+  }
 }
