@@ -52,7 +52,7 @@ vi.mock('@/lib/sse/broadcaster', () => {
     },
     broadcastWorkOrderUpdated: vi.fn((workOrder) => {
       broadcastMock('work-orders', {
-        name: 'work-order-updated',
+        name: 'work_order_updated',
         data: {
           workOrderId: workOrder.id,
           otNumero: workOrder.numero,
@@ -64,7 +64,7 @@ vi.mock('@/lib/sse/broadcaster', () => {
     }),
     broadcastRepuestoStockUpdated: vi.fn((repuestoId) => {
       broadcastMock('work-orders', {
-        name: 'repuesto-stock-updated',
+        name: 'repuesto_stock_updated',
         data: {
           repuestoId,
           updatedAt: new Date().toISOString()
@@ -74,7 +74,7 @@ vi.mock('@/lib/sse/broadcaster', () => {
     }),
     broadcastWorkOrderCommentAdded: vi.fn((workOrderId, comment) => {
       broadcastMock('work-orders', {
-        name: 'work-order-comment-added',
+        name: 'work_order_comment_added',
         data: {
           workOrderId,
           commentId: comment.id,
@@ -101,8 +101,8 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
   const createdRepuestos: string[] = [];
   const createdComponentes: string[] = [];
 
-  beforeAll(async () => {
-    // Setup: Create test technician user
+  // Helper: Ensure test user exists and return user ID
+  async function ensureTestUser(): Promise<string> {
     const tecnico = await prisma.user.upsert({
       where: { email: 'tecnico-test@example.com' },
       update: {},
@@ -113,7 +113,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       }
     });
 
-    // Create capabilities for the user
+    // Create capabilities for the user if they exist
     const canViewOwnOTs = await prisma.capability.findUnique({
       where: { name: 'can_view_own_ots' }
     });
@@ -122,15 +122,39 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
     });
 
     if (canViewOwnOTs && canUpdateOwnOT) {
-      await prisma.userCapability.createMany({
-        data: [
-          { userId: tecnico.id, capabilityId: canViewOwnOTs.id },
-          { userId: tecnico.id, capabilityId: canUpdateOwnOT.id }
-        ]
+      // Use upsert to avoid duplicate key errors
+      await prisma.userCapability.upsert({
+        where: {
+          userId_capabilityId: {
+            userId: tecnico.id,
+            capabilityId: canViewOwnOTs.id
+          }
+        },
+        update: {},
+        create: { userId: tecnico.id, capabilityId: canViewOwnOTs.id }
+      });
+      await prisma.userCapability.upsert({
+        where: {
+          userId_capabilityId: {
+            userId: tecnico.id,
+            capabilityId: canUpdateOwnOT.id
+          }
+        },
+        update: {},
+        create: { userId: tecnico.id, capabilityId: canUpdateOwnOT.id }
       });
     }
 
-    createdUsers.push(tecnico.id);
+    if (!createdUsers.includes(tecnico.id)) {
+      createdUsers.push(tecnico.id);
+    }
+
+    return tecnico.id;
+  }
+
+  beforeAll(async () => {
+    // Pre-create test user to ensure it exists
+    await ensureTestUser();
   });
 
   afterEach(async () => {
@@ -180,15 +204,8 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
     vi.clearAllMocks();
   });
 
-  afterAll(async () => {
-    // Clean up users after all tests
-    if (createdUsers.length > 0) {
-      await prisma.user.deleteMany({
-        where: { id: { in: createdUsers } }
-      });
-      createdUsers.length = 0;
-    }
-  });
+  // NOTE: Don't delete test user in afterAll - the upsert handles duplicates
+  // and deleting users can cause FK violations in parallel tests
 
   // Helper: Create test WorkOrder
   async function createTestWorkOrder(overrides: Partial<{
@@ -227,6 +244,9 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
     });
     createdEquipment.push(equipo.id);
 
+    // Ensure user exists before creating WorkOrder
+    const userId = await ensureTestUser();
+
     const workOrder = await prisma.workOrder.create({
       data: {
         numero: `OT-${faker.string.uuid()}`,
@@ -237,7 +257,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         equipo_id: overrides.equipoId || equipo.id,
         assignments: {
           create: {
-            userId: createdUsers[0], // tecnico
+            userId, // Use ensured user ID
             role: 'TECNICO'
           }
         }
@@ -296,10 +316,11 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       });
 
       expect(updated?.estado).toBe(WorkOrderEstado.EN_PROGRESO);
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P0-AC3] should create audit log when OT is started', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.ASIGNADA });
+      const userId = await ensureTestUser();
 
       // Simulate Server Action with audit log
       await prisma.$transaction(async (tx) => {
@@ -310,7 +331,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
         await tx.auditLog.create({
           data: {
-            userId: createdUsers[0],
+            userId,
             action: 'work_order_started',
             targetId: workOrder.id
           }
@@ -327,7 +348,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       expect(auditLog).toBeDefined();
       expect(auditLog?.action).toBe('work_order_started');
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P0-AC3] should emit SSE event when OT is started', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.ASIGNADA });
@@ -341,7 +362,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       // Trigger SSE broadcast manually
       const { BroadcastManager } = await import('@/lib/sse/broadcaster');
       BroadcastManager.broadcast('work-orders', {
-        name: 'work-order-updated',
+        name: 'work_order_updated',
         data: {
           workOrderId: workOrder.id,
           otNumero: workOrder.numero,
@@ -353,13 +374,13 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // Verify SSE broadcast called
       expect(broadcastMock).toHaveBeenCalledWith('work-orders', expect.objectContaining({
-        name: 'work-order-updated',
+        name: 'work_order_updated',
         data: expect.objectContaining({
           workOrderId: workOrder.id,
           estado: 'EN_PROGRESO'
         })
       }));
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P1-AC3] should return error if OT not in ASIGNADA state', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
@@ -375,7 +396,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // Verify that EN_PROGRESO cannot transition to EN_PROGRESO
       expect(canTransitionToEN_PROGRESO).toBe(false);
-    });
+    }, 15000); // Extended timeout for Prisma operations
   });
 
   /**
@@ -431,7 +452,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       });
 
       expect(updatedRepuesto?.stock).toBe(10 - cantidad); // 10 - 3 = 7
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P0-AC4] should fail if cantidad exceeds current stock', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
@@ -454,7 +475,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
           data: { stock: newStock }
         });
       })).rejects.toThrow('Stock insuficiente');
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P1-AC4] should rollback transaction on race condition', async () => {
       // THIS TEST WILL FAIL - Optimistic locking not implemented
@@ -499,12 +520,13 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // This test requires concurrent transaction simulation
       // For now, skipped because optimistic locking doesn't exist
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P1-AC4] should create audit log for repuesto used', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
       const repuesto = await createTestRepuesto(5);
       const cantidad = 2;
+      const userId = await ensureTestUser();
 
       // Simulate Server Action with audit log
       await prisma.$transaction(async (tx) => {
@@ -523,7 +545,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
         await tx.auditLog.create({
           data: {
-            userId: createdUsers[0],
+            userId,
             action: 'repuesto_used',
             targetId: repuesto.id,
             metadata: { work_order_id: workOrder.id, cantidad, newStock: 3 }
@@ -544,7 +566,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         work_order_id: workOrder.id,
         cantidad
       });
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P1-AC4] should emit SSE event for stock update', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
@@ -569,7 +591,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       // Trigger SSE broadcast
       const { BroadcastManager } = await import('@/lib/sse/broadcaster');
       BroadcastManager.broadcast('work-orders', {
-        name: 'repuesto-stock-updated',
+        name: 'repuesto_stock_updated',
         data: {
           repuestoId: repuesto.id,
           updatedAt: new Date().toISOString()
@@ -579,12 +601,12 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // Verify SSE broadcast called
       expect(broadcastMock).toHaveBeenCalledWith('work-orders', expect.objectContaining({
-        name: 'repuesto-stock-updated',
+        name: 'repuesto_stock_updated',
         data: expect.objectContaining({
           repuestoId: repuesto.id
         })
       }));
-    });
+    }, 15000); // Extended timeout for Prisma transaction
   });
 
   /**
@@ -594,6 +616,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
   describe('completeWorkOrder (AC5)', () => {
     it('[P0-AC5] should change OT status to COMPLETADA with completedAt timestamp', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
+      const userId = await ensureTestUser();
 
       // Simulate Server Action with Prisma transaction
       await prisma.$transaction(async (tx) => {
@@ -607,7 +630,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
         await tx.auditLog.create({
           data: {
-            userId: createdUsers[0],
+            userId,
             action: 'work_order_completed',
             targetId: workOrder.id,
             metadata: {
@@ -630,7 +653,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       expect(updated?.estado).toBe(WorkOrderEstado.COMPLETADA);
       expect(updated?.completed_at).toBeDefined();
       expect(updated?.completed_at).toBeInstanceOf(Date);
-    });
+    }, 15000); // Extended timeout for Prisma transaction
 
     it('[P0-AC5] should emit SSE event when OT is completed', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
@@ -647,7 +670,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       // Trigger SSE broadcast manually (call mock function directly)
       const { BroadcastManager } = await import('@/lib/sse/broadcaster');
       BroadcastManager.broadcast('work-orders', {
-        name: 'work-order-updated',
+        name: 'work_order_updated',
         data: {
           workOrderId: workOrder.id,
           otNumero: workOrder.numero,
@@ -659,16 +682,17 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // Verify SSE broadcast called
       expect(broadcastMock).toHaveBeenCalledWith('work-orders', expect.objectContaining({
-        name: 'work-order-updated',
+        name: 'work_order_updated',
         data: expect.objectContaining({
           workOrderId: workOrder.id,
           estado: 'COMPLETADA'
         })
       }));
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P1-AC5] should create audit log when OT is completed', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
+      const userId = await ensureTestUser();
 
       // Simulate Server Action
       await prisma.$transaction(async (tx) => {
@@ -682,7 +706,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
         await tx.auditLog.create({
           data: {
-            userId: createdUsers[0],
+            userId,
             action: 'work_order_completed',
             targetId: workOrder.id,
             metadata: {
@@ -705,7 +729,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       expect(auditLog).toBeDefined();
       expect(auditLog?.action).toBe('work_order_completed');
-    });
+    }, 15000); // Extended timeout for Prisma transaction
   });
 
   /**
@@ -740,7 +764,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       });
 
       expect(auditLog).toBeDefined();
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P2-AC6] should create rework OT when funciona=false', async () => {
       const originalOT = await createTestWorkOrder({
@@ -811,7 +835,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       });
 
       expect(auditLog).toBeDefined();
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P2-AC6] should prevent verification of non-completed OTs', async () => {
       const workOrder = await createTestWorkOrder({
@@ -829,7 +853,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       // Attempting to verify non-completed OT via Server Action should return error
       // For integration test, we verify the state is correct
       expect(nonCompletedOT?.verificacion_at).toBeNull();
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P2-AC6] should prevent duplicate verification', async () => {
       const workOrder = await createTestWorkOrder({
@@ -846,7 +870,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       });
 
       expect(alreadyVerified?.verificacion_at).toBeDefined();
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P2-AC6] should link rework OT to original OT via parent_work_order_id', async () => {
       const originalOT = await createTestWorkOrder({
@@ -880,7 +904,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       expect(parent?.child_work_orders).toHaveLength(1);
       expect(parent?.child_work_orders[0].id).toBe(reworkOT.id);
-    });
+    }, 15000); // Extended timeout for Prisma operations
   });
 
   /**
@@ -890,13 +914,14 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
   describe('addComment (AC7)', () => {
     it('[P1-AC7] should create comment with timestamp', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
+      const userId = await ensureTestUser();
       const texto = 'Reemplazado bearing defectuoso';
 
       // Simulate Server Action with Prisma
       await prisma.workOrderComment.create({
         data: {
           work_order_id: workOrder.id,
-          user_id: createdUsers[0],
+          user_id: userId,
           texto
         }
       });
@@ -911,19 +936,20 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       expect(comment).toBeDefined();
       expect(comment?.texto).toBe(texto);
-      expect(comment?.user_id).toBe(createdUsers[0]);
+      expect(comment?.user_id).toBe(userId);
       expect(comment?.created_at).toBeDefined();
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P1-AC7] should emit SSE event after comment added', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
+      const userId = await ensureTestUser();
       const texto = 'Necesito repuesto adicional';
 
       // Simulate Server Action with SSE broadcast
       const comment = await prisma.workOrderComment.create({
         data: {
           work_order_id: workOrder.id,
-          user_id: createdUsers[0],
+          user_id: userId,
           texto
         }
       });
@@ -931,7 +957,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       // Trigger SSE broadcast manually (call mock function directly)
       const { BroadcastManager } = await import('@/lib/sse/broadcaster');
       BroadcastManager.broadcast('work-orders', {
-        name: 'work-order-comment-added',
+        name: 'work_order_comment_added',
         data: {
           workOrderId: workOrder.id,
           commentId: comment.id,
@@ -943,13 +969,13 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       // Verify SSE broadcast called
       expect(broadcastMock).toHaveBeenCalledWith('work-orders', expect.objectContaining({
-        name: 'work-order-comment-added',
+        name: 'work_order_comment_added',
         data: expect.objectContaining({
           workOrderId: workOrder.id,
           texto
         })
       }));
-    });
+    }, 15000); // Extended timeout for Prisma operations
   });
 
   /**
@@ -982,7 +1008,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
       expect(photo).toBeDefined();
       expect(photo?.url).toBe(url);
       expect(photo?.tipo).toBe(tipo.toUpperCase());
-    });
+    }, 15000); // Extended timeout for Prisma operations
 
     it('[P1-AC8] should support DESPUES photo type', async () => {
       const workOrder = await createTestWorkOrder({ estado: WorkOrderEstado.EN_PROGRESO });
@@ -1008,7 +1034,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       expect(photo).toBeDefined();
       expect(photo?.tipo).toBe('DESPUES');
-    });
+    }, 15000); // Extended timeout for Prisma operations
   });
 
   /**
@@ -1016,7 +1042,11 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
    * Priority: P2 (Nice to have - performance optimization)
    */
   describe('getMyWorkOrders con paginación (NFR-SC4)', () => {
+    let testUserId: string;
+
     beforeEach(async () => {
+      // Ensure user exists before creating OTs
+      testUserId = await ensureTestUser();
       // Create 25 OTs for testing pagination (more than default limit of 20)
       const otPromises = Array.from({ length: 25 }, async (_, i) => {
         return createTestWorkOrder({
@@ -1025,7 +1055,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         })
       })
       await Promise.all(otPromises)
-    })
+    }, 30000) // Extended timeout for creating 25 OTs
 
     it('[P2-NFR-SC4] should return first page with default limit', async () => {
       const page = 1
@@ -1037,7 +1067,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         },
@@ -1049,7 +1079,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         }
@@ -1061,7 +1091,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
 
       const totalPages = Math.ceil(total / limit)
       expect(totalPages).toBeGreaterThan(1)
-    })
+    }, 15000) // Extended timeout for pagination queries
 
     it('[P2-NFR-SC4] should return second page correctly', async () => {
       const page = 2
@@ -1072,7 +1102,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         },
@@ -1098,7 +1128,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         }
@@ -1120,7 +1150,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         }
@@ -1135,7 +1165,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         },
@@ -1159,7 +1189,7 @@ describe('Story 3.2 - Integration Tests: My WorkOrders (P0)', () => {
         where: {
           assignments: {
             some: {
-              userId: createdUsers[0]
+              userId: testUserId
             }
           }
         },

@@ -123,33 +123,21 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
   const otIdRef = useRef(ot.id)
   useEffect(() => {
     otIdRef.current = ot.id
-    console.log('[Modal] otIdRef updated to:', ot.id)
   }, [ot.id])
 
   // Update local state when ot data changes (modal reopened OR selectedOT updated via SSE)
   // This ensures the modal reflects changes made by the user via SSE events in the parent
   useEffect(() => {
-    console.log('[Modal] Syncing local state with ot prop updates', {
-      otId: ot.id,
-      isOpen,
-      usedRepuestos: ot.usedRepuestos?.length,
-      comments: ot.comments?.length,
-      photos: ot.photos?.length
-    })
-
     // Only sync if the lengths are different (parent got SSE update before we did)
     // This prevents overwriting local state if we're ahead of parent
     if (isOpen) {
       if (ot.usedRepuestos?.length !== localUsedRepuestos.length) {
-        console.log('[Modal] Syncing usedRepuestos from parent')
         setLocalUsedRepuestos(ot.usedRepuestos)
       }
       if (ot.comments?.length !== localComments.length) {
-        console.log('[Modal] Syncing comments from parent')
         setLocalComments(ot.comments)
       }
       if (ot.photos?.length !== localPhotos.length) {
-        console.log('[Modal] Syncing photos from parent')
         setLocalPhotos(ot.photos)
       }
     }
@@ -173,12 +161,6 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
     onMessage: (message) => {
       const currentOtId = otIdRef.current
 
-      console.log('[SSE Modal] Received message:', {
-        type: message.type,
-        currentOtId,
-        isOpen
-      })
-
       // Handle repuesto added event
       if (message.type === 'work_order_repuesto_added') {
         const data = message.data as {
@@ -187,28 +169,15 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           repuestoNombre: string
           cantidad: number
         }
-        console.log('[SSE Modal] Repuesto event:', {
-          currentOtId,
-          eventWorkOrderId: data.workOrderId,
-          match: data.workOrderId === currentOtId,
-          data
-        })
         if (data.workOrderId === currentOtId) {
-          console.log('[SSE Modal] ✓ Adding repuesto to local state:', data.repuestoNombre)
-          setLocalUsedRepuestos((prev) => {
-            const updated = [
-              ...prev,
-              {
-                id: data.usedRepuestoId,
-                cantidad: data.cantidad,
-                repuesto: { name: data.repuestoNombre }
-              }
-            ]
-            console.log('[SSE Modal] New localUsedRepuestos count:', updated.length)
-            return updated
-          })
-        } else {
-          console.log('[SSE Modal] ✗ WorkOrderId mismatch - ignoring event')
+          setLocalUsedRepuestos((prev) => [
+            ...prev,
+            {
+              id: data.usedRepuestoId,
+              cantidad: data.cantidad,
+              repuesto: { name: data.repuestoNombre }
+            }
+          ])
         }
       }
 
@@ -221,26 +190,16 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           createdAt: string
           userName: string
         }
-        console.log('[SSE Modal] Comment event:', {
-          currentOtId,
-          eventWorkOrderId: data.workOrderId,
-          match: data.workOrderId === currentOtId
-        })
         if (data.workOrderId === currentOtId) {
-          console.log('[SSE Modal] ✓ Adding comment to local state')
-          setLocalComments((prev) => {
-            const updated = [
-              ...prev,
-              {
-                id: data.commentId,
-                texto: data.texto,
-                created_at: new Date(data.createdAt),
-                user: { name: data.userName }
-              }
-            ]
-            console.log('[SSE Modal] New localComments count:', updated.length)
-            return updated
-          })
+          setLocalComments((prev) => [
+            ...prev,
+            {
+              id: data.commentId,
+              texto: data.texto,
+              created_at: new Date(data.createdAt),
+              user: { name: data.userName }
+            }
+          ])
         }
       }
 
@@ -253,29 +212,16 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
           url: string
           createdAt: string
         }
-        console.log('[SSE Modal] Photo event:', {
-          currentOtId,
-          eventWorkOrderId: data.workOrderId,
-          match: data.workOrderId === currentOtId,
-          tipo: data.tipo
-        })
         if (data.workOrderId === currentOtId) {
-          console.log('[SSE Modal] ✓ Adding photo to local state:', data.tipo)
-          setLocalPhotos((prev) => {
-            const updated = [
-              ...prev,
-              {
-                id: data.photoId,
-                tipo: data.tipo,
-                url: data.url,
-                created_at: new Date(data.createdAt)
-              }
-            ]
-            console.log('[SSE Modal] New localPhotos count:', updated.length)
-            return updated
-          })
-        } else {
-          console.log('[SSE Modal] ✗ Photo WorkOrderId mismatch')
+          setLocalPhotos((prev) => [
+            ...prev,
+            {
+              id: data.photoId,
+              tipo: data.tipo,
+              url: data.url,
+              created_at: new Date(data.createdAt)
+            }
+          ])
         }
       }
     }
@@ -350,13 +296,9 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
     try {
       const result = await verifyWorkOrder(ot.id, true)
 
-      if (result.success) {
-        toast.success(result.message || `OT ${ot.numero} verificada - Reparación confirmada`)
-        router.refresh()
-        onClose()
-      } else {
-        toast.error(result.error || 'Error al verificar OT')
-      }
+      toast.success(result.message || `OT ${ot.numero} verificada - Reparación confirmada`)
+      router.refresh()
+      onClose()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al verificar OT')
     } finally {
@@ -374,13 +316,9 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
     try {
       const result = await verifyWorkOrder(ot.id, false, 'Reparación no funcionó. Revisar y corregir.')
 
-      if (result.success) {
-        toast.success(result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`)
-        router.refresh()
-        onClose()
-      } else {
-        toast.error(result.error || 'Error al crear OT de re-trabajo')
-      }
+      toast.success(result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`)
+      router.refresh()
+      onClose()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al crear OT de re-trabajo')
     } finally {

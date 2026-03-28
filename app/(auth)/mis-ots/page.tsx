@@ -21,7 +21,9 @@ export default async function MyWorkOrdersPage({
   searchParams: { page?: string }
 }) {
   // Parse page from URL query params (default: 1)
-  const page = searchParams.page ? parseInt(searchParams.page) : 1
+  // Validate: must be a positive integer, NaN defaults to 1
+  const rawPage = parseInt(searchParams.page || '1')
+  const page = Math.max(1, isNaN(rawPage) ? 1 : rawPage)
 
   // getMyWorkOrders() handles authentication and capability checks internally
   // The layout also already redirects unauthenticated users

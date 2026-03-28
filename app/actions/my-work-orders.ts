@@ -315,11 +315,6 @@ export async function addUsedRepuesto(
     })
 
     // Emit evento SSE para work-orders (para actualizar lista de repuestos usados)
-    console.log('[SSE Broadcast] Emitting work_order_repuesto_added:', {
-      workOrderId: validated.workOrderId,
-      usedRepuestoId: result.usedRepuesto.id,
-      repuestoNombre: result.repuestoNombre
-    })
     BroadcastManager.broadcast('work-orders', {
       name: 'work_order_repuesto_added',
       data: {
@@ -779,7 +774,8 @@ export async function getMyWorkOrders(
         usedRepuestos: {
           include: {
             repuesto: true
-          }
+          },
+          take: 50 // Limit to prevent N+1 queries
         }
       },
       orderBy: {
@@ -835,19 +831,16 @@ export async function verifyWorkOrder(
   workOrderId: string,
   funciona: boolean,
   comentario?: string
-): Promise<
-  | { success: true; workOrder: WorkOrder; message: string }
-  | { success: false; error: string }
-> {
+): Promise<{ success: true; workOrder: WorkOrder; message: string }> {
   const session = await auth()
   if (!session?.user) {
-    return { success: false, error: 'No autenticado' }
+    throw new AuthenticationError('No autenticado')
   }
 
   // PBAC validation: capability para verificar OTs
   const hasCapability = session.user.capabilities.includes('can_verify_ot')
   if (!hasCapability) {
-    return { success: false, error: 'Sin permisos para verificar OTs' }
+    throw new AuthorizationError('Sin permisos para verificar OTs')
   }
 
   // Validar input con Zod
@@ -889,17 +882,17 @@ export async function verifyWorkOrder(
       })
 
       if (!workOrder) {
-        return { success: false, error: 'OT no encontrada' }
+        throw new ValidationError('OT no encontrada')
       }
 
       // 2. Verificar que la OT esté completada
       if (workOrder.estado !== 'COMPLETADA') {
-        return { success: false, error: 'Solo se pueden verificar OTs completadas' }
+        throw new ValidationError('Solo se pueden verificar OTs completadas')
       }
 
       // 3. Verificar que la OT no haya sido verificada previamente
       if (workOrder.verificacion_at) {
-        return { success: false, error: 'Esta OT ya ha sido verificada' }
+        throw new ValidationError('Esta OT ya ha sido verificada')
       }
 
       if (validated.funciona) {
@@ -949,11 +942,12 @@ export async function verifyWorkOrder(
           orderBy: { numero: 'desc' }
         })
 
-        // Extraer número base y calcular siguiente
-        const numeroActual = ultimoNumero?.numero || 'OT-2026-000'
-        const match = numeroActual.match(/OT-2026-(\d+)/)
+        // Extraer número base y calcular siguiente (use dynamic year)
+        const currentYear = new Date().getFullYear()
+        const numeroActual = ultimoNumero?.numero || `OT-${currentYear}-000`
+        const match = numeroActual.match(/OT-\d{4}-(\d+)/)
         const siguienteNumero = match ? parseInt(match[1]) + 1 : 1
-        const nuevoNumero = `OT-2026-${String(siguienteNumero).padStart(3, '0')}`
+        const nuevoNumero = `OT-${currentYear}-${String(siguienteNumero).padStart(3, '0')}`
 
         // Crear OT de re-trabajo con prioridad ALTA
         const reworkOrder = await tx.workOrder.create({
@@ -1036,10 +1030,9 @@ export async function verifyWorkOrder(
       }
     })
   } catch (error) {
-    console.error('[verifyWorkOrder] Error:', error)
     if (error instanceof z.ZodError) {
-      return { success: false, error: 'Datos inválidos' }
+      throw new ValidationError('Datos inválidos')
     }
-    return { success: false, error: 'Error al verificar OT' }
+    throw error
   }
 }

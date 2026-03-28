@@ -356,7 +356,7 @@ export async function convertFailureReportToOT(failureReportId: string) {
     // Emit SSE notification to supervisors (can_view_all_ots capability)
     // NFR-S4: Notificación SSE entregada en <30s (P95)
     emitSSEEvent({
-      type: 'work-order-updated',
+      type: 'work_order_updated',
       data: {
         workOrderId: workOrder.id,
         otNumero: workOrder.numero,

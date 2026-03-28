@@ -115,18 +115,14 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
     try {
       const result = await verifyWorkOrder(workOrder.id, true)
 
-      if (result.success) {
-        toast.success(result.message || `OT ${workOrder.numero} verificada - Reparación confirmada`)
-        setIsVerificationDialogOpen(false)
-        onOpenChange(false)
-        // Refresh page to show updated data
-        window.location.reload()
-      } else {
-        toast.error(result.error || 'Error al verificar OT')
-      }
+      toast.success(result.message || `OT ${workOrder.numero} verificada - Reparación confirmada`)
+      setIsVerificationDialogOpen(false)
+      onOpenChange(false)
+      // Refresh page to show updated data
+      window.location.reload()
     } catch (error) {
       console.error('Error verifying work order:', error)
-      toast.error('Error al verificar OT')
+      toast.error(error instanceof Error ? error.message : 'Error al verificar OT')
     } finally {
       setIsVerifying(false)
     }
@@ -145,20 +141,16 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
         'Reparación no funcionó - se requiere re-trabajo'
       )
 
-      if (result.success) {
-        toast.success(
-          result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`
-        )
-        setIsVerificationDialogOpen(false)
-        onOpenChange(false)
-        // Refresh page to show new rework OT
-        window.location.reload()
-      } else {
-        toast.error(result.error || 'Error al crear OT de re-trabajo')
-      }
+      toast.success(
+        result.message || `OT de re-trabajo creada: ${result.workOrder.numero}`
+      )
+      setIsVerificationDialogOpen(false)
+      onOpenChange(false)
+      // Refresh page to show new rework OT
+      window.location.reload()
     } catch (error) {
       console.error('Error creating rework OT:', error)
-      toast.error('Error al crear OT de re-trabajo')
+      toast.error(error instanceof Error ? error.message : 'Error al crear OT de re-trabajo')
     } finally {
       setIsVerifying(false)
     }

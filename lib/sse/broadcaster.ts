@@ -309,7 +309,7 @@ export function broadcastTechnicianAssigned(assignment: {
   estado: string
 }): void {
   BroadcastManager.broadcast('work-orders', {
-    name: 'technician-assigned',
+    name: 'technician_assigned',
     data: {
       otNumero: assignment.otNumero,
       otId: assignment.otId,

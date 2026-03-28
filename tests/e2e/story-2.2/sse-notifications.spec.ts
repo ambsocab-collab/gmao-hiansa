@@ -113,20 +113,20 @@ test.describe('Epic 2: SSE Notifications (R-002 PERF score=6)', () => {
         window.eventSource = new EventSource('/api/v1/sse?channel=work-orders');
 
         // @ts-ignore
-        window.eventSource.addEventListener('work-order-updated', (e: MessageEvent) => {
+        window.eventSource.addEventListener('work_order_updated', (e: MessageEvent) => {
           // @ts-ignore
           window.sseEvents.push({
-            type: 'work-order-updated',
+            type: 'work_order_updated',
             data: JSON.parse(e.data),
             timestamp: Date.now()
           });
         });
 
         // @ts-ignore
-        window.eventSource.addEventListener('technician-assigned', (e: MessageEvent) => {
+        window.eventSource.addEventListener('technician_assigned', (e: MessageEvent) => {
           // @ts-ignore
           window.sseEvents.push({
-            type: 'technician-assigned',
+            type: 'technician_assigned',
             data: JSON.parse(e.data),
             timestamp: Date.now()
           });
@@ -178,8 +178,8 @@ test.describe('Epic 2: SSE Notifications (R-002 PERF score=6)', () => {
           () => {
             // @ts-ignore
             return window.sseEvents && (
-              window.sseEvents.some((e: any) => e.type === 'work-order-updated') ||
-              window.sseEvents.some((e: any) => e.type === 'technician-assigned')
+              window.sseEvents.some((e: any) => e.type === 'work_order_updated') ||
+              window.sseEvents.some((e: any) => e.type === 'technician_assigned')
             );
           },
           { timeout: 30000 }
@@ -197,7 +197,7 @@ test.describe('Epic 2: SSE Notifications (R-002 PERF score=6)', () => {
         const eventData = await tecnicoPage.evaluate(() => {
           // @ts-ignore
           const event = window.sseEvents.find((e: any) =>
-            e.type === 'work-order-updated' || e.type === 'technician-assigned'
+            e.type === 'work_order_updated' || e.type === 'technician_assigned'
           );
           // @ts-ignore
           return event ? event.data : null;
