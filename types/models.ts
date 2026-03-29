@@ -21,6 +21,7 @@ import {
   EquipoEstado,
   AssignmentRole,
   FailureReportEstado,
+  Provider,
 } from '@prisma/client'
 
 // Re-export all Prisma models for easy import
@@ -43,6 +44,7 @@ export type {
   EquipoEstado,
   AssignmentRole,
   FailureReportEstado,
+  Provider,
 }
 
 // Legacy type aliases for backward compatibility with existing code
@@ -81,10 +83,11 @@ export type EquipoWithLinea = Equipo & {
   }
 }
 
-// Helper type for WorkOrder with assignments
+// Helper type for WorkOrder with assignments (Story 3.3: user ahora es opcional, provider added)
 export type WorkOrderWithAssignments = WorkOrder & {
   assignments: Array<{
-    user: User
+    user: User | null
+    provider: Provider | null
   }>
   equipo: Equipo
 }

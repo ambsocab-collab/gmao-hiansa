@@ -54,11 +54,17 @@ interface OTDetailsModalProps {
     assignments?: Array<{
       id: string
       role: string
-      user: {
+      userId: string | null
+      providerId: string | null
+      user?: {
         id: string
         name: string
         email: string
-      }
+      } | null
+      provider?: {
+        id: string
+        name: string
+      } | null
     }>
   }
   open: boolean
@@ -189,7 +195,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
               <p className="text-sm text-muted-foreground">Equipo</p>
               <p className="font-medium">{workOrder.equipo.name}</p>
               <p className="text-xs text-muted-foreground">
-                {workOrder.equipo.linea?.planta?.name} → {workOrder.equipo.linea?.name} → {workOrder.equipo.code}
+                {workOrder.equipo.linea?.planta?.division} → {workOrder.equipo.linea?.name} → {workOrder.equipo.code}
               </p>
             </div>
           )}
@@ -226,14 +232,14 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
             </div>
           )}
 
-          {/* Técnicos asignados */}
+          {/* Técnicos/Proveedores asignados */}
           {workOrder.assignments && workOrder.assignments.length > 0 && (
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Técnicos asignados</p>
+              <p className="text-sm text-muted-foreground">Asignados</p>
               <div className="flex flex-wrap gap-2">
                 {workOrder.assignments.map((assignment) => (
                   <Badge key={assignment.id} variant="outline">
-                    {assignment.user.name}
+                    {assignment.user?.name || assignment.provider?.name || 'Sin asignar'}
                   </Badge>
                 ))}
               </div>

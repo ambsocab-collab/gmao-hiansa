@@ -31,7 +31,7 @@ export interface KanbanColumnProps {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }>
   onOTCardClick?: (workOrder: WorkOrder & {
@@ -46,9 +46,25 @@ export interface KanbanColumnProps {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }) => void
+  onAssignClick?: (workOrder: WorkOrder & {
+    equipo: {
+      name: string
+      linea: {
+        planta: {
+          division: string
+        }
+      }
+    }
+    assignments?: Array<{
+      user: {
+        name: string | null
+      } | null
+    }>
+  }) => void
+  canAssign?: boolean // Story 3.3: Mostrar botón asignar
   disableDrag?: boolean
   compactCards?: boolean // Vista mobile simplificada
 }
@@ -81,7 +97,7 @@ const estadoLabels: Record<WorkOrderEstado, string> = {
   DESCARTADA: 'Cancelada',
 }
 
-export function KanbanColumn({ estado, workOrders, onOTCardClick, disableDrag, compactCards }: KanbanColumnProps) {
+export function KanbanColumn({ estado, workOrders, onOTCardClick, onAssignClick, canAssign, disableDrag, compactCards }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: estado,
     data: {
@@ -162,6 +178,8 @@ export function KanbanColumn({ estado, workOrders, onOTCardClick, disableDrag, c
                   key={workOrder.id}
                   workOrder={workOrder}
                   onClick={onOTCardClick}
+                  onAssignClick={onAssignClick}
+                  canAssign={canAssign}
                   disableDrag={disableDrag}
                   compact={compactCards}
                 />

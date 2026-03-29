@@ -17,7 +17,8 @@ import { StatusBadge } from '@/components/ui/status-badge'
 import { DivisionTag } from '@/components/ui/division-tag'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Users, Wrench } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Calendar, Users, Wrench, UserPlus } from 'lucide-react'
 
 export interface OTCardProps {
   workOrder: WorkOrder & {
@@ -32,7 +33,7 @@ export interface OTCardProps {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }
   onClick?: (workOrder: WorkOrder & {
@@ -47,9 +48,25 @@ export interface OTCardProps {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }) => void
+  onAssignClick?: (workOrder: WorkOrder & {
+    equipo: {
+      name: string
+      linea: {
+        planta: {
+          division: string
+        }
+      }
+    }
+    assignments?: Array<{
+      user: {
+        name: string | null
+      } | null
+    }>
+  }) => void
+  canAssign?: boolean // Story 3.3: Mostrar botón asignar
   disableDrag?: boolean // Para móvil: no drag & drop, solo click
   compact?: boolean // Vista mobile simplificada
 }
@@ -84,7 +101,7 @@ const tipoColors: Record<WorkOrderTipo, { bg: string; text: string; label: strin
   },
 }
 
-export function OTCard({ workOrder, onClick, disableDrag = false, compact = false }: OTCardProps) {
+export function OTCard({ workOrder, onClick, onAssignClick, canAssign = false, disableDrag = false, compact = false }: OTCardProps) {
   // Solo usar drag & drop si no está deshabilitado (para móvil)
   const { attributes, listeners, setNodeRef: draggableSetNodeRef, isDragging } = useDraggable({
     id: workOrder.id,
@@ -111,7 +128,7 @@ export function OTCard({ workOrder, onClick, disableDrag = false, compact = fals
 
   // Técnicos asignados
   const tecnicosAsignados = workOrder.assignments
-    ?.map(a => a.user.name)
+    ?.map(a => a.user?.name)
     .filter(Boolean)
     .join(', ') || 'Sin asignar'
 
@@ -271,6 +288,27 @@ export function OTCard({ workOrder, onClick, disableDrag = false, compact = fals
             <span data-testid={`ot-fecha-${workOrder.id}`}>
               {fechaLimite}
             </span>
+          </div>
+        )}
+
+        {/* Botón Asignar - Story 3.3 */}
+        {canAssign && (
+          <div className="pt-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full"
+              onClick={(e) => {
+                e.stopPropagation()
+                if (onAssignClick) {
+                  onAssignClick(workOrder)
+                }
+              }}
+              data-testid="btn-asignar"
+            >
+              <UserPlus className="h-3.5 w-3.5 mr-1" />
+              Asignar
+            </Button>
           </div>
         )}
       </CardContent>

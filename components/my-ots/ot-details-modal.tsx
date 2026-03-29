@@ -62,7 +62,7 @@ interface WorkOrderWithRelations extends WorkOrder {
     user: {
       id: string
       name: string
-    }
+    } | null
   }>
   photos: Array<{
     id: string
@@ -461,7 +461,7 @@ export function OTDetailsModal({ ot, isOpen, onClose, allRepuestos = [] }: OTDet
               <div data-testid="ot-asignados">
                 <span className="text-gray-600 dark:text-gray-400">Técnicos asignados: </span>
                 <span className="text-gray-900 dark:text-gray-100">
-                  {ot.assignments.map(a => a.user.name).join(', ')}
+                  {ot.assignments.map(a => a.user?.name || 'Sin nombre').join(', ')}
                 </span>
               </div>
             </div>

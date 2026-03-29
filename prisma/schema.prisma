@@ -24,6 +24,8 @@ model User {
   forcePasswordReset Boolean   @default(false) @map("force_password_reset")
   deleted            Boolean   @default(false) // Soft delete (Story 1.1)
   lastLogin          DateTime? @map("last_login") // Last login timestamp (Story 1.1)
+  skills             String[]  @default([]) // Story 3.3: Habilidades del técnico (eléctrica, mecánica, etc.)
+  ubicacion          String?   @map("ubicacion") // Story 3.3: Ubicación de trabajo (Planta HiRock, Planta Ultra, Taller, Almacén)
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @updatedAt @map("updated_at")
 
@@ -39,6 +41,7 @@ model User {
   @@index([email])
   @@index([deleted]) // For filtering soft-deleted users (Story 1.1)
   @@index([createdAt])
+  @@index([ubicacion]) // Story 3.3: Para filtrar por ubicación
   @@map("users")
 }
 
@@ -312,19 +315,42 @@ enum AssignmentRole {
   PROVEEDOR
 }
 
+// Story 3.3: Modelo para Proveedores Externos
+model Provider {
+  id           String   @id @default(cuid())
+  name         String
+  email        String?  @map("email")
+  phone        String?  @map("phone")
+  services     String[] // Tipos de servicio: ["eléctrica", "mecánica", "hidráulica", "neumática", "electrónica"]
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  assignments WorkOrderAssignment[]
+
+  @@index([name])
+  @@index([active])
+  @@map("providers")
+}
+
 model WorkOrderAssignment {
+  id            String         @id @default(cuid())
   work_order_id String
-  userId        String
+  userId        String?        // Story 3.3: Ahora opcional para soportar asignación de proveedores
+  providerId    String?        @map("provider_id") // Story 3.3: Para asignación de proveedores
   role          AssignmentRole
   created_at    DateTime       @default(now())
 
   // Relations
   work_order WorkOrder @relation(fields: [work_order_id], references: [id], onDelete: Cascade)
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider   Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
-  @@id([work_order_id, userId])
+  @@unique([work_order_id, userId, providerId]) // Story 3.3: Compound unique constraint
   @@index([userId]) // Para buscar OTs asignadas a un usuario
   @@index([work_order_id]) // Para buscar asignaciones de una OT
+  @@index([providerId]) // Story 3.3: Para buscar OTs asignadas a un proveedor
   @@map("workOrderAssignments")
 }
 

@@ -26,6 +26,7 @@ async function main() {
   await prisma.planta.deleteMany()
   await prisma.userCapability.deleteMany()
   await prisma.capability.deleteMany()
+  await prisma.provider.deleteMany() // Story 3.3: Limpiar providers
   await prisma.user.deleteMany()
 
   // ============================================
@@ -110,7 +111,7 @@ async function main() {
     })),
   })
 
-  // Usuario: Técnico con capacidades limitadas
+  // Usuario: Técnico con capacidades limitadas (Story 3.3: skills + ubicacion)
   const tecnicoPassword = await bcrypt.hash('tecnico123', 10)
   const tecnico = await prisma.user.create({
     data: {
@@ -119,6 +120,8 @@ async function main() {
       name: 'Carlos Tecnico',
       phone: '+34 600 000 002',
       forcePasswordReset: false,
+      skills: ['eléctrica', 'mecánica'],
+      ubicacion: 'Planta HiRock',
     },
   })
 
@@ -131,6 +134,45 @@ async function main() {
   await prisma.userCapability.createMany({
     data: tecnicoCapabilities.map((cap) => ({
       userId: tecnico.id,
+      capabilityId: cap.id,
+    })),
+  })
+
+  // Story 3.3: Crear técnicos adicionales con diferentes skills y ubicaciones
+  const tecnico2Password = await bcrypt.hash('tecnico123', 10)
+  const tecnico2 = await prisma.user.create({
+    data: {
+      email: 'tecnico2@hiansa.com',
+      passwordHash: tecnico2Password,
+      name: 'Ana Hidraulica',
+      phone: '+34 600 000 020',
+      forcePasswordReset: false,
+      skills: ['hidráulica', 'neumática'],
+      ubicacion: 'Planta Ultra',
+    },
+  })
+  await prisma.userCapability.createMany({
+    data: tecnicoCapabilities.map((cap) => ({
+      userId: tecnico2.id,
+      capabilityId: cap.id,
+    })),
+  })
+
+  const tecnico3Password = await bcrypt.hash('tecnico123', 10)
+  const tecnico3 = await prisma.user.create({
+    data: {
+      email: 'tecnico3@hiansa.com',
+      passwordHash: tecnico3Password,
+      name: 'Pedro Electronico',
+      phone: '+34 600 000 021',
+      forcePasswordReset: false,
+      skills: ['electrónica'],
+      ubicacion: 'Taller',
+    },
+  })
+  await prisma.userCapability.createMany({
+    data: tecnicoCapabilities.map((cap) => ({
+      userId: tecnico3.id,
       capabilityId: cap.id,
     })),
   })
@@ -226,6 +268,40 @@ async function main() {
   })
 
   console.log(`✅ Created ${tags.count} classification tags`)
+
+  // ============================================
+  // Story 3.3: CREAR PROVEEDORES EXTERNOS
+  // ============================================
+  console.log('🏭 Creating external providers...')
+
+  const providers = await prisma.provider.createMany({
+    data: [
+      {
+        name: 'ElectroServicios HiRock',
+        email: 'contacto@electroservicios.com',
+        phone: '+34 910 001 001',
+        services: ['eléctrica', 'electrónica'],
+        active: true,
+      },
+      {
+        name: 'HidroMantenimiento Ultra',
+        email: 'info@hidromantenimiento.com',
+        phone: '+34 910 002 002',
+        services: ['hidráulica', 'neumática'],
+        active: true,
+      },
+      {
+        name: 'MecaTotal Industrial',
+        email: 'servicios@mecatotal.com',
+        phone: '+34 910 003 003',
+        services: ['mecánica'],
+        active: true,
+      },
+    ],
+    skipDuplicates: true,
+  })
+
+  console.log(`✅ Created ${providers.count} external providers`)
 
   // ============================================
   // 3. CREAR JERARQUÍA DE 5 NIVELES

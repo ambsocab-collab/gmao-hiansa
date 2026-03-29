@@ -1,238 +1,271 @@
-<testsuites id="" name="" tests="55" failures="0" skipped="7" errors="0" time="188.948386">
-<testsuite name="story-3.2\debug-mis-ots-page.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="1" failures="0" skipped="0" time="5.059" errors="0">
-<testcase name="DEBUG - Mis OTs Page › debug: check page content after navigation" classname="story-3.2\debug-mis-ots-page.spec.ts" time="5.059">
-<system-out>
-<![CDATA[Current URL: http://localhost:3000/mis-ots
-Page title: GMAO Hiansa - Gestión de Mantenimiento Asistido por Ordenador
-Page content (first 500 chars): Hola,
-U
-Cerrar Sesión
-Dashboard
-Reportar Avería
-Mis OTs
-Mis Órdenes de Trabajo
+<testsuites id="" name="" tests="6" failures="5" skipped="1" errors="0" time="1456.1460630000001">
+<testsuite name="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" timestamp="2026-03-29T20:37:59.154Z" hostname="chromium" tests="6" failures="5" skipped="1" time="1489.856" errors="0">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="55.756">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:32:7 [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:32:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT 
 
-OTs asignadas para su gestión (71 total)
+    Error: expect(locator).toBeVisible() failed
 
-OT-2025-002
-Asignada
-HiRock
-Torno CNC TC-01
-•
-hace un momento
-OT-2025-010
-Asignada
-HiRock
-Prensa Hidraulica PH-01
-•
-hace un momento
-OT-2025-011
-Asignada
-HiRock
-Transportadora TR-01
-•
-hace un momento
-OT-2025-012
-Asignada
-HiRock
-Brazo Mecanico BM-01
-•
-hace un momento
-OT-2025-013
-Asignada
-Ultra
-Horno HR-01
-•
-hace un momento
-OT-2025-100
-Asignada
-HiRock
-Prensa Hidraulica PH-01
-•
-h
-Is login page: [33mtrue[39m
-Error elements found: [33m0[39m
+    Locator: locator('[data-testid="tecnico-option-0"]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('[data-testid="tecnico-option-0"]')
+
+
+      58 |     // Select first technician (by checkbox in dropdown)
+      59 |     const tecnicoOption1 = page.locator('[data-testid="tecnico-option-0"]');
+    > 60 |     await expect(tecnicoOption1).toBeVisible();
+         |                                  ^
+      61 |     await tecnicoOption1.click();
+      62 |
+      63 |     // Select second technician
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:60:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\debug-ot-states.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="1" failures="0" skipped="0" time="7.928" errors="0">
-<testcase name="DEBUG - OT States › debug: print all OT states" classname="story-3.2\debug-ot-states.spec.ts" time="7.928">
+</failure>
 <system-out>
 <![CDATA[
-=== Total OT cards: 20 ===
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\test-failed-1.png]]
 
-OT 1: OT-2025-002 - Estado: "Asignada" - Includes ASIGNADA: true
-OT 2: OT-2025-010 - Estado: "Asignada" - Includes ASIGNADA: true
-OT 3: OT-2025-011 - Estado: "Asignada" - Includes ASIGNADA: true
-OT 4: OT-2025-012 - Estado: "Asignada" - Includes ASIGNADA: true
-OT 5: OT-2025-013 - Estado: "Asignada" - Includes ASIGNADA: true
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip]]
 ]]>
 </system-out>
 </testcase>
-</testsuite>
-<testsuite name="story-3.2\P0-ac1-mis-ots-view.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="1" time="34.546" errors="0">
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-001] should show Mis OTs view for assigned technician" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="7.691">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="57.776">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:89:7 [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:89:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo 
+
+    Error: expect(locator).not.toBeVisible() failed
+
+    Locator:  locator('[data-testid^="modal-asignacion-"]')
+    Expected: not visible
+    Received: visible
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]')
+        7 × locator resolved to <div role="dialog" tabindex="-1" id="radix-:r0:" data-state="open" aria-labelledby="radix-:r1:" aria-describedby="radix-:r2:" data-testid="modal-asignacion-cmnc7zrvc009bzcmmc13qlwvo" class="fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in…>…</div>
+          - unexpected value "visible"
+        - waiting for" http://localhost:3000/ots/lista" navigation to finish...
+
+
+      125 |
+      126 |     // Wait for modal to close
+    > 127 |     await expect(assignmentModal).not.toBeVisible({ timeout: 5000 });
+          |                                       ^
+      128 |
+      129 |     // Verify success
+      130 |     const successToast = page.locator('[data-testid="toast-success"]');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:127:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-002] should show OT card with required information" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.274">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="41.479">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:134:7 [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:134:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor) 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: 0
+
+      165 |     const selectedTecnicos = assignmentModal.locator('[data-testid="selected-tecnico-badge"]');
+      166 |     const tecnicoCount = await selectedTecnicos.count();
+    > 167 |     expect(tecnicoCount).toBe(3);
+          |                          ^
+      168 |
+      169 |     // Try to select a provider (should be disabled or show error)
+      170 |     const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:167:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-003] should NOT show OTs assigned to other technicians" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.516">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-004] should show bottom nav tab &quot;Mis OTs&quot; on mobile" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.262">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.715">
-</testcase>
-<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P2-AC1-006] should show empty state when no OTs assigned" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.088">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-004] Técnico sin capability no puede asignar" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="41.876">
 <properties>
-<property name="skip" value="Requires user with no OTs assigned - test data setup needed">
+<property name="skip" value="Requires separate auth context - move to separate test file">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-</testsuite>
-<testsuite name="story-3.2\P0-ac3-iniciar-ot.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="2" time="55.295" errors="0">
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-001] should show &quot;Iniciar OT&quot; button when OT is ASIGNADA" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.633">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="1289.586">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:215:7 [P1-AC1-005] Filtros por habilidades disponibles" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:215:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="modal-asignacion-"]').getByTestId('filtro-skills-checkbox-eléctrica')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('filtro-skills-checkbox-eléctrica')
+
+
+      230 |     for (const skill of skills) {
+      231 |       const skillCheckbox = assignmentModal.getByTestId(`filtro-skills-checkbox-${skill}`);
+    > 232 |       await expect(skillCheckbox).toBeVisible();
+          |                                   ^
+      233 |     }
+      234 |
+      235 |     // Click on "eléctrica" filter
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:232:35
+
+    Tearing down "context" exceeded the test timeout of 60000ms.
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip]]
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-002] should show confirmation dialog when clicking &quot;Iniciar OT&quot;" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.565">
-</testcase>
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-003] should change OT status to EN_PROGRESO when confirmed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="24.625">
-</testcase>
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-004] should emit SSE event when OT is started" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.209">
-<properties>
-<property name="skip" value="SSE event verification requires SSE listener setup - verified in integration tests">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-005] should cancel iniciar OT when confirmation dismissed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="7.619">
-</testcase>
-<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-006] should show error if iniciar OT fails" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="6.644">
-<properties>
-<property name="skip" value="Requires mock failure scenario - error handling not implemented">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P0-ac4-agregar-repuestos.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="6" failures="0" skipped="1" time="58.953" errors="0">
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-001] should show repuestos dropdown when OT is EN_PROGRESO" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="14.628">
-</testcase>
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-002] should show repuesto info: name, stock, location" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="7.186">
-</testcase>
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-003] should add repuesto when stock is sufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="16.773">
-</testcase>
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-004] should show error when stock is insufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="8.24">
-</testcase>
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P1-AC4-005] should not send notification to can_manage_stock users" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="6.909">
-</testcase>
-<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P2-AC4-006] should handle race condition with optimistic locking" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="5.217">
-<properties>
-<property name="skip" value="Optimistic locking not implemented - requires concurrent requests with Promise.all()">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P0-ac5-completar-ot.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="8" failures="0" skipped="0" time="96.232" errors="0">
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-001] should show &quot;Completar OT&quot; button when OT is EN_PROGRESO" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="4.833">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-002] should show confirmation dialog when clicking &quot;Completar OT&quot;" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.316">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-003] should change OT status to COMPLETADA when confirmed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="15.767">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-004] should record completedAt timestamp" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="27.759">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-005] should emit SSE event when OT is completed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="18.397">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-006] should cancel completar OT when confirmation dismissed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="9.263">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-007] should show error if completar OT fails" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.947">
-</testcase>
-<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P2-AC5-008] should only allow completion from valid states" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.95">
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P1-ac2-modal-detalles.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="7" failures="0" skipped="0" time="44.236" errors="0">
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-001] should open modal when clicking on OT card" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="5.831">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-002] should show complete OT information in modal" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="4.704">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-003] should close modal with X button" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="7.158">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-004] should close modal with ESC key" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="5.567">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-005] should close modal when clicking outside" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.532">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-006] should show repuestos sugeridos if exist" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.972">
-</testcase>
-<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P2-AC2-007] should trap focus within modal when open" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="7.472">
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P1-ac7-comentarios.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="7" failures="0" skipped="0" time="94.562" errors="0">
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-001] should show comment input in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="14.076">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-002] should add comment with timestamp when submitted" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="17.897">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-003] should show all comments in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="6.34">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-004] should emit SSE event when comment added" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="10.969">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-005] should auto-scroll to latest comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="23.125">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-006] should clear input after submitting comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="10.022">
-</testcase>
-<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-007] should show commenter name and timestamp" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="12.133">
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P1-ac8-fotos.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="8" failures="0" skipped="0" time="151.286" errors="0">
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-001] should show &quot;Adjuntar foto antes&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="14.405">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-002] should show &quot;Adjuntar foto después&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="18.017">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-003] should upload &quot;antes&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="28.758">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-004] should upload &quot;después&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="27.621">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-005] should show photos in separate lists: Antes and Después" classname="story-3.2\P1-ac8-fotos.spec.ts" time="18.819">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-006] should validate file type (only jpeg/png)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="15.172">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-007] should validate file size (max 5MB)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="17.028">
-</testcase>
-<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P2-AC8-008] should show multiple photos in each section" classname="story-3.2\P1-ac8-fotos.spec.ts" time="11.466">
-</testcase>
-</testsuite>
-<testsuite name="story-3.2\P2-ac6-verificacion.spec.ts" timestamp="2026-03-28T01:33:32.141Z" hostname="chromium" tests="5" failures="0" skipped="3" time="17.175" errors="0">
-<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-001] should show verification option for completed OTs" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="2.255">
-<properties>
-<property name="skip" value="No completed OTs available - skipping test">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-002] should mark OT as verified when repair works" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="3.276">
-<properties>
-<property name="skip" value="No completed OTs available - skipping test">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-003] should create rework OT when repair does not work" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="3.938">
-<properties>
-<property name="skip" value="No completed OTs available - skipping test">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-004] should notify technicians when rework OT created" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="4.903">
-</testcase>
-<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-005] should show confirmation message with aviso number" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="2.803">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="3.383">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:255:7 [P1-AC1-006] Filtros por ubicación disponibles" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:255:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles 
+
+    Error: page.goto: net::ERR_NETWORK_IO_SUSPENDED at http://localhost:3000/ots/lista
+    Call log:
+      - navigating to "http://localhost:3000/ots/lista", waiting until "load"
+
+
+      26 |     // Navigate to OT list page where assignment modal can be triggered
+      27 |     const baseURL = process.env.BASE_URL || 'http://localhost:3000';
+    > 28 |     await page.goto(`${baseURL}/ots/lista`);
+         |                ^
+      29 |     await page.waitForLoadState('domcontentloaded');
+      30 |   });
+      31 |
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:28:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

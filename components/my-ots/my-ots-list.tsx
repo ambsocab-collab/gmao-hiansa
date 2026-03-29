@@ -34,7 +34,7 @@ interface WorkOrderWithRelations extends WorkOrder {
     user: {
       id: string
       name: string
-    }
+    } | null
   }>
   photos: Array<{
     id: string

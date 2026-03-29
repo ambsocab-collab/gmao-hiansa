@@ -37,7 +37,7 @@ export interface KanbanBoardProps {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }>
 }
@@ -80,11 +80,17 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     assignments?: Array<{
       id: string
       role: string
-      user: {
+      userId: string | null
+      providerId: string | null
+      user?: {
         id: string
         name: string
         email: string
-      }
+      } | null
+      provider?: {
+        id: string
+        name: string
+      } | null
     }>
   } | null>(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -259,7 +265,7 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     assignments?: Array<{
       user: {
         name: string | null
-      }
+      } | null
     }>
   }) => {
     // Convertir WorkOrder al formato esperado por el modal
@@ -283,11 +289,17 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
       assignments?: Array<{
         id: string
         role: string
-        user: {
+        userId: string | null
+        providerId: string | null
+        user?: {
           id: string
           name: string
           email: string
-        }
+        } | null
+        provider?: {
+          id: string
+          name: string
+        } | null
       }>
     }
 
