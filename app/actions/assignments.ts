@@ -452,14 +452,130 @@ export async function getTechnicianWorkload(userId: string): Promise<number> {
  */
 /**
  * Remove a technician or provider assignment from a work order
- * * Story 3.3: AC1 - Remove assignment capability
+ * Story 3.3: AC1 - Remove assignment capability
+ *
+ * @param workOrderId - ID de la OT
+ * @param userId - ID del técnico a remover (opcional)
+ * @param providerId - ID del proveedor a remover (opcional)
+ * @returns Resultado de la operación
  */
 export async function removeAssignment(
   workOrderId: string,
   userId?: string,
   providerId?: string
-): Promise<{ success: boolean }> {
+): Promise<{ success: boolean; removedCount: number }> {
+  const session = await auth()
 
+  if (!session?.user) {
+    throw new AuthenticationError('No autenticado')
+  }
+
+  // Validación PBAC: requiere can_assign_technicians
+  if (!session.user.capabilities.includes('can_assign_technicians')) {
+    throw new AuthorizationError('No tienes permiso para remover asignaciones')
+  }
+
+  const perf = trackPerformance('remove_assignment', session.user.id)
+
+  try {
+    // Verificar que la OT existe
+    const workOrder = await prisma.workOrder.findUnique({
+      where: { id: workOrderId }
+    })
+
+    if (!workOrder) {
+      throw new ValidationError('La OT no existe')
+    }
+
+    // Validar que al menos uno de los parámetros fue proporcionado
+    if (!userId && !providerId) {
+      throw new ValidationError('Debe especificar un userId o providerId para remover')
+    }
+
+    let removedCount = 0
+
+    // Transacción para remover asignaciones
+    await prisma.$transaction(async (tx) => {
+      // Remover asignación de técnico si se especificó
+      if (userId) {
+        const deletedUser = await tx.workOrderAssignment.deleteMany({
+          where: {
+            work_order_id: workOrderId,
+            userId
+          }
+        })
+        removedCount += deletedUser.count
+      }
+
+      // Remover asignación de proveedor si se especificó
+      if (providerId) {
+        const deletedProvider = await tx.workOrderAssignment.deleteMany({
+          where: {
+            work_order_id: workOrderId,
+            providerId
+          }
+        })
+        removedCount += deletedProvider.count
+      }
+
+      // Registrar auditoría
+      await tx.auditLog.create({
+        data: {
+          userId: session.user.id,
+          action: 'assignment_removed',
+          targetId: workOrderId,
+          metadata: {
+            workOrderNumero: workOrder.numero,
+            removedUserId: userId,
+            removedProviderId: providerId,
+            removedBy: session.user.name
+          }
+        }
+      })
+    })
+
+    // Emitir evento SSE
+    broadcastWorkOrderUpdated({
+      id: workOrder.id,
+      numero: workOrder.numero,
+      estado: workOrder.estado,
+      updatedAt: new Date()
+    })
+
+    // Revalidar rutas
+    revalidatePath('/ots/kanban')
+    revalidatePath('/ots/lista')
+    revalidatePath('/ots/mis-ots')
+
+    perf.end(1000)
+
+    return { success: true, removedCount }
+  } catch (error) {
+    perf.end(1000)
+
+    if (error instanceof ValidationError || error instanceof AuthorizationError) {
+      throw error
+    }
+
+    console.error('[removeAssignment] Error:', error)
+    throw new ValidationError('Error al remover asignación')
+  }
+}
+
+// ============================================
+// CONFIRM PROVIDER WORK
+// ============================================
+
+/**
+ * Confirmar trabajo de proveedor externo
+ * Story 3.3 AC5
+ *
+ * @param workOrderId - ID de la OT
+ * @returns Resultado de la confirmación
+ */
+export async function confirmProviderWork(
+  workOrderId: string
+): Promise<{ success: boolean }> {
   const session = await auth()
 
   if (!session?.user) {

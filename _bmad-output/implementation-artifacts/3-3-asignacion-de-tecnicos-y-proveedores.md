@@ -1,6 +1,6 @@
 # Story 3.3: Asignación de Técnicos y Proveedores
 
-Status: in-progress
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -431,30 +431,32 @@ N/A - Code review ejecutado sin debugging adicional
 ## 🔍 Review Follow-ups (AI)
 
 **Añadido por Code Review - 2026-03-29**
+**Actualizado: 2026-03-29 - Round 1 Completado**
 
 ### 🔴 CRITICAL - Must Fix Before Done
 
-- [ ] **[AI-Review][CRITICAL] Actualizar types/models.ts** - Exportar tipo Provider
+- [x] **[AI-Review][CRITICAL] Actualizar types/models.ts** - Exportar tipo Provider ✅ FIXED
   - File: `types/models.ts`
   - Issue: No se exporta `Provider` type a pesar de que existe en Prisma schema
   - Fix: Añadir `Provider` a los imports y exports
 
-- [ ] **[AI-Review][CRITICAL] Implementar removeAssignment Server Action**
+- [x] **[AI-Review][CRITICAL] Implementar removeAssignment Server Action** ✅ FIXED
   - File: `app/actions/assignments.ts`
   - Issue: Función especificada en tasks pero NO implementada
-  - Fix: Crear función `removeAssignment(workOrderId, userId?, providerId?)`
+  - Fix: Creada función `removeAssignment(workOrderId, userId?, providerId?)` que realmente remueve asignaciones
+  - Fix: Creada función separada `confirmProviderWork(workOrderId)` para AC5
 
-- [ ] **[AI-Review][CRITICAL] Actualizar WorkOrderWithAssignments type**
+- [x] **[AI-Review][CRITICAL] Actualizar WorkOrderWithAssignments type** ✅ FIXED
   - File: `types/models.ts:84-90`
   - Issue: No incluye relación `provider` en assignments
-  - Fix: Añadir `provider` al tipo de assignment
+  - Fix: Añadido `provider` al tipo de assignment
 
 ### 🟡 HIGH - Should Fix
 
-- [ ] **[AI-Review][HIGH] Corregir dataTestId en AssignmentModal**
-  - File: `components/assignments/assignment-modal.tsx:143`
+- [x] **[AI-Review][HIGH] Corregir dataTestId en AssignmentModal** ✅ VERIFIED CORRECT
+  - File: `components/assignments/assignment-modal.tsx:142`
   - Issue: Usa `dataTestId` en lugar de `data-testid` (prop incorrecto para shadcn Dialog)
-  - Fix: Cambiar `dataTestId` por `data-testid`
+  - Status: Ya usa `data-testid` correctamente
 
 - [ ] **[AI-Review][HIGH] Actualizar comentarios de tests "RED PHASE"**
   - Files: `tests/integration/story-3.3/assignments.test.ts`, `tests/e2e/story-3.3/*.spec.ts`
@@ -465,10 +467,10 @@ N/A - Code review ejecutado sin debugging adicional
   - Issue: Server Action `confirmProviderWork()` existe pero NO hay UI
   - Fix: Añadir botón "Confirmar Recepción" en OTDetailsModal para OTs en REPARACION_EXTERNA
 
-- [ ] **[AI-Review][HIGH] Verificar integración completa en KanbanBoard**
+- [x] **[AI-Review][HIGH] Verificar integración completa en KanbanBoard** ✅ VERIFIED
   - File: `components/kanban/kanban-board.tsx`
   - Issue: No verificado si pasa canAssign a OTCards y renderiza AssignmentModal
-  - Fix: Verificar integración y añadir si falta
+  - Status: Props onAssignClick y canAssign existen en KanbanColumn y OTCard. Modal disponible via OTDetailsModal.
 
 ### 🟢 MEDIUM - Nice to Have
 
@@ -482,9 +484,9 @@ N/A - Code review ejecutado sin debugging adicional
   - Issue: AC1 especifica filtro por servicios pero NO implementado
   - Fix: Añadir filtro similar a TechnicianSelect
 
-- [ ] **[AI-Review][MEDIUM] Añadir barrel export en components/assignments**
+- [x] **[AI-Review][MEDIUM] Añadir barrel export en components/assignments** ✅ EXISTS
   - Issue: No existe `index.ts` con exports
-  - Fix: Crear `components/assignments/index.ts`
+  - Status: `components/assignments/index.ts` ya existe con todos los exports
 
 - [ ] **[AI-Review][LOW] Actualizar comentarios de seed.ts**
   - File: `prisma/seed.ts`
