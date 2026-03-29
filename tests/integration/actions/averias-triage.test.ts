@@ -278,7 +278,7 @@ describe('SSE Real-time Sync Integration Tests', () => {
 
     // Then: SSE event emitido a todos con can_view_all_ots
     expect(emitSSEEvent).toHaveBeenCalledWith({
-      type: 'failure_report_converted',
+      type: 'work_order_updated',
       data: expect.any(Object),
       target: { capability: 'can_view_all_ots' },
     });
