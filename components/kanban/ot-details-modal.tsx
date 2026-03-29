@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { VALID_TRANSITIONS, ACTION_BUTTONS } from '@/lib/constants/work-orders'
 import { verifyWorkOrder } from '@/app/actions/my-work-orders'
+import { confirmProviderWork } from '@/app/actions/assignments'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -75,6 +76,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
   const [isUpdating, setIsUpdating] = useState(false)
   const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
+  const [isConfirmingProvider, setIsConfirmingProvider] = useState(false)
 
   /**
    * Maneja el cambio de estado de la OT
@@ -163,6 +165,27 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
   }
 
   /**
+   * Story 3.3 AC5: Confirm provider work received
+   */
+  async function handleConfirmProviderWork() {
+    setIsConfirmingProvider(true)
+
+    try {
+      await confirmProviderWork(workOrder.id)
+
+      toast.success(`Recepción confirmada para OT ${workOrder.numero}`)
+      onOpenChange(false)
+      // Refresh page to show updated state
+      window.location.reload()
+    } catch (error) {
+      console.error('Error confirming provider work:', error)
+      toast.error(error instanceof Error ? error.message : 'Error al confirmar recepción')
+    } finally {
+      setIsConfirmingProvider(false)
+    }
+  }
+
+  /**
    * Determina qué botones de acción mostrar según estado actual
    */
   const actionButtons = ACTION_BUTTONS[workOrder.estado] || []
@@ -172,6 +195,13 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
    */
   const showVerifyButton =
     workOrder.estado === 'COMPLETADA' && !workOrder.verificacion_at
+
+  /**
+   * Story 3.3 AC5: Show confirm provider button for REPARACION_EXTERNA with provider
+   */
+  const hasProviderAssigned = workOrder.assignments?.some(a => a.providerId && a.provider)
+  const showConfirmProviderButton =
+    workOrder.estado === 'REPARACION_EXTERNA' && hasProviderAssigned
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -284,6 +314,31 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
                   </Button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Story 3.3 AC5: Botón de confirmación de proveedor para OTs en REPARACION_EXTERNA */}
+          {showConfirmProviderButton && (
+            <div className="space-y-2 pt-4 border-t">
+              <p className="text-sm font-medium">Confirmación de Proveedor</p>
+              <Button
+                onClick={handleConfirmProviderWork}
+                className="w-full bg-cyan-600 hover:bg-cyan-700"
+                disabled={isConfirmingProvider}
+                data-testid="confirmar-recepcion-btn"
+              >
+                {isConfirmingProvider ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Confirmando...
+                  </>
+                ) : (
+                  'Confirmar Recepción'
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Confirma que el proveedor ha completado la reparación externa
+              </p>
             </div>
           )}
 
