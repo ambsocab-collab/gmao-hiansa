@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P0 E2E Tests for Story 3.3 AC1: Seleccionar técnicos internos y/o proveedores externos
  *
- * TDD RED PHASE: Tests validate assignment functionality - all tests will FAIL
- * Expected Failures: Elements not found, routes don't exist
+ * TDD GREEN PHASE: Tests validate assignment functionality - implementation complete
  *
  * Acceptance Criteria:
  * - Supervisor con capability can_assign_technicians puede asignar
@@ -30,10 +29,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
   });
 
   test('[P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT', async ({ page }) => {
-    // RED PHASE: This test will fail because:
-    // - Assignment modal doesn't exist
-    // - TechnicianSelect component doesn't exist
-    // - assignToWorkOrder Server Action doesn't exist
+    // GREEN PHASE: Assignment modal, TechnicianSelect, and assignToWorkOrder implemented
 
     // Find first OT card in the list
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
@@ -87,10 +83,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
   });
 
   test('[P0-AC1-002] Supervisor puede asignar 1 proveedor externo', async ({ page }) => {
-    // RED PHASE: This test will fail because:
-    // - Provider model doesn't exist
-    // - ProviderSelect component doesn't exist
-    // - getAvailableProviders Server Action doesn't exist
+    // GREEN PHASE: Provider model, ProviderSelect, and getAvailableProviders implemented
 
     // Find first OT card
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
@@ -132,9 +125,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
   });
 
   test('[P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)', async ({ page }) => {
-    // RED PHASE: This test will fail because:
-    // - Validation logic doesn't exist
-    // - Error handling UI doesn't exist
+    // GREEN PHASE: Validation logic and error handling implemented
 
     // Find first OT card
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
@@ -213,7 +204,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
   });
 
   test('[P1-AC1-005] Filtros por habilidades disponibles', async ({ page }) => {
-    // RED PHASE: This test will fail because filter UI doesn't exist
+    // GREEN PHASE: Filter UI implemented in TechnicianSelect
 
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
@@ -253,7 +244,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
   });
 
   test('[P1-AC1-006] Filtros por ubicación disponibles', async ({ page }) => {
-    // RED PHASE: This test will fail because filter UI doesn't exist
+    // GREEN PHASE: Location filter UI implemented in TechnicianSelect
 
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
