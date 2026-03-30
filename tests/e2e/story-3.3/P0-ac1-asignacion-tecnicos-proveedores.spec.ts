@@ -180,15 +180,12 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     const options = page.locator('[data-testid^="tecnico-option-"]');
     const optionCount = await options.count();
 
-    // Try to select up to 3 technicians
-    let selectedCount = 0;
+    // Try to select up to 3 technicians (only click enabled options)
     for (let i = 0; i < Math.min(3, optionCount); i++) {
       const option = options.nth(i);
-      // Check if already selected
-      const checkmark = option.locator('.bg-primary');
-      if (await checkmark.count() === 0) {
+      // Check if option is enabled before clicking
+      if (await option.isEnabled()) {
         await option.click();
-        selectedCount++;
         await page.waitForTimeout(300);
       }
     }
@@ -216,12 +213,9 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     await expect(assignmentModal).not.toBeVisible({ timeout: 5000 });
   });
 
-  test('[P1-AC1-004] Técnico sin capability no puede asignar', async ({ page }) => {
-    // This test uses tecnico auth which doesn't have can_assign_technicians
-    // Need to re-authenticate as tecnico
-    // Note: This test should be in a separate describe block with tecnico storage state
-    test.skip(true, 'Requires separate auth context - move to separate test file');
-  });
+  // Note: [P1-AC1-004] Técnico sin capability no puede asignar
+  // This test is now in a separate file: p1-ac1-tecnico-sin-capability.spec.ts
+  // with the correct tecnico auth context
 
   test('[P1-AC1-005] Filtros por habilidades disponibles', async ({ page }) => {
     // GREEN PHASE: Filter UI implemented in TechnicianSelect
