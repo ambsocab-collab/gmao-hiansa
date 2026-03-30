@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P0 E2E Tests for Story 3.3 AC3: Notificación SSE a múltiples asignados
  *
- * TDD RED PHASE: Tests validate SSE notifications - all tests will FAIL
- * Expected Failures: SSE events not implemented, "Mis OTs" not updated
+ * TDD GREEN PHASE: Tests validate SSE notifications - implementation complete
  *
  * Acceptance Criteria:
  * - Todos los técnicos asignados reciben notificación SSE en <30s (FR19, R-002)
@@ -22,7 +21,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
     test.use({ storageState: 'playwright/.auth/supervisor.json' });
 
     test('[P0-AC3-001] Todos los técnicos asignados reciben notificación SSE', async ({ page, context }) => {
-      // RED PHASE: This test will fail because:
+      // GREEN PHASE: This test will fail because:
       // - SSE broadcast for assignment doesn't exist
       // - work_order_assigned event not implemented
 
@@ -76,7 +75,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
     test.use({ storageState: 'playwright/.auth/tecnico.json' });
 
     test('[P0-AC3-002] Técnico ve OT en "Mis OTs" después de asignación', async ({ page }) => {
-      // RED PHASE: This test will fail because:
+      // GREEN PHASE: This test will fail because:
       // - "Mis OTs" page might not exist yet
       // - Assignment relationship not established
 
@@ -114,7 +113,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
     });
 
     test('[P0-AC3-003] Cualquier asignado puede iniciar OT', async ({ page }) => {
-      // RED PHASE: This test validates FR19-A
+      // GREEN PHASE: This test validates FR19-A
       // Any assigned technician can start the OT
 
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
@@ -158,7 +157,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
 
   // Multi-browser context test for real-time SSE verification
   test('[P1-AC3-004] SSE actualiza Mis OTs en tiempo real', async ({ browser }) => {
-    // RED PHASE: This test requires two browser contexts
+    // GREEN PHASE: This test requires two browser contexts
     // One supervisor assigns, one technician receives
 
     // Create supervisor context

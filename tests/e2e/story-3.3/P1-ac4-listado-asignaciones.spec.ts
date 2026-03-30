@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P1 E2E Tests for Story 3.3 AC4: Columna "Asignaciones" en vista de listado
  *
- * TDD RED PHASE: Tests validate assignments column in list view - all tests will FAIL
- * Expected Failures: Column doesn't exist, badge format not implemented
+ * TDD GREEN PHASE: Tests validate assignments column in list view - implementation complete
  *
  * Acceptance Criteria:
  * - Columna "Asignaciones" muestra distribución (FR21)
@@ -25,7 +24,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   });
 
   test('[P1-AC4-001] Columna "Asignaciones" muestra distribución correcta', async ({ page }) => {
-    // RED PHASE: This test will fail because:
+    // GREEN PHASE: This test will fail because:
     // - "Asignaciones" column doesn't exist in the table
     // - AssignmentBadge component doesn't exist
 
@@ -71,7 +70,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   });
 
   test('[P1-AC4-002] Tooltip muestra nombres completos al hacer hover', async ({ page }) => {
-    // RED PHASE: This test will fail because:
+    // GREEN PHASE: This test will fail because:
     // - Tooltip with names doesn't exist
 
     const otTable = page.getByTestId('ot-list-table');
@@ -103,7 +102,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   });
 
   test('[P1-AC4-003] Modal de detalles muestra lista de asignados', async ({ page }) => {
-    // RED PHASE: This test will fail because:
+    // GREEN PHASE: This test will fail because:
     // - Details modal doesn't show assignments section
 
     const otTable = page.getByTestId('ot-list-table');
@@ -136,7 +135,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   });
 
   test('[P2-AC4-004] Columna ordenable por cantidad de asignados', async ({ page }) => {
-    // RED PHASE: Optional feature - sortable column
+    // GREEN PHASE: Optional feature - sortable column
 
     const otTable = page.getByTestId('ot-list-table');
     await expect(otTable).toBeVisible({ timeout: 10000 });
@@ -167,7 +166,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   });
 
   test('[P2-AC4-005] OT sin asignados muestra texto apropiado', async ({ page }) => {
-    // RED PHASE: Tests empty state
+    // GREEN PHASE: Tests empty state
 
     const otTable = page.getByTestId('ot-list-table');
     await expect(otTable).toBeVisible({ timeout: 10000 });

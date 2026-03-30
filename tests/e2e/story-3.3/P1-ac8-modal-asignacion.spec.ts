@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P1 E2E Tests for Story 3.3 AC8: Modal de asignación desde Kanban y Listado
  *
- * TDD RED PHASE: Tests validate assignment modal - all tests will FAIL
- * Expected Failures: Modal doesn't exist, triggers not implemented
+ * TDD GREEN PHASE: Tests validate assignment modal - implementation complete
  *
  * Acceptance Criteria:
  * - Click en "Asignar" de una OT abre modal de asignación
@@ -28,7 +27,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
     });
 
     test('[P1-AC8-001] Modal de asignación se abre desde vista de Listado', async ({ page }) => {
-      // RED PHASE: This test will fail because:
+      // GREEN PHASE: This test will fail because:
       // - "Asignar" button doesn't exist on OT cards
       // - AssignmentModal component doesn't exist
 
@@ -59,7 +58,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
     });
 
     test('[P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación', async ({ page }) => {
-      // RED PHASE: Validates technician display in modal
+      // GREEN PHASE: Validates technician display in modal
 
       const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
@@ -104,7 +103,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
     });
 
     test('[P1-AC8-003] Modal muestra proveedores disponibles con servicios', async ({ page }) => {
-      // RED PHASE: Validates provider display in modal
+      // GREEN PHASE: Validates provider display in modal
 
       const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
@@ -144,7 +143,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
     });
 
     test('[P1-AC8-004] Botón "Guardar Asignación" funciona correctamente', async ({ page }) => {
-      // RED PHASE: Validates save button
+      // GREEN PHASE: Validates save button
 
       const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
@@ -194,7 +193,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
     });
 
     test('[P1-AC8-005] Modal de asignación se abre desde vista Kanban', async ({ page }) => {
-      // RED PHASE: Validates Kanban integration
+      // GREEN PHASE: Validates Kanban integration
 
       // Wait for Kanban board to load
       const kanbanBoard = page.getByTestId('kanban-board');

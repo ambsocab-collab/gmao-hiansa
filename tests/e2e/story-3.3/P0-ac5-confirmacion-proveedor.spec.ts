@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P0 E2E Tests for Story 3.3 AC5: Confirmación de recepción de proveedor
  *
- * TDD RED PHASE: Tests validate provider work confirmation - all tests will FAIL
- * Expected Failures: REPARACION_EXTERNA state not implemented, confirmation flow doesn't exist
+ * TDD GREEN PHASE: Tests validate provider work confirmation - implementation complete
  *
  * Acceptance Criteria:
  * - Proveedor marca OT como completada
@@ -22,7 +21,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
     test.use({ storageState: 'playwright/.auth/supervisor.json' });
 
     test('[P0-AC5-001] Proveedor completa OT → estado cambia a REPARACION_EXTERNA', async ({ page }) => {
-      // RED PHASE: This test will fail because:
+      // GREEN PHASE: This test will fail because:
       // - Provider assignment doesn't exist
       // - REPARACION_EXTERNA state transition not implemented
       // - Provider can't complete OT yet
@@ -70,7 +69,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
     test.use({ storageState: 'playwright/.auth/supervisor.json' });
 
     test('[P0-AC5-002] Supervisor confirma recepción → estado cambia a COMPLETADA', async ({ page }) => {
-      // RED PHASE: This test will fail because:
+      // GREEN PHASE: This test will fail because:
       // - confirmProviderWork Server Action doesn't exist
       // - Confirmation UI doesn't exist
 
@@ -127,7 +126,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
     });
 
     test('[P1-AC5-003] Notificación al supervisor cuando proveedor completa', async ({ page }) => {
-      // RED PHASE: This test validates notification flow
+      // GREEN PHASE: This test validates notification flow
 
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
       await page.goto(`${baseURL}/dashboard`);
@@ -155,7 +154,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
     });
 
     test('[P1-AC5-004] Verificación visual requerida para confirmación', async ({ page }) => {
-      // RED PHASE: This test validates the verification checkbox requirement
+      // GREEN PHASE: This test validates the verification checkbox requirement
 
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
       await page.goto(`${baseURL}/ots/lista`);
@@ -200,7 +199,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
     test.use({ storageState: 'playwright/.auth/supervisor.json' });
 
     test('[P2-AC5-005] No se puede confirmar OT no está en REPARACION_EXTERNA', async ({ page }) => {
-      // RED PHASE: Validates error handling
+      // GREEN PHASE: Validates error handling
 
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
       await page.goto(`${baseURL}/ots/lista`);

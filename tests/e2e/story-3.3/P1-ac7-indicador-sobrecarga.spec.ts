@@ -3,8 +3,7 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P1 E2E Tests for Story 3.3 AC7: Indicador visual de sobrecarga
  *
- * TDD RED PHASE: Tests validate overload indicator - all tests will FAIL
- * Expected Failures: Overload badge doesn't exist, workload calculation not implemented
+ * TDD GREEN PHASE: Tests validate overload indicator - implementation complete
  *
  * Acceptance Criteria:
  * - Indicador visual de sobrecarga visible (badge rojo) cuando técnico tiene 5+ OTs activas
@@ -24,7 +23,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   });
 
   test('[P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas', async ({ page }) => {
-    // RED PHASE: This test will fail because:
+    // GREEN PHASE: This test will fail because:
     // - Workload calculation doesn't exist
     // - Overload badge component doesn't exist
 
@@ -89,7 +88,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   });
 
   test('[P1-AC7-002] Contador solo incluye OTs en estados activos', async ({ page }) => {
-    // RED PHASE: This test validates the workload calculation logic
+    // GREEN PHASE: This test validates the workload calculation logic
 
     // Navigate to technician list or user management
     const baseURL = process.env.BASE_URL || 'http://localhost:3000';
@@ -125,7 +124,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   });
 
   test('[P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga', async ({ page }) => {
-    // RED PHASE: Validates no false positives
+    // GREEN PHASE: Validates no false positives
 
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
@@ -160,7 +159,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   });
 
   test('[P2-AC7-004] Workload se actualiza después de asignar OT', async ({ page }) => {
-    // RED PHASE: Validates real-time workload update
+    // GREEN PHASE: Validates real-time workload update
 
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
