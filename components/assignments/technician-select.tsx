@@ -143,7 +143,7 @@ export function TechnicianSelect({
   }
 
   const handleUbicacionFilter = (ubicacion: string) => {
-    setSelectedUbicacion(ubicacion === selectedUbicacion ? '' : ubicacion)
+    setSelectedUbicacion(ubicacion === 'all' ? '' : ubicacion === selectedUbicacion ? '' : ubicacion)
   }
 
   const selectedTechnicians = technicians.filter(t => value.includes(t.id))
@@ -219,7 +219,7 @@ export function TechnicianSelect({
             {/* Location filter */}
             <div>
               <p className="text-xs font-medium text-muted-foreground mb-2">Filtrar por ubicación</p>
-              <Select value={selectedUbicacion} onValueChange={handleUbicacionFilter}>
+              <Select value={selectedUbicacion || 'all'} onValueChange={handleUbicacionFilter}>
                 <SelectTrigger
                   className="h-8 text-xs"
                   data-testid="filtro-ubicacion-select"
@@ -227,7 +227,7 @@ export function TechnicianSelect({
                   <SelectValue placeholder="Todas las ubicaciones" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas</SelectItem>
+                  <SelectItem value="all">Todas</SelectItem>
                   {UBICACIONES.map((ubicacion) => (
                     <SelectItem
                       key={ubicacion.id}
