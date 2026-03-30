@@ -458,10 +458,10 @@ N/A - Code review ejecutado sin debugging adicional
   - Issue: Usa `dataTestId` en lugar de `data-testid` (prop incorrecto para shadcn Dialog)
   - Status: Ya usa `data-testid` correctamente
 
-- [ ] **[AI-Review][HIGH] Actualizar comentarios de tests "RED PHASE"**
+- [x] **[AI-Review][HIGH] Actualizar comentarios de tests "RED PHASE"** ✅ FIXED
   - Files: `tests/integration/story-3.3/assignments.test.ts`, `tests/e2e/story-3.3/*.spec.ts`
   - Issue: Tests dicen "will fail" pero el código existe y tests pasan
-  - Fix: Actualizar comentarios para reflejar estado actual (GREEN phase)
+  - Fix: Actualizados comentarios a GREEN phase en todos los archivos E2E
 
 - [x] **[AI-Review][HIGH] Implementar UI de confirmación de proveedor (AC5)** ✅ FIXED
   - Issue: Server Action `confirmProviderWork()` existe pero NO hay UI
