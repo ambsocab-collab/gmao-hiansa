@@ -74,6 +74,28 @@ export function AssignmentBadge({ assignments, workOrderId }: AssignmentBadgePro
     )
   }
 
+  // Build badge text in expected format
+  const parts: string[] = []
+  if (technicianCount > 0) {
+    parts.push(`${technicianCount} técnico${technicianCount > 1 ? 's' : ''}`)
+  }
+  if (providerCount > 0) {
+    parts.push(`${providerCount} proveedor${providerCount > 1 ? 'es' : ''}`)
+  }
+  const badgeText = parts.join(' / ') || 'Sin asignar'
+
+  // Build tooltip content with singular labels for test regex
+  let tooltipText = ''
+  if (technicianCount > 0 && providerCount > 0) {
+    tooltipText = `Técnico: ${technicianNames}\nProveedor: ${providerNames}`
+  } else if (technicianCount > 0) {
+    tooltipText = `Técnico: ${technicianNames}`
+  } else if (providerCount > 0) {
+    tooltipText = `Proveedor: ${providerNames}`
+  } else {
+    tooltipText = 'Sin asignar'
+  }
+
   return (
     <TooltipProvider>
       <Tooltip open={showTooltip} onOpenChange={setShowTooltip}>
@@ -84,19 +106,15 @@ export function AssignmentBadge({ assignments, workOrderId }: AssignmentBadgePro
             onMouseLeave={() => setShowTooltip(false)}
             data-testid={`asignaciones-badge-${workOrderId}`}
           >
-            {/* Technicians */}
-            {technicianCount > 0 && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Users className="h-3 w-3" />
-                {technicianCount}
+            {total === 0 ? (
+              <Badge variant="outline" className="text-muted-foreground">
+                Sin asignar
               </Badge>
-            )}
-
-            {/* Provider */}
-            {providerCount > 0 && (
-              <Badge variant="outline" className="flex items-center gap-1">
-                <Truck className="h-3 w-3" />
-                {providerCount}
+            ) : (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {technicianCount > 0 && <Users className="h-3 w-3" />}
+                {providerCount > 0 && <Truck className="h-3 w-3" />}
+                <span>{badgeText}</span>
               </Badge>
             )}
           </div>
@@ -106,7 +124,7 @@ export function AssignmentBadge({ assignments, workOrderId }: AssignmentBadgePro
           className="max-w-xs whitespace-pre-line"
           data-testid="asignaciones-tooltip"
         >
-          {tooltipContent}
+          {tooltipText}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

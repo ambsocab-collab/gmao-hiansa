@@ -31,7 +31,14 @@ interface WorkOrderWithRelations extends WorkOrder {
     }
   }
   assignments: Array<{
+    id: string
+    userId: string | null
+    providerId: string | null
     user: {
+      id: string
+      name: string
+    } | null
+    provider: {
       id: string
       name: string
     } | null

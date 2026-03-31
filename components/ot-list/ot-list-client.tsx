@@ -11,7 +11,7 @@
  * - Modal de asignación al hacer click en "Asignar"
  */
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { WorkOrder, WorkOrderEstado, WorkOrderTipo } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -32,7 +32,9 @@ import {
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Calendar, Wrench, UserPlus, Eye } from 'lucide-react'
+import { Calendar, Wrench, UserPlus, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+
+type SortDirection = 'asc' | 'desc' | null
 
 type WorkOrderWithRelations = WorkOrder & {
   equipo: {
@@ -77,6 +79,7 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrderWithRelations | null>(null)
   const [assignmentModalWorkOrder, setAssignmentModalWorkOrder] = useState<WorkOrderWithRelations | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
 
   const handleRowClick = (workOrder: WorkOrderWithRelations) => {
     setSelectedWorkOrder(workOrder)
@@ -92,6 +95,26 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
     setRefreshKey(prev => prev + 1)
     window.location.reload()
   }
+
+  const handleSortClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSortDirection(prev => {
+      if (prev === null) return 'asc'
+      if (prev === 'asc') return 'desc'
+      return null
+    })
+  }
+
+  // Sort work orders by assignment count
+  const sortedWorkOrders = useMemo(() => {
+    if (sortDirection === null) return workOrders
+
+    return [...workOrders].sort((a, b) => {
+      const aCount = a.assignments?.length || 0
+      const bCount = b.assignments?.length || 0
+      return sortDirection === 'asc' ? aCount - bCount : bCount - aCount
+    })
+  }, [workOrders, sortDirection])
 
   const formatDate = (date: Date | null) => {
     if (!date) return '-'
@@ -125,7 +148,7 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
 
       {/* Table */}
       <div className="flex-1 overflow-auto p-6">
-        <div className="bg-white rounded-lg border shadow-sm">
+        <div className="bg-white rounded-lg border shadow-sm" data-testid="ot-list-table-container">
           <Table data-testid="ot-list-table">
             <TableHeader>
               <TableRow>
@@ -136,12 +159,28 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
                 <TableHead className="w-[150px]">Equipo</TableHead>
                 <TableHead className="w-[100px]">División</TableHead>
                 <TableHead className="w-[100px]">Fecha</TableHead>
-                <TableHead className="w-[140px]">Asignaciones</TableHead>
+                <TableHead
+                  className="w-[140px] cursor-pointer select-none hover:bg-muted/50"
+                  onClick={handleSortClick}
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Asignaciones</span>
+                    <span data-testid="sort-icon">
+                      {sortDirection === null ? (
+                        <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                      ) : sortDirection === 'asc' ? (
+                        <ArrowUp className="h-4 w-4 text-primary" />
+                      ) : (
+                        <ArrowDown className="h-4 w-4 text-primary" />
+                      )}
+                    </span>
+                  </div>
+                </TableHead>
                 <TableHead className="w-[100px]">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {workOrders.map((wo) => {
+              {sortedWorkOrders.map((wo) => {
                 const tipoInfo = tipoColors[wo.tipo]
 
                 return (

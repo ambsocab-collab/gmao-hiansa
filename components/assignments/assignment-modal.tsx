@@ -243,16 +243,6 @@ export function AssignmentModal({
           </Button>
         </DialogFooter>
 
-        {/* Close button for E2E tests */}
-        <button
-          type="button"
-          onClick={() => handleOpenChange(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none"
-          data-testid="modal-close-btn"
-          aria-label="Cerrar"
-        >
-          <span className="sr-only">Cerrar</span>
-        </button>
       </DialogContent>
     </Dialog>
   )

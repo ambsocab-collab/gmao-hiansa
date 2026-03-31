@@ -11,6 +11,7 @@
  * - Responsive: 8 columnas desktop, 2-3 tablet, 1 móvil
  * - Modal de detalles en móvil (AC6)
  * - Performance tracking (<1s para updates - NFR-S3)
+ * - Modal de asignación (Story 3.3 AC8)
  */
 
 import { useState, useEffect } from 'react'
@@ -18,6 +19,7 @@ import { DndContext, DragEndEvent, DragOverEvent, closestCenter, PointerSensor, 
 import { WorkOrder, WorkOrderEstado } from '@prisma/client'
 import { KanbanColumn } from './kanban-column'
 import { OTDetailsModal } from './ot-details-modal'
+import { AssignmentModal } from '@/components/assignments/assignment-modal'
 import { ViewToggle } from './view-toggle'
 import { updateWorkOrderStatus } from '@/app/actions/work-orders'
 import { useSSEConnection } from '@/components/sse/use-sse-connection'
@@ -40,6 +42,7 @@ export interface KanbanBoardProps {
       } | null
     }>
   }>
+  canAssignTechnicians?: boolean // Story 3.3: Mostrar botón asignar
 }
 
 /**
@@ -56,7 +59,7 @@ const KANBAN_COLUMNS: WorkOrderEstado[] = [
   'DESCARTADA',
 ]
 
-export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
+export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }: KanbanBoardProps) {
   const router = useRouter()
   const [workOrders, setWorkOrders] = useState(initialWorkOrders)
   const [isUpdating, setIsUpdating] = useState(false)
@@ -93,6 +96,40 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
       } | null
     }>
   } | null>(null)
+  const [assignmentModalWorkOrder, setAssignmentModalWorkOrder] = useState<WorkOrder & {
+    equipo?: {
+      id: string
+      name: string
+      code: string
+      linea?: {
+        id: string
+        name: string
+        code: string
+        planta?: {
+          id: string
+          name: string
+          code: string
+          division: string
+        }
+      }
+    }
+    assignments?: Array<{
+      id: string
+      role: string
+      userId: string | null
+      providerId: string | null
+      user?: {
+        id: string
+        name: string
+        email: string
+      } | null
+      provider?: {
+        id: string
+        name: string
+      } | null
+    }>
+  } | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const [visibleColumnRange, setVisibleColumnRange] = useState({ start: 1, end: 8 })
 
@@ -306,6 +343,68 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
     setSelectedWorkOrder(modalWorkOrder)
   }
 
+  /**
+   * Handle click en botón Asignar - abrir modal de asignación
+   */
+  const handleAssignClick = (workOrder: WorkOrder & {
+    equipo?: {
+      name: string
+      linea?: {
+        planta: {
+          division: string
+        }
+      }
+    }
+    assignments?: Array<{
+      user: {
+        name: string | null
+      } | null
+    }>
+  }) => {
+    const modalWorkOrder = workOrder as WorkOrder & {
+      equipo?: {
+        id: string
+        name: string
+        code: string
+        linea?: {
+          id: string
+          name: string
+          code: string
+          planta?: {
+            id: string
+            name: string
+            code: string
+            division: string
+          }
+        }
+      }
+      assignments?: Array<{
+        id: string
+        role: string
+        userId: string | null
+        providerId: string | null
+        user?: {
+          id: string
+          name: string
+          email: string
+        } | null
+        provider?: {
+          id: string
+          name: string
+        } | null
+      }>
+    }
+    setAssignmentModalWorkOrder(modalWorkOrder)
+  }
+
+  /**
+   * Handle assignment complete - refresh the page
+   */
+  const handleAssignmentComplete = () => {
+    setRefreshKey(prev => prev + 1)
+    router.refresh()
+  }
+
   return (
     <div className="h-full flex flex-col bg-gray-50" data-testid="ot-kanban-board">
       {/* Header del Kanban */}
@@ -363,6 +462,8 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
                 estado={estado}
                 workOrders={workOrdersByEstado[estado] || []}
                 onOTCardClick={handleOTCardClick}
+                onAssignClick={handleAssignClick}
+                canAssign={canAssignTechnicians}
                 disableDrag={isMobile}
                 compactCards={false}
               />
@@ -377,6 +478,8 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
                 estado={estado}
                 workOrders={workOrdersByEstado[estado] || []}
                 onOTCardClick={handleOTCardClick}
+                onAssignClick={handleAssignClick}
+                canAssign={canAssignTechnicians}
                 disableDrag={isMobile}
                 compactCards={false}
               />
@@ -391,6 +494,8 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
                 estado={estado}
                 workOrders={workOrdersByEstado[estado] || []}
                 onOTCardClick={handleOTCardClick}
+                onAssignClick={handleAssignClick}
+                canAssign={canAssignTechnicians}
                 disableDrag={true} // No drag & drop en móvil
                 compactCards={true} // Cards simplificadas
               />
@@ -405,6 +510,16 @@ export function KanbanBoard({ initialWorkOrders }: KanbanBoardProps) {
           workOrder={selectedWorkOrder}
           open={!!selectedWorkOrder}
           onOpenChange={(open) => !open && setSelectedWorkOrder(null)}
+        />
+      )}
+
+      {/* Modal de asignación (Story 3.3 AC8) */}
+      {assignmentModalWorkOrder && (
+        <AssignmentModal
+          workOrder={assignmentModalWorkOrder}
+          open={!!assignmentModalWorkOrder}
+          onOpenChange={(open) => !open && setAssignmentModalWorkOrder(null)}
+          onAssignmentComplete={handleAssignmentComplete}
         />
       )}
     </div>

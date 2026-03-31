@@ -205,7 +205,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" data-testid="ot-details-modal">
+      <DialogContent className="max-w-md" data-testid={`ot-details-modal-${workOrder.id}`}>
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>OT {workOrder.numero}</span>
@@ -262,15 +262,27 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
             </div>
           )}
 
-          {/* Técnicos/Proveedores asignados */}
+          {/* Story 3.3 AC4: Técnicos/Proveedores asignados con testids */}
           {workOrder.assignments && workOrder.assignments.length > 0 && (
-            <div className="space-y-1">
+            <div className="space-y-1" data-testid="asignados-list">
               <p className="text-sm text-muted-foreground">Asignados</p>
               <div className="flex flex-wrap gap-2">
                 {workOrder.assignments.map((assignment) => (
-                  <Badge key={assignment.id} variant="outline">
-                    {assignment.user?.name || assignment.provider?.name || 'Sin asignar'}
-                  </Badge>
+                  <div
+                    key={assignment.id}
+                    className="flex items-center gap-1"
+                    data-testid={`asignado-item-${assignment.id}`}
+                  >
+                    <Badge variant="outline" data-testid="asignado-nombre">
+                      {assignment.user?.name || assignment.provider?.name || 'Sin asignar'}
+                    </Badge>
+                    <span
+                      className="text-xs text-muted-foreground"
+                      data-testid="asignado-rol"
+                    >
+                      {assignment.providerId ? 'Proveedor' : 'Técnico'}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>

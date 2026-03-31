@@ -6,7 +6,6 @@
  */
 
 import { prisma } from '@/lib/db'
-import { auth } from '@/lib/auth-adapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**

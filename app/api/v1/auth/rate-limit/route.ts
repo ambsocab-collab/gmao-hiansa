@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getRemainingAttempts } from '@/lib/rate-limit'
-import { loginAttempts } from '@/lib/rate-limit'
+import { NextResponse } from 'next/server'
+import { getRemainingAttempts, loginAttempts } from '@/lib/rate-limit'
 
 /**
  * GET /api/v1/auth/rate-limit
@@ -8,7 +7,7 @@ import { loginAttempts } from '@/lib/rate-limit'
  * Returns rate limit status for the current IP address.
  * Used by the login form to check if the user is blocked.
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Use localhost for testing (same as auth.config.ts)
     const ip = 'localhost'

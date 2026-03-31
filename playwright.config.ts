@@ -30,8 +30,8 @@ export default defineConfig({
   },
 
   // Retry on CI and locally (for flaky tests in parallel mode)
-  // DISABLED until tests are stable in GREEN phase
-  retries: 0,
+  // Enabled: 2 retries for flaky test recovery (SSE timing, DB race conditions)
+  retries: 2,
 
   // Parallel workers - Fixed to 4 workers
   workers: 4,

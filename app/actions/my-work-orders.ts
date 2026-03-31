@@ -750,6 +750,12 @@ export async function getMyWorkOrders(
                 id: true,
                 name: true
               }
+            },
+            provider: {
+              select: {
+                id: true,
+                name: true
+              }
             }
           }
         },

@@ -84,12 +84,18 @@ export default async function KanbanPage() {
     redirect('/?error=unauthorized')
   }
 
+  // Check assignment capability
+  const canAssign = session.user.capabilities?.includes('can_assign_technicians')
+
   // Fetch WorkOrders
   const workOrders = await getKanbanData()
 
   return (
     <div className="h-screen flex flex-col">
-      <KanbanBoard initialWorkOrders={workOrders} />
+      <KanbanBoard
+        initialWorkOrders={workOrders}
+        canAssignTechnicians={canAssign || false}
+      />
     </div>
   )
 }

@@ -29,6 +29,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getAvailableTechnicians, TechnicianWithWorkload } from '@/app/actions/assignments'
 import { toast } from 'sonner'
@@ -194,6 +200,7 @@ export function TechnicianSelect({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 p-0" align="start">
+          <TooltipProvider>
           {/* Filters */}
           <div className="border-b p-3 space-y-3">
             {/* Skills filters */}
@@ -285,14 +292,38 @@ export function TechnicianSelect({
                           >
                             {tech.name}
                           </p>
+                          {/* Workload count - always visible */}
+                          <span
+                            className={cn(
+                              'text-[10px] px-1.5 py-0.5 rounded',
+                              tech.isOverloaded
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-gray-100 text-gray-600'
+                            )}
+                            data-testid="workload-count"
+                          >
+                            {tech.workload} OTs
+                          </span>
+                          {/* Overload badge with tooltip */}
                           {tech.isOverloaded && (
-                            <Badge
-                              variant="destructive"
-                              className="text-[10px] px-1 py-0"
-                              data-testid="sobrecarga-badge"
-                            >
-                              {tech.workload} OTs
-                            </Badge>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge
+                                  variant="destructive"
+                                  className="text-[10px] px-1 py-0 cursor-help"
+                                  data-testid="sobrecarga-badge"
+                                >
+                                  <AlertTriangle className="h-3 w-3 mr-1" />
+                                  !
+                                </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent
+                                side="right"
+                                data-testid="sobrecarga-tooltip"
+                              >
+                                Este técnico tiene {tech.workload} OTs asignadas
+                              </TooltipContent>
+                            </Tooltip>
                           )}
                         </div>
 
@@ -327,6 +358,7 @@ export function TechnicianSelect({
               </div>
             )}
           </ScrollArea>
+          </TooltipProvider>
         </PopoverContent>
       </Popover>
 
