@@ -1,29 +1,22 @@
-<testsuites id="" name="" tests="6" failures="5" skipped="1" errors="0" time="1456.1460630000001">
-<testsuite name="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" timestamp="2026-03-29T20:37:59.154Z" hostname="chromium" tests="6" failures="5" skipped="1" time="1489.856" errors="0">
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="55.756">
-<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:32:7 [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" type="FAILURE">
-<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:32:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT 
+<testsuites id="" name="" tests="35" failures="8" skipped="0" errors="0" time="312.247822">
+<testsuite name="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="5" failures="3" skipped="0" time="268.652" errors="0">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="77.677">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:31:7 [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:31:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT 
 
-    Error: expect(locator).toBeVisible() failed
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
 
-    Locator: locator('[data-testid="tecnico-option-0"]')
-    Expected: visible
-    Timeout: 15000ms
-    Error: element(s) not found
+    Expected: >= 1
+    Received:    0
 
-    Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for locator('[data-testid="tecnico-option-0"]')
-
-
-      58 |     // Select first technician (by checkbox in dropdown)
-      59 |     const tecnicoOption1 = page.locator('[data-testid="tecnico-option-0"]');
-    > 60 |     await expect(tecnicoOption1).toBeVisible();
-         |                                  ^
-      61 |     await tecnicoOption1.click();
-      62 |
-      63 |     // Select second technician
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:60:34
+       98 |     const selectedTecnicos = assignmentModal.locator('[data-testid="selected-tecnico-badge"]');
+       99 |     const finalCount = await selectedTecnicos.count();
+    > 100 |     expect(finalCount).toBeGreaterThanOrEqual(1);
+          |                        ^
+      101 |
+      102 |     // Click "Guardar Asignación" button
+      103 |     const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:100:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\test-failed-1.png
@@ -42,6 +35,74 @@
         npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('tecnicos-select')
+
+
+      65 |
+      66 |     // Re-open dropdown
+    > 67 |     await tecnicosSelect.click();
+         |                          ^
+      68 |     await page.waitForTimeout(1000);
+      69 |
+      70 |     // Select/deselect to get exactly 2 technicians
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:67:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('tecnicos-select')
+
+
+      65 |
+      66 |     // Re-open dropdown
+    > 67 |     await tecnicosSelect.click();
+         |                          ^
+      68 |     await page.waitForTimeout(1000);
+      69 |
+      70 |     // Select/deselect to get exactly 2 technicians
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:67:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
@@ -53,81 +114,51 @@
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\error-context.md]]
 
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium-retry2\trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="57.776">
-<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:89:7 [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" type="FAILURE">
-<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:89:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo 
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="33.918">
+</testcase>
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="97.159">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:156:7 [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:156:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor) 
 
-    Error: expect(locator).not.toBeVisible() failed
+    Error: expect(locator).toBeEnabled() failed
 
-    Locator:  locator('[data-testid^="modal-asignacion-"]')
-    Expected: not visible
-    Received: visible
-    Timeout:  5000ms
+    Locator: locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
+    Expected: enabled
+    Timeout: 15000ms
+    Error: element(s) not found
 
     Call log:
-      - Expect "not toBeVisible" with timeout 5000ms
-      - waiting for locator('[data-testid^="modal-asignacion-"]')
-        7 × locator resolved to <div role="dialog" tabindex="-1" id="radix-:r0:" data-state="open" aria-labelledby="radix-:r1:" aria-describedby="radix-:r2:" data-testid="modal-asignacion-cmnc7zrvc009bzcmmc13qlwvo" class="fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in…>…</div>
-          - unexpected value "visible"
-        - waiting for" http://localhost:3000/ots/lista" navigation to finish...
+      - Expect "toBeEnabled" with timeout 15000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
 
 
-      125 |
-      126 |     // Wait for modal to close
-    > 127 |     await expect(assignmentModal).not.toBeVisible({ timeout: 5000 });
+      206 |       // Provider should be enabled
+      207 |       const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
+    > 208 |       await expect(proveedoresSelect).toBeEnabled();
           |                                       ^
-      128 |
-      129 |     // Verify success
-      130 |     const successToast = page.locator('[data-testid="toast-success"]');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:127:39
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm]]
-
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="41.479">
-<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:134:7 [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" type="FAILURE">
-<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:134:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor) 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 3
-    Received: 0
-
-      165 |     const selectedTecnicos = assignmentModal.locator('[data-testid="selected-tecnico-badge"]');
-      166 |     const tecnicoCount = await selectedTecnicos.count();
-    > 167 |     expect(tecnicoCount).toBe(3);
-          |                          ^
-      168 |
-      169 |     // Try to select a provider (should be disabled or show error)
-      170 |     const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:167:26
+      209 |     }
+      210 |
+      211 |     // Close modal without saving
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:208:39
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\test-failed-1.png
@@ -146,6 +177,88 @@
         npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator: locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
+    Expected: enabled
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeEnabled" with timeout 15000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
+
+
+      206 |       // Provider should be enabled
+      207 |       const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
+    > 208 |       await expect(proveedoresSelect).toBeEnabled();
+          |                                       ^
+      209 |     }
+      210 |
+      211 |     // Close modal without saving
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:208:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator: locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
+    Expected: enabled
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeEnabled" with timeout 15000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('proveedores-select')
+
+
+      206 |       // Provider should be enabled
+      207 |       const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
+    > 208 |       await expect(proveedoresSelect).toBeEnabled();
+          |                                       ^
+      209 |     }
+      210 |
+      211 |     // Close modal without saving
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:208:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
@@ -157,88 +270,51 @@
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\error-context.md]]
 
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium-retry2\trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-004] Técnico sin capability no puede asignar" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="41.876">
-<properties>
-<property name="skip" value="Requires separate auth context - move to separate test file">
-</property>
-</properties>
-<skipped>
-</skipped>
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="24.781">
 </testcase>
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="1289.586">
-<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:215:7 [P1-AC1-005] Filtros por habilidades disponibles" type="FAILURE">
-<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:215:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles 
-
-    Test timeout of 60000ms exceeded.
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="35.117">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:286:7 [P1-AC1-006] Filtros por ubicación disponibles" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:286:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles 
 
     Error: expect(locator).toBeVisible() failed
 
-    Locator: locator('[data-testid^="modal-asignacion-"]').getByTestId('filtro-skills-checkbox-eléctrica')
+    Locator: getByTestId('filtro-ubicacion-select')
     Expected: visible
-    Timeout: 15000ms
+    Timeout: 3000ms
     Error: element(s) not found
 
     Call log:
-      - Expect "toBeVisible" with timeout 15000ms
-      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('filtro-skills-checkbox-eléctrica')
+      - Expect "toBeVisible" with timeout 3000ms
+      - waiting for getByTestId('filtro-ubicacion-select')
 
 
-      230 |     for (const skill of skills) {
-      231 |       const skillCheckbox = assignmentModal.getByTestId(`filtro-skills-checkbox-${skill}`);
-    > 232 |       await expect(skillCheckbox).toBeVisible();
-          |                                   ^
-      233 |     }
-      234 |
-      235 |     // Click on "eléctrica" filter
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:232:35
-
-    Tearing down "context" exceeded the test timeout of 60000ms.
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\error-context.md]]
-
-[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-6b28e-por-habilidades-disponibles-chromium\trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="3.383">
-<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:255:7 [P1-AC1-006] Filtros por ubicación disponibles" type="FAILURE">
-<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:255:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles 
-
-    Error: page.goto: net::ERR_NETWORK_IO_SUSPENDED at http://localhost:3000/ots/lista
-    Call log:
-      - navigating to "http://localhost:3000/ots/lista", waiting until "load"
-
-
-      26 |     // Navigate to OT list page where assignment modal can be triggered
-      27 |     const baseURL = process.env.BASE_URL || 'http://localhost:3000';
-    > 28 |     await page.goto(`${baseURL}/ots/lista`);
-         |                ^
-      29 |     await page.waitForLoadState('domcontentloaded');
-      30 |   });
-      31 |
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:28:16
+      316 |         // Now verify location filter dropdown exists (inside popover)
+      317 |         const ubicacionSelect = page.getByTestId('filtro-ubicacion-select');
+    > 318 |         await expect(ubicacionSelect).toBeVisible({ timeout: 3000 });
+          |                                       ^
+      319 |
+      320 |         // We found what we needed - close and exit
+      321 |         const cancelarBtn = assignmentModal.getByTestId('cancelar-asignacion-btn');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:318:39
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\test-failed-1.png
@@ -248,11 +324,95 @@
     ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
     ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip
     Usage:
 
         npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('filtro-ubicacion-select')
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 3000ms
+      - waiting for getByTestId('filtro-ubicacion-select')
+
+
+      316 |         // Now verify location filter dropdown exists (inside popover)
+      317 |         const ubicacionSelect = page.getByTestId('filtro-ubicacion-select');
+    > 318 |         await expect(ubicacionSelect).toBeVisible({ timeout: 3000 });
+          |                                       ^
+      319 |
+      320 |         // We found what we needed - close and exit
+      321 |         const cancelarBtn = assignmentModal.getByTestId('cancelar-asignacion-btn');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:318:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('filtro-ubicacion-select')
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 3000ms
+      - waiting for getByTestId('filtro-ubicacion-select')
+
+
+      316 |         // Now verify location filter dropdown exists (inside popover)
+      317 |         const ubicacionSelect = page.getByTestId('filtro-ubicacion-select');
+    > 318 |         await expect(ubicacionSelect).toBeVisible({ timeout: 3000 });
+          |                                       ^
+      319 |
+      320 |         // We found what we needed - close and exit
+      321 |         const cancelarBtn = assignmentModal.getByTestId('cancelar-asignacion-btn');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:318:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
@@ -263,9 +423,815 @@
 
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\video.webm]]
 
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\error-context.md]]
+
 [[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-P0-ac1-asignacio-1485c-s-por-ubicación-disponibles-chromium-retry2\trace.zip]]
 ]]>
 </system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\p0-ac3-notificaciones-sse.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="4" failures="2" skipped="0" time="199.042" errors="0">
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Asignación desde Supervisor › [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="73.254">
+<failure message="p0-ac3-notificaciones-sse.spec.ts:23:9 [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p0-ac3-notificaciones-sse.spec.ts:23:9 › Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Asignación desde Supervisor › [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE 
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('guardar-asignacion-btn')
+
+
+      62 |       // Save assignment
+      63 |       const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
+    > 64 |       if (await guardarBtn.isEnabled()) {
+         |                            ^
+      65 |         await guardarBtn.click();
+      66 |         // Wait for modal to close
+      67 |         await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:64:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('guardar-asignacion-btn')
+
+
+      62 |       // Save assignment
+      63 |       const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
+    > 64 |       if (await guardarBtn.isEnabled()) {
+         |                            ^
+      65 |         await guardarBtn.click();
+      66 |         // Wait for modal to close
+      67 |         await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:64:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="modal-asignacion-"]').getByTestId('guardar-asignacion-btn')
+
+
+      62 |       // Save assignment
+      63 |       const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
+    > 64 |       if (await guardarBtn.isEnabled()) {
+         |                            ^
+      65 |         await guardarBtn.click();
+      66 |         // Wait for modal to close
+      67 |         await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:64:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Recepción de notificación por Técnico › [P0-AC3-002] Técnico ve OT en &quot;Mis OTs&quot; después de asignación" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="9.29">
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Recepción de notificación por Técnico › [P0-AC3-003] Cualquier asignado puede iniciar OT" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="13.521">
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › [P1-AC3-004] SSE actualiza Mis OTs en tiempo real" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="102.977">
+<failure message="p0-ac3-notificaciones-sse.spec.ts:193:7 [P1-AC3-004] SSE actualiza Mis OTs en tiempo real" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p0-ac3-notificaciones-sse.spec.ts:193:7 › Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › [P1-AC3-004] SSE actualiza Mis OTs en tiempo real 
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="tecnico-option-0"]')
+
+
+      278 |               // Fallback to first option if Carlos not found
+      279 |               const tecnicoOption = carlosOption || supervisorPage.locator('[data-testid="tecnico-option-0"]');
+    > 280 |               if (await tecnicoOption.isEnabled()) {
+          |                                       ^
+      281 |                 await tecnicoOption.click();
+      282 |                 await supervisorPage.keyboard.press('Escape');
+      283 |                 await supervisorPage.waitForTimeout(500);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:280:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="tecnico-option-0"]')
+
+
+      278 |               // Fallback to first option if Carlos not found
+      279 |               const tecnicoOption = carlosOption || supervisorPage.locator('[data-testid="tecnico-option-0"]');
+    > 280 |               if (await tecnicoOption.isEnabled()) {
+          |                                       ^
+      281 |                 await tecnicoOption.click();
+      282 |                 await supervisorPage.keyboard.press('Escape');
+      283 |                 await supervisorPage.waitForTimeout(500);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:280:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.isEnabled: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="tecnico-option-0"]')
+
+
+      278 |               // Fallback to first option if Carlos not found
+      279 |               const tecnicoOption = carlosOption || supervisorPage.locator('[data-testid="tecnico-option-0"]');
+    > 280 |               if (await tecnicoOption.isEnabled()) {
+          |                                       ^
+      281 |                 await tecnicoOption.click();
+      282 |                 await supervisorPage.keyboard.press('Escape');
+      283 |                 await supervisorPage.waitForTimeout(500);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:280:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="5" failures="0" skipped="0" time="34.972" errors="0">
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Proveedor completa OT › [P0-AC5-001] Proveedor completa OT → estado cambia a REPARACION_EXTERNA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="14.971">
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P0-AC5-002] Supervisor confirma recepción → estado cambia a COMPLETADA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="5.487">
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-003] Notificación al supervisor cuando proveedor completa" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="3.873">
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-004] Verificación visual requerida para confirmación" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="5.467">
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Validaciones de estado › [P2-AC5-005] No se puede confirmar OT no está en REPARACION_EXTERNA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="5.174">
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="2" failures="0" skipped="0" time="14.216" errors="0">
+<testcase name="Story 3.3 - AC1: Técnico sin capability no puede asignar › [P1-AC1-004] Técnico sin capability no puede ver botón &quot;Asignar&quot;" classname="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" time="6.928">
+</testcase>
+<testcase name="Story 3.3 - AC1: Técnico sin capability no puede asignar › [P1-AC1-007] Técnico no puede acceder a modal de asignación directamente" classname="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" time="7.288">
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\p1-ac4-listado-asignaciones.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="5" failures="0" skipped="0" time="37.297" errors="0">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-001] Columna &quot;Asignaciones&quot; muestra distribución correcta" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="8.466">
+</testcase>
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-002] Tooltip muestra nombres completos al hacer hover" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="5.007">
+</testcase>
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-003] Modal de detalles muestra lista de asignados" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="7.554">
+</testcase>
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-004] Columna ordenable por cantidad de asignados" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="7.897">
+</testcase>
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-005] OT sin asignados muestra texto apropiado" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="8.373">
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="4" failures="1" skipped="0" time="60.512" errors="0">
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="36.732">
+<failure message="p1-ac7-indicador-sobrecarga.spec.ts:25:7 [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:25:7 › Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      50 |     // Wait for technician options to appear (proper wait instead of fixed timeout)
+      51 |     const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 52 |     await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                          ^
+      53 |
+      54 |     const count = await tecnicoOptions.count();
+      55 |     expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:52:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      50 |     // Wait for technician options to appear (proper wait instead of fixed timeout)
+      51 |     const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 52 |     await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                          ^
+      53 |
+      54 |     const count = await tecnicoOptions.count();
+      55 |     expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:52:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      50 |     // Wait for technician options to appear (proper wait instead of fixed timeout)
+      51 |     const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 52 |     await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                          ^
+      53 |
+      54 |     const count = await tecnicoOptions.count();
+      55 |     expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:52:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac7-indicador-8dc1e-técnico-tiene-5-OTs-activas-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-002] Contador solo incluye OTs en estados activos" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="9.622">
+<system-out>
+<![CDATA[No technician found in user list
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="7.445">
+</testcase>
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P2-AC7-004] Workload se actualiza después de asignar OT" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="6.713">
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\p1-ac8-modal-asignacion.spec.ts" timestamp="2026-03-31T17:22:14.189Z" hostname="chromium" tests="10" failures="2" skipped="0" time="148.549" errors="0">
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-001] Modal de asignación se abre desde vista de Listado" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="6.03">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="38.581">
+<failure message="p1-ac8-modal-asignacion.spec.ts:60:9 [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:60:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      94 |       // Verify technician options are visible
+      95 |       const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 96 |       await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                            ^
+      97 |
+      98 |       const count = await tecnicoOptions.count();
+      99 |       expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:96:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      94 |       // Verify technician options are visible
+      95 |       const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 96 |       await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                            ^
+      97 |
+      98 |       const count = await tecnicoOptions.count();
+      99 |       expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:96:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="tecnico-option-"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid^="tecnico-option-"]').first()
+
+
+      94 |       // Verify technician options are visible
+      95 |       const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
+    > 96 |       await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
+         |                                            ^
+      97 |
+      98 |       const count = await tecnicoOptions.count();
+      99 |       expect(count).toBeGreaterThan(0);
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:96:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-faaa6-bles-con-skills-y-ubicación-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-003] Modal muestra proveedores disponibles con servicios" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="34.528">
+<failure message="p1-ac8-modal-asignacion.spec.ts:117:9 [P1-AC8-003] Modal muestra proveedores disponibles con servicios" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:117:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-003] Modal muestra proveedores disponibles con servicios 
+
+    Error: expect(locator).not.toBeVisible() failed
+
+    Locator:  locator('[data-testid^="modal-asignacion-"]')
+    Expected: not visible
+    Received: visible
+    Timeout:  3000ms
+
+    Call log:
+      - Expect "not toBeVisible" with timeout 3000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]')
+        7 × locator resolved to <div role="dialog" tabindex="-1" id="radix-:r0:" data-state="open" aria-labelledby="radix-:r1:" aria-describedby="radix-:r2:" data-testid="modal-asignacion-cmnevwa90009b82s1gcp7nihj" class="fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in…>…</div>
+          - unexpected value "visible"
+
+
+      176 |       // Close modal
+      177 |       await page.keyboard.press('Escape');
+    > 178 |       await expect(assignmentModal).not.toBeVisible({ timeout: 3000 });
+          |                                         ^
+      179 |     });
+      180 |
+      181 |     test('[P1-AC8-004] Botón "Guardar Asignación" funciona correctamente', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:178:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).not.toBeVisible() failed
+
+    Locator:  locator('[data-testid^="modal-asignacion-"]')
+    Expected: not visible
+    Received: visible
+    Timeout:  3000ms
+
+    Call log:
+      - Expect "not toBeVisible" with timeout 3000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]')
+        6 × locator resolved to <div role="dialog" tabindex="-1" id="radix-:r0:" data-state="open" aria-labelledby="radix-:r1:" aria-describedby="radix-:r2:" data-testid="modal-asignacion-cmnevwa90009b82s1gcp7nihj" class="fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in…>…</div>
+          - unexpected value "visible"
+
+
+      176 |       // Close modal
+      177 |       await page.keyboard.press('Escape');
+    > 178 |       await expect(assignmentModal).not.toBeVisible({ timeout: 3000 });
+          |                                         ^
+      179 |     });
+      180 |
+      181 |     test('[P1-AC8-004] Botón "Guardar Asignación" funciona correctamente', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:178:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).not.toBeVisible() failed
+
+    Locator:  locator('[data-testid^="modal-asignacion-"]')
+    Expected: not visible
+    Received: visible
+    Timeout:  3000ms
+
+    Call log:
+      - Expect "not toBeVisible" with timeout 3000ms
+      - waiting for locator('[data-testid^="modal-asignacion-"]')
+        7 × locator resolved to <div role="dialog" tabindex="-1" id="radix-:r0:" data-state="open" aria-labelledby="radix-:r1:" aria-describedby="radix-:r2:" data-testid="modal-asignacion-cmnevwa90009b82s1gcp7nihj" class="fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in…>…</div>
+          - unexpected value "visible"
+
+
+      176 |       // Close modal
+      177 |       await page.keyboard.press('Escape');
+    > 178 |       await expect(assignmentModal).not.toBeVisible({ timeout: 3000 });
+          |                                         ^
+      179 |     });
+      180 |
+      181 |     test('[P1-AC8-004] Botón "Guardar Asignación" funciona correctamente', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac8-modal-asignacion.spec.ts:178:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.3-p1-ac8-modal-asi-e6693-s-disponibles-con-servicios-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-004] Botón &quot;Guardar Asignación&quot; funciona correctamente" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="9.45">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Kanban › [P1-AC8-005] Modal de asignación se abre desde vista Kanban" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="16.288">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-006] Modal cierra con click en &quot;X&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="5.605">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-007] Modal cierra con tecla ESC" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="12.122">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-008] Modal cierra con click fuera" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="11.047">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-009] Modal tiene botón &quot;Cancelar&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="8.924">
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Visibilidad por capability › [P1-AC8-010] Técnico sin can_assign_technicians no ve botón &quot;Asignar&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="5.974">
 </testcase>
 </testsuite>
 </testsuites>
