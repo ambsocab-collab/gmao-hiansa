@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth-adapter'
 import { prisma } from '@/lib/db'
 import { trackPerformance } from '@/lib/observability/performance'
 import { revalidatePath } from 'next/cache'
-import { WorkOrderEstado } from '@prisma/client'
+import { WorkOrderEstado, Prisma } from '@prisma/client'
 import { ValidationError, AuthorizationError, AuthenticationError } from '@/lib/utils/errors'
 import { broadcastWorkOrderUpdated, broadcastTechnicianAssigned } from '@/lib/sse/broadcaster'
 
@@ -76,9 +76,12 @@ export async function getAvailableTechnicians(
       WorkOrderEstado.PENDIENTE_REPUESTO,
     ]
 
-    // Construir filtros WHERE
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const whereConditions: any = { deleted: false }
+    // Construir filtros WHERE con tipo Prisma
+    const whereConditions: {
+      deleted: boolean
+      skills?: { hasSome: string[] }
+      ubicacion?: string
+    } = { deleted: false }
 
     if (filters?.skills && filters.skills.length > 0) {
       whereConditions.skills = { hasSome: filters.skills }
@@ -110,30 +113,40 @@ export async function getAvailableTechnicians(
       }
     })
 
-    // Calcular workload para cada técnico
-    const techniciansWithWorkload: TechnicianWithWorkload[] = await Promise.all(
-      technicians.map(async (tech) => {
-        const workload = await prisma.workOrderAssignment.count({
-          where: {
-            userId: tech.id,
-            work_order: {
-              estado: { in: activeStates }
-            }
-          }
-        })
+    // OPTIMIZACIÓN: Calcular workload con una sola query de aggregation
+    // en lugar de N+1 queries por cada técnico
+    const technicianIds = technicians.map(t => t.id)
 
-        return {
-          id: tech.id,
-          name: tech.name,
-          email: tech.email,
-          phone: tech.phone,
-          skills: tech.skills,
-          ubicacion: tech.ubicacion,
-          workload,
-          isOverloaded: workload >= 5,
+    const workloadCounts = await prisma.workOrderAssignment.groupBy({
+      by: ['userId'],
+      where: {
+        userId: { in: technicianIds },
+        work_order: {
+          estado: { in: activeStates }
         }
-      })
-    )
+      },
+      _count: {
+        userId: true
+      }
+    })
+
+    // Crear mapa de workload por userId
+    const workloadMap = new Map<string, number>()
+    workloadCounts.forEach((item) => {
+      workloadMap.set(item.userId, item._count.userId)
+    })
+
+    // Construir resultado con workload
+    const techniciansWithWorkload: TechnicianWithWorkload[] = technicians.map((tech) => ({
+      id: tech.id,
+      name: tech.name,
+      email: tech.email,
+      phone: tech.phone,
+      skills: tech.skills,
+      ubicacion: tech.ubicacion,
+      workload: workloadMap.get(tech.id) || 0,
+      isOverloaded: (workloadMap.get(tech.id) || 0) >= 5,
+    }))
 
     perf.end(1000)
 
@@ -173,9 +186,11 @@ export async function getAvailableProviders(
   const perf = trackPerformance('get_available_providers', session.user.id)
 
   try {
-    // Construir filtros WHERE
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const whereConditions: any = { active: true }
+    // Construir filtros WHERE con tipo Prisma
+    const whereConditions: {
+      active: boolean
+      services?: { hasSome: string[] }
+    } = { active: true }
 
     if (filters?.services && filters.services.length > 0) {
       whereConditions.services = { hasSome: filters.services }
@@ -259,6 +274,33 @@ export async function assignToWorkOrder(
 
     if (!workOrder) {
       throw new ValidationError('La OT no existe')
+    }
+
+    // Validación: verificar que los técnicos tienen capability can_update_own_ot
+    if (technicianIds.length > 0) {
+      const validTechnicians = await prisma.user.findMany({
+        where: {
+          id: { in: technicianIds },
+          userCapabilities: {
+            some: {
+              capability: {
+                name: 'can_update_own_ot'
+              }
+            }
+          }
+        },
+        select: { id: true }
+      })
+
+      const validIds = validTechnicians.map(t => t.id)
+      const invalidIds = technicianIds.filter(id => !validIds.includes(id))
+
+      if (invalidIds.length > 0) {
+        throw new ValidationError(
+          `Los siguientes usuarios no son técnicos válidos: ${invalidIds.join(', ')}. ` +
+          `Solo usuarios con capability can_update_own_ot pueden ser asignados.`
+        )
+      }
     }
 
     // Transacción para asignaciones
