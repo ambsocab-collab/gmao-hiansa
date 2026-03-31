@@ -55,7 +55,8 @@ async function globalSetup(_config: FullConfig) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       const response = await fetch(`${baseURL}/api/v1/health`, {
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
+        headers: { 'x-playwright-test': '1' }
       });
 
       if (response.ok) {
@@ -132,7 +133,8 @@ async function globalSetup(_config: FullConfig) {
   // Verificar cuántos equipos hay (siempre, no solo después del seed)
   try {
     const countResponse = await fetch(`${baseURL}/api/v1/test/count-equipos`, {
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(5000),
+      headers: { 'x-playwright-test': '1' }
     });
 
     if (countResponse.ok) {
@@ -260,13 +262,40 @@ async function globalSetup(_config: FullConfig) {
       // Store cookies to maintain session
       let cookieStore = '';
 
-      // Step 1: Get CSRF token
+      // Step 1: Get CSRF token (with retry for server compilation)
       console.log(`[${displayName}] [STEP 1] Getting CSRF token...`);
-      const csrfResponse = await fetch(`${baseURL}/api/auth/csrf`);
-      const csrfData = await csrfResponse.json() as { csrfToken: string };
+      let csrfData: { csrfToken: string } | null = null;
+      let lastCsrfResponse: Response | null = null;
+
+      for (let attempt = 1; attempt <= 10; attempt++) {
+        const csrfResponse = await fetch(`${baseURL}/api/auth/csrf`, {
+          headers: { 'x-playwright-test': '1' }
+        });
+
+        const responseText = await csrfResponse.text();
+
+        // Check if response is JSON (valid CSRF response)
+        if (responseText.startsWith('{') || responseText.startsWith('["')) {
+          try {
+            csrfData = JSON.parse(responseText) as { csrfToken: string };
+            lastCsrfResponse = csrfResponse;
+            console.log(`[${displayName}] CSRF token obtained on attempt ${attempt}`);
+            break;
+          } catch {
+            // Not valid JSON, continue retrying
+          }
+        }
+
+        console.log(`[${displayName}] ⏳ Waiting for server compilation... (attempt ${attempt}/10)`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
+      if (!csrfData || !lastCsrfResponse) {
+        throw new Error('Failed to get CSRF token after 10 attempts - server may not be ready');
+      }
 
       // Extract cookies from CSRF response
-      const csrfCookies = parseCookies(csrfResponse.headers);
+      const csrfCookies = parseCookies(lastCsrfResponse.headers);
       cookieStore = csrfCookies;
 
       // Step 2: Make login request with cookies
@@ -276,7 +305,8 @@ async function globalSetup(_config: FullConfig) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Cookie': cookieStore
+          'Cookie': cookieStore,
+          'x-playwright-test': '1'
         },
         body: new URLSearchParams({
           csrfToken: csrfData!.csrfToken,

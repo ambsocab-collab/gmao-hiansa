@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/test.fixtures';
+import { test, expect, findOTCardWithAvailableSlots } from '../../fixtures/test.fixtures';
 
 /**
  * P1 E2E Tests for Story 3.3 AC7: Indicador visual de sobrecarga
@@ -23,15 +23,18 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   });
 
   test('[P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas', async ({ page }) => {
-    // GREEN PHASE: This test will fail because:
-    // - Workload calculation doesn't exist
-    // - Overload badge component doesn't exist
+    // GREEN PHASE: Tests that overload badge is visible for technicians with 5+ active OTs
 
-    // Open assignment modal
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
-    await expect(firstOTCard).toBeVisible({ timeout: 10000 });
+    // Find an OT card with available assignment slots
+    const otCard = await findOTCardWithAvailableSlots(page, 1);
 
-    const asignarBtn = firstOTCard.getByTestId('btn-asignar');
+    if (!otCard) {
+      // Skip test if no OT with available slots found
+      test.skip();
+      return;
+    }
+
+    const asignarBtn = otCard.getByTestId('btn-asignar');
     await asignarBtn.click();
 
     const assignmentModal = page.locator('[data-testid^="modal-asignacion-"]');
@@ -39,52 +42,61 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
 
     // Open technician dropdown
     const tecnicosSelect = assignmentModal.getByTestId('tecnicos-select');
+
+    // Verify select is enabled (we found an OT with available slots)
+    await expect(tecnicosSelect).toBeEnabled({ timeout: 3000 });
     await tecnicosSelect.click();
 
-    // Wait for technician options to load
-    await page.waitForTimeout(500);
-
-    // Find a technician with 5+ active OTs (if any)
+    // Wait for technician options to appear (proper wait instead of fixed timeout)
     const tecnicoOptions = page.locator('[data-testid^="tecnico-option-"]');
-    const count = await tecnicoOptions.count();
+    await expect(tecnicoOptions.first()).toBeVisible({ timeout: 5000 });
 
+    const count = await tecnicoOptions.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Find a technician with 5+ active OTs (seed creates "Carlos Tecnico" with 50+ OTs)
     let foundOverloaded = false;
 
     for (let i = 0; i < count; i++) {
       const option = tecnicoOptions.nth(i);
 
-      // Check for overload badge
-      const overloadBadge = option.locator('[data-testid="sobrecarga-badge"]');
+      // Check for workload count
+      const workloadCount = option.locator('[data-testid="workload-count"]');
+      if (await workloadCount.isVisible()) {
+        const workloadText = await workloadCount.textContent();
+        const workload = parseInt(workloadText || '0');
 
-      if (await overloadBadge.isVisible()) {
-        foundOverloaded = true;
+        // If workload >= 5, should have overload badge
+        if (workload >= 5) {
+          // Check for overload badge
+          const overloadBadge = option.locator('[data-testid="sobrecarga-badge"]');
+          await expect(overloadBadge).toBeVisible({ timeout: 2000 });
 
-        // Verify badge is red (has appropriate styling)
-        const badgeClass = await overloadBadge.getAttribute('class');
-        expect(badgeClass).toMatch(/red|error|warning|destructive/i);
+          // Verify badge is red (has destructive variant)
+          const badgeClass = await overloadBadge.getAttribute('class');
+          expect(badgeClass).toMatch(/red|error|warning|destructive/i);
 
-        // Verify badge shows count or warning icon
-        const badgeText = await overloadBadge.textContent();
-        expect(badgeText).toMatch(/\d+|⚠|!/);
+          // Verify badge shows warning icon
+          const badgeText = await overloadBadge.textContent();
+          expect(badgeText).toMatch(/⚠|!/);
 
-        // Hover to see tooltip
-        await overloadBadge.hover();
+          // Hover to see tooltip
+          await overloadBadge.hover();
 
-        const tooltip = page.locator('[data-testid="sobrecarga-tooltip"]');
-        await expect(tooltip).toBeVisible({ timeout: 2000 });
+          const tooltip = page.locator('[data-testid="sobrecarga-tooltip"]');
+          await expect(tooltip).toBeVisible({ timeout: 2000 });
 
-        const tooltipText = await tooltip.textContent();
-        expect(tooltipText).toMatch(/tiene \d+ OTs? asignadas/i);
+          const tooltipText = await tooltip.textContent();
+          expect(tooltipText).toMatch(/tiene \d+ OTs? asignadas/i);
 
-        break;
+          foundOverloaded = true;
+          break;
+        }
       }
     }
 
-    if (!foundOverloaded) {
-      // No overloaded technicians in current test data
-      // This is acceptable - the test validates the UI component exists
-      console.log('No overloaded technicians found - test data may need update');
-    }
+    // The seed creates "Carlos Tecnico" with 50+ active OTs, so we should find at least one overloaded
+    expect(foundOverloaded).toBe(true);
   });
 
   test('[P1-AC7-002] Contador solo incluye OTs en estados activos', async ({ page }) => {

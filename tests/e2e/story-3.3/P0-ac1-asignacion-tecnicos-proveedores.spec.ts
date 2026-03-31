@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/test.fixtures';
+import { test, expect, findOTCardWithAvailableSlots, parseAssignmentCount } from '../../fixtures/test.fixtures';
 
 /**
  * P0 E2E Tests for Story 3.3 AC1: Seleccionar técnicos internos y/o proveedores externos
@@ -115,8 +115,9 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
-    // Click "Asignar" button
-    const asignarBtn = firstOTCard.getByTestId('btn-asignar');
+    // Click "Asignar" button - use page-level locator since button is in table row
+    const asignarBtn = page.locator('[data-testid="btn-asignar"]').first();
+    await expect(asignarBtn).toBeVisible({ timeout: 5000 });
     await asignarBtn.click();
 
     // Wait for modal
@@ -221,10 +222,16 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     // GREEN PHASE: Filter UI implemented in TechnicianSelect
     // Note: Filter elements are inside the popover, so we need to open it first
 
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
-    await expect(firstOTCard).toBeVisible({ timeout: 10000 });
+    // Find an OT card with at least 1 available slot (less than 3 assignments)
+    const otCard = await findOTCardWithAvailableSlots(page, 1);
 
-    const asignarBtn = firstOTCard.getByTestId('btn-asignar');
+    if (!otCard) {
+      // Skip test if no OT with available slots found
+      test.skip();
+      return;
+    }
+
+    const asignarBtn = otCard.getByTestId('btn-asignar');
     await asignarBtn.click();
 
     const assignmentModal = page.locator('[data-testid^="modal-asignacion-"]');
@@ -232,6 +239,9 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
 
     // Open technician popover first (filters are inside)
     const tecnicosSelect = assignmentModal.getByTestId('tecnicos-select');
+
+    // Verify technician select is enabled (OT has available slots)
+    await expect(tecnicosSelect).toBeEnabled({ timeout: 3000 });
     await tecnicosSelect.click();
 
     // Wait for popover to open
@@ -267,6 +277,10 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
         }
       }
     }
+
+    // Close modal
+    await page.keyboard.press('Escape');
+    await expect(assignmentModal).not.toBeVisible({ timeout: 3000 });
   });
 
   test('[P1-AC1-006] Filtros por ubicación disponibles', async ({ page }) => {

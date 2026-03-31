@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test';
+import { test as base, Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 /**
@@ -27,6 +27,76 @@ const STORAGE_STATES = {
   supervisor: 'playwright/.auth/supervisor.json',
   stock_manager: 'playwright/.auth/admin.json', // Use admin for now
 };
+
+/**
+ * Helper: Find an OT card with available assignment slots
+ *
+ * Assignment rules: max 3 total (technicians + provider)
+ * - "Sin asignar" = 0 slots used
+ * - "1 técnico" = 1 slot used, 2 available
+ * - "2 técnicos" = 2 slots used, 1 available
+ * - "2 técnicos / 1 proveedor" = 3 slots used, 0 available (FULL)
+ *
+ * @param page - Playwright page object
+ * @param minSlotsNeeded - Minimum slots needed (default: 1)
+ * @returns Locator for an OT card with available slots, or null if none found
+ */
+export async function findOTCardWithAvailableSlots(
+  page: Page,
+  minSlotsNeeded: number = 1
+): Promise<Locator | null> {
+  const otCards = page.locator('[data-testid^="ot-card-"]');
+  const count = await otCards.count();
+
+  for (let i = 0; i < count; i++) {
+    const card = otCards.nth(i);
+    const assignmentBadge = card.locator('[data-testid^="asignaciones-badge-"]');
+
+    if (await assignmentBadge.count() === 0) continue;
+
+    const badgeText = await assignmentBadge.textContent() || '';
+
+    // Count current assignments
+    let currentAssignments = 0;
+
+    if (badgeText.includes('Sin asignar')) {
+      currentAssignments = 0;
+    } else {
+      // Extract numbers from badge text like "2 técnicos / 1 proveedor"
+      const tecnicoMatch = badgeText.match(/(\d+)\s*técnico/i);
+      const proveedorMatch = badgeText.match(/(\d+)\s*proveedor/i);
+
+      const tecnicos = tecnicoMatch ? parseInt(tecnicoMatch[1]) : 0;
+      const proveedores = proveedorMatch ? parseInt(proveedorMatch[1]) : 0;
+      currentAssignments = tecnicos + proveedores;
+    }
+
+    // Check if this card has enough slots available
+    const availableSlots = 3 - currentAssignments;
+    if (availableSlots >= minSlotsNeeded) {
+      return card;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Helper: Get assignment count from badge text
+ */
+export function parseAssignmentCount(badgeText: string): { technicians: number; providers: number; total: number } {
+  if (badgeText.includes('Sin asignar')) {
+    return { technicians: 0, providers: 0, total: 0 };
+  }
+
+  const tecnicoMatch = badgeText.match(/(\d+)\s*técnico/i);
+  const proveedorMatch = badgeText.match(/(\d+)\s*proveedor/i);
+
+  const technicians = tecnicoMatch ? parseInt(tecnicoMatch[1]) : 0;
+  const providers = proveedorMatch ? parseInt(proveedorMatch[1]) : 0;
+
+  return { technicians, providers, total: technicians + providers };
+}
 
 // Extend base test with custom fixtures
 export const test = base.extend<AuthFixtures>({
