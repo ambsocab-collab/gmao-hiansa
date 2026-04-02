@@ -24,7 +24,7 @@ const prisma = new PrismaClient()
  * Hierarchical structure for generating equipos
  * Matches the 5-level hierarchy: Planta → Linea → Equipo → Componente → Repuesto
  */
-const divisiones = ['HIROCK', 'ULTRA'] as const
+const _divisiones = ['HIROCK', 'ULTRA'] as const
 
 const plantas = [
   { division: 'HIROCK' as const, name: 'Planta HiRock 1', code: 'PHR-1' },
@@ -136,7 +136,7 @@ async function generate10KEquipos() {
 
   // Step 4: Generate 10,000 equipos
   console.log('📝 Generating 10,000 equipos...')
-  const batchSize = 100
+  const _batchSize = 100
   const totalEquipos = 10000
   const equiposPerLinea = Math.floor(totalEquipos / lineas.length)
 

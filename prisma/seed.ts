@@ -517,7 +517,7 @@ async function main() {
   // Seed ampliado con muchas OTs para E2E testing - evita que los tests se afecten entre sí
 
   // PENDIENTE (5 OTs)
-  const workOrder1 = await prisma.workOrder.create({
+  const _workOrder1 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-001',
       tipo: 'CORRECTIVO',
@@ -527,7 +527,7 @@ async function main() {
     },
   })
 
-  const workOrder6 = await prisma.workOrder.create({
+  const _workOrder6 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-006',
       tipo: 'PREVENTIVO',
@@ -537,7 +537,7 @@ async function main() {
     },
   })
 
-  const workOrder7 = await prisma.workOrder.create({
+  const _workOrder7 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-007',
       tipo: 'CORRECTIVO',
@@ -547,7 +547,7 @@ async function main() {
     },
   })
 
-  const workOrder8 = await prisma.workOrder.create({
+  const _workOrder8 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-008',
       tipo: 'PREVENTIVO',
@@ -557,7 +557,7 @@ async function main() {
     },
   })
 
-  const workOrder9 = await prisma.workOrder.create({
+  const _workOrder9 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-009',
       tipo: 'CORRECTIVO',
@@ -881,7 +881,7 @@ async function main() {
     },
   })
 
-  const workOrder3b = await prisma.workOrder.create({
+  const _workOrder3b = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-003b',
       tipo: 'CORRECTIVO',
@@ -891,7 +891,7 @@ async function main() {
     },
   })
 
-  const workOrder14 = await prisma.workOrder.create({
+  const _workOrder14 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-014',
       tipo: 'PREVENTIVO',
@@ -901,7 +901,7 @@ async function main() {
     },
   })
 
-  const workOrder15 = await prisma.workOrder.create({
+  const _workOrder15 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-015',
       tipo: 'CORRECTIVO',
@@ -911,7 +911,7 @@ async function main() {
     },
   })
 
-  const workOrder16 = await prisma.workOrder.create({
+  const _workOrder16 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-016',
       tipo: 'PREVENTIVO',
@@ -1023,7 +1023,7 @@ async function main() {
   })
 
   // PENDIENTE_REPUESTO (4 OTs)
-  const workOrder4 = await prisma.workOrder.create({
+  const _workOrder4 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-004',
       tipo: 'PREVENTIVO',
@@ -1033,7 +1033,7 @@ async function main() {
     },
   })
 
-  const workOrder17 = await prisma.workOrder.create({
+  const _workOrder17 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-017',
       tipo: 'CORRECTIVO',
@@ -1043,7 +1043,7 @@ async function main() {
     },
   })
 
-  const workOrder18 = await prisma.workOrder.create({
+  const _workOrder18 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-018',
       tipo: 'PREVENTIVO',
@@ -1053,7 +1053,7 @@ async function main() {
     },
   })
 
-  const workOrder19 = await prisma.workOrder.create({
+  const _workOrder19 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-019',
       tipo: 'CORRECTIVO',
@@ -1064,7 +1064,7 @@ async function main() {
   })
 
   // PENDIENTE_PARADA (3 OTs)
-  const workOrder20 = await prisma.workOrder.create({
+  const _workOrder20 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-020',
       tipo: 'CORRECTIVO',
@@ -1074,7 +1074,7 @@ async function main() {
     },
   })
 
-  const workOrder21 = await prisma.workOrder.create({
+  const _workOrder21 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-021',
       tipo: 'PREVENTIVO',
@@ -1084,7 +1084,7 @@ async function main() {
     },
   })
 
-  const workOrder22 = await prisma.workOrder.create({
+  const _workOrder22 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-022',
       tipo: 'CORRECTIVO',
@@ -1095,7 +1095,7 @@ async function main() {
   })
 
   // REPARACION_EXTERNA (3 OTs)
-  const workOrder23 = await prisma.workOrder.create({
+  const _workOrder23 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-023',
       tipo: 'CORRECTIVO',
@@ -1105,7 +1105,7 @@ async function main() {
     },
   })
 
-  const workOrder24 = await prisma.workOrder.create({
+  const _workOrder24 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-024',
       tipo: 'PREVENTIVO',
@@ -1115,7 +1115,7 @@ async function main() {
     },
   })
 
-  const workOrder25 = await prisma.workOrder.create({
+  const _workOrder25 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-025',
       tipo: 'CORRECTIVO',
@@ -1126,7 +1126,7 @@ async function main() {
   })
 
   // COMPLETADA (5 OTs)
-  const workOrder5 = await prisma.workOrder.create({
+  const _workOrder5 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-005',
       tipo: 'CORRECTIVO',
@@ -1137,7 +1137,7 @@ async function main() {
     },
   })
 
-  const workOrder26 = await prisma.workOrder.create({
+  const _workOrder26 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-026',
       tipo: 'PREVENTIVO',
@@ -1148,7 +1148,7 @@ async function main() {
     },
   })
 
-  const workOrder27 = await prisma.workOrder.create({
+  const _workOrder27 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-027',
       tipo: 'CORRECTIVO',
@@ -1159,7 +1159,7 @@ async function main() {
     },
   })
 
-  const workOrder28 = await prisma.workOrder.create({
+  const _workOrder28 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-028',
       tipo: 'PREVENTIVO',
@@ -1170,7 +1170,7 @@ async function main() {
     },
   })
 
-  const workOrder29 = await prisma.workOrder.create({
+  const _workOrder29 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-029',
       tipo: 'CORRECTIVO',
@@ -1182,7 +1182,7 @@ async function main() {
   })
 
   // DESCARTADA (2 OTs)
-  const workOrder30 = await prisma.workOrder.create({
+  const _workOrder30 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-030',
       tipo: 'CORRECTIVO',
@@ -1192,7 +1192,7 @@ async function main() {
     },
   })
 
-  const workOrder31 = await prisma.workOrder.create({
+  const _workOrder31 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-031',
       tipo: 'PREVENTIVO',
@@ -1364,7 +1364,7 @@ async function main() {
   }
 
   // Crear FailureReports de ejemplo con estado NUEVO (para Story 2.3 - Triage)
-  const failureReport1 = await prisma.failureReport.create({
+  const _failureReport1 = await prisma.failureReport.create({
     data: {
       numero: 'AV-2026-001',
       descripcion: 'Compresor haciendo ruido excesivo y vibracion anormal',
@@ -1376,7 +1376,7 @@ async function main() {
     },
   })
 
-  const failureReport2 = await prisma.failureReport.create({
+  const _failureReport2 = await prisma.failureReport.create({
     data: {
       numero: 'AV-2026-002',
       descripcion: 'Torno CNC presenta errores de posicionamiento en eje X',
@@ -1388,7 +1388,7 @@ async function main() {
     },
   })
 
-  const failureReport3 = await prisma.failureReport.create({
+  const _failureReport3 = await prisma.failureReport.create({
     data: {
       numero: 'AV-2026-003',
       descripcion: 'Transportadora tiene banda desalineada',

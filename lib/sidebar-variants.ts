@@ -106,7 +106,7 @@ export function getSidebarVariant(): SidebarVariant {
 
     // Fallback to 'compact' (Story 1.5 default for unconfigured routes)
     return 'compact'
-  } catch (error) {
+  } catch {
     // Defensive fallback to 'compact' if headers are not available
     // This can happen during build time or in unexpected error conditions
     // Note: Next.js throws error if headers() called from client component

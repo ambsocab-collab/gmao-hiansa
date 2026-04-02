@@ -13,8 +13,6 @@
  * ```
  */
 
-import { CAPABILITIES } from '@/lib/capabilities'
-
 /**
  * Navigation item configuration
  */
