@@ -181,8 +181,8 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     // Open equipo combobox
     await filtroEquipo.click();
 
-    // Type to search
-    await page.keyboard.type('equipo');
+    // Type to search - search for "SR" which matches "Selladora SR-01" in seed data
+    await page.keyboard.type('SR');
 
     // Verify options appear (wait deterministically)
     const equipoOptions = page.locator('[data-testid^="equipo-option-"]');

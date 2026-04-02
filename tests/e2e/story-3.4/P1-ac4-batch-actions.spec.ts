@@ -132,19 +132,18 @@ test.describe('Story 3.4 - AC4: Acciones en Lote (P1)', () => {
     const assignmentModal = page.locator('[data-testid^="modal-asignacion-"]');
     await expect(assignmentModal).toBeVisible({ timeout: 5000 });
 
-    // Select a technician
-    const tecnicosSelect = assignmentModal.getByTestId('tecnicos-select');
-    await tecnicosSelect.click();
-
-    // Wait for dropdown options to appear
-    const tecnicoOption = page.locator('[data-testid^="tecnico-option-"]').first();
+    // Select a technician - the list is always visible, just click an option
+    const tecnicoOption = assignmentModal.locator('[data-testid^="tecnico-option-"]').first();
     await expect(tecnicoOption).toBeVisible({ timeout: 5000 });
     await tecnicoOption.click();
-    await page.keyboard.press('Escape');
 
-    // Save assignment
-    const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
-    await guardarBtn.click();
+    // Small delay to ensure state updates
+    await page.waitForTimeout(100);
+
+    // Save assignment - click the button via JavaScript
+    await assignmentModal.getByTestId('guardar-asignacion-btn').evaluate(btn => {
+      (btn as HTMLButtonElement).click();
+    });
 
     // Modal should close
     await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });

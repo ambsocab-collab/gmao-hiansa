@@ -49,7 +49,9 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
 
     // Click to go to Kanban
     await kanbanBtn.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to change (more reliable than networkidle for client-side nav)
+    await page.waitForURL('**/ots/kanban**', { timeout: 10000 });
 
     // Should be on Kanban page
     expect(page.url()).toContain('/ots/kanban');
@@ -78,14 +80,16 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     // Switch to Kanban
     const kanbanBtn = page.getByTestId('view-toggle-kanban');
     await kanbanBtn.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to change
+    await page.waitForURL('**/ots/kanban**', { timeout: 10000 });
 
     // Verify filter is still applied in Kanban
     url = page.url();
     expect(url).toContain('tipo=CORRECTIVO');
 
     // Verify Kanban shows filtered results
-    const kanbanBoard = page.getByTestId('kanban-board');
+    const kanbanBoard = page.getByTestId('ot-kanban-board');
     await expect(kanbanBoard).toBeVisible();
   });
 
@@ -104,7 +108,9 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     // Switch to Kanban
     const kanbanBtn = page.getByTestId('view-toggle-kanban');
     await kanbanBtn.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to change
+    await page.waitForURL('**/ots/kanban**', { timeout: 10000 });
 
     // Verify sort is still in URL (even if Kanban doesn't use it visually)
     url = page.url();
@@ -151,7 +157,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     await page.goto(`${baseURL}/ots/kanban`);
     await page.waitForLoadState('domcontentloaded');
 
-    const kanbanBoard = page.getByTestId('kanban-board');
+    const kanbanBoard = page.getByTestId('ot-kanban-board');
     await expect(kanbanBoard).toBeVisible({ timeout: 10000 });
 
     // Make a change (e.g., drag OT to different column)
@@ -189,13 +195,15 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     await page.goto(`${baseURL}/ots/kanban?estado=ASIGNADA`);
     await page.waitForLoadState('domcontentloaded');
 
-    const kanbanBoard = page.getByTestId('kanban-board');
+    const kanbanBoard = page.getByTestId('ot-kanban-board');
     await expect(kanbanBoard).toBeVisible({ timeout: 10000 });
 
     // Switch to list
     const listaBtn = page.getByTestId('view-toggle-lista');
     await listaBtn.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to change
+    await page.waitForURL('**/ots/lista**', { timeout: 10000 });
 
     // Verify filter is maintained
     const url = page.url();
