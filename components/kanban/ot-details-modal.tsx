@@ -67,6 +67,23 @@ interface OTDetailsModalProps {
         name: string
       } | null
     }>
+    spareParts?: Array<{
+      id: string
+      cantidad: number
+      repuesto?: {
+        id: string
+        name: string
+      }
+    }>
+    comments?: Array<{
+      id: string
+      contenido: string
+      created_at: Date | string
+      user?: {
+        id: string
+        name: string
+      } | null
+    }>
   }
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -205,7 +222,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" data-testid={`ot-details-modal-${workOrder.id}`}>
+      <DialogContent className="max-w-md" data-testid={`modal-ot-info-${workOrder.id}`}>
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>OT {workOrder.numero}</span>
@@ -264,7 +281,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
           {/* Story 3.3 AC4: Técnicos/Proveedores asignados con testids */}
           {workOrder.assignments && workOrder.assignments.length > 0 && (
-            <div className="space-y-1" data-testid="asignados-list">
+            <div className="space-y-1" data-testid="modal-ot-asignados">
               <p className="text-sm text-muted-foreground">Asignados</p>
               <div className="flex flex-wrap gap-2">
                 {workOrder.assignments.map((assignment) => (
@@ -289,9 +306,9 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
           )}
 
           {/* Fechas */}
-          <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="grid grid-cols-2 gap-4 text-sm" data-testid="modal-ot-fechas">
             <div>
-              <p className="text-muted-foreground">Creada</p>
+              <p className="text-muted-foreground">Creación</p>
               <p className="font-medium">{new Date(workOrder.created_at).toLocaleDateString('es-ES')}</p>
             </div>
             {workOrder.completed_at && (
@@ -299,6 +316,67 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
                 <p className="text-muted-foreground">Completada</p>
                 <p className="font-medium">{new Date(workOrder.completed_at).toLocaleDateString('es-ES')}</p>
               </div>
+            )}
+            {workOrder.updated_at && (
+              <div>
+                <p className="text-muted-foreground">Última Actualización</p>
+                <p className="font-medium">{new Date(workOrder.updated_at).toLocaleDateString('es-ES')}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Origen */}
+          <div className="space-y-1" data-testid="modal-ot-origen">
+            <p className="text-sm text-muted-foreground">Origen</p>
+            <p className="font-medium">
+              {workOrder.failure_report_id
+                ? 'Avería'
+                : 'Manual'}
+            </p>
+            {workOrder.failure_report_id && (
+              <a
+                href={`/averias/${workOrder.failure_report_id}`}
+                className="text-sm text-blue-600 hover:underline"
+                data-testid="link-averia-original"
+              >
+                Ver avería original →
+              </a>
+            )}
+          </div>
+
+          {/* Repuestos usados */}
+          <div className="space-y-1" data-testid="modal-ot-repuestos">
+            <p className="text-sm text-muted-foreground">Repuestos</p>
+            {workOrder.spareParts && workOrder.spareParts.length > 0 ? (
+              <div className="space-y-2">
+                {workOrder.spareParts.map((sparePart) => (
+                  <div key={sparePart.id} className="flex justify-between items-center text-sm">
+                    <span>{sparePart.repuesto?.name || 'Repuesto'}</span>
+                    <span className="text-muted-foreground">x{sparePart.cantidad}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">Sin repuestos registrados</p>
+            )}
+          </div>
+
+          {/* Comentarios */}
+          <div className="space-y-1" data-testid="modal-ot-comentarios">
+            <p className="text-sm text-muted-foreground">Comentarios</p>
+            {workOrder.comments && workOrder.comments.length > 0 ? (
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {workOrder.comments.map((comment) => (
+                  <div key={comment.id} className="text-sm border-l-2 border-muted pl-2">
+                    <p className="text-xs text-muted-foreground">
+                      {comment.user?.name || 'Sistema'} - {new Date(comment.created_at).toLocaleDateString('es-ES')}
+                    </p>
+                    <p>{comment.contenido}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">Sin comentarios registrados</p>
             )}
           </div>
 

@@ -15,7 +15,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { DndContext, DragEndEvent, DragOverEvent, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { WorkOrder, WorkOrderEstado } from '@prisma/client'
 import { KanbanColumn } from './kanban-column'
 import { OTDetailsModal } from './ot-details-modal'
@@ -129,7 +129,7 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
       } | null
     }>
   } | null>(null)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const [_refreshKey, setRefreshKey] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const [visibleColumnRange, setVisibleColumnRange] = useState({ start: 1, end: 8 })
 

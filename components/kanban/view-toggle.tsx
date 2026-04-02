@@ -2,20 +2,21 @@
 
 /**
  * ViewToggle Component
- * Story 3.1: Kanban de 8 Columnas con Drag & Drop
+ * Story 3.1: Kanban - 8 Columnas con Drag and Drop
+ * Story 3.4: Vista de Listado con Filtros y Sync Real-time
  *
- * AC8: Toggle Kanban ↔ Listado con sincronización
- *
- * Toggle button para alternar entre vista Kanban y Listado
- * - Guarda preferencia en localStorage
- * - Sincronización bidireccional de filtros
- * - data-testid="vista-toggle"
+ * AC5: Toggle Kanban ↔ Listado with syncronization
+ *  - Toggle button to between views
+ *  - Guarda preference in localStorage
+ *  - data-testid="view-toggle"
+ *  - Separate buttons for Kanban and Lista with data-active attribute
  */
 
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { LayoutGrid, List } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 type ViewMode = 'kanban' | 'list'
 
@@ -30,7 +31,11 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
   const pathname = usePathname()
   const [viewMode, setViewMode] = useState<ViewMode>(currentView)
 
-  // Cargar preferencia guardada
+  // Determine if we're on kanban or list view based on pathname
+  const isKanbanActive = pathname?.includes('/kanban')
+  const isListActive = pathname?.includes('/lista')
+
+  // Load saved preference
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(VIEW_MODE_KEY) as ViewMode | null
@@ -40,54 +45,84 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
     }
   }, [])
 
-  // Actualizar estado si cambia la prop externa
+  // Update state if external prop changes
   useEffect(() => {
     setViewMode(currentView)
   }, [currentView])
 
   /**
-   * Toggle entre vista Kanban y Listado
+   * Get current URL search params from window.location
+   * This avoids the Suspense boundary requirement of useSearchParams()
    */
-  const handleToggle = () => {
-    const newViewMode: ViewMode = viewMode === 'kanban' ? 'list' : 'kanban'
-
-    // Guardar preferencia en localStorage
+  const getCurrentSearchParams = (): string => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(VIEW_MODE_KEY, newViewMode)
+      const search = window.location.search
+      return search ? search.slice(1) : '' // Remove the leading '?'
     }
-
-    setViewMode(newViewMode)
-
-    // Navegar a la nueva vista
-    if (newViewMode === 'kanban') {
-      router.push('/ots/kanban')
-    } else {
-      router.push('/ots/lista')
-    }
+    return ''
   }
 
-  // Determinar iconos y labels según vista actual
-  const isKanbanView = viewMode === 'kanban' || pathname?.includes('/kanban')
+  /**
+   * Navigate to Kanban view, preserving current filters
+   */
+  const handleKanbanClick = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(VIEW_MODE_KEY, 'kanban')
+    }
+    setViewMode('kanban')
+    // Preserve current URL params (filters, sorting) when switching views
+    const currentParams = getCurrentSearchParams()
+    const targetUrl = currentParams ? `/ots/kanban?${currentParams}` : '/ots/kanban'
+    router.push(targetUrl)
+  }
+
+  /**
+   * Navigate to Lista view, preserving current filters
+   */
+  const handleListClick = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(VIEW_MODE_KEY, 'list')
+    }
+    setViewMode('list')
+    // Preserve current URL params (filters, sorting) when switching views
+    const currentParams = getCurrentSearchParams()
+    const targetUrl = currentParams ? `/ots/lista?${currentParams}` : '/ots/lista'
+    router.push(targetUrl)
+  }
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleToggle}
-      data-testid="vista-toggle"
-      className="gap-2"
+    <div
+      className="flex items-center gap-1 p-1 bg-muted rounded-md"
+      data-testid="view-toggle"
     >
-      {isKanbanView ? (
-        <>
-          <List className="h-4 w-4" />
-          <span className="hidden sm:inline">Vista Lista</span>
-        </>
-      ) : (
-        <>
-          <LayoutGrid className="h-4 w-4" />
-          <span className="hidden sm:inline">Vista Kanban</span>
-        </>
-      )}
-    </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleKanbanClick}
+        data-testid="view-toggle-kanban"
+        data-active={isKanbanActive ? 'true' : 'false'}
+        className={cn(
+          "gap-1.5 px-3",
+          isKanbanActive && "bg-white shadow-sm"
+        )}
+      >
+        <LayoutGrid className="h-4 w-4" />
+        <span className="hidden sm:inline">Kanban</span>
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleListClick}
+        data-testid="view-toggle-lista"
+        data-active={isListActive ? 'true' : 'false'}
+        className={cn(
+          "gap-1.5 px-3",
+          isListActive && "bg-white shadow-sm"
+        )}
+      >
+        <List className="h-4 w-4" />
+        <span className="hidden sm:inline">Lista</span>
+      </Button>
+    </div>
   )
 }

@@ -2,25 +2,23 @@
 
 /**
  * OTListClient Component
- * Story 3.3 AC4: Vista de listado de OTs
- *
- * Client Component que:
- * - Muestra tabla de OTs con columna de Asignaciones
- * - Incluye botón "Asignar" para usuarios con capability
- * - Modal de detalles al hacer click en fila
- * - Modal de asignación al hacer click en "Asignar"
+ * Story 3.4: Vista de Listado de OTs con Filtros y Paginación
  */
 
-import { useState, useMemo } from 'react'
-import { WorkOrder, WorkOrderEstado, WorkOrderTipo } from '@prisma/client'
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { WorkOrder } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { DivisionTag } from '@/components/ui/division-tag'
 import { AssignmentBadge } from '@/components/assignments/assignment-badge'
 import { AssignmentModal } from '@/components/assignments/assignment-modal'
 import { OTDetailsModal } from '@/components/kanban/ot-details-modal'
 import { ViewToggle } from '@/components/kanban/view-toggle'
+import { FilterBar } from '@/components/ot-list/filter-bar'
+import { SortableHeader } from '@/components/ot-list/sortable-header'
+import { BatchCheckbox, SelectAllCheckbox, BatchActionsBar, BatchAssignDialog, BatchStatusDialog, BatchCommentDialog } from '@/components/ot-list/batch-actions'
+import { SSEConnectionIndicator } from '@/components/sse/sse-connection-indicator'
 import {
   Table,
   TableBody,
@@ -29,12 +27,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { toast } from 'sonner'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Calendar, Wrench, UserPlus, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { Calendar, Wrench, UserPlus, ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-type SortDirection = 'asc' | 'desc' | null
+type SortOrder = 'asc' | 'desc' | null
 
 type WorkOrderWithRelations = WorkOrder & {
   equipo: {
@@ -68,20 +66,71 @@ type WorkOrderWithRelations = WorkOrder & {
       name: string
     } | null
   }>
+  origin?: 'failure_report' | 'rutina' | null
+  created_at: Date | null
+  updated_at: Date | null
+}
+
+interface PaginationMetadata {
+  page: number
+  pageSize: number
+  total: number
+  totalPages: number
+  hasNext: boolean
+  hasPrev: boolean
+}
+
+interface FilterOption {
+  id: string
+  name: string
 }
 
 interface OTListClientProps {
   workOrders: WorkOrderWithRelations[]
   canAssignTechnicians: boolean
+  pagination?: PaginationMetadata
+  filterOptions?: {
+    tecnicos: FilterOption[]
+    equipos: FilterOption[]
+  }
 }
 
-export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientProps) {
+export function OTListClient({ workOrders, canAssignTechnicians, pagination, filterOptions }: OTListClientProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrderWithRelations | null>(null)
   const [assignmentModalWorkOrder, setAssignmentModalWorkOrder] = useState<WorkOrderWithRelations | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [batchAssignOpen, setBatchAssignOpen] = useState(false)
+  const [batchStatusOpen, setBatchStatusOpen] = useState(false)
+  const [batchCommentOpen, setBatchCommentOpen] = useState(false)
 
-  const handleRowClick = (workOrder: WorkOrderWithRelations) => {
+  const urlSortBy = searchParams.get('sortBy')
+  const sortBy = urlSortBy === 'created_at' ? 'fecha' : urlSortBy
+  const sortOrder = searchParams.get('sortOrder') as SortOrder | null
+
+  const currentPage = pagination?.page || 1
+  const totalPages = pagination?.totalPages || 1
+  const total = pagination?.total || workOrders.length
+  const pageSize = pagination?.pageSize || 100
+  const hasNext = pagination?.hasNext || false
+  const hasPrev = pagination?.hasPrev || false
+
+  const allIds = workOrders.map(wo => wo.id)
+  const selectedCount = selectedIds.size
+
+  const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, workOrder: WorkOrderWithRelations) => {
+    // Don't open modal if clicking on checkbox, button, or interactive elements
+    const target = e.target as HTMLElement
+    if (
+      target.closest('[data-testid^="ot-checkbox-"]') ||
+      target.closest('[role="checkbox"]') ||
+      target.closest('button') ||
+      target.closest('[data-testid="select-all-checkbox"]')
+    ) {
+      return
+    }
     setSelectedWorkOrder(workOrder)
   }
 
@@ -91,30 +140,40 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
   }
 
   const handleAssignmentComplete = () => {
-    // Refresh the page to show updated assignments
     setRefreshKey(prev => prev + 1)
     window.location.reload()
   }
 
-  const handleSortClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setSortDirection(prev => {
-      if (prev === null) return 'asc'
-      if (prev === 'asc') return 'desc'
-      return null
+  const handleToggleSelection = (id: string) => {
+    setSelectedIds(prev => {
+      const newIds = new Set(prev)
+      if (newIds.has(id)) {
+        newIds.delete(id)
+      } else {
+        newIds.add(id)
+      }
+      return newIds
     })
   }
 
-  // Sort work orders by assignment count
-  const sortedWorkOrders = useMemo(() => {
-    if (sortDirection === null) return workOrders
+  const handleSelectAll = () => {
+    setSelectedIds(new Set(allIds))
+  }
 
-    return [...workOrders].sort((a, b) => {
-      const aCount = a.assignments?.length || 0
-      const bCount = b.assignments?.length || 0
-      return sortDirection === 'asc' ? aCount - bCount : bCount - aCount
-    })
-  }, [workOrders, sortDirection])
+  const handleClearSelection = () => {
+    setSelectedIds(new Set())
+    setSelectedWorkOrder(null)
+    setAssignmentModalWorkOrder(null)
+    setBatchAssignOpen(false)
+    setBatchStatusOpen(false)
+    setBatchCommentOpen(false)
+  }
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('page', page.toString())
+    router.push(`/ots/lista?${params.toString()}`)
+  }
 
   const formatDate = (date: Date | null) => {
     if (!date) return '-'
@@ -126,9 +185,26 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
     CORRECTIVO: { bg: 'bg-red-100', text: 'text-red-700' },
   }
 
+  const startItem = (currentPage - 1) * pageSize + 1
+  const endItem = Math.min(currentPage * pageSize, total)
+
+  const handleBatchAssignSuccess = () => {
+    setSelectedIds(new Set())
+    window.location.reload()
+  }
+
+  const handleBatchStatusSuccess = () => {
+    setSelectedIds(new Set())
+    window.location.reload()
+  }
+
+  const handleBatchCommentSuccess = () => {
+    setSelectedIds(new Set())
+    window.location.reload()
+  }
+
   return (
     <div className="flex flex-col h-full bg-gray-50" key={refreshKey}>
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
@@ -136,81 +212,79 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
               Lista de Órdenes de Trabajo
             </h1>
             <p className="text-sm text-gray-600 mt-1">
-              {workOrders.length} órdenes de trabajo
+              {total} órdenes de trabajo
             </p>
           </div>
-
           <div className="flex items-center gap-4">
+            <SSEConnectionIndicator channel="work-orders" />
             <ViewToggle currentView="list" />
           </div>
         </div>
       </div>
 
-      {/* Table */}
+      <FilterBar
+        tecnicoOptions={filterOptions?.tecnicos || []}
+        equipoOptions={filterOptions?.equipos || []}
+      />
+
+      {selectedCount > 0 && (
+        <BatchActionsBar
+          selectedCount={selectedCount}
+          onClearSelection={handleClearSelection}
+          onBatchAssign={() => setBatchAssignOpen(true)}
+          onBatchStatus={() => setBatchStatusOpen(true)}
+          onBatchComment={() => setBatchCommentOpen(true)}
+        />
+      )}
+
       <div className="flex-1 overflow-auto p-6">
-        <div className="bg-white rounded-lg border shadow-sm" data-testid="ot-list-table-container">
-          <Table data-testid="ot-list-table">
+        <div className="bg-white rounded-lg border shadow-sm" data-testid="ots-lista-tabla-container">
+          <Table data-testid="ots-lista-tabla">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Número</TableHead>
-                <TableHead>Descripción</TableHead>
-                <TableHead className="w-[120px]">Tipo</TableHead>
-                <TableHead className="w-[140px]">Estado</TableHead>
-                <TableHead className="w-[150px]">Equipo</TableHead>
-                <TableHead className="w-[100px]">División</TableHead>
-                <TableHead className="w-[100px]">Fecha</TableHead>
-                <TableHead
-                  className="w-[140px] cursor-pointer select-none hover:bg-muted/50"
-                  onClick={handleSortClick}
-                >
-                  <div className="flex items-center gap-1">
-                    <span>Asignaciones</span>
-                    <span data-testid="sort-icon">
-                      {sortDirection === null ? (
-                        <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                      ) : sortDirection === 'asc' ? (
-                        <ArrowUp className="h-4 w-4 text-primary" />
-                      ) : (
-                        <ArrowDown className="h-4 w-4 text-primary" />
-                      )}
-                    </span>
-                  </div>
+                <TableHead className="w-[40px]">
+                  <SelectAllCheckbox
+                    allIds={allIds}
+                    selectedIds={selectedIds}
+                    onSelectAll={handleSelectAll}
+                    onClearAll={handleClearSelection}
+                  />
                 </TableHead>
+                <SortableHeader column="numero" label="Número" sortBy={sortBy} sortOrder={sortOrder} className="w-[100px]" />
+                <SortableHeader column="equipo" label="Equipo" sortBy={sortBy} sortOrder={sortOrder} />
+                <SortableHeader column="estado" label="Estado" sortBy={sortBy} sortOrder={sortOrder} className="w-[140px]" />
+                <SortableHeader column="tipo" label="Tipo" sortBy={sortBy} sortOrder={sortOrder} className="w-[120px]" />
+                <SortableHeader column="asignados" label="Asignados" sortBy={sortBy} sortOrder={sortOrder} className="w-[140px]" />
+                <SortableHeader column="fecha" label="Fecha Creación" sortBy={sortBy} sortOrder={sortOrder} className="w-[120px]" />
                 <TableHead className="w-[100px]">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedWorkOrders.map((wo) => {
+              {workOrders.map((wo) => {
                 const tipoInfo = tipoColors[wo.tipo]
+                const isSelected = selectedIds.has(wo.id)
 
                 return (
                   <TableRow
                     key={wo.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => handleRowClick(wo)}
-                    data-testid={`ot-card-${wo.id}`}
+                    className={cn(
+                      "cursor-pointer hover:bg-muted/50",
+                      isSelected && "bg-blue-50"
+                    )}
+                    onClick={(e) => handleRowClick(e, wo)}
+                    data-testid={`ot-row-${wo.id}`}
                   >
+                    <TableCell>
+                      <BatchCheckbox
+                        id={wo.id}
+                        isSelected={isSelected}
+                        onToggle={handleToggleSelection}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium">
                       <span data-testid={`ot-numero-${wo.id}`}>
                         {wo.numero}
                       </span>
-                    </TableCell>
-                    <TableCell>
-                      <p className="truncate max-w-xs" data-testid={`ot-descripcion-${wo.id}`}>
-                        {wo.descripcion}
-                      </p>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        className={`${tipoInfo.bg} ${tipoInfo.text}`}
-                        variant="outline"
-                        data-testid={`ot-tipo-${wo.id}`}
-                      >
-                        {wo.tipo === 'PREVENTIVO' ? 'Preventivo' : 'Correctivo'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge estado={wo.estado} />
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
@@ -221,9 +295,22 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
                       </div>
                     </TableCell>
                     <TableCell>
-                      {wo.equipo?.linea?.planta?.division && (
-                        <DivisionTag division={wo.equipo.linea.planta.division} />
-                      )}
+                      <StatusBadge estado={wo.estado} data-testid={`estado-badge-${wo.id}`} />
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${tipoInfo.bg} ${tipoInfo.text}`}
+                        variant="outline"
+                        data-testid={`ot-tipo-${wo.id}`}
+                      >
+                        {wo.tipo === 'PREVENTIVO' ? 'Preventivo' : 'Correctivo'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell data-testid="asignaciones-column">
+                      <AssignmentBadge
+                        assignments={wo.assignments}
+                        workOrderId={wo.id}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -233,14 +320,20 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell data-testid="asignaciones-column">
-                      <AssignmentBadge
-                        assignments={wo.assignments}
-                        workOrderId={wo.id}
-                      />
-                    </TableCell>
-                    <TableCell>
+                    <TableCell data-testid="acciones-ot">
                       <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedWorkOrder(wo)
+                          }}
+                          data-testid="btn-ver-detalles"
+                          title="Ver detalles"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                         {canAssignTechnicians && (
                           <Button
                             size="sm"
@@ -262,7 +355,59 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
         </div>
       </div>
 
-      {/* Details Modal */}
+      <div className="bg-white border-t border-gray-200 px-6 py-4" data-testid="pagination-controls">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600" data-testid="pagination-info">
+            Mostrando {startItem}-{endItem} de {total}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(1)}
+              disabled={!hasPrev}
+              data-testid="btn-first-page"
+              title="Primera página"
+            >
+              <ChevronFirst className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={!hasPrev}
+              data-testid="btn-prev-page"
+              title="Página anterior"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="px-3 py-1 text-sm font-medium">
+              Página {currentPage} de {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={!hasNext}
+              data-testid="btn-next-page"
+              title="Página siguiente"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(totalPages)}
+              disabled={!hasNext}
+              data-testid="btn-last-page"
+              title="Última página"
+            >
+              <ChevronLast className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
       {selectedWorkOrder && (
         <OTDetailsModal
           workOrder={selectedWorkOrder}
@@ -271,7 +416,6 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
         />
       )}
 
-      {/* Assignment Modal */}
       {assignmentModalWorkOrder && (
         <AssignmentModal
           workOrder={assignmentModalWorkOrder}
@@ -280,6 +424,28 @@ export function OTListClient({ workOrders, canAssignTechnicians }: OTListClientP
           onAssignmentComplete={handleAssignmentComplete}
         />
       )}
+
+      <BatchAssignDialog
+        open={batchAssignOpen}
+        selectedIds={selectedIds}
+        tecnicoOptions={filterOptions?.tecnicos || []}
+        onSuccess={handleBatchAssignSuccess}
+        onOpenChange={setBatchAssignOpen}
+      />
+
+      <BatchStatusDialog
+        open={batchStatusOpen}
+        selectedIds={selectedIds}
+        onSuccess={handleBatchStatusSuccess}
+        onOpenChange={setBatchStatusOpen}
+      />
+
+      <BatchCommentDialog
+        open={batchCommentOpen}
+        selectedIds={selectedIds}
+        onSuccess={handleBatchCommentSuccess}
+        onOpenChange={setBatchCommentOpen}
+      />
     </div>
   )
 }
