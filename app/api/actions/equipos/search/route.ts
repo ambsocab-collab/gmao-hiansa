@@ -13,7 +13,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { searchEquipos } from '@/app/actions/equipos'
 import { apiErrorHandler } from '@/lib/api/errorHandler'
 import { auth } from '@/lib/auth-adapter'
-import { headers } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   // Generate correlation ID for tracking

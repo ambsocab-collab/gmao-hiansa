@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
   }
 
   // Check for test header to prevent accidental calls
-  const testHeader = request.headers.get('x-playwright-test');
-  if (!testHeader && process.env.NODE_ENV !== 'development') {
+  const _testHeader = request.headers.get('x-playwright-test');
+  if (!_testHeader && process.env.NODE_ENV !== 'development') {
     return NextResponse.json(
       { error: 'Seed endpoint only available for automated tests' },
       { status: 403 }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET method to check if seed is needed
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   // Security: Only allow in test/development environments
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json(

@@ -21,7 +21,7 @@ import { prisma } from '@/lib/db'
  *
  * WARNING: Only for testing purposes!
  */
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   // Only allow in test/development environment
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Not allowed in production' }, { status: 403 })

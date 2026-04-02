@@ -21,7 +21,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  const _correlationId = request.headers.get('x-correlation-id') || 'unknown'
 
   try {
     const session = await auth()
@@ -82,7 +82,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  const _correlationId = request.headers.get('x-correlation-id') || 'unknown'
 
   try {
     const session = await auth()

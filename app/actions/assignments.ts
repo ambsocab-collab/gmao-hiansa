@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth-adapter'
 import { prisma } from '@/lib/db'
 import { trackPerformance } from '@/lib/observability/performance'
 import { revalidatePath } from 'next/cache'
-import { WorkOrderEstado, Prisma } from '@prisma/client'
+import { WorkOrderEstado } from '@prisma/client'
 import { ValidationError, AuthorizationError, AuthenticationError } from '@/lib/utils/errors'
 import { broadcastWorkOrderUpdated, broadcastTechnicianAssigned } from '@/lib/sse/broadcaster'
 
@@ -133,7 +133,9 @@ export async function getAvailableTechnicians(
     // Crear mapa de workload por userId
     const workloadMap = new Map<string, number>()
     workloadCounts.forEach((item) => {
-      workloadMap.set(item.userId, item._count.userId)
+      if (item.userId) {
+        workloadMap.set(item.userId, item._count.userId)
+      }
     })
 
     // Construir resultado con workload

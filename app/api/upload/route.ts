@@ -24,13 +24,10 @@ export async function POST(request: Request): Promise<Response> {
     const correlationId = `upload-${Date.now()}`
 
     // Handle the upload using Vercel Blob's built-in handler
-    const { searchParams } = new URL(request.url)
-    const pathname = searchParams.get('pathname') || 'averias'
-
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname, clientPayload, multipart) => {
+      onBeforeGenerateToken: async (_pathname, _clientPayload, _multipart) => {
         // Validate file size and type before generating token
         return {
           maximumSizeInBytes: 5 * 1024 * 1024, // 5MB

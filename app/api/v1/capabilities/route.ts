@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from 'next/server'
  * No authentication required - capabilities are public metadata
  */
 export async function GET(request: NextRequest) {
-  const correlationId = request.headers.get('x-correlation-id') || 'unknown'
+  const _correlationId = request.headers.get('x-correlation-id') || 'unknown'
 
   try {
     // Get all capabilities ordered by name

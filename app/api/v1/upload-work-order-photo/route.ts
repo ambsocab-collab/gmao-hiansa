@@ -34,12 +34,12 @@ export async function POST(request: Request): Promise<Response> {
 
     // Get tipo from query params (antes | despues)
     const tipo = searchParams.get('tipo') || 'antes'
-    const pathname = `work-orders/${tipo}`
+    const _pathname = `work-orders/${tipo}`
 
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname, clientPayload, multipart) => {
+      onBeforeGenerateToken: async (pathname, _clientPayload, _multipart) => {
         // Validate file size and type before generating token
         return {
           maximumSizeInBytes: 5 * 1024 * 1024, // 5MB (AC8 requirement)

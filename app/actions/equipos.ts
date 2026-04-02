@@ -8,7 +8,6 @@
  */
 
 import { prisma } from '@/lib/db'
-import { auth } from '@/lib/auth-adapter'
 import { ValidationError } from '@/lib/utils/errors'
 import { trackPerformance } from '@/lib/observability/performance'
 import { logger } from '@/lib/observability/logger'
