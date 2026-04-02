@@ -30,7 +30,7 @@
 
 import { chromium, FullConfig } from '@playwright/test';
 
-export default async function globalSetup(config: FullConfig) {
+export default async function globalSetup(_config: FullConfig) {
   console.log('🔐 Setting up admin auth session...');
 
   const browser = await chromium.launch();
