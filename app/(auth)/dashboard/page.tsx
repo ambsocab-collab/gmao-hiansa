@@ -23,7 +23,7 @@ export default async function DashboardPage() {
   }
 
   // Get user's initials for avatar
-  const initials = session.user.name
+  const _initials = session.user.name
     ?.split(' ')
     .map((n: string) => n[0])
     .join('')

@@ -74,8 +74,8 @@ export default async function UsuarioDetailPage({
     orderBy: { name: 'asc' },
   })
 
-  const capabilities = user.userCapabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
-  const initialCapabilities = user.userCapabilities.map((uc: { capability: { name: string } }) => uc.capability.name)
+  const _capabilities = user.userCapabilities.map((uc: { capability: { name: string; label: string } }) => uc.capability)
+  const initialCapabilities = _capabilities.map((cap) => cap.name)
   const selectedTags = user.userTags.map((ut: { tag: { id: string } }) => ut.tag.id)
 
   return (
