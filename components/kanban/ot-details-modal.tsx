@@ -77,7 +77,7 @@ interface OTDetailsModalProps {
     }>
     comments?: Array<{
       id: string
-      contenido: string
+      texto: string
       created_at: Date | string
       user?: {
         id: string
@@ -344,6 +344,21 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
             )}
           </div>
 
+          {/* AC8: Rutina Preventiva */}
+          <div className="space-y-1" data-testid="modal-ot-rutina">
+            <p className="text-sm text-muted-foreground">Rutina Preventiva</p>
+            {workOrder.rutina_id ? (
+              <div className="flex items-center justify-between">
+                <p className="font-medium">Rutina asignada</p>
+                <span className="text-xs text-muted-foreground italic">
+                  (Epic 7 - no implementado aún)
+                </span>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">Rutina no disponible</p>
+            )}
+          </div>
+
           {/* Repuestos usados */}
           <div className="space-y-1" data-testid="modal-ot-repuestos">
             <p className="text-sm text-muted-foreground">Repuestos</p>
@@ -371,7 +386,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
                     <p className="text-xs text-muted-foreground">
                       {comment.user?.name || 'Sistema'} - {new Date(comment.created_at).toLocaleDateString('es-ES')}
                     </p>
-                    <p>{comment.contenido}</p>
+                    <p>{comment.texto}</p>
                   </div>
                 ))}
               </div>

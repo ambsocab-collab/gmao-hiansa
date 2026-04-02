@@ -423,6 +423,14 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
           </div>
 
           <div className="flex items-center gap-4">
+            {/* SSE Connection Indicator (Story 3.4 AC5) */}
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700"
+              data-testid="sse-connection-indicator"
+              data-connected={isConnected ? 'true' : 'false'}
+            >
+              {isConnected ? '🟢' : '🔴'} Sincronizado
+            </div>
+
             {/* Toggle Vista Kanban ↔ Listado (AC8) */}
             <ViewToggle currentView="kanban" />
 

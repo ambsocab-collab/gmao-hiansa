@@ -62,6 +62,9 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     const estadoOption = page.locator('[data-testid^="estado-option-"]').first();
     await expect(estadoOption).toBeVisible({ timeout: 5000 });
 
+    // Save selected estado text BEFORE clicking (page will navigate after click)
+    const selectedEstado = await estadoOption.textContent();
+
     // Select an estado
     await estadoOption.click();
     await page.waitForLoadState('networkidle');
@@ -78,11 +81,10 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     const estadoBadges = tabla.locator('[data-testid^="estado-badge-"]');
     const count = await estadoBadges.count();
 
-    if (count > 0) {
-      const selectedEstado = await estadoOption.textContent();
+    if (count > 0 && selectedEstado) {
       // At least the first badge should match the selected estado
       const firstBadge = estadoBadges.first();
-      await expect(firstBadge).toContainText(selectedEstado || '');
+      await expect(firstBadge).toContainText(selectedEstado);
     }
   });
 
@@ -132,14 +134,16 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
 
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
-    // Fill fecha inicio
+    // Fill fecha inicio and dispatch change event to trigger filter
     await filtroFechaInicio.fill(formatDate(thirtyDaysAgo));
+    await filtroFechaInicio.dispatchEvent('change');
+    await page.waitForLoadState('networkidle');
 
-    // Fill fecha fin
-    await filtroFechaFin.fill(formatDate(today));
-
-    // Trigger filter (may need to click outside or press enter)
-    await page.keyboard.press('Enter');
+    // After first date filter, URL should have fechaInicio
+    // Now fill fecha fin on the refreshed page
+    const filtroFechaFinAfterRefresh = page.getByTestId('filtro-fecha-fin');
+    await filtroFechaFinAfterRefresh.fill(formatDate(today));
+    await filtroFechaFinAfterRefresh.dispatchEvent('change');
     await page.waitForLoadState('networkidle');
 
     // Verify URL has fecha params

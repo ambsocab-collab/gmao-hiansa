@@ -129,7 +129,7 @@ export function BatchActionsBar({
             size="sm"
             onClick={onBatchAssign}
             disabled={selectedCount === 0}
-            dataTestId="btn-batch-asignar"
+            data-testid="btn-batch-asignar"
           >
             <UserPlus className="h-4 w-4" />
             Asignar
@@ -139,7 +139,7 @@ export function BatchActionsBar({
             size="sm"
             onClick={onBatchStatus}
             disabled={selectedCount === 0}
-            dataTestId="btn-batch-estado"
+            data-testid="btn-batch-estado"
           >
             <RefreshCw className="h-4 w-4" />
             Estado
@@ -149,7 +149,7 @@ export function BatchActionsBar({
             size="sm"
             onClick={onBatchComment}
             disabled={selectedCount === 0}
-            dataTestId="btn-batch-comentario"
+            data-testid="btn-batch-comentario"
           >
             <MessageSquare className="h-4 w-4" />
             Comentario
@@ -162,7 +162,7 @@ export function BatchActionsBar({
             size="sm"
             onClick={onClearSelection}
             className="text-sm text-muted-foreground"
-            dataTestId="btn-limpiar-seleccion"
+            data-testid="btn-limpiar-seleccion"
           >
             <X className="h-4 w-4" />
             Limpiar
@@ -201,23 +201,16 @@ export function BatchAssignDialog({
   }
 
   const handleSave = async () => {
-    console.log('[BatchAssignDialog] handleSave called', { selectedTecnicos, selectedIdsSize: selectedIds.size })
     if (selectedTecnicos.length === 0) {
-      console.log('[BatchAssignDialog] No technicians selected, returning')
       return
     }
 
     setIsSaving(true)
     try {
-      console.log('[BatchAssignDialog] Calling batchAssignTechnicians', {
-        workOrderIds: Array.from(selectedIds),
-        userIds: selectedTecnicos
-      })
       const result = await batchAssignTechnicians(
         Array.from(selectedIds),
         selectedTecnicos
       )
-      console.log('[BatchAssignDialog] Result:', result)
 
       if (result.success) {
         toast.success(`Técnicos asignados a ${result.count} OTs`)
@@ -227,7 +220,6 @@ export function BatchAssignDialog({
         throw new Error('Error al asignar técnicos')
       }
     } catch (error) {
-      console.error('[BatchAssignDialog] Error assigning technicians:', error)
       toast.error(error instanceof Error ? error.message : 'Error al asignar técnicos')
     } finally {
       setIsSaving(false)
@@ -297,7 +289,7 @@ export function BatchAssignDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={selectedTecnicos.length === 0 || isSaving} dataTestId="guardar-asignacion-btn">
+          <Button onClick={handleSave} disabled={selectedTecnicos.length === 0 || isSaving} data-testid="guardar-asignacion-btn">
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -395,7 +387,7 @@ export function BatchStatusDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={!selectedStatus || isSaving} dataTestId="btn-confirmar-cambio">
+          <Button onClick={handleSave} disabled={!selectedStatus || isSaving} data-testid="btn-confirmar-cambio">
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -430,7 +422,7 @@ export function BatchCommentDialog({
 
   const handleSave = async () => {
     if (!comment.trim()) {
-      toast.error('El comentario debe tener entre 10-200 caracteres')
+      toast.error('El comentario debe tener entre 1 y 1000 caracteres')
       return
     }
 
@@ -484,7 +476,7 @@ export function BatchCommentDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={!comment.trim() || isSaving} dataTestId="btn-guardar-comentario">
+          <Button onClick={handleSave} disabled={!comment.trim() || isSaving} data-testid="btn-guardar-comentario">
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

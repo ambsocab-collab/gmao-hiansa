@@ -12,6 +12,7 @@ import { Clock, UserCheck, Play, Package, Pause, Wrench, CheckCircle, XCircle } 
 export interface StatusBadgeProps {
   estado: string
   showLabel?: boolean
+  'data-testid'?: string
 }
 
 /**
@@ -64,7 +65,7 @@ const estadoConfig: Record<string, {
   },
 }
 
-export function StatusBadge({ estado, showLabel = true }: StatusBadgeProps) {
+export function StatusBadge({ estado, showLabel = true, 'data-testid': testId }: StatusBadgeProps) {
   const config = estadoConfig[estado] || {
     icon: Clock,
     className: 'bg-gray-100 text-gray-700 border border-gray-300',
@@ -81,7 +82,7 @@ export function StatusBadge({ estado, showLabel = true }: StatusBadgeProps) {
       )}
       role="status"
       aria-label={`Estado: ${config.label}`}
-      data-testid="status-badge"
+      data-testid={testId || 'status-badge'}
     >
       <Icon className="h-3 w-3" aria-hidden="true" />
       {showLabel && <span>{config.label}</span>}

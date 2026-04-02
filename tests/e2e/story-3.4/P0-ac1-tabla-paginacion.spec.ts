@@ -66,7 +66,8 @@ test.describe('Story 3.4 - AC1: Tabla de OTs con Paginación (P0)', () => {
     const firstRow = otRows.first();
 
     // Check for OT number format (OT-YYYY-NNN)
-    const numeroCell = firstRow.locator('td').first();
+    // Note: First cell is checkbox, second cell is OT number
+    const numeroCell = firstRow.locator('td').nth(1);
     const numeroText = await numeroCell.textContent();
     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
 

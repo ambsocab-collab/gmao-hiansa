@@ -1,164 +1,598 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="129.687481">
-<testsuite name="story-3.4\P1-ac4-batch-actions.spec.ts" timestamp="2026-04-02T11:34:00.986Z" hostname="chromium" tests="1" failures="1" skipped="0" time="58.158" errors="0">
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-005] Asignar técnicos en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="58.158">
-<failure message="P1-ac4-batch-actions.spec.ts:116:7 [P1-AC4-005] Asignar técnicos en lote" type="FAILURE">
-<![CDATA[  [chromium] › story-3.4\P1-ac4-batch-actions.spec.ts:116:7 › Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-005] Asignar técnicos en lote 
+<testsuites id="" name="" tests="62" failures="3" skipped="1" errors="0" time="574.626816">
+<testsuite name="story-3.4\P0-ac1-tabla-paginacion.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="6" failures="1" skipped="1" time="38.393" errors="0">
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-001] Tabla de OTs visible con columnas correctas" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="11.92">
+</testcase>
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-002] Tabla muestra OTs con datos correctos" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="13.55">
+<failure message="P0-ac1-tabla-paginacion.spec.ts:54:7 [P0-AC1-002] Tabla muestra OTs con datos correctos" type="FAILURE">
+<![CDATA[  [chromium] › story-3.4\P0-ac1-tabla-paginacion.spec.ts:54:7 › Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-002] Tabla muestra OTs con datos correctos 
 
-    Error: expect(locator).not.toBeVisible() failed
+    Error: expect(received).toMatch(expected)
 
-    Locator:  locator('[data-testid^="modal-asignacion-"]')
-    Expected: not visible
-    Received: visible
-    Timeout:  10000ms
+    Expected pattern: /OT-\d{4}-\d{3}/
+    Received string:  ""
 
-    Call log:
-      - Expect "not toBeVisible" with timeout 10000ms
-      - waiting for locator('[data-testid^="modal-asignacion-"]')
-        13 × locator resolved to <div role="dialog" tabindex="-1" data-state="open" id="radix-:R8jttt7pj6:" data-testid="modal-asignacion-batch" aria-labelledby="radix-:R8jttt7pj6H1:" aria-describedby="radix-:R8jttt7pj6H2:" class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[st…>…</div>
-           - unexpected value "visible"
-
-
-      146 |
-      147 |     // Modal should close
-    > 148 |     await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
-          |                                       ^
-      149 |
-      150 |     // Selection should be cleared
-      151 |     const selectedCount = page.getByTestId('selected-count');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P1-ac4-batch-actions.spec.ts:148:39
+      69 |     const numeroCell = firstRow.locator('td').first();
+      70 |     const numeroText = await numeroCell.textContent();
+    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
+         |                        ^
+      72 |
+      73 |     // Check for estado badge
+      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\test-failed-1.png
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\video.webm
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\error-context.md
+    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\trace.zip
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: expect(locator).not.toBeVisible() failed
+    Error: expect(received).toMatch(expected)
 
-    Locator:  locator('[data-testid^="modal-asignacion-"]')
-    Expected: not visible
-    Received: visible
-    Timeout:  10000ms
+    Expected pattern: /OT-\d{4}-\d{3}/
+    Received string:  ""
 
-    Call log:
-      - Expect "not toBeVisible" with timeout 10000ms
-      - waiting for locator('[data-testid^="modal-asignacion-"]')
-        13 × locator resolved to <div role="dialog" tabindex="-1" data-state="open" id="radix-:R8jttt7pj6:" data-testid="modal-asignacion-batch" aria-labelledby="radix-:R8jttt7pj6H1:" aria-describedby="radix-:R8jttt7pj6H2:" class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[st…>…</div>
-           - unexpected value "visible"
-
-
-      146 |
-      147 |     // Modal should close
-    > 148 |     await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
-          |                                       ^
-      149 |
-      150 |     // Selection should be cleared
-      151 |     const selectedCount = page.getByTestId('selected-count');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P1-ac4-batch-actions.spec.ts:148:39
+      69 |     const numeroCell = firstRow.locator('td').first();
+      70 |     const numeroText = await numeroCell.textContent();
+    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
+         |                        ^
+      72 |
+      73 |     // Check for estado badge
+      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\test-failed-1.png
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\video.webm
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\error-context.md
+    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\trace.zip
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: expect(locator).not.toBeVisible() failed
+    Error: expect(received).toMatch(expected)
 
-    Locator:  locator('[data-testid^="modal-asignacion-"]')
-    Expected: not visible
-    Received: visible
-    Timeout:  10000ms
+    Expected pattern: /OT-\d{4}-\d{3}/
+    Received string:  ""
 
-    Call log:
-      - Expect "not toBeVisible" with timeout 10000ms
-      - waiting for locator('[data-testid^="modal-asignacion-"]')
-        13 × locator resolved to <div role="dialog" tabindex="-1" data-state="open" id="radix-:R8jttt7pj6:" data-testid="modal-asignacion-batch" aria-labelledby="radix-:R8jttt7pj6H1:" aria-describedby="radix-:R8jttt7pj6H2:" class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[st…>…</div>
-           - unexpected value "visible"
-
-
-      146 |
-      147 |     // Modal should close
-    > 148 |     await expect(assignmentModal).not.toBeVisible({ timeout: 10000 });
-          |                                       ^
-      149 |
-      150 |     // Selection should be cleared
-      151 |     const selectedCount = page.getByTestId('selected-count');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P1-ac4-batch-actions.spec.ts:148:39
+      69 |     const numeroCell = firstRow.locator('td').first();
+      70 |     const numeroText = await numeroCell.textContent();
+    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
+         |                        ^
+      72 |
+      73 |     // Check for estado badge
+      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\test-failed-1.png
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\video.webm
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\error-context.md
+    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\trace.zip
+    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
 <![CDATA[
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\test-failed-1.png]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\test-failed-1.png]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\video.webm]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\video.webm]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\error-context.md]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\error-context.md]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium\trace.zip]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\test-failed-1.png]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\test-failed-1.png]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\video.webm]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\video.webm]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\error-context.md]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\error-context.md]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry1\trace.zip]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\test-failed-1.png]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\test-failed-1.png]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\video.webm]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\video.webm]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\error-context.md]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\error-context.md]]
 
-[[ATTACHMENT|test-results\story-3.4-P1-ac4-batch-act-3f63c-05-Asignar-técnicos-en-lote-chromium-retry2\trace.zip]]
+[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip]]
 ]]>
 </system-out>
+</testcase>
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-003] Paginación funciona correctamente (100 por página)" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.894">
+</testcase>
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-004] Navegación entre páginas funciona" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.071">
+</testcase>
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-005] URL refleja página actual" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="2.927">
+</testcase>
+<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-006] Supervisor sin can_view_all_ots no puede ver lista" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.031">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P0-ac2-filtros.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="1" skipped="0" time="79.681" errors="0">
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-001] Barra de filtros visible con 5 filtros" classname="story-3.4\P0-ac2-filtros.spec.ts" time="3.224">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-002] Filtro por estado funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.148">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-003] Filtro por técnico con búsqueda predictiva" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.737">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-004] Filtro por rango de fechas funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="19.428">
+<failure message="P0-ac2-filtros.spec.ts:119:7 [P0-AC2-004] Filtro por rango de fechas funciona" type="FAILURE">
+<![CDATA[  [chromium] › story-3.4\P0-ac2-filtros.spec.ts:119:7 › Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-004] Filtro por rango de fechas funciona 
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /fechaInicio=|fechaFin=/
+    Received string:  "http://localhost:3000/ots/lista"
+
+      145 |     // Verify URL has fecha params
+      146 |     const url = page.url();
+    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
+          |                 ^
+      148 |   });
+      149 |
+      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /fechaInicio=|fechaFin=/
+    Received string:  "http://localhost:3000/ots/lista"
+
+      145 |     // Verify URL has fecha params
+      146 |     const url = page.url();
+    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
+          |                 ^
+      148 |   });
+      149 |
+      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /fechaInicio=|fechaFin=/
+    Received string:  "http://localhost:3000/ots/lista"
+
+      145 |     // Verify URL has fecha params
+      146 |     const url = page.url();
+    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
+          |                 ^
+      148 |   });
+      149 |
+      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.535">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-006] Filtro por equipo con búsqueda predictiva" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.47">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-007] Filtros combinados con AND lógica" classname="story-3.4\P0-ac2-filtros.spec.ts" time="9.307">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-008] Botón limpiar filtros funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="10.03">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-009] Badge muestra count de filtros activos" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.754">
+</testcase>
+<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-010] URL compartible con filtros" classname="story-3.4\P0-ac2-filtros.spec.ts" time="5.048">
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P0-ac3-sorting.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="87.335" errors="0">
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-001] Headers de columnas son clickeables para ordenar" classname="story-3.4\P0-ac3-sorting.spec.ts" time="3.76">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-002] Click en header ordena ascendente" classname="story-3.4\P0-ac3-sorting.spec.ts" time="6.37">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-003] Segundo click toggle a descendente" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.948">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-004] Tercer click remueve ordenamiento" classname="story-3.4\P0-ac3-sorting.spec.ts" time="12.164">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-005] Ordenar por columna Número" classname="story-3.4\P0-ac3-sorting.spec.ts" time="11.623">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-006] Ordenar por columna Fecha Creación" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.874">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-007] Sorting se mantiene al cambiar de página" classname="story-3.4\P0-ac3-sorting.spec.ts" time="9.297">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-008] Cambiar columna de ordenamiento resetea toggle" classname="story-3.4\P0-ac3-sorting.spec.ts" time="11.81">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-009] URL compartible con sorting" classname="story-3.4\P0-ac3-sorting.spec.ts" time="5.61">
+</testcase>
+<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-010] Sorting con filtros aplicados" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.879">
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P0-ac5-sync-sse.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="1" skipped="0" time="135.953" errors="0">
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-001] Toggle visible en página de lista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="3.184">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-002] Click en Kanban navega a vista Kanban" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.431">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-003] Filtros se mantienen al cambiar de vista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.306">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-004] Sorting se mantiene al cambiar de vista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.091">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-005] SSE indicator visible" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.006">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-006] SSE actualiza lista cuando OT es modificada" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.291">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-007] Cambios en Kanban se reflejan en Lista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="5.79">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-008] SSE reconecta automáticamente" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.078">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-009] Toggle desde Kanban mantiene estado" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="8.517">
+</testcase>
+<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-010] Múltiples tabs sincronizadas" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="78.259">
+<failure message="P0-ac5-sync-sse.spec.ts:217:7 [P0-AC5-010] Múltiples tabs sincronizadas" type="FAILURE">
+<![CDATA[  [chromium] › story-3.4\P0-ac5-sync-sse.spec.ts:217:7 › Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-010] Múltiples tabs sincronizadas 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByTestId('sse-connection-indicator')
+    Expected: "true"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for getByTestId('sse-connection-indicator')
+
+
+      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
+      244 |
+    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
+          |                        ^
+      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
+      247 |
+      248 |     // Cleanup
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByTestId('sse-connection-indicator')
+    Expected: "true"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for getByTestId('sse-connection-indicator')
+
+
+      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
+      244 |
+    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
+          |                        ^
+      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
+      247 |
+      248 |     // Cleanup
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: getByTestId('sse-connection-indicator')
+    Expected: "true"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for getByTestId('sse-connection-indicator')
+
+
+      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
+      244 |
+    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
+          |                        ^
+      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
+      247 |
+      248 |     // Cleanup
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-3.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-3.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-3.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-2.png]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\video.webm]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\error-context.md]]
+
+[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P1-ac4-batch-actions.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="66.843" errors="0">
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-001] Checkboxes de selección visibles en cada fila" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="3.314">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-002] Seleccionar OTs individuales" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.352">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-003] Seleccionar todos los visibles" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.404">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-004] Barra de acciones aparece cuando hay selección" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.172">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-005] Asignar técnicos en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="10.502">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-006] Cambiar estado en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="9.011">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-007] Agregar comentario en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.71">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-008] Limpiar selección funciona" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.609">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-009] Validación máximo 50 OTs por batch" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.694">
+</testcase>
+<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-010] SSE emitido para cada OT en batch" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="5.075">
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P1-ac6-modal-detalles.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="43.006" errors="0">
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-001] Modal se abre al hacer click en &quot;Ver Detalles&quot;" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.164">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-002] Modal muestra secciones de información" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.353">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-003] Sección fechas muestra datos correctos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.326">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-004] Sección origen muestra datos correctos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.368">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-005] Modal cierra con click en X" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.303">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-006] Modal cierra con tecla ESC" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.283">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-007] Modal cierra con click fuera" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.442">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-008] Sección asignados muestra técnicos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.363">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-009] Sección repuestos muestra lista" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.202">
+</testcase>
+<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-010] Sección comentarios muestra historial" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.202">
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P1-ac7-link-averia.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="3" failures="0" skipped="0" time="12.66" errors="0">
+<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-001] Link a avería original visible si existe" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="4.006">
+</testcase>
+<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-002] Click en link avería navega correctamente" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="4.73">
+</testcase>
+<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-003] Modal muestra datos de avería si existe" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="3.924">
+</testcase>
+</testsuite>
+<testsuite name="story-3.4\P1-ac8-link-rutina.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="3" failures="0" skipped="0" time="12.844" errors="0">
+<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-001] Link a rutina preventiva visible si existe" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.309">
+</testcase>
+<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-002] Modal muestra &quot;Rutina no disponible&quot; si no existe" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.318">
+</testcase>
+<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-003] Click en link rutina navega correctamente" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.217">
 </testcase>
 </testsuite>
 </testsuites>

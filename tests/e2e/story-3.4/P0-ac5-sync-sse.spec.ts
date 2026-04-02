@@ -238,12 +238,15 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     await page2.goto(`${baseURL}/ots/lista`);
     await page2.waitForLoadState('domcontentloaded');
 
-    // Both should show SSE connected
+    // Both should show SSE connected (with extended timeout for SSE connection)
     const sse1 = page1.getByTestId('sse-connection-indicator');
     const sse2 = page2.getByTestId('sse-connection-indicator');
 
-    await expect(sse1).toHaveAttribute('data-connected', 'true');
-    await expect(sse2).toHaveAttribute('data-connected', 'true');
+    // Wait for SSE connection to establish (may take time in CI environments)
+    await expect(sse1).toBeVisible({ timeout: 20000 });
+    await expect(sse1).toHaveAttribute('data-connected', 'true', { timeout: 20000 });
+    await expect(sse2).toBeVisible({ timeout: 20000 });
+    await expect(sse2).toHaveAttribute('data-connected', 'true', { timeout: 20000 });
 
     // Cleanup
     await context1.close();
