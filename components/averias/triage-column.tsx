@@ -181,7 +181,7 @@ export async function TriageColumn({ userId, searchParams }: TriageColumnProps) 
 
     // Calculate priority for each report
     const reportsWithPriority = allReports.map((report) => {
-      const reportAge = now.getTime() - new Date(report.createdAt).getTime()
+      const _reportAge = now.getTime() - new Date(report.createdAt).getTime()
       const isOlderThan24h = new Date(report.createdAt) < twentyFourHoursAgo
       const isOlderThan12h = new Date(report.createdAt) < twelveHoursAgo
 

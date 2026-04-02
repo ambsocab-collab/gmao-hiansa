@@ -9,7 +9,7 @@
  * AC1: Vista de "Mis OTs" filtrada por asignaciones
  */
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSSEConnection } from '@/components/sse/use-sse-connection'
 import { MyOTCard } from './my-ot-card'

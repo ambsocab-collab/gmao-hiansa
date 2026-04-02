@@ -89,7 +89,7 @@ export function EquipoSearch({ onEquipoSelect, value, onChange, disabled = false
         try {
           const equipos = await searchEquipos(debouncedSearch)
           setResults(equipos)
-        } catch (error) {
+        } catch {
           // Show user-friendly error message instead of console.error
           setError('Error al buscar equipos. Por favor intenta nuevamente.')
           setResults([])

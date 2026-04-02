@@ -22,7 +22,7 @@ interface ScrollFollowCursorProps {
  */
 export default function ScrollFollowCursor({ children, className = '' }: ScrollFollowCursorProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const rafRef = useRef<number | null>(null)
+  const _rafRef = useRef<number | null>(null)
   const lastPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
 
   useEffect(() => {

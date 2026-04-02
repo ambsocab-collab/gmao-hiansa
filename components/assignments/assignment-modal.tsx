@@ -112,7 +112,7 @@ export function AssignmentModal({
 
     setIsSaving(true)
     try {
-      const result = await assignToWorkOrder(
+      await assignToWorkOrder(
         workOrder.id,
         selectedTechnicians,
         selectedProvider

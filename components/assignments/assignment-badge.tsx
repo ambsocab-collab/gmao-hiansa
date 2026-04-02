@@ -55,16 +55,13 @@ export function AssignmentBadge({ assignments, workOrderId }: AssignmentBadgePro
   const technicianNames = technicians.map(a => a.user?.name || 'Sin nombre').join(', ')
   const providerNames = providers.map(a => a.provider?.name || 'Sin nombre').join(', ')
 
-  let tooltipContent = ''
-  if (technicianCount > 0 && providerCount > 0) {
-    tooltipContent = `Técnicos: ${technicianNames}\nProveedor: ${providerNames}`
-  } else if (technicianCount > 0) {
-    tooltipContent = `Técnicos: ${technicianNames}`
-  } else if (providerCount > 0) {
-    tooltipContent = `Proveedor: ${providerNames}`
-  } else {
-    tooltipContent = 'Sin asignar'
-  }
+  const _tooltipContent = technicianCount > 0 && providerCount > 0
+    ? `Técnicos: ${technicianNames}\nProveedor: ${providerNames}`
+    : technicianCount > 0
+    ? `Técnicos: ${technicianNames}`
+    : providerCount > 0
+    ? `Proveedor: ${providerNames}`
+    : 'Sin asignar'
 
   if (total === 0) {
     return (

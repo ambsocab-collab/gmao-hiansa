@@ -16,11 +16,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
-interface TriageColumnSSEProps {
-  // No props needed - uses session context
-}
-
-export function TriageColumnSSE({}: TriageColumnSSEProps) {
+export function TriageColumnSSE() {
   const router = useRouter()
   const { data: session } = useSession()
   const eventSourceRef = useRef<EventSource | null>(null)
