@@ -118,16 +118,19 @@ export function buildFilterQuery(filters: FilterParams): PrismaWhereClause {
     conditions.push({ equipo_id: filters.equipoId });
   }
 
-  // Date range filter
+  // Date range filter (M-004: unified with page.tsx logic)
   if (filters.fechaInicio || filters.fechaFin) {
-    const dateCondition: { gte?: Date; lte?: Date } = {};
+    const dateCondition: { gte?: Date; lt?: Date } = {};
 
     if (filters.fechaInicio) {
       dateCondition.gte = filters.fechaInicio;
     }
 
     if (filters.fechaFin) {
-      dateCondition.lte = filters.fechaFin;
+      // Use lt + 1 day to include the end date (same logic as page.tsx)
+      const endDate = new Date(filters.fechaFin);
+      endDate.setDate(endDate.getDate() + 1);
+      dateCondition.lt = endDate;
     }
 
     conditions.push({ created_at: dateCondition });

@@ -23,6 +23,7 @@ import { AssignmentModal } from '@/components/assignments/assignment-modal'
 import { ViewToggle } from './view-toggle'
 import { updateWorkOrderStatus } from '@/app/actions/work-orders'
 import { useSSEConnection } from '@/components/sse/use-sse-connection'
+import { logClientError } from '@/lib/observability/client-logger'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -129,7 +130,7 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
       } | null
     }>
   } | null>(null)
-  const [_refreshKey, setRefreshKey] = useState(0)
+  const [, setRefreshKey] = useState(0) // Triggers re-render when assignments change
   const [isMobile, setIsMobile] = useState(false)
   const [visibleColumnRange, setVisibleColumnRange] = useState({ start: 1, end: 8 })
 
@@ -202,7 +203,7 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
   /**
    * Suscribir a eventos SSE para real-time sync (R-002: <30s)
    */
-  useSSEConnection({
+  const { isConnected } = useSSEConnection({
     channel: 'work-orders',
     onMessage: (message) => {
       if (message.type === 'work_order_updated') {
@@ -277,10 +278,9 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
       const errorMessage = error instanceof Error ? error.message : 'Error al actualizar OT'
       toast.error(errorMessage)
 
-      console.error('[KanbanBoard] Error al actualizar estado:', {
-        workOrderId,
-        nuevoEstado,
-        error
+      // L-NEW-003: Structured logging instead of console.error
+      logClientError({
+        message: `KanbanBoard error updating status: ${errorMessage} | workOrderId: ${workOrderId}, nuevoEstado: ${nuevoEstado}`
       })
     } finally {
       setIsUpdating(false)

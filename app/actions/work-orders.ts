@@ -3,6 +3,7 @@
 import { auth } from '@/lib/auth-adapter'
 import { prisma } from '@/lib/db'
 import { trackPerformance } from '@/lib/observability/performance'
+import { logger } from '@/lib/observability/logger'
 import { revalidatePath } from 'next/cache'
 import { WorkOrderEstado } from '@prisma/client'
 import { ValidationError, AuthorizationError, AuthenticationError } from '@/lib/utils/errors'
@@ -13,7 +14,7 @@ import { z } from 'zod'
 // Batch operation schemas
 const BatchAssignSchema = z.object({
   workOrderIds: z.array(z.string()).min(1).max(50),
-  userIds: z.array(z.string()).optional(),
+  userIds: z.array(z.string()).max(3, 'Máximo 3 técnicos por OT').optional(), // M-003: PRD limit
   providerId: z.string().optional()
 })
 
@@ -139,13 +140,9 @@ export async function updateWorkOrderStatus(
       throw error // Re-throw errores conocidos
     }
 
-    // Log unexpected errors
-    console.error('[updateWorkOrderStatus] Error inesperado:', {
-      workOrderId,
-      newEstado,
-      userId: session.user.id,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    })
+    // Log unexpected errors with structured logging (M-002)
+    const errorObj = error instanceof Error ? error : new Error('Unknown error')
+    logger.error(errorObj, 'updateWorkOrderStatus.error', crypto.randomUUID(), session.user.id)
 
     // Preservar contexto original del error
     const originalMessage = error instanceof Error ? error.message : 'Error desconocido'
@@ -157,17 +154,20 @@ export async function updateWorkOrderStatus(
  * Asignar técnicos a múltiples Órdenes de Trabajo en lote
  *
  * @param workOrderIds - Array de IDs de OTs (máx 50)
- * @param userIds - Array de IDs de usuarios a asignar
+ * @param userIds - Array de IDs de usuarios a asignar (máx 3 por OT según PRD)
  * @param providerId - ID de proveedor (opcional)
  * @returns Objeto con count de OTs actualizadas
+ * @throws AuthenticationError si no hay sesión
+ * @throws AuthorizationError si faltan capacidades PBAC (can_assign_technicians)
+ * @throws ValidationError si la validación falla o no hay usuarios/proveedor
  */
 export async function batchAssignTechnicians(
   workOrderIds: string[],
   userIds?: string[],
   providerId?: string
 ) {
-  const perf = trackPerformance('batchAssignTechnicians')
   const session = await auth()
+  const perf = trackPerformance('batchAssignTechnicians', crypto.randomUUID())
 
   if (!session?.user) {
     throw new AuthenticationError('No autenticado')
@@ -258,7 +258,9 @@ export async function batchAssignTechnicians(
     }
   } catch (error) {
     perf.end(2000)
-    console.error('[batchAssignTechnicians] Error:', error)
+    // M-002: Structured logging instead of console.error
+    const errorObj = error instanceof Error ? error : new Error('Unknown error')
+    logger.error(errorObj, 'batchAssignTechnicians.error', crypto.randomUUID())
     throw new ValidationError(
       error instanceof Error ? error.message : 'Error al asignar técnicos en lote'
     )
@@ -271,13 +273,16 @@ export async function batchAssignTechnicians(
  * @param workOrderIds - Array de IDs de OTs (máx 50)
  * @param newStatus - Nuevo estado
  * @returns Objeto con count de OTs actualizadas
+ * @throws AuthenticationError si no hay sesión
+ * @throws AuthorizationError si faltan capacidades PBAC
+ * @throws ValidationError si la validación falla
  */
 export async function batchUpdateStatus(
   workOrderIds: string[],
   newStatus: WorkOrderEstado
 ) {
-  const perf = trackPerformance('batchUpdateStatus')
   const session = await auth()
+  const perf = trackPerformance('batchUpdateStatus', crypto.randomUUID())
 
   if (!session?.user) {
     throw new AuthenticationError('No autenticado')
@@ -355,7 +360,9 @@ export async function batchUpdateStatus(
     }
   } catch (error) {
     perf.end(2000)
-    console.error('[batchUpdateStatus] Error:', error)
+    // M-002: Structured logging instead of console.error
+    const errorObj = error instanceof Error ? error : new Error('Unknown error')
+    logger.error(errorObj, 'batchUpdateStatus.error', crypto.randomUUID())
     throw new ValidationError(
       error instanceof Error ? error.message : 'Error al cambiar estado en lote'
     )
@@ -366,15 +373,18 @@ export async function batchUpdateStatus(
  * Agregar comentario a múltiples Órdenes de Trabajo en lote
  *
  * @param workOrderIds - Array de IDs de OTs (máx 50)
- * @param comment - Comentario a agregar
+ * @param comment - Comentario a agregar (máx 1000 caracteres)
  * @returns Objeto con count de OTs actualizadas
+ * @throws AuthenticationError si no hay sesión
+ * @throws AuthorizationError si faltan capacidades PBAC
+ * @throws ValidationError si la validación falla
  */
 export async function batchAddComment(
   workOrderIds: string[],
   comment: string
 ) {
-  const perf = trackPerformance('batchAddComment')
   const session = await auth()
+  const perf = trackPerformance('batchAddComment', crypto.randomUUID())
 
   if (!session?.user) {
     throw new AuthenticationError('No autenticado')
@@ -449,7 +459,9 @@ export async function batchAddComment(
     }
   } catch (error) {
     perf.end(2000)
-    console.error('[batchAddComment] Error:', error)
+    // M-002: Structured logging instead of console.error
+    const errorObj = error instanceof Error ? error : new Error('Unknown error')
+    logger.error(errorObj, 'batchAddComment.error', crypto.randomUUID())
     throw new ValidationError(
       error instanceof Error ? error.message : 'Error al agregar comentario en lote'
     )

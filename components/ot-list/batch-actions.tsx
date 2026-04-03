@@ -28,6 +28,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Loader2, UserPlus, RefreshCw, MessageSquare, X } from 'lucide-react'
+import { logClientError } from '@/lib/observability/client-logger'
 import { cn } from '@/lib/utils'
 import { batchAssignTechnicians, batchUpdateStatus, batchAddComment } from '@/app/actions/work-orders'
 
@@ -340,7 +341,9 @@ export function BatchStatusDialog({
         throw new Error('Error al cambiar estado')
       }
     } catch (error) {
-      console.error('Error updating batch status:', error)
+      // M-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error updating batch status: ${errorMessage}` })
       toast.error(error instanceof Error ? error.message : 'Error al cambiar estado')
     } finally {
       setIsSaving(false)
@@ -441,7 +444,9 @@ export function BatchCommentDialog({
         throw new Error('Error al agregar comentario')
       }
     } catch (error) {
-      console.error('Error adding batch comment:', error)
+      // M-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error adding batch comment: ${errorMessage}` })
       toast.error(error instanceof Error ? error.message : 'Error al agregar comentario')
     } finally {
       setIsSaving(false)

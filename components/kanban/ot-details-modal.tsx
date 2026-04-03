@@ -11,6 +11,7 @@
  */
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { WorkOrder, WorkOrderEstado } from '@prisma/client'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,7 @@ import { Badge } from '@/components/ui/badge'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { DivisionTag } from '@/components/ui/division-tag'
 import { updateWorkOrderStatus } from '@/app/actions/work-orders'
+import { logClientError } from '@/lib/observability/client-logger'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { VALID_TRANSITIONS, ACTION_BUTTONS } from '@/lib/constants/work-orders'
@@ -90,6 +92,7 @@ interface OTDetailsModalProps {
 }
 
 export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModalProps) {
+  const router = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
   const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
@@ -121,7 +124,9 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
       // Cerrar modal después de actualizar
       onOpenChange(false)
     } catch (error) {
-      console.error('Error updating work order status:', error)
+      // M-NEW-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error updating work order status: ${errorMessage}` })
 
       toast.error(
         error instanceof Error ? error.message : 'Error desconocido al actualizar estado'
@@ -143,10 +148,12 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
       toast.success(result.message || `OT ${workOrder.numero} verificada - Reparación confirmada`)
       setIsVerificationDialogOpen(false)
       onOpenChange(false)
-      // Refresh page to show updated data
-      window.location.reload()
+      // M-NEW-001: Use router.refresh() instead of window.location.reload()
+      router.refresh()
     } catch (error) {
-      console.error('Error verifying work order:', error)
+      // M-NEW-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error verifying work order: ${errorMessage}` })
       toast.error(error instanceof Error ? error.message : 'Error al verificar OT')
     } finally {
       setIsVerifying(false)
@@ -171,10 +178,12 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
       )
       setIsVerificationDialogOpen(false)
       onOpenChange(false)
-      // Refresh page to show new rework OT
-      window.location.reload()
+      // M-NEW-001: Use router.refresh() instead of window.location.reload()
+      router.refresh()
     } catch (error) {
-      console.error('Error creating rework OT:', error)
+      // M-NEW-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error creating rework OT: ${errorMessage}` })
       toast.error(error instanceof Error ? error.message : 'Error al crear OT de re-trabajo')
     } finally {
       setIsVerifying(false)
@@ -192,10 +201,12 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
       toast.success(`Recepción confirmada para OT ${workOrder.numero}`)
       onOpenChange(false)
-      // Refresh page to show updated state
-      window.location.reload()
+      // M-NEW-001: Use router.refresh() instead of window.location.reload()
+      router.refresh()
     } catch (error) {
-      console.error('Error confirming provider work:', error)
+      // M-NEW-002: Structured logging instead of console.error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      logClientError({ message: `Error confirming provider work: ${errorMessage}` })
       toast.error(error instanceof Error ? error.message : 'Error al confirmar recepción')
     } finally {
       setIsConfirmingProvider(false)
@@ -341,21 +352,6 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
               >
                 Ver avería original →
               </a>
-            )}
-          </div>
-
-          {/* AC8: Rutina Preventiva */}
-          <div className="space-y-1" data-testid="modal-ot-rutina">
-            <p className="text-sm text-muted-foreground">Rutina Preventiva</p>
-            {workOrder.rutina_id ? (
-              <div className="flex items-center justify-between">
-                <p className="font-medium">Rutina asignada</p>
-                <span className="text-xs text-muted-foreground italic">
-                  (Epic 7 - no implementado aún)
-                </span>
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground italic">Rutina no disponible</p>
             )}
           </div>
 

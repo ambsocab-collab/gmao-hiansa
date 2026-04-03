@@ -141,7 +141,7 @@ export function OTListClient({ workOrders, canAssignTechnicians, pagination, fil
 
   const handleAssignmentComplete = () => {
     setRefreshKey(prev => prev + 1)
-    window.location.reload()
+    router.refresh() // Revalidate server data without full page reload
   }
 
   const handleToggleSelection = (id: string) => {
@@ -190,17 +190,17 @@ export function OTListClient({ workOrders, canAssignTechnicians, pagination, fil
 
   const handleBatchAssignSuccess = () => {
     setSelectedIds(new Set())
-    window.location.reload()
+    router.refresh() // Revalidate server data without full page reload
   }
 
   const handleBatchStatusSuccess = () => {
     setSelectedIds(new Set())
-    window.location.reload()
+    router.refresh() // Revalidate server data without full page reload
   }
 
   const handleBatchCommentSuccess = () => {
     setSelectedIds(new Set())
-    window.location.reload()
+    router.refresh() // Revalidate server data without full page reload
   }
 
   return (
@@ -306,7 +306,7 @@ export function OTListClient({ workOrders, canAssignTechnicians, pagination, fil
                         {wo.tipo === 'PREVENTIVO' ? 'Preventivo' : 'Correctivo'}
                       </Badge>
                     </TableCell>
-                    <TableCell data-testid="asignaciones-column">
+                    <TableCell data-testid={`asignaciones-column-${wo.id}`}>
                       <AssignmentBadge
                         assignments={wo.assignments}
                         workOrderId={wo.id}
