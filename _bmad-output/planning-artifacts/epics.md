@@ -271,7 +271,7 @@ This document provides the complete epic and story breakdown for gmao-hiansa, de
 - 3 breakpoints principales: <768px (móvil), 768-1200px (tablet), >1200px (desktop)
 - Breakpoints adicionales: 640px (sm), 1024px (lg), 1536px (2xl)
 - Navegación adaptativa: bottom nav (móvil), sidebar simplificado (tablet), sidebar completo (desktop)
-- Contenedor responsive: 100% ancho (móvil), 90% máximo (tablet), 1280px máximo (desktop)
+- Contenedor responsive: 100% ancho disponible (todas las pantallas)
 
 **Líneas de Diseño UX (Colores y Pantallas)**
 - Color principal: Rojo Burdeos #7D1220 (header, botones principales, estados activos)

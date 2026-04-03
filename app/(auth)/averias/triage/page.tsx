@@ -31,7 +31,7 @@ export default async function TriagePage({
   // If user doesn't have capability, they get redirected to /unauthorized
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
+    <div className="w-full px-4 py-6">
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Triage de Averías</h1>
