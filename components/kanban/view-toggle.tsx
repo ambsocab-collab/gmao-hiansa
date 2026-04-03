@@ -73,7 +73,7 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
     // Preserve current URL params (filters, sorting) when switching views
     const currentParams = getCurrentSearchParams()
     const targetUrl = currentParams ? `/ots/kanban?${currentParams}` : '/ots/kanban'
-    router.push(targetUrl)
+    window.location.href = targetUrl
   }
 
   /**
@@ -87,7 +87,7 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
     // Preserve current URL params (filters, sorting) when switching views
     const currentParams = getCurrentSearchParams()
     const targetUrl = currentParams ? `/ots/lista?${currentParams}` : '/ots/lista'
-    router.push(targetUrl)
+    window.location.href = targetUrl
   }
 
   return (

@@ -195,7 +195,9 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
 
     if (count > 0) {
       await equipoOptions.first().click();
-      await page.waitForLoadState('networkidle');
+
+      // Wait for URL to contain equipo param
+      await page.waitForURL(/equipo=/, { timeout: 10000 });
 
       // Verify URL has equipo param
       const url = page.url();
@@ -217,15 +219,17 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     await expect(estadoOption).toBeVisible({ timeout: 5000 });
     await estadoOption.click();
 
-    // Wait for filter to apply
-    await page.waitForLoadState('networkidle');
+    // Wait for URL to contain estado param (indicates navigation completed)
+    await page.waitForURL(/estado=/, { timeout: 10000 });
 
     // Apply tipo filter
     await filtroTipo.click();
     const tipoOption = page.getByTestId('tipo-option-CORRECTIVO');
     await expect(tipoOption).toBeVisible({ timeout: 5000 });
     await tipoOption.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to contain tipo param
+    await page.waitForURL(/tipo=/, { timeout: 10000 });
 
     // Verify URL has both params
     const url = page.url();
@@ -248,7 +252,9 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     const tipoOption = page.getByTestId('tipo-option-CORRECTIVO');
     await expect(tipoOption).toBeVisible({ timeout: 5000 });
     await tipoOption.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to contain tipo param
+    await page.waitForURL(/tipo=/, { timeout: 10000 });
 
     // Verify filter is applied
     let url = page.url();
@@ -258,7 +264,9 @@ test.describe('Story 3.4 - AC2: Filtros por 5 criterios (P0)', () => {
     const limpiarBtn = page.getByTestId('btn-limpiar-filtros');
     await expect(limpiarBtn).toBeVisible();
     await limpiarBtn.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to no longer contain tipo param
+    await page.waitForURL(url => !url.toString().includes('tipo='), { timeout: 10000 });
 
     // Verify URL no longer has filter params
     url = page.url();

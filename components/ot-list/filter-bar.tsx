@@ -14,7 +14,8 @@
  * All filters use URL params for sharing URL
  */
 
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { WorkOrderEstado, WorkOrderTipo } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -54,31 +55,23 @@ interface FilterBarProps {
 }
 
 export function FilterBar({ tecnicoOptions = [], equipoOptions = [] }: FilterBarProps) {
-  // Track current URL params in state to avoid stale closure issues
-  const [currentParams, setCurrentParams] = useState<URLSearchParams | null>(null)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   // Local state for comboboxes
   const [tecnicoOpen, setTecnicoOpen] = useState(false)
   const [equipoOpen, setEquipoOpen] = useState(false)
   const [tecnicoSearch, setTecnicoSearch] = useState('')
   const [equipoSearch, setEquipoSearch] = useState('')
-  // Sync params from URL on mount and on popstate
-  useEffect(() => {
-    const syncParams = () => {
-      setCurrentParams(new URLSearchParams(window.location.search))
-    }
-    syncParams()
-    window.addEventListener('popstate', syncParams)
-    return () => window.removeEventListener('popstate', syncParams)
-  }, [])
-  // Get current filter values from state (synced with URL)
-  const params = currentParams || new URLSearchParams()
-  const estadoFilter = params.get('estado') || ''
-  const tecnicoFilter = params.get('tecnico') || ''
-  const fechaInicioFilter = params.get('fechaInicio') || ''
-  const fechaFinFilter = params.get('fechaFin') || ''
-  const tipoFilter = params.get('tipo') || ''
-  const equipoFilter = params.get('equipo') || ''
+
+  // Get current filter values directly from searchParams (reactive)
+  const estadoFilter = searchParams.get('estado') || ''
+  const tecnicoFilter = searchParams.get('tecnico') || ''
+  const fechaInicioFilter = searchParams.get('fechaInicio') || ''
+  const fechaFinFilter = searchParams.get('fechaFin') || ''
+  const tipoFilter = searchParams.get('tipo') || ''
+  const equipoFilter = searchParams.get('equipo') || ''
+
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     let count = 0
@@ -89,10 +82,9 @@ export function FilterBar({ tecnicoOptions = [], equipoOptions = [] }: FilterBar
     if (equipoFilter) count++
     return count
   }, [estadoFilter, tecnicoFilter, fechaInicioFilter, fechaFinFilter, tipoFilter, equipoFilter])
-  // Update URL with new filter params - use window.location for reliability
+  // Update URL with new filter params - use window.location for reliable navigation
   const updateFilters = useCallback((updates: Record<string, string | null>) => {
-    const currentUrl = new URL(window.location.href)
-    const newParams = new URLSearchParams(currentUrl.search)
+    const newParams = new URLSearchParams(Array.from(searchParams.entries()))
     Object.entries(updates).forEach(([key, value]) => {
       if (value) {
         newParams.set(key, value)
@@ -102,22 +94,22 @@ export function FilterBar({ tecnicoOptions = [], equipoOptions = [] }: FilterBar
     })
     // Reset to page 1 when filters change
     newParams.delete('page')
-    // Navigate to new URL
-    const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${newParams.toString()}`
+    // Navigate using window.location for reliable URL update
+    const newUrl = `${pathname}?${newParams.toString()}`
     window.location.href = newUrl
-  }, [])
+  }, [searchParams, pathname])
   // Clear all filters
   const clearFilters = useCallback(() => {
-    const currentUrl = new URL(window.location.href)
     const newParams = new URLSearchParams()
     // Preserve sorting params
-    const sortBy = currentUrl.searchParams.get('sortBy')
-    const sortOrder = currentUrl.searchParams.get('sortOrder')
+    const sortBy = searchParams.get('sortBy')
+    const sortOrder = searchParams.get('sortOrder')
     if (sortBy) newParams.set('sortBy', sortBy)
     if (sortOrder) newParams.set('sortOrder', sortOrder)
-    const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${newParams.toString()}`
+    // Navigate using window.location for reliable URL update
+    const newUrl = `${pathname}?${newParams.toString()}`
     window.location.href = newUrl
-  }, [])
+  }, [searchParams, pathname])
   // Filter tecnico options by search
   const filteredTecnicos = useMemo(() => {
     if (!tecnicoSearch) return tecnicoOptions
@@ -301,7 +293,7 @@ export function FilterBar({ tecnicoOptions = [], equipoOptions = [] }: FilterBar
                 className="w-full h-9 mb-2"
                 autoFocus
               />
-              {filteredEquipos.length === 0? (
+              {filteredEquipos.length === 0 ? (
                 <div className="p-2 text-sm text-muted-foreground">
                   No hay equipos disponibles
                 </div>

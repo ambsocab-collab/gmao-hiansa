@@ -15,6 +15,7 @@ import { auth } from '@/lib/auth-adapter'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import { OTListClient } from '@/components/ot-list/ot-list-client'
+import { Suspense } from 'react'
 import { Prisma, WorkOrderEstado, WorkOrderTipo } from '@prisma/client'
 
 import type { WorkOrder } from '@prisma/client'
@@ -212,27 +213,12 @@ async function getListData(
 
   const totalPages = Math.ceil(total / pageSize)
 
-  // Sort by assignments count if requested (client-side sorting for this field)
-  let sortedWorkOrders = workOrders.map(wo => ({
-    ...wo,
-    equipo: wo.equipo ? {
-      ...wo.equipo,
-      name: wo.equipo.name || (wo.equipo as Record<string, unknown>).nombre,
-      linea: wo.equipo.linea ? {
-        ...wo.equipo.linea,
-        name: wo.equipo.linea.name || (wo.equipo.linea as Record<string, unknown>).nombre,
-        planta: wo.equipo.linea.planta ? {
-          ...wo.equipo.linea.planta,
-          name: wo.equipo.linea.planta.name || (wo.equipo.linea.planta as Record<string, unknown>).nombre,
-          division: wo.equipo.linea.planta.division
-        } : null
-      } : null
-    } : null
-  })) as unknown as typeof workOrders
-
-  // Client-side sorting for assignments count
+  // Client-side sorting for assignments count (H-003: documented limitation)
+  // Note: Server-side sorting for assignments would require a _count query,
+  // but is complex with the current schema. Client-side works for page size of 100.
+  let sortedWorkOrders = workOrders
   if (sorting.sortBy === 'asignados' && sorting.sortOrder) {
-    sortedWorkOrders = sortedWorkOrders.sort((a, b) => {
+    sortedWorkOrders = [...workOrders].sort((a, b) => {
       const aCount = a.assignments?.length || 0
       const bCount = b.assignments?.length || 0
       return sorting.sortOrder === 'asc' ? aCount - bCount : bCount - aCount
@@ -293,7 +279,7 @@ async function getFilterOptions(): Promise<{
 
   return {
     tecnicos: tecnicos.map(t => ({ id: t.id, name: t.name })),
-    equipos: equipos.map(e => ({ id: e.id, name: e.name || (e as Record<string, unknown>).nombre as string }))
+    equipos: equipos.map(e => ({ id: e.id, name: e.name }))
   }
 }
 
@@ -349,12 +335,14 @@ export default async function OTListPage({ searchParams }: OTListPageProps) {
 
   return (
     <div className="h-screen flex flex-col">
-      <OTListClient
-        workOrders={listData.workOrders}
-        canAssignTechnicians={canAssign || false}
-        pagination={listData.pagination}
-        filterOptions={filterOptions}
-      />
+      <Suspense fallback={<div className="flex items-center justify-center h-full">Cargando...</div>}>
+        <OTListClient
+          workOrders={listData.workOrders}
+          canAssignTechnicians={canAssign || false}
+          pagination={listData.pagination}
+          filterOptions={filterOptions}
+        />
+      </Suspense>
     </div>
   )
 }

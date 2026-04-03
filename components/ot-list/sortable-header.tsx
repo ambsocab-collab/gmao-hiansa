@@ -11,6 +11,7 @@
  */
 
 import { useCallback } from 'react'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { TableHead } from '@/components/ui/table'
 
@@ -31,13 +32,14 @@ export function SortableHeader({
   sortOrder,
   className,
 }: SortableHeaderProps) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
   const isActive = sortBy === column
 
   // Handle sort toggle: asc → desc → neutral → asc
   const handleSort = useCallback(() => {
-    // Get current params from window.location to avoid stale closure issues
-    const currentUrl = new URL(window.location.href)
-    const params = new URLSearchParams(currentUrl.search)
+    const params = new URLSearchParams(Array.from(searchParams.entries()))
 
     let newSortOrder: SortOrder = 'asc'
 
@@ -63,10 +65,10 @@ export function SortableHeader({
     // Reset to page 1 when sorting changes
     params.delete('page')
 
-    // Navigate using window.location for reliability
-    const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`
+    // Navigate using window.location for reliable URL update
+    const newUrl = `${pathname}?${params.toString()}`
     window.location.href = newUrl
-  }, [column, isActive, sortOrder])
+  }, [column, isActive, sortOrder, searchParams, pathname])
 
   // Determine the indicator to show
   const getIndicator = () => {

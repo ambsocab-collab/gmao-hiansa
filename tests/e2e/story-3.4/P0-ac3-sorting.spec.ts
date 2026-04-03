@@ -101,15 +101,18 @@ test.describe('Story 3.4 - AC3: Ordenamiento por cualquier columna (P0)', () => 
 
     // First click - ascending
     await fechaHeader.click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(/sortBy=.*fecha/, { timeout: 10000 });
 
     // Second click - descending
     await fechaHeader.click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(/sortOrder=desc/, { timeout: 10000 });
 
     // Third click - no sorting
     await fechaHeader.click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(url => {
+      const urlStr = url.toString();
+      return !urlStr.includes('sortBy=fecha') || !urlStr.includes('sortOrder');
+    }, { timeout: 10000 });
 
     // Verify no sort indicator or neutral indicator (↕)
     const sortIndicator = fechaHeader.locator('[data-testid="sort-indicator"]');
@@ -257,12 +260,16 @@ test.describe('Story 3.4 - AC3: Ordenamiento por cualquier columna (P0)', () => 
     const tipoOption = page.getByTestId('tipo-option-CORRECTIVO');
     await expect(tipoOption).toBeVisible({ timeout: 5000 });
     await tipoOption.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to contain tipo param
+    await page.waitForURL(/tipo=/, { timeout: 10000 });
 
     // Now apply sorting
     const fechaHeader = page.getByTestId('sort-header-fecha');
     await fechaHeader.click();
-    await page.waitForLoadState('networkidle');
+
+    // Wait for URL to contain sortBy param
+    await page.waitForURL(/sortBy=/, { timeout: 10000 });
 
     // Verify URL has both filter and sort params
     const url = page.url();
