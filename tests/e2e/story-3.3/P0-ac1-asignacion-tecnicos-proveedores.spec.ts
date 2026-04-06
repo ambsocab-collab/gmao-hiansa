@@ -33,7 +33,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
 
     // Find first OT card in the list that doesn't have existing assignments
     // We look for OT cards and check if they show "Sin asignar" or have no technician badges
-    const otCards = page.locator('[data-testid^="ot-card-"]');
+    const otCards = page.locator('[data-testid^="ot-row-"]');
     await expect(otCards.first()).toBeVisible({ timeout: 10000 });
 
     // Get the first OT card
@@ -112,7 +112,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     // GREEN PHASE: Provider model, ProviderSelect, and getAvailableProviders implemented
 
     // Find first OT card
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    const firstOTCard = page.locator('[data-testid^="ot-row-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
     // Click "Asignar" button - use page-level locator since button is in table row
@@ -158,7 +158,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     // This test validates the max 3 assignment rule
 
     // Find an OT card (use second card to avoid conflicts with previous tests)
-    const otCards = page.locator('[data-testid^="ot-card-"]');
+    const otCards = page.locator('[data-testid^="ot-row-"]');
     const otCard = otCards.nth(1); // Use second OT to avoid test pollution
     await expect(otCard).toBeVisible({ timeout: 10000 });
 
@@ -288,7 +288,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     // Note: Filter elements are inside the popover, so we need to open it first
     // Use a different OT to avoid conflicts
 
-    const otCards = page.locator('[data-testid^="ot-card-"]');
+    const otCards = page.locator('[data-testid^="ot-row-"]');
     // Try to find an OT where the technician select is enabled
     const count = await otCards.count();
 

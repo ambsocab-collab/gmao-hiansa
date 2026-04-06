@@ -28,7 +28,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
       await page.waitForLoadState('domcontentloaded');
 
       // Open assignment modal for first OT
-      const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+      const firstOTCard = page.locator('[data-testid^="ot-row-"]').first();
       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
       const asignarBtn = firstOTCard.getByTestId('btn-asignar');
@@ -89,7 +89,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
       await expect(misOtsList).toBeVisible({ timeout: 10000 });
 
       // Count OT cards - technicians should have at least some from seed data
-      const otCards = misOtsList.locator('[data-testid^="my-ot-card-"]');
+      const otCards = misOtsList.locator('[data-testid^="my-ot-row-"]');
       const cardCount = await otCards.count();
 
       // Should have at least one OT assigned (from seed data)
@@ -121,7 +121,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
       await expect(misOtsList).toBeVisible({ timeout: 10000 });
 
       // Find an OT in ASIGNADA state (check for badge text - uses "Asignada" label)
-      const asignadaCards = misOtsList.locator('[data-testid^="my-ot-card-"]');
+      const asignadaCards = misOtsList.locator('[data-testid^="my-ot-row-"]');
       const count = await asignadaCards.count();
 
       // The seed data creates ASIGNADA OTs assigned to the technician
@@ -167,7 +167,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
           await page.waitForLoadState('domcontentloaded');
 
           // Find the card by OT number and verify new state
-          const allCards = page.getByTestId('mis-ots-lista').locator('[data-testid^="my-ot-card-"]');
+          const allCards = page.getByTestId('mis-ots-lista').locator('[data-testid^="my-ot-row-"]');
           const newCount = await allCards.count();
 
           for (let j = 0; j < newCount; j++) {
@@ -225,7 +225,7 @@ test.describe('Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0)',
 
       // Find an OT in PENDIENTE state (these are unassigned)
       // PENDIENTE OTs should have the Asignar button enabled
-      const otCards = supervisorPage.locator('[data-testid^="ot-card-"]');
+      const otCards = supervisorPage.locator('[data-testid^="ot-row-"]');
       const cardCount = await otCards.count();
 
       let assignedOtNumero = '';

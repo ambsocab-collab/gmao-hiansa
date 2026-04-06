@@ -28,7 +28,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       await page.waitForLoadState('domcontentloaded');
 
       // OT list uses table format with rows
-      const otRows = page.locator('[data-testid^="ot-card-"]');
+      const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // Find a PENDIENTE OT (StatusBadge shows "Pendiente")
@@ -90,7 +90,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
 
       // Seed data provides 3 OTs in REPARACION_EXTERNA state
       // Find an OT in REPARACION_EXTERNA state (StatusBadge shows "Reparación Externa")
-      const otRows = page.locator('[data-testid^="ot-card-"]');
+      const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // Find OT with "Reparación" in status badge
@@ -144,7 +144,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       await page.waitForLoadState('domcontentloaded');
 
       // Verify the page loaded correctly by checking for OT list
-      const otRows = page.locator('[data-testid^="ot-card-"]');
+      const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // The notification system may not be fully implemented yet
@@ -165,7 +165,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       await page.waitForLoadState('domcontentloaded');
 
       // Seed data provides 3 OTs in REPARACION_EXTERNA state
-      const otRows = page.locator('[data-testid^="ot-card-"]');
+      const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // Find OT with "Reparación" in status badge
@@ -223,7 +223,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
 
       // Find an OT NOT in REPARACION_EXTERNA (e.g., ASIGNADA, EN_PROGRESO)
       // These have status badges showing "Asignada" or "En Progreso" or "Pendiente"
-      const otRows = page.locator('[data-testid^="ot-card-"]');
+      const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // Find an OT that does NOT show "Reparación" in status

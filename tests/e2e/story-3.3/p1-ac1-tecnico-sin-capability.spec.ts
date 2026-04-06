@@ -26,10 +26,10 @@ test.describe('Story 3.3 - AC1: Técnico sin capability no puede asignar', () =>
     await page.waitForTimeout(2000);
 
     // Find first OT card (technicians see their assigned OTs)
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    const firstOTCard = page.locator('[data-testid^="my-ot-card-"]').first();
 
     // If there are OT cards, check that "Asignar" button is not visible
-    const cardCount = await page.locator('[data-testid^="ot-card-"]').count();
+    const cardCount = await page.locator('[data-testid^="my-ot-card-"]').count();
 
     if (cardCount > 0) {
       // "Asignar" button should NOT be visible for technicians

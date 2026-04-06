@@ -138,7 +138,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   test('[P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga', async ({ page }) => {
     // GREEN PHASE: Validates no false positives
 
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    const firstOTCard = page.locator('[data-testid^="ot-row-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
     const asignarBtn = firstOTCard.getByTestId('btn-asignar');
@@ -173,7 +173,7 @@ test.describe('Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1)', () => {
   test('[P2-AC7-004] Workload se actualiza después de asignar OT', async ({ page }) => {
     // GREEN PHASE: Validates real-time workload update
 
-    const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    const firstOTCard = page.locator('[data-testid^="ot-row-"]').first();
     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
     const asignarBtn = firstOTCard.getByTestId('btn-asignar');
