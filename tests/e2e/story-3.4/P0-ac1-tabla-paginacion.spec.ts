@@ -40,7 +40,7 @@ test.describe('Story 3.4 - AC1: Tabla de OTs con Paginación (P0)', () => {
       'Equipo',
       'Estado',
       'Tipo',
-      'Asignados',
+      'Asignaciones',
       'Fecha Creación',
       'Acciones'
     ];

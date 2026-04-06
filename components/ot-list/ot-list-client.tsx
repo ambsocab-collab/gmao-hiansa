@@ -254,7 +254,7 @@ export function OTListClient({ workOrders, canAssignTechnicians, pagination, fil
                 <SortableHeader column="equipo" label="Equipo" sortBy={sortBy} sortOrder={sortOrder} />
                 <SortableHeader column="estado" label="Estado" sortBy={sortBy} sortOrder={sortOrder} className="w-[140px]" />
                 <SortableHeader column="tipo" label="Tipo" sortBy={sortBy} sortOrder={sortOrder} className="w-[120px]" />
-                <SortableHeader column="asignados" label="Asignados" sortBy={sortBy} sortOrder={sortOrder} className="w-[140px]" />
+                <SortableHeader column="asignaciones" label="Asignaciones" sortBy={sortBy} sortOrder={sortOrder} className="w-[140px]" />
                 <SortableHeader column="fecha" label="Fecha Creación" sortBy={sortBy} sortOrder={sortOrder} className="w-[120px]" />
                 <TableHead className="w-[100px]">Acciones</TableHead>
               </TableRow>
@@ -306,7 +306,7 @@ export function OTListClient({ workOrders, canAssignTechnicians, pagination, fil
                         {wo.tipo === 'PREVENTIVO' ? 'Preventivo' : 'Correctivo'}
                       </Badge>
                     </TableCell>
-                    <TableCell data-testid={`asignaciones-column-${wo.id}`}>
+                    <TableCell data-testid="asignaciones-column">
                       <AssignmentBadge
                         assignments={wo.assignments}
                         workOrderId={wo.id}

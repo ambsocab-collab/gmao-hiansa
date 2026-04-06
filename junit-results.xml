@@ -1,147 +1,464 @@
-<testsuites id="" name="" tests="62" failures="3" skipped="1" errors="0" time="574.626816">
-<testsuite name="story-3.4\P0-ac1-tabla-paginacion.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="6" failures="1" skipped="1" time="38.393" errors="0">
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-001] Tabla de OTs visible con columnas correctas" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="11.92">
+<testsuites id="" name="" tests="110" failures="39" skipped="9" errors="0" time="1654.352565">
+<testsuite name="story-3.2\debug-mis-ots-page.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="1" failures="0" skipped="0" time="11.58" errors="0">
+<testcase name="DEBUG - Mis OTs Page › debug: check page content after navigation" classname="story-3.2\debug-mis-ots-page.spec.ts" time="11.58">
+<system-out>
+<![CDATA[Current URL: http://localhost:3000/mis-ots
+Page title: GMAO Hiansa - Gestión de Mantenimiento Asistido por Ordenador
+Page content (first 500 chars): Hola,
+U
+Cerrar Sesión
+Dashboard
+Reportar Avería
+Mis OTs
+Mis Órdenes de Trabajo
+
+OTs asignadas para su gestión (71 total)
+
+OT-2025-002
+Asignada
+HiRock
+Torno CNC TC-01
+•
+hace un momento
+OT-2025-010
+Asignada
+HiRock
+Prensa Hidraulica PH-01
+•
+hace un momento
+OT-2025-011
+Asignada
+HiRock
+Transportadora TR-01
+•
+hace un momento
+OT-2025-012
+Asignada
+HiRock
+Brazo Mecanico BM-01
+•
+hace un momento
+OT-2025-013
+Asignada
+Ultra
+Horno HR-01
+•
+hace un momento
+OT-2025-100
+Asignada
+HiRock
+Prensa Hidraulica PH-01
+•
+h
+Is login page: [33mtrue[39m
+Error elements found: [33m0[39m
+]]>
+</system-out>
 </testcase>
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-002] Tabla muestra OTs con datos correctos" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="13.55">
-<failure message="P0-ac1-tabla-paginacion.spec.ts:54:7 [P0-AC1-002] Tabla muestra OTs con datos correctos" type="FAILURE">
-<![CDATA[  [chromium] › story-3.4\P0-ac1-tabla-paginacion.spec.ts:54:7 › Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-002] Tabla muestra OTs con datos correctos 
+</testsuite>
+<testsuite name="story-3.2\debug-ot-states.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="1" failures="0" skipped="0" time="12.248" errors="0">
+<testcase name="DEBUG - OT States › debug: print all OT states" classname="story-3.2\debug-ot-states.spec.ts" time="12.248">
+<system-out>
+<![CDATA[
+=== Total OT cards: 20 ===
 
-    Error: expect(received).toMatch(expected)
+OT 1: OT-2025-002 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 2: OT-2025-010 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 3: OT-2025-011 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 4: OT-2025-012 - Estado: "Asignada" - Includes ASIGNADA: true
+OT 5: OT-2025-013 - Estado: "Asignada" - Includes ASIGNADA: true
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac1-mis-ots-view.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="6" failures="0" skipped="1" time="50.204" errors="0">
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-001] should show Mis OTs view for assigned technician" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="11.307">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-002] should show OT card with required information" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="11.799">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P0-AC1-003] should NOT show OTs assigned to other technicians" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="7.992">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-004] should show bottom nav tab &quot;Mis OTs&quot; on mobile" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="7.651">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P1-AC1-005] should filter OTs by technician assignment" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.837">
+</testcase>
+<testcase name="Story 3.2 - AC1: Vista Mis OTs Filtrada (P0) › [P2-AC1-006] should show empty state when no OTs assigned" classname="story-3.2\P0-ac1-mis-ots-view.spec.ts" time="5.618">
+<properties>
+<property name="skip" value="Requires user with no OTs assigned - test data setup needed">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac3-iniciar-ot.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="6" failures="0" skipped="2" time="48.176" errors="0">
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-001] should show &quot;Iniciar OT&quot; button when OT is ASIGNADA" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="4.715">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-002] should show confirmation dialog when clicking &quot;Iniciar OT&quot;" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.694">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-003] should change OT status to EN_PROGRESO when confirmed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="19.371">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P0-AC3-004] should emit SSE event when OT is started" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="6.052">
+<properties>
+<property name="skip" value="SSE event verification requires SSE listener setup - verified in integration tests">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-005] should cancel iniciar OT when confirmation dismissed" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="7.15">
+</testcase>
+<testcase name="Story 3.2 - AC3: Iniciar OT (P0) › [P1-AC3-006] should show error if iniciar OT fails" classname="story-3.2\P0-ac3-iniciar-ot.spec.ts" time="5.194">
+<properties>
+<property name="skip" value="Requires mock failure scenario - error handling not implemented">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac4-agregar-repuestos.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="6" failures="0" skipped="1" time="53.41" errors="0">
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-001] should show repuestos dropdown when OT is EN_PROGRESO" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="12.593">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-002] should show repuesto info: name, stock, location" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="6.483">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-003] should add repuesto when stock is sufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="15.216">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P0-AC4-004] should show error when stock is insufficient" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="7.458">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P1-AC4-005] should not send notification to can_manage_stock users" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="5.997">
+</testcase>
+<testcase name="Story 3.2 - AC4: Agregar Repuestos (P0) › [P2-AC4-006] should handle race condition with optimistic locking" classname="story-3.2\P0-ac4-agregar-repuestos.spec.ts" time="5.663">
+<properties>
+<property name="skip" value="Optimistic locking not implemented - requires concurrent requests with Promise.all()">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P0-ac5-completar-ot.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="8" failures="0" skipped="0" time="82.154" errors="0">
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-001] should show &quot;Completar OT&quot; button when OT is EN_PROGRESO" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="4.264">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-002] should show confirmation dialog when clicking &quot;Completar OT&quot;" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.992">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-003] should change OT status to COMPLETADA when confirmed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="15.071">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-004] should record completedAt timestamp" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="19.952">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P0-AC5-005] should emit SSE event when OT is completed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="17.507">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-006] should cancel completar OT when confirmation dismissed" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.622">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P1-AC5-007] should show error if completar OT fails" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="5.063">
+</testcase>
+<testcase name="Story 3.2 - AC5: Completar OT (P0) › [P2-AC5-008] should only allow completion from valid states" classname="story-3.2\P0-ac5-completar-ot.spec.ts" time="6.683">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac2-modal-detalles.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="7" failures="0" skipped="0" time="41.793" errors="0">
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-001] should open modal when clicking on OT card" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="4.915">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-002] should show complete OT information in modal" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.176">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-003] should close modal with X button" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="5.833">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-004] should close modal with ESC key" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="4.899">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-005] should close modal when clicking outside" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.007">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P1-AC2-006] should show repuestos sugeridos if exist" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="6.828">
+</testcase>
+<testcase name="Story 3.2 - AC2: Modal de Detalles (P1) › [P2-AC2-007] should trap focus within modal when open" classname="story-3.2\P1-ac2-modal-detalles.spec.ts" time="7.135">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac7-comentarios.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="7" failures="0" skipped="0" time="82.986" errors="0">
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-001] should show comment input in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="11.561">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-002] should add comment with timestamp when submitted" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="17.258">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-003] should show all comments in modal" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="5.917">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P1-AC7-004] should emit SSE event when comment added" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="11.354">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-005] should auto-scroll to latest comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="19.966">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-006] should clear input after submitting comment" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="8.367">
+</testcase>
+<testcase name="Story 3.2 - AC7: Comentarios en Tiempo Real (P1) › [P2-AC7-007] should show commenter name and timestamp" classname="story-3.2\P1-ac7-comentarios.spec.ts" time="8.563">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P1-ac8-fotos.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="8" failures="1" skipped="0" time="130.641" errors="0">
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-001] should show &quot;Adjuntar foto antes&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="11.196">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-002] should show &quot;Adjuntar foto después&quot; button" classname="story-3.2\P1-ac8-fotos.spec.ts" time="11.019">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-003] should upload &quot;antes&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="23.383">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-004] should upload &quot;después&quot; photo to Vercel Blob" classname="story-3.2\P1-ac8-fotos.spec.ts" time="25.168">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-005] should show photos in separate lists: Antes and Después" classname="story-3.2\P1-ac8-fotos.spec.ts" time="11.581">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-006] should validate file type (only jpeg/png)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="14.211">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P1-AC8-007] should validate file size (max 5MB)" classname="story-3.2\P1-ac8-fotos.spec.ts" time="15.024">
+</testcase>
+<testcase name="Story 3.2 - AC8: Fotos Antes/Después (P1) › [P2-AC8-008] should show multiple photos in each section" classname="story-3.2\P1-ac8-fotos.spec.ts" time="19.059">
+<failure message="P1-ac8-fotos.spec.ts:228:7 [P2-AC8-008] should show multiple photos in each section" type="FAILURE">
+<![CDATA[  [chromium] › story-3.2\P1-ac8-fotos.spec.ts:228:7 › Story 3.2 - AC8: Fotos Antes/Después (P1) › [P2-AC8-008] should show multiple photos in each section 
 
-    Expected pattern: /OT-\d{4}-\d{3}/
-    Received string:  ""
+    Error: expect(received).not.toBeNull()
 
-      69 |     const numeroCell = firstRow.locator('td').first();
-      70 |     const numeroText = await numeroCell.textContent();
-    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
-         |                        ^
-      72 |
-      73 |     // Check for estado badge
-      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
+    Received: null
+
+      230 |
+      231 |     const result = await findOTCardByState(page, 'EN_PROGRESO');
+    > 232 |     expect(result).not.toBeNull();
+          |                        ^
+      233 |     await result!.card.click();
+      234 |
+      235 |     // Wait for modal
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.2\P1-ac8-fotos.spec.ts:232:24
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\test-failed-1.png
+    ..\..\test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\video.webm
+    ..\..\test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\error-context.md
+    Error Context: ..\..\test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip
+    ..\..\test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toMatch(expected)
-
-    Expected pattern: /OT-\d{4}-\d{3}/
-    Received string:  ""
-
-      69 |     const numeroCell = firstRow.locator('td').first();
-      70 |     const numeroText = await numeroCell.textContent();
-    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
-         |                        ^
-      72 |
-      73 |     // Check for estado badge
-      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toMatch(expected)
-
-    Expected pattern: /OT-\d{4}-\d{3}/
-    Received string:  ""
-
-      69 |     const numeroCell = firstRow.locator('td').first();
-      70 |     const numeroText = await numeroCell.textContent();
-    > 71 |     expect(numeroText).toMatch(/OT-\d{4}-\d{3}/);
-         |                        ^
-      72 |
-      73 |     // Check for estado badge
-      74 |     const estadoBadge = firstRow.locator('[data-testid^="estado-badge-"]');
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac1-tabla-paginacion.spec.ts:71:24
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
-<system-out>
+<system-err>
 <![CDATA[
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\test-failed-1.png]]
+Warning: attachment test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\video.webm is missing
+Warning: attachment test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.2-P1-ac8-fotos-Sto-9390d-iple-photos-in-each-section-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P2-ac6-verificacion.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="5" failures="0" skipped="3" time="31.502" errors="0">
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-001] should show verification option for completed OTs" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="10.251">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-002] should mark OT as verified when repair works" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="8.263">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-003] should create rework OT when repair does not work" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="6.979">
+<properties>
+<property name="skip" value="No completed OTs available - skipping test">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-004] should notify technicians when rework OT created" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="4.235">
+</testcase>
+<testcase name="Story 3.2 - AC6: Verificación por Operario (P2) › [P2-AC6-005] should show confirmation message with aviso number" classname="story-3.2\P2-ac6-verificacion.spec.ts" time="1.774">
+</testcase>
+</testsuite>
+<testsuite name="story-3.2\P2-batch-operations.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="11" failures="0" skipped="0" time="50.122" errors="0">
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-001] should select multiple OTs with checkboxes" classname="story-3.2\P2-batch-operations.spec.ts" time="4.558">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-002] should start multiple OTs at once" classname="story-3.2\P2-batch-operations.spec.ts" time="4.67">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-003] should add repuesto to multiple OTs" classname="story-3.2\P2-batch-operations.spec.ts" time="4.642">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-004] should select all OTs with select all checkbox" classname="story-3.2\P2-batch-operations.spec.ts" time="4.536">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-005] should deselect all OTs" classname="story-3.2\P2-batch-operations.spec.ts" time="4.725">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-006] should show progress during batch operation" classname="story-3.2\P2-batch-operations.spec.ts" time="4.489">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-007] should allow canceling batch operation" classname="story-3.2\P2-batch-operations.spec.ts" time="4.483">
+</testcase>
+<testcase name="Story 3.2 - E2E: Batch Operations › [E2E-3.2-BATCH-008] should handle partial failure in batch operation" classname="story-3.2\P2-batch-operations.spec.ts" time="4.25">
+</testcase>
+<testcase name="Story 3.2 - E2E: Time Tracking › [E2E-3.2-TIME-001] should show elapsed time for in-progress OT" classname="story-3.2\P2-batch-operations.spec.ts" time="4.389">
+</testcase>
+<testcase name="Story 3.2 - E2E: Time Tracking › [E2E-3.2-TIME-002] should pause and resume OT" classname="story-3.2\P2-batch-operations.spec.ts" time="4.692">
+</testcase>
+<testcase name="Story 3.2 - E2E: Time Tracking › [E2E-3.2-TIME-003] should calculate total work time on completion" classname="story-3.2\P2-batch-operations.spec.ts" time="4.688">
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="5" failures="3" skipped="2" time="133.85" errors="0">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="35.717">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:31:7 [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:31:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-001] Supervisor puede asignar 2 técnicos a una OT 
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\video.webm]]
+    Error: expect(locator).toBeVisible() failed
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\error-context.md]]
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium\trace.zip]]
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\test-failed-1.png]]
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\video.webm]]
+      35 |     // We look for OT cards and check if they show "Sin asignar" or have no technician badges
+      36 |     const otCards = page.locator('[data-testid^="ot-card-"]');
+    > 37 |     await expect(otCards.first()).toBeVisible({ timeout: 10000 });
+         |                                   ^
+      38 |
+      39 |     // Get the first OT card
+      40 |     const firstOTCard = otCards.first();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:37:35
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\error-context.md]]
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry1\trace.zip]]
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\test-failed-1.png]]
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\error-context.md
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\video.webm]]
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip
+    Usage:
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\error-context.md]]
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac1-tabla-pag-8e46e-tra-OTs-con-datos-correctos-chromium-retry2\trace.zip]]
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
-</system-out>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-a2891-asignar-2-técnicos-a-una-OT-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-003] Paginación funciona correctamente (100 por página)" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.894">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="34.892">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:111:7 [P0-AC1-002] Supervisor puede asignar 1 proveedor externo" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:111:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-002] Supervisor puede asignar 1 proveedor externo 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      114 |     // Find first OT card
+      115 |     const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    > 116 |     await expect(firstOTCard).toBeVisible({ timeout: 10000 });
+          |                               ^
+      117 |
+      118 |     // Click "Asignar" button - use page-level locator since button is in table row
+      119 |     const asignarBtn = page.locator('[data-testid="btn-asignar"]').first();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:116:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-4a464-asignar-1-proveedor-externo-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-004] Navegación entre páginas funciona" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.071">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="33.974">
+<failure message="P0-ac1-asignacion-tecnicos-proveedores.spec.ts:156:7 [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor)" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:156:7 › Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P0-AC1-003] Validación máximo 3 asignados (técnicos + proveedor) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').nth(1)
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').nth(1)
+
+
+      161 |     const otCards = page.locator('[data-testid^="ot-card-"]');
+      162 |     const otCard = otCards.nth(1); // Use second OT to avoid test pollution
+    > 163 |     await expect(otCard).toBeVisible({ timeout: 10000 });
+          |                          ^
+      164 |
+      165 |     // Click "Asignar" button
+      166 |     const asignarBtn = otCard.getByTestId('btn-asignar');
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts:163:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac1-asignacio-5141b-ignados-técnicos-proveedor--chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-005] URL refleja página actual" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="2.927">
-</testcase>
-<testcase name="Story 3.4 - AC1: Tabla de OTs con Paginación (P0) › [P0-AC1-006] Supervisor sin can_view_all_ots no puede ver lista" classname="story-3.4\P0-ac1-tabla-paginacion.spec.ts" time="3.031">
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-005] Filtros por habilidades disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="25.217">
 <properties>
 <property name="skip" value="">
 </property>
@@ -149,450 +466,789 @@
 <skipped>
 </skipped>
 </testcase>
+<testcase name="Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0) › [P1-AC1-006] Filtros por ubicación disponibles" classname="story-3.3\P0-ac1-asignacion-tecnicos-proveedores.spec.ts" time="4.05">
+<properties>
+<property name="skip" value="No OT available with technician select enabled">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
 </testsuite>
-<testsuite name="story-3.4\P0-ac2-filtros.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="1" skipped="0" time="79.681" errors="0">
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-001] Barra de filtros visible con 5 filtros" classname="story-3.4\P0-ac2-filtros.spec.ts" time="3.224">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-002] Filtro por estado funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.148">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-003] Filtro por técnico con búsqueda predictiva" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.737">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-004] Filtro por rango de fechas funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="19.428">
-<failure message="P0-ac2-filtros.spec.ts:119:7 [P0-AC2-004] Filtro por rango de fechas funciona" type="FAILURE">
-<![CDATA[  [chromium] › story-3.4\P0-ac2-filtros.spec.ts:119:7 › Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-004] Filtro por rango de fechas funciona 
+<testsuite name="story-3.3\p0-ac3-notificaciones-sse.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="4" failures="2" skipped="0" time="46.722" errors="0">
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Asignación desde Supervisor › [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="15.586">
+<failure message="p0-ac3-notificaciones-sse.spec.ts:23:9 [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p0-ac3-notificaciones-sse.spec.ts:23:9 › Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Asignación desde Supervisor › [P0-AC3-001] Todos los técnicos asignados reciben notificación SSE 
 
-    Error: expect(received).toMatch(expected)
+    Error: expect(locator).toBeVisible() failed
 
-    Expected pattern: /fechaInicio=|fechaFin=/
-    Received string:  "http://localhost:3000/ots/lista"
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
 
-      145 |     // Verify URL has fecha params
-      146 |     const url = page.url();
-    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
-          |                 ^
-      148 |   });
-      149 |
-      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      30 |       // Open assignment modal for first OT
+      31 |       const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+    > 32 |       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
+         |                                 ^
+      33 |
+      34 |       const asignarBtn = firstOTCard.getByTestId('btn-asignar');
+      35 |       await asignarBtn.click();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:32:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\test-failed-1.png
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\video.webm
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\error-context.md
+    Error Context: ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\error-context.md
 
     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip
+    ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toMatch(expected)
-
-    Expected pattern: /fechaInicio=|fechaFin=/
-    Received string:  "http://localhost:3000/ots/lista"
-
-      145 |     // Verify URL has fecha params
-      146 |     const url = page.url();
-    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
-          |                 ^
-      148 |   });
-      149 |
-      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toMatch(expected)
-
-    Expected pattern: /fechaInicio=|fechaFin=/
-    Received string:  "http://localhost:3000/ots/lista"
-
-      145 |     // Verify URL has fecha params
-      146 |     const url = page.url();
-    > 147 |     expect(url).toMatch(/fechaInicio=|fechaFin=/);
-          |                 ^
-      148 |   });
-      149 |
-      150 |   test('[P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)', async ({ page }) => {
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac2-filtros.spec.ts:147:17
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
-<system-out>
+<system-err>
 <![CDATA[
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\test-failed-1.png]]
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-baf82-os-reciben-notificación-SSE-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Recepción de notificación por Técnico › [P0-AC3-002] Técnico ve OT en &quot;Mis OTs&quot; después de asignación" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="4.584">
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › Recepción de notificación por Técnico › [P0-AC3-003] Cualquier asignado puede iniciar OT" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="13.107">
+</testcase>
+<testcase name="Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › [P1-AC3-004] SSE actualiza Mis OTs en tiempo real" classname="story-3.3\p0-ac3-notificaciones-sse.spec.ts" time="13.445">
+<failure message="p0-ac3-notificaciones-sse.spec.ts:193:7 [P1-AC3-004] SSE actualiza Mis OTs en tiempo real" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p0-ac3-notificaciones-sse.spec.ts:193:7 › Story 3.3 - AC3: Notificaciones SSE a Múltiples Asignados (P0) › [P1-AC3-004] SSE actualiza Mis OTs en tiempo real 
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\video.webm]]
+    Error: expect(received).toBe(expected) // Object.is equality
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\error-context.md]]
+    Expected: true
+    Received: false
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium\trace.zip]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\video.webm]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\error-context.md]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry1\trace.zip]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\video.webm]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\error-context.md]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac2-filtros-S-d83c7-or-rango-de-fechas-funciona-chromium-retry2\trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-005] Filtro por tipo (Preventivo/Correctivo)" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.535">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-006] Filtro por equipo con búsqueda predictiva" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.47">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-007] Filtros combinados con AND lógica" classname="story-3.4\P0-ac2-filtros.spec.ts" time="9.307">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-008] Botón limpiar filtros funciona" classname="story-3.4\P0-ac2-filtros.spec.ts" time="10.03">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-009] Badge muestra count de filtros activos" classname="story-3.4\P0-ac2-filtros.spec.ts" time="6.754">
-</testcase>
-<testcase name="Story 3.4 - AC2: Filtros por 5 criterios (P0) › [P0-AC2-010] URL compartible con filtros" classname="story-3.4\P0-ac2-filtros.spec.ts" time="5.048">
-</testcase>
-</testsuite>
-<testsuite name="story-3.4\P0-ac3-sorting.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="87.335" errors="0">
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-001] Headers de columnas son clickeables para ordenar" classname="story-3.4\P0-ac3-sorting.spec.ts" time="3.76">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-002] Click en header ordena ascendente" classname="story-3.4\P0-ac3-sorting.spec.ts" time="6.37">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-003] Segundo click toggle a descendente" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.948">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-004] Tercer click remueve ordenamiento" classname="story-3.4\P0-ac3-sorting.spec.ts" time="12.164">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-005] Ordenar por columna Número" classname="story-3.4\P0-ac3-sorting.spec.ts" time="11.623">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-006] Ordenar por columna Fecha Creación" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.874">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-007] Sorting se mantiene al cambiar de página" classname="story-3.4\P0-ac3-sorting.spec.ts" time="9.297">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-008] Cambiar columna de ordenamiento resetea toggle" classname="story-3.4\P0-ac3-sorting.spec.ts" time="11.81">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-009] URL compartible con sorting" classname="story-3.4\P0-ac3-sorting.spec.ts" time="5.61">
-</testcase>
-<testcase name="Story 3.4 - AC3: Ordenamiento por cualquier columna (P0) › [P0-AC3-010] Sorting con filtros aplicados" classname="story-3.4\P0-ac3-sorting.spec.ts" time="8.879">
-</testcase>
-</testsuite>
-<testsuite name="story-3.4\P0-ac5-sync-sse.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="1" skipped="0" time="135.953" errors="0">
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-001] Toggle visible en página de lista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="3.184">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-002] Click en Kanban navega a vista Kanban" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.431">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-003] Filtros se mantienen al cambiar de vista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.306">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-004] Sorting se mantiene al cambiar de vista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="9.091">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-005] SSE indicator visible" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.006">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-006] SSE actualiza lista cuando OT es modificada" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.291">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-007] Cambios en Kanban se reflejan en Lista" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="5.79">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-008] SSE reconecta automáticamente" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="4.078">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-009] Toggle desde Kanban mantiene estado" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="8.517">
-</testcase>
-<testcase name="Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-010] Múltiples tabs sincronizadas" classname="story-3.4\P0-ac5-sync-sse.spec.ts" time="78.259">
-<failure message="P0-ac5-sync-sse.spec.ts:217:7 [P0-AC5-010] Múltiples tabs sincronizadas" type="FAILURE">
-<![CDATA[  [chromium] › story-3.4\P0-ac5-sync-sse.spec.ts:217:7 › Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0) › [P0-AC5-010] Múltiples tabs sincronizadas 
-
-    Error: expect(locator).toHaveAttribute(expected) failed
-
-    Locator: getByTestId('sse-connection-indicator')
-    Expected: "true"
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveAttribute" with timeout 15000ms
-      - waiting for getByTestId('sse-connection-indicator')
-
-
-      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
-      244 |
-    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
-          |                        ^
-      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
-      247 |
-      248 |     // Cleanup
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
+      304 |
+      305 |       // The assignment should succeed - seed data provides PENDIENTE OTs
+    > 306 |       expect(assignmentSuccess).toBe(true);
+          |                                 ^
+      307 |       expect(assignedOtNumero).toBeTruthy();
+      308 |
+      309 |       // Wait a moment for revalidation to complete
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p0-ac3-notificaciones-sse.spec.ts:306:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-1.png
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-3.png
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-2.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\error-context.md
-
-    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toHaveAttribute(expected) failed
-
-    Locator: getByTestId('sse-connection-indicator')
-    Expected: "true"
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveAttribute" with timeout 15000ms
-      - waiting for getByTestId('sse-connection-indicator')
-
-
-      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
-      244 |
-    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
-          |                        ^
-      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
-      247 |
-      248 |     // Cleanup
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-3.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\error-context.md
-
-    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(locator).toHaveAttribute(expected) failed
-
-    Locator: getByTestId('sse-connection-indicator')
-    Expected: "true"
-    Timeout: 15000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveAttribute" with timeout 15000ms
-      - waiting for getByTestId('sse-connection-indicator')
-
-
-      243 |     const sse2 = page2.getByTestId('sse-connection-indicator');
-      244 |
-    > 245 |     await expect(sse1).toHaveAttribute('data-connected', 'true');
-          |                        ^
-      246 |     await expect(sse2).toHaveAttribute('data-connected', 'true');
-      247 |
-      248 |     // Cleanup
-        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.4\P0-ac5-sync-sse.spec.ts:245:24
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-3.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\error-context.md
-
-    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip
+        npx playwright show-trace ..\..\test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
-<system-out>
+<system-err>
 <![CDATA[
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-1.png]]
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\test-failed-2.png is missing
+Warning: attachment test-results\story-3.3-p0-ac3-notificac-8a383-liza-Mis-OTs-en-tiempo-real-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="5" failures="5" skipped="0" time="80.212" errors="0">
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Proveedor completa OT › [P0-AC5-001] Proveedor completa OT → estado cambia a REPARACION_EXTERNA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="16.349">
+<failure message="P0-ac5-confirmacion-proveedor.spec.ts:23:9 [P0-AC5-001] Proveedor completa OT → estado cambia a REPARACION_EXTERNA" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:23:9 › Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Proveedor completa OT › [P0-AC5-001] Proveedor completa OT → estado cambia a REPARACION_EXTERNA 
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-3.png]]
+    Error: expect(locator).toBeVisible() failed
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\test-failed-2.png]]
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\video.webm]]
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\error-context.md]]
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium\trace.zip]]
+      30 |       // OT list uses table format with rows
+      31 |       const otRows = page.locator('[data-testid^="ot-card-"]');
+    > 32 |       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
+         |                                    ^
+      33 |
+      34 |       // Find a PENDIENTE OT (StatusBadge shows "Pendiente")
+      35 |       const pendienteRow = otRows.filter({
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:32:36
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-3.png]]
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-2.png]]
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\test-failed-1.png]]
+    Error Context: ..\..\test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\error-context.md
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\video.webm]]
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\trace.zip
+    Usage:
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\error-context.md]]
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\trace.zip
 
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry1\trace.zip]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-3.png]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\test-failed-2.png]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\video.webm]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\error-context.md]]
-
-[[ATTACHMENT|test-results\story-3.4-P0-ac5-sync-sse--916bf-últiples-tabs-sincronizadas-chromium-retry2\trace.zip]]
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
-</system-out>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-a53ec-cambia-a-REPARACION-EXTERNA-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P0-AC5-002] Supervisor confirma recepción → estado cambia a COMPLETADA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="16.551">
+<failure message="P0-ac5-confirmacion-proveedor.spec.ts:84:9 [P0-AC5-002] Supervisor confirma recepción → estado cambia a COMPLETADA" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:84:9 › Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P0-AC5-002] Supervisor confirma recepción → estado cambia a COMPLETADA 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      92 |       // Find an OT in REPARACION_EXTERNA state (StatusBadge shows "Reparación Externa")
+      93 |       const otRows = page.locator('[data-testid^="ot-card-"]');
+    > 94 |       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
+         |                                    ^
+      95 |
+      96 |       // Find OT with "Reparación" in status badge
+      97 |       const otEnReparacion = otRows.filter({
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:94:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-24fae--estado-cambia-a-COMPLETADA-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-003] Notificación al supervisor cuando proveedor completa" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="15.997">
+<failure message="P0-ac5-confirmacion-proveedor.spec.ts:139:9 [P1-AC5-003] Notificación al supervisor cuando proveedor completa" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:139:9 › Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-003] Notificación al supervisor cuando proveedor completa 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      146 |       // Verify the page loaded correctly by checking for OT list
+      147 |       const otRows = page.locator('[data-testid^="ot-card-"]');
+    > 148 |       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
+          |                                    ^
+      149 |
+      150 |       // The notification system may not be fully implemented yet
+      151 |       // For now, we verify the page structure allows for future notification integration
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:148:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-78755-r-cuando-proveedor-completa-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-004] Verificación visual requerida para confirmación" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="16.012">
+<failure message="P0-ac5-confirmacion-proveedor.spec.ts:160:9 [P1-AC5-004] Verificación visual requerida para confirmación" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:160:9 › Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Supervisor confirma recepción › [P1-AC5-004] Verificación visual requerida para confirmación 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      167 |       // Seed data provides 3 OTs in REPARACION_EXTERNA state
+      168 |       const otRows = page.locator('[data-testid^="ot-card-"]');
+    > 169 |       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
+          |                                    ^
+      170 |
+      171 |       // Find OT with "Reparación" in status badge
+      172 |       const otEnReparacion = otRows.filter({
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:169:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-73675-requerida-para-confirmación-chromium\trace.zip is missing]]>
+</system-err>
+</testcase>
+<testcase name="Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Validaciones de estado › [P2-AC5-005] No se puede confirmar OT no está en REPARACION_EXTERNA" classname="story-3.3\P0-ac5-confirmacion-proveedor.spec.ts" time="15.303">
+<failure message="P0-ac5-confirmacion-proveedor.spec.ts:217:9 [P2-AC5-005] No se puede confirmar OT no está en REPARACION_EXTERNA" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:217:9 › Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0) › Validaciones de estado › [P2-AC5-005] No se puede confirmar OT no está en REPARACION_EXTERNA 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid^="ot-card-"]').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid^="ot-card-"]').first()
+
+
+      225 |       // These have status badges showing "Asignada" or "En Progreso" or "Pendiente"
+      226 |       const otRows = page.locator('[data-testid^="ot-card-"]');
+    > 227 |       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
+          |                                    ^
+      228 |
+      229 |       // Find an OT that does NOT show "Reparación" in status
+      230 |       const otNormal = otRows.filter({
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\P0-ac5-confirmacion-proveedor.spec.ts:227:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-P0-ac5-confirmac-c0129--está-en-REPARACION-EXTERNA-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
 </testsuite>
-<testsuite name="story-3.4\P1-ac4-batch-actions.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="66.843" errors="0">
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-001] Checkboxes de selección visibles en cada fila" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="3.314">
+<testsuite name="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="2" failures="0" skipped="0" time="14.706" errors="0">
+<testcase name="Story 3.3 - AC1: Técnico sin capability no puede asignar › [P1-AC1-004] Técnico sin capability no puede ver botón &quot;Asignar&quot;" classname="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" time="8.665">
 </testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-002] Seleccionar OTs individuales" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.352">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-003] Seleccionar todos los visibles" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.404">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-004] Barra de acciones aparece cuando hay selección" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.172">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-005] Asignar técnicos en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="10.502">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-006] Cambiar estado en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="9.011">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-007] Agregar comentario en lote" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.71">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-008] Limpiar selección funciona" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="8.609">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-009] Validación máximo 50 OTs por batch" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="4.694">
-</testcase>
-<testcase name="Story 3.4 - AC4: Acciones en Lote (P1) › [P1-AC4-010] SSE emitido para cada OT en batch" classname="story-3.4\P1-ac4-batch-actions.spec.ts" time="5.075">
+<testcase name="Story 3.3 - AC1: Técnico sin capability no puede asignar › [P1-AC1-007] Técnico no puede acceder a modal de asignación directamente" classname="story-3.3\p1-ac1-tecnico-sin-capability.spec.ts" time="6.041">
 </testcase>
 </testsuite>
-<testsuite name="story-3.4\P1-ac6-modal-detalles.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="10" failures="0" skipped="0" time="43.006" errors="0">
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-001] Modal se abre al hacer click en &quot;Ver Detalles&quot;" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.164">
+<testsuite name="story-3.3\p1-ac4-listado-asignaciones.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="5" failures="5" skipped="0" time="61.326" errors="0">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-001] Columna &quot;Asignaciones&quot; muestra distribución correcta" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="15.75">
+<failure message="p1-ac4-listado-asignaciones.spec.ts:26:7 [P1-AC4-001] Columna &quot;Asignaciones&quot; muestra distribución correcta" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac4-listado-asignaciones.spec.ts:26:7 › Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-001] Columna "Asignaciones" muestra distribución correcta 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('ot-list-table')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('ot-list-table')
+
+
+      31 |     // Verify table exists
+      32 |     const otTable = page.getByTestId('ot-list-table');
+    > 33 |     await expect(otTable).toBeVisible({ timeout: 10000 });
+         |                           ^
+      34 |
+      35 |     // Verify "Asignaciones" column header exists
+      36 |     const asignacionesHeader = otTable.locator('th').filter({ hasText: 'Asignaciones' });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac4-listado-asignaciones.spec.ts:33:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-1dc54-estra-distribución-correcta-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-002] Modal muestra secciones de información" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.353">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-002] Tooltip muestra nombres completos al hacer hover" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="14.637">
+<failure message="p1-ac4-listado-asignaciones.spec.ts:72:7 [P1-AC4-002] Tooltip muestra nombres completos al hacer hover" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac4-listado-asignaciones.spec.ts:72:7 › Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-002] Tooltip muestra nombres completos al hacer hover 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('ot-list-table')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('ot-list-table')
+
+
+      75 |
+      76 |     const otTable = page.getByTestId('ot-list-table');
+    > 77 |     await expect(otTable).toBeVisible({ timeout: 10000 });
+         |                           ^
+      78 |
+      79 |     const rows = otTable.locator('tbody tr');
+      80 |     const firstRow = rows.first();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac4-listado-asignaciones.spec.ts:77:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-865e3-es-completos-al-hacer-hover-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-003] Sección fechas muestra datos correctos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.326">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-003] Modal de detalles muestra lista de asignados" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="14.974">
+<failure message="p1-ac4-listado-asignaciones.spec.ts:104:7 [P1-AC4-003] Modal de detalles muestra lista de asignados" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac4-listado-asignaciones.spec.ts:104:7 › Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P1-AC4-003] Modal de detalles muestra lista de asignados 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('ot-list-table')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('ot-list-table')
+
+
+      107 |
+      108 |     const otTable = page.getByTestId('ot-list-table');
+    > 109 |     await expect(otTable).toBeVisible({ timeout: 10000 });
+          |                           ^
+      110 |
+      111 |     const rows = otTable.locator('tbody tr');
+      112 |     const firstRow = rows.first();
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac4-listado-asignaciones.spec.ts:109:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-7c7c7--muestra-lista-de-asignados-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-004] Sección origen muestra datos correctos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.368">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-004] Columna ordenable por cantidad de asignados" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="15.965">
+<failure message="p1-ac4-listado-asignaciones.spec.ts:137:7 [P2-AC4-004] Columna ordenable por cantidad de asignados" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac4-listado-asignaciones.spec.ts:137:7 › Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-004] Columna ordenable por cantidad de asignados 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('ot-list-table')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('ot-list-table')
+
+
+      139 |
+      140 |     const otTable = page.getByTestId('ot-list-table');
+    > 141 |     await expect(otTable).toBeVisible({ timeout: 10000 });
+          |                           ^
+      142 |
+      143 |     // Find and click "Asignaciones" header to sort
+      144 |     const asignacionesHeader = otTable.locator('th').filter({ hasText: 'Asignaciones' });
+        at C:\Users\ambso\dev\gmao-hiansa\tests\e2e\story-3.3\p1-ac4-listado-asignaciones.spec.ts:141:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-err>
+<![CDATA[
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\test-failed-1.png is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\video.webm is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\error-context.md is missing
+Warning: attachment test-results\story-3.3-p1-ac4-listado-a-bde27-e-por-cantidad-de-asignados-chromium\trace.zip is missing]]>
+</system-err>
 </testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-005] Modal cierra con click en X" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.303">
-</testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-006] Modal cierra con tecla ESC" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.283">
-</testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-007] Modal cierra con click fuera" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.442">
-</testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-008] Sección asignados muestra técnicos" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.363">
-</testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-009] Sección repuestos muestra lista" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.202">
-</testcase>
-<testcase name="Story 3.4 - AC6: Modal de Detalles (P1) › [P1-AC6-010] Sección comentarios muestra historial" classname="story-3.4\P1-ac6-modal-detalles.spec.ts" time="4.202">
+<testcase name="Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-005] OT sin asignados muestra texto apropiado" classname="story-3.3\p1-ac4-listado-asignaciones.spec.ts" time="0">
+<failure message="p1-ac4-listado-asignaciones.spec.ts:168:7 [P2-AC4-005] OT sin asignados muestra texto apropiado" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac4-listado-asignaciones.spec.ts:168:7 › Story 3.3 - AC4: Columna Asignaciones en Listado (P1) › [P2-AC4-005] OT sin asignados muestra texto apropiado 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
 </testsuite>
-<testsuite name="story-3.4\P1-ac7-link-averia.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="3" failures="0" skipped="0" time="12.66" errors="0">
-<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-001] Link a avería original visible si existe" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="4.006">
+<testsuite name="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="4" failures="4" skipped="0" time="0" errors="0">
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="0">
+<failure message="p1-ac7-indicador-sobrecarga.spec.ts:25:7 [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:25:7 › Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-001] Badge rojo visible cuando técnico tiene 5+ OTs activas 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
-<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-002] Click en link avería navega correctamente" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="4.73">
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-002] Contador solo incluye OTs en estados activos" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="0">
+<failure message="p1-ac7-indicador-sobrecarga.spec.ts:102:7 [P1-AC7-002] Contador solo incluye OTs en estados activos" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:102:7 › Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-002] Contador solo incluye OTs en estados activos 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
-<testcase name="Story 3.4 - AC7: Link a Avería Original (P1) › [P1-AC7-003] Modal muestra datos de avería si existe" classname="story-3.4\P1-ac7-link-averia.spec.ts" time="3.924">
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="0">
+<failure message="p1-ac7-indicador-sobrecarga.spec.ts:138:7 [P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:138:7 › Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P1-AC7-003] Técnico con menos de 5 OTs no muestra badge de sobrecarga 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P2-AC7-004] Workload se actualiza después de asignar OT" classname="story-3.3\p1-ac7-indicador-sobrecarga.spec.ts" time="0">
+<failure message="p1-ac7-indicador-sobrecarga.spec.ts:173:7 [P2-AC7-004] Workload se actualiza después de asignar OT" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac7-indicador-sobrecarga.spec.ts:173:7 › Story 3.3 - AC7: Indicador Visual de Sobrecarga (P1) › [P2-AC7-004] Workload se actualiza después de asignar OT 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
 </testsuite>
-<testsuite name="story-3.4\P1-ac8-link-rutina.spec.ts" timestamp="2026-04-02T17:00:40.200Z" hostname="chromium" tests="3" failures="0" skipped="0" time="12.844" errors="0">
-<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-001] Link a rutina preventiva visible si existe" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.309">
+<testsuite name="story-3.3\p1-ac8-modal-asignacion.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="10" failures="10" skipped="0" time="0" errors="0">
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-001] Modal de asignación se abre desde vista de Listado" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:29:9 [P1-AC8-001] Modal de asignación se abre desde vista de Listado" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:29:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-001] Modal de asignación se abre desde vista de Listado 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
-<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-002] Modal muestra &quot;Rutina no disponible&quot; si no existe" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.318">
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:60:9 [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:60:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
-<testcase name="Story 3.4 - AC8: Link a Rutina Preventiva (P1) › [P1-AC8-003] Click en link rutina navega correctamente" classname="story-3.4\P1-ac8-link-rutina.spec.ts" time="4.217">
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-003] Modal muestra proveedores disponibles con servicios" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:118:9 [P1-AC8-003] Modal muestra proveedores disponibles con servicios" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:118:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-003] Modal muestra proveedores disponibles con servicios 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-004] Botón &quot;Guardar Asignación&quot; funciona correctamente" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:183:9 [P1-AC8-004] Botón &quot;Guardar Asignación&quot; funciona correctamente" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:183:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Listado › [P1-AC8-004] Botón "Guardar Asignación" funciona correctamente 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Kanban › [P1-AC8-005] Modal de asignación se abre desde vista Kanban" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:267:9 [P1-AC8-005] Modal de asignación se abre desde vista Kanban" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:267:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Modal desde vista Kanban › [P1-AC8-005] Modal de asignación se abre desde vista Kanban 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-006] Modal cierra con click en &quot;X&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:312:9 [P1-AC8-006] Modal cierra con click en &quot;X&quot;" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:312:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-006] Modal cierra con click en "X" 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-007] Modal cierra con tecla ESC" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:334:9 [P1-AC8-007] Modal cierra con tecla ESC" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:334:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-007] Modal cierra con tecla ESC 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-008] Modal cierra con click fuera" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:354:9 [P1-AC8-008] Modal cierra con click fuera" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:354:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-008] Modal cierra con click fuera 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-009] Modal tiene botón &quot;Cancelar&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:375:9 [P1-AC8-009] Modal tiene botón &quot;Cancelar&quot;" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:375:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Cierre del modal › [P1-AC8-009] Modal tiene botón "Cancelar" 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - AC8: Modal de Asignación (P1) › Visibilidad por capability › [P1-AC8-010] Técnico sin can_assign_technicians no ve botón &quot;Asignar&quot;" classname="story-3.3\p1-ac8-modal-asignacion.spec.ts" time="0">
+<failure message="p1-ac8-modal-asignacion.spec.ts:404:9 [P1-AC8-010] Técnico sin can_assign_technicians no ve botón &quot;Asignar&quot;" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\p1-ac8-modal-asignacion.spec.ts:404:9 › Story 3.3 - AC8: Modal de Asignación (P1) › Visibilidad por capability › [P1-AC8-010] Técnico sin can_assign_technicians no ve botón "Asignar" 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="story-3.3\P2-bulk-assignment.spec.ts" timestamp="2026-04-06T06:11:04.489Z" hostname="chromium" tests="9" failures="9" skipped="0" time="0" errors="0">
+<testcase name="Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-001] should assign multiple OTs to single technician" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:24:7 [E2E-3.3-BULK-001] should assign multiple OTs to single technician" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:24:7 › Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-001] should assign multiple OTs to single technician 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-002] should distribute OTs among technicians" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:78:7 [E2E-3.3-BULK-002] should distribute OTs among technicians" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:78:7 › Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-002] should distribute OTs among technicians 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-003] should reassign all OTs from one technician" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:119:7 [E2E-3.3-BULK-003] should reassign all OTs from one technician" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:119:7 › Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-003] should reassign all OTs from one technician 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-004] should warn about technician overload" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:174:7 [E2E-3.3-BULK-004] should warn about technician overload" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:174:7 › Story 3.3 - E2E: Bulk Assignment › [E2E-3.3-BULK-004] should warn about technician overload 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Provider Workflow › [E2E-3.3-PROV-001] should assign OT to external provider" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:230:7 [E2E-3.3-PROV-001] should assign OT to external provider" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:230:7 › Story 3.3 - E2E: Provider Workflow › [E2E-3.3-PROV-001] should assign OT to external provider 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Provider Workflow › [E2E-3.3-PROV-002] should track provider OT progress" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:286:7 [E2E-3.3-PROV-002] should track provider OT progress" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:286:7 › Story 3.3 - E2E: Provider Workflow › [E2E-3.3-PROV-002] should track provider OT progress 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-001] should display technician workload chart" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:330:7 [E2E-3.3-ANALYTICS-001] should display technician workload chart" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:330:7 › Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-001] should display technician workload chart 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-002] should filter analytics by date range" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:351:7 [E2E-3.3-ANALYTICS-002] should filter analytics by date range" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:351:7 › Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-002] should filter analytics by date range 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-003] should export assignment report" classname="story-3.3\P2-bulk-assignment.spec.ts" time="0">
+<failure message="P2-bulk-assignment.spec.ts:391:7 [E2E-3.3-ANALYTICS-003] should export assignment report" type="FAILURE">
+<![CDATA[  [chromium] › story-3.3\P2-bulk-assignment.spec.ts:391:7 › Story 3.3 - E2E: Assignment Analytics › [E2E-3.3-ANALYTICS-003] should export assignment report 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
 </testcase>
 </testsuite>
 </testsuites>

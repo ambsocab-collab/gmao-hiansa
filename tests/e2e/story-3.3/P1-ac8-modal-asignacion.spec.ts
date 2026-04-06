@@ -32,12 +32,12 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find first OT card (table row)
-      const firstOTCard = page.locator('[data-testid^="ot-card-"]').first();
+      const firstOTCard = page.locator('[data-testid^="ot-row-"]').first();
       await expect(firstOTCard).toBeVisible({ timeout: 10000 });
 
       // Get the OT ID from the card
       const cardId = await firstOTCard.getAttribute('data-testid');
-      const workOrderId = cardId?.replace('ot-card-', '');
+      const workOrderId = cardId?.replace('ot-row-', '');
 
       // Find and click "Asignar" button using page-level locator
       const asignarBtn = page.locator('[data-testid="btn-asignar"]').first();
@@ -274,7 +274,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
       await expect(kanbanBoard).toBeVisible({ timeout: 15000 });
 
       // Find first OT card in any column - uses ot-card- prefix
-      const otCards = kanbanBoard.locator('[data-testid^="ot-card-"]');
+      const otCards = kanbanBoard.locator('[data-testid^="ot-row-"]');
       const count = await otCards.count();
 
       expect(count).toBeGreaterThan(0);

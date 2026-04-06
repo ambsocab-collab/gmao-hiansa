@@ -44,7 +44,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
 
     // Check first row has assignment column with badge
     const firstRow = rows.first();
-    const asignacionesCell = firstRow.locator('[data-testid="asignaciones-column"]');
+    const asignacionesCell = firstRow.locator('[data-testid^="asignaciones-column"]');
     await expect(asignacionesCell).toBeVisible();
 
     // Verify badge format (e.g., "2 técnicos", "1 técnico / 1 proveedor")
@@ -119,7 +119,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
     await expect(detailsModal).toBeVisible({ timeout: 5000 });
 
     // Find "Asignados" section
-    const asignadosSection = detailsModal.getByTestId('asignados-list');
+    const asignadosSection = detailsModal.getByTestId('modal-ot-asignados');
     await expect(asignadosSection).toBeVisible();
 
     // Verify section contains at least one assigned person
