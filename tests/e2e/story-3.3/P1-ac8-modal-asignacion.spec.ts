@@ -28,7 +28,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-001] Modal de asignación se abre desde vista de Listado', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find first OT card (table row)
@@ -59,7 +59,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-002] Modal muestra técnicos disponibles con skills y ubicación', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find an OT card with available assignment slots
@@ -117,7 +117,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-003] Modal muestra proveedores disponibles con servicios', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find an OT card with available assignment slots
@@ -182,7 +182,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-004] Botón "Guardar Asignación" funciona correctamente', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find an OT card with at least 1 available slot
@@ -311,7 +311,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-006] Modal cierra con click en "X"', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find and click "Asignar" button
@@ -333,7 +333,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-007] Modal cierra con tecla ESC', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find and click "Asignar" button
@@ -353,7 +353,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-008] Modal cierra con click fuera', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find and click "Asignar" button
@@ -374,7 +374,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
 
     test('[P1-AC8-009] Modal tiene botón "Cancelar"', async ({ page }) => {
       // Wait for table to be fully loaded
-      const table = page.getByTestId('ot-list-table');
+      const table = page.getByTestId('ots-lista-tabla');
       await expect(table).toBeVisible({ timeout: 15000 });
 
       // Find and click "Asignar" button

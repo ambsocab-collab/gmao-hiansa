@@ -29,7 +29,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
     // - AssignmentBadge component doesn't exist
 
     // Verify table exists
-    const otTable = page.getByTestId('ot-list-table');
+    const otTable = page.getByTestId('ots-lista-tabla');
     await expect(otTable).toBeVisible({ timeout: 10000 });
 
     // Verify "Asignaciones" column header exists
@@ -73,7 +73,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
     // GREEN PHASE: This test will fail because:
     // - Tooltip with names doesn't exist
 
-    const otTable = page.getByTestId('ot-list-table');
+    const otTable = page.getByTestId('ots-lista-tabla');
     await expect(otTable).toBeVisible({ timeout: 10000 });
 
     const rows = otTable.locator('tbody tr');
@@ -105,7 +105,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
     // GREEN PHASE: This test will fail because:
     // - Details modal doesn't show assignments section
 
-    const otTable = page.getByTestId('ot-list-table');
+    const otTable = page.getByTestId('ots-lista-tabla');
     await expect(otTable).toBeVisible({ timeout: 10000 });
 
     const rows = otTable.locator('tbody tr');
@@ -137,7 +137,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   test('[P2-AC4-004] Columna ordenable por cantidad de asignados', async ({ page }) => {
     // GREEN PHASE: Optional feature - sortable column
 
-    const otTable = page.getByTestId('ot-list-table');
+    const otTable = page.getByTestId('ots-lista-tabla');
     await expect(otTable).toBeVisible({ timeout: 10000 });
 
     // Find and click "Asignaciones" header to sort
@@ -168,7 +168,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
   test('[P2-AC4-005] OT sin asignados muestra texto apropiado', async ({ page }) => {
     // GREEN PHASE: Tests empty state
 
-    const otTable = page.getByTestId('ot-list-table');
+    const otTable = page.getByTestId('ots-lista-tabla');
     await expect(otTable).toBeVisible({ timeout: 10000 });
 
     // Find an OT without assignments
