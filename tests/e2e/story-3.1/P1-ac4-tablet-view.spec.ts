@@ -76,8 +76,8 @@ test.describe('Story 3.1 - AC4: Tablet View (P1)', () => {
     // WHEN: veo indicador
     // THEN: muestra "X-Y de 8"
 
-    // The column count indicator (if implemented)
-    const indicator = page.getByTestId('column-count-indicator');
+    // The column indicator
+    const indicator = page.getByTestId('column-indicator');
 
     const indicatorCount = await indicator.count();
     if (indicatorCount > 0) {

@@ -14,13 +14,14 @@
  * - Modal de asignación (Story 3.3 AC8)
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DndContext, DragEndEvent, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { WorkOrder, WorkOrderEstado } from '@prisma/client'
 import { KanbanColumn } from './kanban-column'
 import { OTDetailsModal } from './ot-details-modal'
 import { AssignmentModal } from '@/components/assignments/assignment-modal'
 import { ViewToggle } from './view-toggle'
+import { KPIPanel } from './kpi-panel'
 import { updateWorkOrderStatus } from '@/app/actions/work-orders'
 import { useSSEConnection } from '@/components/sse/use-sse-connection'
 import { logClientError } from '@/lib/observability/client-logger'
@@ -132,7 +133,10 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
   } | null>(null)
   const [, setRefreshKey] = useState(0) // Triggers re-render when assignments change
   const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
   const [visibleColumnRange, setVisibleColumnRange] = useState({ start: 1, end: 8 })
+  const [isKpiPanelCollapsed, setIsKpiPanelCollapsed] = useState(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   // Detectar vista móvil (<768px) para deshabilitar drag & drop
   useEffect(() => {
@@ -142,7 +146,9 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
       // Debounce: esperar 250ms después del último resize
       clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => {
-        setIsMobile(window.innerWidth < 768)
+        const width = window.innerWidth
+        setIsMobile(width < 768)
+        setIsTablet(width >= 768 && width < 1200)
       }, 250)
     }
 
@@ -158,35 +164,50 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
     }
   }, [])
 
-  // Calcular columnas visibles basado en viewport (AC4)
+  // Calcular columnas visibles basado en scroll (AC4)
   useEffect(() => {
-    let resizeTimeout: NodeJS.Timeout
+    const scrollContainer = scrollContainerRef.current
+    if (!scrollContainer) return
 
-    const calculateVisibleColumns = () => {
-      // Debounce: esperar 250ms después del último resize
-      clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(() => {
-        const width = window.innerWidth
+    const handleScroll = () => {
+      if (window.innerWidth >= 1200) {
+        // Desktop: todas las columnas visibles
+        setVisibleColumnRange({ start: 1, end: 8 })
+        return
+      }
 
-        if (width < 768) {
-          // Mobile: 1 columna
-          setVisibleColumnRange({ start: 1, end: 1 })
-        } else if (width >= 768 && width < 1200) {
-          // Tablet: 2 columnas visibles (aprox)
-          setVisibleColumnRange({ start: 1, end: 2 })
-        } else {
-          // Desktop: todas las columnas
-          setVisibleColumnRange({ start: 1, end: 8 })
-        }
-      }, 250)
+      // Tablet/Mobile: calcular basado en scroll position
+      const scrollLeft = scrollContainer.scrollLeft
+      const containerWidth = scrollContainer.clientWidth
+
+      // Ancho aproximado de cada columna (incluyendo gap)
+      const columnWidth = 280 + 16 // 280px columna + 16px gap
+      const totalColumns = KANBAN_COLUMNS.length
+
+      // Calcular qué columnas son visibles
+      const startColumn = Math.floor(scrollLeft / columnWidth) + 1
+      const visibleCount = Math.floor(containerWidth / columnWidth)
+      const endColumn = Math.min(startColumn + Math.max(visibleCount - 1, 0), totalColumns)
+
+      if (window.innerWidth < 768) {
+        // Mobile: 1 columna
+        setVisibleColumnRange({ start: startColumn, end: startColumn })
+      } else {
+        // Tablet: 2 columnas
+        setVisibleColumnRange({ start: startColumn, end: endColumn })
+      }
     }
 
-    calculateVisibleColumns()
-    window.addEventListener('resize', calculateVisibleColumns)
+    // Initial calculation
+    handleScroll()
+
+    // Listen for scroll
+    scrollContainer.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
 
     return () => {
-      clearTimeout(resizeTimeout)
-      window.removeEventListener('resize', calculateVisibleColumns)
+      scrollContainer.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
     }
   }, [])
 
@@ -434,8 +455,11 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
             {/* Toggle Vista Kanban ↔ Listado (AC8) */}
             <ViewToggle currentView="kanban" />
 
-            {/* Indicador de columnas visibles (AC4) - solo tablet/mobile */}
-            <div className="hidden md:flex lg:hidden text-sm text-gray-600">
+            {/* Indicador de columnas visibles (AC4) - solo tablet/mobile, oculto en desktop */}
+            <div
+              className="hidden md:flex lg:hidden text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded"
+              data-testid="column-indicator"
+            >
               {visibleColumnRange.start}-{visibleColumnRange.end} de {KANBAN_COLUMNS.length}
             </div>
 
@@ -455,61 +479,77 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
         )}
       </div>
 
-      {/* Kanban Board - Responsive Design */}
-      <div className="flex-1 overflow-x-auto">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
+      {/* Kanban Board - Responsive Design with KPI Panel */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* KPI Panel Sidebar (AC4) - Desktop/Tablet only */}
+        {!isMobile && (
+          <KPIPanel
+            workOrdersByEstado={workOrdersByEstado}
+            isCollapsed={isKpiPanelCollapsed}
+            onToggle={() => setIsKpiPanelCollapsed(!isKpiPanelCollapsed)}
+          />
+        )}
+
+        {/* Kanban columns container */}
+        <div
+          className="flex-1 overflow-x-auto"
+          ref={scrollContainerRef}
+          data-testid="kanban-scroll-container"
         >
-          {/* Desktop: 8 columnas visibles */}
-          <div className="hidden lg:flex gap-4 p-6 min-h-full">
-            {KANBAN_COLUMNS.map((estado) => (
-              <KanbanColumn
-                key={estado}
-                estado={estado}
-                workOrders={workOrdersByEstado[estado] || []}
-                onOTCardClick={handleOTCardClick}
-                onAssignClick={handleAssignClick}
-                canAssign={canAssignTechnicians}
-                disableDrag={isMobile}
-                compactCards={false}
-              />
-            ))}
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            {/* Desktop: 8 columnas visibles */}
+            <div className="hidden lg:flex gap-4 p-6 min-h-full">
+              {KANBAN_COLUMNS.map((estado) => (
+                <KanbanColumn
+                  key={estado}
+                  estado={estado}
+                  workOrders={workOrdersByEstado[estado] || []}
+                  onOTCardClick={handleOTCardClick}
+                  onAssignClick={handleAssignClick}
+                  canAssign={canAssignTechnicians}
+                  disableDrag={isMobile}
+                  compactCards={false}
+                />
+              ))}
+            </div>
 
-          {/* Tablet: 2-3 columnas con swipe horizontal */}
-          <div className="hidden md:flex lg:hidden gap-4 p-6 overflow-x-auto snap-x snap-mandatory">
-            {KANBAN_COLUMNS.map((estado) => (
-              <KanbanColumn
-                key={estado}
-                estado={estado}
-                workOrders={workOrdersByEstado[estado] || []}
-                onOTCardClick={handleOTCardClick}
-                onAssignClick={handleAssignClick}
-                canAssign={canAssignTechnicians}
-                disableDrag={isMobile}
-                compactCards={false}
-              />
-            ))}
-          </div>
+            {/* Tablet: 2-3 columnas con swipe horizontal */}
+            <div className="hidden md:flex lg:hidden gap-4 p-6 overflow-x-auto snap-x snap-mandatory">
+              {KANBAN_COLUMNS.map((estado) => (
+                <KanbanColumn
+                  key={estado}
+                  estado={estado}
+                  workOrders={workOrdersByEstado[estado] || []}
+                  onOTCardClick={handleOTCardClick}
+                  onAssignClick={handleAssignClick}
+                  canAssign={canAssignTechnicians}
+                  disableDrag={isMobile}
+                  compactCards={false}
+                />
+              ))}
+            </div>
 
-          {/* Mobile: 1 columna con swipe, cards simplificadas */}
-          <div className="flex md:hidden gap-4 p-4 overflow-x-auto snap-x snap-mandatory">
-            {KANBAN_COLUMNS.map((estado) => (
-              <KanbanColumn
-                key={estado}
-                estado={estado}
-                workOrders={workOrdersByEstado[estado] || []}
-                onOTCardClick={handleOTCardClick}
-                onAssignClick={handleAssignClick}
-                canAssign={canAssignTechnicians}
-                disableDrag={true} // No drag & drop en móvil
-                compactCards={true} // Cards simplificadas
-              />
-            ))}
-          </div>
-        </DndContext>
+            {/* Mobile: 1 columna con swipe, cards simplificadas */}
+            <div className="flex md:hidden gap-4 p-4 overflow-x-auto snap-x snap-mandatory">
+              {KANBAN_COLUMNS.map((estado) => (
+                <KanbanColumn
+                  key={estado}
+                  estado={estado}
+                  workOrders={workOrdersByEstado[estado] || []}
+                  onOTCardClick={handleOTCardClick}
+                  onAssignClick={handleAssignClick}
+                  canAssign={canAssignTechnicians}
+                  disableDrag={true} // No drag & drop en móvil
+                  compactCards={true} // Cards simplificadas
+                />
+              ))}
+            </div>
+          </DndContext>
+        </div>
       </div>
 
       {/* Modal de detalles para móvil (AC6) */}

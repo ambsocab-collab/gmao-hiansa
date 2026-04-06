@@ -38,9 +38,9 @@ test.describe('Story 3.1 - AC8: Toggle Kanban ↔ Listado (P1)', () => {
     const toggle = page.getByTestId('vista-toggle');
     await expect(toggle).toBeVisible();
 
-    // Verify toggle has correct icon (List icon since we're in Kanban view)
-    const listIcon = toggle.locator('svg');
-    await expect(listIcon).toBeVisible();
+    // Verify toggle has icons (now has 2 buttons: Kanban + Lista)
+    const icons = toggle.locator('svg');
+    await expect(icons.first()).toBeVisible();
 
     // Note: Full navigation test skipped until /ots/lista page is implemented
     // The toggle button exists and is clickable, but navigation to /ots/lista won't work

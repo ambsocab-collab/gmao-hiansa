@@ -233,7 +233,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" data-testid={`modal-ot-info-${workOrder.id}`}>
+      <DialogContent className="max-w-md" data-testid="ot-details-modal">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>OT {workOrder.numero}</span>

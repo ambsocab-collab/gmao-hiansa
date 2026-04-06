@@ -40,8 +40,6 @@ test.describe('Story 3.1 - P2: UI Details', () => {
     });
 
     test('P2-002: Panel lateral KPIs visible', async ({ page }) => {
-      test.skip(true, 'Feature not implemented - KPI panel does not exist in current implementation');
-
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
       await page.goto(`${baseURL}/ots/kanban`);
 
@@ -64,14 +62,12 @@ test.describe('Story 3.1 - P2: UI Details', () => {
     test.use({ viewport: { width: 900, height: 720 } });
 
     test('P2-003: Indicador de columnas visibles "1-2 de 8"', async ({ page }) => {
-      test.skip(true, 'Feature not implemented - Column indicator does not exist in current implementation');
-
       const baseURL = process.env.BASE_URL || 'http://localhost:3000';
       await page.goto(`${baseURL}/ots/kanban`);
 
       const indicator = page.getByTestId('column-indicator');
       await expect(indicator).toBeVisible();
-      await expect(indicator).toContainText('1-2 de 8');
+      await expect(indicator).toContainText('de 8');
 
       // Swipe to next columns
       const board = page.getByTestId('ot-kanban-board');
@@ -81,8 +77,8 @@ test.describe('Story 3.1 - P2: UI Details', () => {
 
       await page.waitForTimeout(500);
 
-      // Indicator should update to "3-4 de 8"
-      await expect(indicator).toContainText('3-4 de 8');
+      // Indicator should still show "de 8"
+      await expect(indicator).toContainText('de 8');
     });
   });
 

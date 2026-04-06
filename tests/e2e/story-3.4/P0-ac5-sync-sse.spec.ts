@@ -27,19 +27,19 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     // Wait for network to settle and React hydration to complete
     await page.waitForLoadState('networkidle');
     // Wait for the main content to be visible
-    const viewToggle = page.getByTestId('view-toggle');
+    const viewToggle = page.getByTestId('vista-toggle');
     await viewToggle.waitFor({ state: 'visible', timeout: 15000 });
   });
 
   test('[P0-AC5-001] Toggle visible en página de lista', async ({ page }) => {
-    // RED PHASE: This test will fail - view-toggle doesn't exist on list page yet
+    // RED PHASE: This test will fail - vista-toggle doesn't exist on list page yet
 
-    const viewToggle = page.getByTestId('view-toggle');
+    const viewToggle = page.getByTestId('vista-toggle');
     await expect(viewToggle).toBeVisible({ timeout: 10000 });
 
     // Verify both options exist
-    const kanbanBtn = page.getByTestId('view-toggle-kanban');
-    const listaBtn = page.getByTestId('view-toggle-lista');
+    const kanbanBtn = page.getByTestId('vista-toggle-kanban');
+    const listaBtn = page.getByTestId('vista-toggle-lista');
 
     await expect(kanbanBtn).toBeVisible();
     await expect(listaBtn).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
   test('[P0-AC5-002] Click en Kanban navega a vista Kanban', async ({ page }) => {
     // RED PHASE: This test will fail - view toggle navigation not implemented yet
 
-    const kanbanBtn = page.getByTestId('view-toggle-kanban');
+    const kanbanBtn = page.getByTestId('vista-toggle-kanban');
     await expect(kanbanBtn).toBeVisible({ timeout: 10000 });
 
     // Click to go to Kanban
@@ -86,7 +86,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     expect(url).toContain('tipo=CORRECTIVO');
 
     // Switch to Kanban
-    const kanbanBtn = page.getByTestId('view-toggle-kanban');
+    const kanbanBtn = page.getByTestId('vista-toggle-kanban');
     await expect(kanbanBtn).toBeVisible({ timeout: 5000 });
     await kanbanBtn.click();
 
@@ -116,7 +116,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     expect(url).toMatch(/sortBy=/);
 
     // Switch to Kanban
-    const kanbanBtn = page.getByTestId('view-toggle-kanban');
+    const kanbanBtn = page.getByTestId('vista-toggle-kanban');
     await expect(kanbanBtn).toBeVisible({ timeout: 5000 });
     await kanbanBtn.click();
 
@@ -167,7 +167,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     await expect(sseIndicator).toHaveAttribute('data-connected', 'true', { timeout: 15000 });
 
     // Verify toggle exists and works
-    const listaBtn = page.getByTestId('view-toggle-lista');
+    const listaBtn = page.getByTestId('vista-toggle-lista');
     await expect(listaBtn).toBeVisible({ timeout: 10000 });
     await listaBtn.click();
 
@@ -209,7 +209,7 @@ test.describe('Story 3.4 - AC5: Toggle Kanban ↔ Listado con Sync SSE (P0)', ()
     await expect(kanbanBoard).toBeVisible({ timeout: 15000 });
 
     // Wait for view toggle to be visible
-    const listaBtn = page.getByTestId('view-toggle-lista');
+    const listaBtn = page.getByTestId('vista-toggle-lista');
     await expect(listaBtn).toBeVisible({ timeout: 10000 });
     await listaBtn.click();
 

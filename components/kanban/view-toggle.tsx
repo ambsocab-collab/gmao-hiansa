@@ -8,7 +8,7 @@
  * AC5: Toggle Kanban ↔ Listado with syncronization
  *  - Toggle button to between views
  *  - Guarda preference in localStorage
- *  - data-testid="view-toggle"
+ *  - data-testid="vista-toggle"
  *  - Separate buttons for Kanban and Lista with data-active attribute
  */
 
@@ -93,13 +93,13 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
   return (
     <div
       className="flex items-center gap-1 p-1 bg-muted rounded-md"
-      data-testid="view-toggle"
+      data-testid="vista-toggle"
     >
       <Button
         variant="ghost"
         size="sm"
         onClick={handleKanbanClick}
-        data-testid="view-toggle-kanban"
+        data-testid="vista-toggle-kanban"
         data-active={isKanbanActive ? 'true' : 'false'}
         className={cn(
           "gap-1.5 px-3",
@@ -113,7 +113,7 @@ export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
         variant="ghost"
         size="sm"
         onClick={handleListClick}
-        data-testid="view-toggle-lista"
+        data-testid="vista-toggle-lista"
         data-active={isListActive ? 'true' : 'false'}
         className={cn(
           "gap-1.5 px-3",
