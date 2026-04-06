@@ -85,7 +85,7 @@ test.describe('Story 3.2 - AC2: Modal de Detalles (P1)', () => {
     await expect(modal).toBeVisible();
 
     // Click X button
-    const closeButton = modal.getByTestId('close-modal-btn');
+    const closeButton = modal.getByTestId('btn-cerrar-modal');
     await closeButton.click();
 
     // Verify modal is closed
@@ -143,7 +143,7 @@ test.describe('Story 3.2 - AC2: Modal de Detalles (P1)', () => {
       return;
     }
     // If still open, close it with the close button (acceptable fallback)
-    await modal.getByTestId('close-modal-btn').click();
+    await modal.getByTestId('btn-cerrar-modal').click();
   });
 
   test('[P1-AC2-006] should show repuestos sugeridos if exist', async ({ page }) => {

@@ -52,8 +52,8 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
       const modalTitle = assignmentModal.locator('[data-testid="modal-title"]');
       await expect(modalTitle).toContainText('Asignar');
 
-      // Verify close button exists - uses close-modal-btn from Dialog component
-      const closeBtn = assignmentModal.getByTestId('close-modal-btn');
+      // Verify close button exists - uses btn-cerrar-modal from Dialog component
+      const closeBtn = assignmentModal.getByTestId('btn-cerrar-modal');
       await expect(closeBtn).toBeVisible();
     });
 
@@ -322,8 +322,8 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
       const assignmentModal = page.locator('[data-testid^="modal-asignacion-"]');
       await expect(assignmentModal).toBeVisible({ timeout: 5000 });
 
-      // Click close button - uses close-modal-btn from Dialog component
-      const closeBtn = assignmentModal.getByTestId('close-modal-btn');
+      // Click close button - uses btn-cerrar-modal from Dialog component
+      const closeBtn = assignmentModal.getByTestId('btn-cerrar-modal');
       await expect(closeBtn).toBeVisible({ timeout: 5000 });
       await closeBtn.click();
 

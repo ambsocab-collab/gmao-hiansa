@@ -1126,7 +1126,7 @@ async function main() {
   })
 
   // COMPLETADA (5 OTs)
-  const _workOrder5 = await prisma.workOrder.create({
+  const workOrder5 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-005',
       tipo: 'CORRECTIVO',
@@ -1137,7 +1137,7 @@ async function main() {
     },
   })
 
-  const _workOrder26 = await prisma.workOrder.create({
+  const workOrder26 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-026',
       tipo: 'PREVENTIVO',
@@ -1148,7 +1148,7 @@ async function main() {
     },
   })
 
-  const _workOrder27 = await prisma.workOrder.create({
+  const workOrder27 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-027',
       tipo: 'CORRECTIVO',
@@ -1159,7 +1159,7 @@ async function main() {
     },
   })
 
-  const _workOrder28 = await prisma.workOrder.create({
+  const workOrder28 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-028',
       tipo: 'PREVENTIVO',
@@ -1170,7 +1170,7 @@ async function main() {
     },
   })
 
-  const _workOrder29 = await prisma.workOrder.create({
+  const workOrder29 = await prisma.workOrder.create({
     data: {
       numero: 'OT-2025-029',
       tipo: 'CORRECTIVO',
@@ -1361,6 +1361,20 @@ async function main() {
         },
       })
     }
+  }
+
+  // ============================================
+  // ASSIGN COMPLETADA OTs TO TECNICO for E2E testing
+  // Story 3.2 AC6: Verify completed OTs in "Mis OTs"
+  // ============================================
+  for (const wo of [workOrder5, workOrder26, workOrder27, workOrder28, workOrder29]) {
+    await prisma.workOrderAssignment.create({
+      data: {
+        work_order_id: wo.id,
+        userId: tecnico.id,
+        role: 'TECNICO',
+      },
+    })
   }
 
   // Crear FailureReports de ejemplo con estado NUEVO (para Story 2.3 - Triage)
