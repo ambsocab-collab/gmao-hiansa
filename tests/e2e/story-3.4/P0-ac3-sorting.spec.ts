@@ -30,12 +30,13 @@ test.describe('Story 3.4 - AC3: Ordenamiento por cualquier columna (P0)', () => 
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
     // Verify sortable headers exist
+    // Aligned with sortable-header.tsx which uses column prop
     const sortableHeaders = [
       'sort-header-numero',
       'sort-header-equipo',
       'sort-header-estado',
       'sort-header-tipo',
-      'sort-header-asignados',
+      'sort-header-asignaciones',  // Uses 'asignaciones' not 'asignados'
       'sort-header-fecha'
     ];
 
