@@ -45,7 +45,8 @@ export async function findOTCardWithAvailableSlots(
   page: Page,
   minSlotsNeeded: number = 1
 ): Promise<Locator | null> {
-  const otCards = page.locator('[data-testid^="ot-card-"]');
+  // Support both Kanban cards (ot-card-) and List rows (ot-row-)
+  const otCards = page.locator('[data-testid^="ot-card-"], [data-testid^="ot-row-"]');
   const count = await otCards.count();
 
   for (let i = 0; i < count; i++) {

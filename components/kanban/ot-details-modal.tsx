@@ -97,6 +97,8 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
   const [isVerificationDialogOpen, setIsVerificationDialogOpen] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
   const [isConfirmingProvider, setIsConfirmingProvider] = useState(false)
+  const [isConfirmRecepcionDialogOpen, setIsConfirmRecepcionDialogOpen] = useState(false)
+  const [visualVerificationChecked, setVisualVerificationChecked] = useState(false)
 
   /**
    * Maneja el cambio de estado de la OT
@@ -233,7 +235,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md" data-testid="ot-details-modal">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto" data-testid="ot-details-modal">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>OT {workOrder.numero}</span>
@@ -277,6 +279,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
                 workOrder.prioridad === 'ALTA' ? 'destructive' :
                 workOrder.prioridad === 'MEDIA' ? 'default' : 'secondary'
               }
+              data-testid="ot-prioridad-badge"
             >
               {workOrder.prioridad}
             </Badge>
@@ -423,19 +426,14 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
             <div className="space-y-2 pt-4 border-t">
               <p className="text-sm font-medium">Confirmación de Proveedor</p>
               <Button
-                onClick={handleConfirmProviderWork}
+                onClick={() => {
+                  setVisualVerificationChecked(false)
+                  setIsConfirmRecepcionDialogOpen(true)
+                }}
                 className="w-full bg-cyan-600 hover:bg-cyan-700"
-                disabled={isConfirmingProvider}
                 data-testid="confirmar-recepcion-btn"
               >
-                {isConfirmingProvider ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Confirmando...
-                  </>
-                ) : (
-                  'Confirmar Recepción'
-                )}
+                Confirmar Recepción
               </Button>
               <p className="text-xs text-muted-foreground">
                 Confirma que el proveedor ha completado la reparación externa
@@ -473,7 +471,7 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
         {/* AC6: Diálogo de verificación */}
         <AlertDialog open={isVerificationDialogOpen} onOpenChange={setIsVerificationDialogOpen}>
-          <AlertDialogContent>
+          <AlertDialogContent data-testid="verification-dialog">
             <AlertDialogHeader>
               <AlertDialogTitle>Verificar Reparación - OT {workOrder.numero}</AlertDialogTitle>
               <AlertDialogDescription>
@@ -511,6 +509,78 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
                   </>
                 ) : (
                   'Funciona'
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Story 3.3 AC5: Diálogo de confirmación de recepción */}
+        <AlertDialog
+          open={isConfirmRecepcionDialogOpen}
+          onOpenChange={(open) => {
+            setIsConfirmRecepcionDialogOpen(open)
+            if (!open) setVisualVerificationChecked(false)
+          }}
+        >
+          <AlertDialogContent data-testid="confirm-recepcion-dialog">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmar Recepción - OT {workOrder.numero}</AlertDialogTitle>
+              <AlertDialogDescription>
+                Verifica visualmente el estado del equipo reparado antes de confirmar la recepción.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="py-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visualVerificationChecked}
+                  onChange={(e) => setVisualVerificationChecked(e.target.checked)}
+                  className="h-5 w-5 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                  data-testid="verificacion-visual-checkbox"
+                />
+                <span className="text-sm">
+                  He verificado visualmente el estado del equipo reparado
+                </span>
+              </label>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel
+                onClick={() => setVisualVerificationChecked(false)}
+                data-testid="cancelar-confirmacion-btn"
+              >
+                Cancelar
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  if (!visualVerificationChecked) return
+                  setIsConfirmRecepcionDialogOpen(false)
+                  setIsConfirmingProvider(true)
+                  try {
+                    await confirmProviderWork(workOrder.id)
+                    toast.success(`Recepción confirmada para OT ${workOrder.numero}`)
+                    onOpenChange(false)
+                    router.refresh()
+                  } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+                    logClientError({ message: `Error confirming provider work: ${errorMessage}` })
+                    toast.error(error instanceof Error ? error.message : 'Error al confirmar recepción')
+                  } finally {
+                    setIsConfirmingProvider(false)
+                    setVisualVerificationChecked(false)
+                  }
+                }}
+                disabled={!visualVerificationChecked || isConfirmingProvider}
+                className="bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50"
+                data-testid="btn-confirmar-final"
+              >
+                {isConfirmingProvider ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Confirmando...
+                  </>
+                ) : (
+                  'Confirmar Recepción'
                 )}
               </AlertDialogAction>
             </AlertDialogFooter>

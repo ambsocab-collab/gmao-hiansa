@@ -3,11 +3,15 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P1 E2E Tests for Story 3.4 AC6: Modal de Detalles
  *
- * TDD RED PHASE: Tests will fail until implementation is complete
+ * GREEN PHASE: Tests validate modal functionality
  *
  * Acceptance Criteria:
  * - AC6: Modal informativo con detalles completos (NFR-S24)
  * - Modal puede cerrarse con click en "X", ESC key, o click fuera
+ *
+ * TestIDs aligned with ot-details-modal.tsx:
+ * - ot-details-modal (main modal)
+ * - modal-ot-fechas, modal-ot-origen, modal-ot-asignados, modal-ot-repuestos, modal-ot-comentarios
  *
  * Storage State: Uses supervisor auth from playwright/.auth/supervisor.json
  */
@@ -22,8 +26,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-001] Modal se abre al hacer click en "Ver Detalles"', async ({ page }) => {
-    // RED PHASE: This test will fail - modal not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -31,18 +33,16 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const firstRow = tabla.locator('[data-testid^="ot-row-"]').first();
     await expect(firstRow).toBeVisible();
 
-    // Click "Ver Detalles" button
+    // Click "Ver Detalles" button (Eye icon)
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    // Modal should open
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    // Modal should open - uses ot-details-modal testid
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
   });
 
   test('[P1-AC6-002] Modal muestra secciones de información', async ({ page }) => {
-    // RED PHASE: This test will fail - modal sections not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -51,7 +51,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify sections exist
@@ -70,8 +70,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-003] Sección fechas muestra datos correctos', async ({ page }) => {
-    // RED PHASE: This test will fail - fecha section not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -80,7 +78,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify fecha section has expected labels
@@ -93,8 +91,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-004] Sección origen muestra datos correctos', async ({ page }) => {
-    // RED PHASE: This test will fail - origen section not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -103,7 +99,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify origen section
@@ -115,8 +111,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-005] Modal cierra con click en X', async ({ page }) => {
-    // RED PHASE: This test will fail - close button not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -125,11 +119,10 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Click X button - use dispatchEvent to bypass viewport checks
-    // The close button uses absolute positioning which may place it outside viewport
     const closeBtn = page.getByTestId('btn-cerrar-modal');
     await closeBtn.dispatchEvent('click');
 
@@ -138,8 +131,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-006] Modal cierra con tecla ESC', async ({ page }) => {
-    // RED PHASE: This test will fail - ESC close not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -148,7 +139,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Press ESC
@@ -159,8 +150,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-007] Modal cierra con click fuera', async ({ page }) => {
-    // RED PHASE: This test will fail - click outside close not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -169,7 +158,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Click outside modal (on overlay)
@@ -181,8 +170,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-008] Sección asignados muestra técnicos', async ({ page }) => {
-    // RED PHASE: This test will fail - asignados section not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -191,7 +178,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify asignados section
@@ -204,8 +191,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-009] Sección repuestos muestra lista', async ({ page }) => {
-    // RED PHASE: This test will fail - repuestos section not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -214,7 +199,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify repuestos section
@@ -227,8 +212,6 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
   });
 
   test('[P1-AC6-010] Sección comentarios muestra historial', async ({ page }) => {
-    // RED PHASE: This test will fail - comments section not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -237,7 +220,7 @@ test.describe('Story 3.4 - AC6: Modal de Detalles (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click()
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Verify comentarios section

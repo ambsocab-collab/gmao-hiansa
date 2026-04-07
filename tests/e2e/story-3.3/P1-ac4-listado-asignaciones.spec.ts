@@ -115,7 +115,7 @@ test.describe('Story 3.3 - AC4: Columna Asignaciones en Listado (P1)', () => {
     await firstRow.click();
 
     // Wait for details modal
-    const detailsModal = page.locator('[data-testid^="ot-details-modal-"]');
+    const detailsModal = page.locator('[data-testid="ot-details-modal"]');
     await expect(detailsModal).toBeVisible({ timeout: 5000 });
 
     // Find "Asignados" section

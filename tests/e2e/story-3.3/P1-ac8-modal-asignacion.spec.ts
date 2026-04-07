@@ -274,7 +274,7 @@ test.describe('Story 3.3 - AC8: Modal de Asignación (P1)', () => {
       await expect(kanbanBoard).toBeVisible({ timeout: 15000 });
 
       // Find first OT card in any column - uses ot-card- prefix
-      const otCards = kanbanBoard.locator('[data-testid^="ot-row-"]');
+      const otCards = kanbanBoard.locator('[data-testid^="ot-card-"]');
       const count = await otCards.count();
 
       expect(count).toBeGreaterThan(0);

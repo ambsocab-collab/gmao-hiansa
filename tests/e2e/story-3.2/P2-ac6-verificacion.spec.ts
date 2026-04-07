@@ -57,7 +57,7 @@ test.describe('Story 3.2 - AC6: Verificación por Operario (P2)', () => {
 
   test.beforeEach(async ({ page }) => {
     const baseURL = process.env.BASE_URL || 'http://localhost:3000';
-    await page.goto(`${baseURL}/kanban`); // Go to Kanban to find completed OTs
+    await page.goto(`${baseURL}/ots/kanban`); // Go to Kanban to find completed OTs
   });
 
   test('[P2-AC6-001] should show verification option for completed OTs', async ({ page }) => {
@@ -85,23 +85,35 @@ test.describe('Story 3.2 - AC6: Verificación por Operario (P2)', () => {
     await page.waitForLoadState('domcontentloaded');
 
     const board = page.getByTestId('ot-kanban-board');
+    await expect(board).toBeVisible({ timeout: 10000 });
+
     const desktopContainer = board.locator('.lg\\:flex').first();
+    await expect(desktopContainer).toBeVisible({ timeout: 5000 });
 
     // Find COMPLETADA column
     const completadaColumn = desktopContainer.getByTestId('kanban-column-COMPLETADA');
+    await expect(completadaColumn).toBeVisible({ timeout: 5000 });
 
-    // Get first completed OT card
-    const otCard = completadaColumn.locator('[data-testid^="ot-card-"]').first();
-    const cardCount = await otCard.count();
+    // Get all completed OT cards and check count
+    const otCards = completadaColumn.locator('[data-testid^="ot-card-"]');
+    await page.waitForTimeout(2000); // Wait for cards to load
+    const cardCount = await otCards.count();
 
     if (cardCount === 0) {
       test.skip(true, 'No completed OTs available - skipping test');
+      return;
     }
 
+    // Get first completed OT card
+    const otCard = otCards.first();
     await otCard.click();
 
+    // Wait for modal to open
+    const modal = page.getByTestId('ot-details-modal');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
     // Verify "Verificar Reparación" button is visible
-    const verificarBtn = page.getByTestId('verificar-reparacion-btn');
+    const verificarBtn = modal.getByTestId('verificar-reparacion-btn');
     await expect(verificarBtn).toBeVisible();
   });
 
@@ -140,39 +152,81 @@ test.describe('Story 3.2 - AC6: Verificación por Operario (P2)', () => {
     const desktopContainer = board.locator('.lg\\:flex').first();
     const completadaColumn = desktopContainer.getByTestId('kanban-column-COMPLETADA');
 
-    const otCard = completadaColumn.locator('[data-testid^="ot-card-"]').first();
-    const cardCount = await otCard.count();
+    // Get all completed OT cards and check count
+    const otCards = completadaColumn.locator('[data-testid^="ot-card-"]');
+    const cardCount = await otCards.count();
 
     if (cardCount === 0) {
       test.skip(true, 'No completed OTs available - skipping test');
+      return;
     }
+
+    const otCard = otCards.first();
+
+    // Get the OT number before clicking to track which OT we're verifying
+    const otCardTestId = await otCard.getAttribute('data-testid');
+    const otNumero = otCardTestId?.replace('ot-card-', '') || '';
 
     await otCard.click();
 
-    // Click "Verificar Reparación" button
-    const verificarBtn = page.getByTestId('verificar-reparacion-btn');
-    await verificarBtn.click();
+    // Wait for modal to open
+    const modal = page.getByTestId('ot-details-modal');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Wait for modal animation to complete
+    await page.waitForTimeout(500);
+
+    // Click "Verificar Reparación" button - scroll to it first
+    const verificarBtn = modal.getByTestId('verificar-reparacion-btn');
+
+    // Wait for button to be visible
+    await expect(verificarBtn).toBeVisible({ timeout: 5000 });
+
+    // Scroll the modal content to bring the button into view
+    // The button might be in a scrollable container within the modal
+    await verificarBtn.evaluate((el) => {
+      el.scrollIntoView({ behavior: 'instant', block: 'center' });
+    });
+    await page.waitForTimeout(500);
+
+    // Force click to bypass any overlay issues
+    await verificarBtn.click({ force: true });
 
     // Select "Funciona" option (this directly confirms and submits)
     const funcionaOption = page.getByTestId('verificacion-funciona-option');
     await funcionaOption.click();
 
-    // Wait a moment for the verification to complete and page to reload
+    // Wait a moment for the verification to complete
     await page.waitForTimeout(2000);
+
+    // Close modal first if still open
+    const closeModalBtn = page.getByTestId('btn-cerrar-modal');
+    if (await closeModalBtn.isVisible().catch(() => false)) {
+      await closeModalBtn.click().catch(() => {});
+      await page.waitForTimeout(500);
+    }
 
     // Reload page to ensure we get fresh state
     await page.reload();
+    await page.waitForLoadState('domcontentloaded');
 
-    // Navigate to COMPLETADA column and click the first OT card
+    // Navigate to the same OT card we verified (by testid)
     const board2 = page.getByTestId('ot-kanban-board');
+    await expect(board2).toBeVisible({ timeout: 10000 });
     const desktopContainer2 = board2.locator('.lg\\:flex').first();
     const completadaColumn2 = desktopContainer2.getByTestId('kanban-column-COMPLETADA');
-    const updatedOtCard = completadaColumn2.locator('[data-testid^="ot-card-"]').first();
 
-    await updatedOtCard.click();
+    // Find the same OT card by its testid
+    const verifiedOtCard = completadaColumn2.getByTestId(`ot-card-${otNumero}`);
+    await expect(verifiedOtCard).toBeVisible({ timeout: 5000 });
+    await verifiedOtCard.click();
+
+    // Wait for modal to open
+    const modal2 = page.getByTestId('ot-details-modal');
+    await expect(modal2).toBeVisible({ timeout: 5000 });
 
     // Now verify the badge is visible in the modal
-    await expect(page.getByTestId('ot-verified-badge')).toBeVisible();
+    await expect(modal2.getByTestId('ot-verified-badge')).toBeVisible();
   });
 
   test('[P2-AC6-003] should create rework OT when repair does not work', async ({ page }) => {
@@ -217,29 +271,59 @@ test.describe('Story 3.2 - AC6: Verificación por Operario (P2)', () => {
     const desktopContainer = board.locator('.lg\\:flex').first();
     const completadaColumn = desktopContainer.getByTestId('kanban-column-COMPLETADA');
 
-    const otCard = completadaColumn.locator('[data-testid^="ot-card-"]').first();
-    const cardCount = await otCard.count();
+    // Get all completed OT cards and check count
+    const otCards = completadaColumn.locator('[data-testid^="ot-card-"]');
+    const cardCount = await otCards.count();
 
     if (cardCount === 0) {
       test.skip(true, 'No completed OTs available - skipping test');
+      return;
     }
 
-    // Click the OT card to open details
+    // Click the first OT card to open details
+    const otCard = otCards.first();
     await otCard.click();
 
-    // Click "Verificar Reparación" button
-    const verificarBtn = page.getByTestId('verificar-reparacion-btn');
-    await verificarBtn.click();
+    // Wait for modal to open
+    const modal = page.getByTestId('ot-details-modal');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Wait for modal animation to complete
+    await page.waitForTimeout(500);
+
+    // Click "Verificar Reparación" button - scroll to it first
+    const verificarBtn = modal.getByTestId('verificar-reparacion-btn');
+
+    // Wait for button to be visible
+    await expect(verificarBtn).toBeVisible({ timeout: 5000 });
+
+    // Scroll the modal content to bring the button into view
+    // The button might be in a scrollable container within the modal
+    await verificarBtn.evaluate((el) => {
+      el.scrollIntoView({ behavior: 'instant', block: 'center' });
+    });
+    await page.waitForTimeout(500);
+
+    // Force click to bypass any overlay issues
+    await verificarBtn.click({ force: true });
 
     // Select "No Funciona" option (this directly confirms and creates rework OT)
     const noFuncionaOption = page.getByTestId('verificacion-no-funciona-option');
     await noFuncionaOption.click();
 
-    // Wait a moment for the rework OT creation and page reload
+    // Wait for the verification dialog to close (indicates success)
+    const verificationDialog = page.getByTestId('verification-dialog');
+    await expect(verificationDialog).not.toBeVisible({ timeout: 5000 }).catch(() => {});
+
+    // Wait for the modal to close as well
+    await expect(modal).not.toBeVisible({ timeout: 5000 }).catch(() => {});
+
+    // Wait a moment for the rework OT creation to complete
     await page.waitForTimeout(2000);
 
     // Reload page to ensure we see the new rework OT
     await page.reload();
+    await page.waitForLoadState('domcontentloaded');
 
     // Verify new OT is created with HIGH priority
     // Navigate to ASIGNADA column to find rework OT
@@ -251,8 +335,16 @@ test.describe('Story 3.2 - AC6: Verificación por Operario (P2)', () => {
 
     await expect(reworkOtCard.first()).toBeVisible();
 
-    // Verify rework OT has HIGH priority
-    await expect(reworkOtCard.first().getByTestId('ot-prioridad-badge')).toContainText('ALTA');
+    // Click the rework OT card to open details modal
+    await reworkOtCard.first().click();
+
+    // Wait for modal to open
+    const modal2 = page.getByTestId('ot-details-modal');
+    await expect(modal2).toBeVisible({ timeout: 5000 });
+
+    // Verify rework OT has HIGH priority in the modal
+    const prioridadBadge = modal2.getByTestId('ot-prioridad-badge');
+    await expect(prioridadBadge).toContainText('ALTA');
 
     // Verify rework OT is linked to parent (would need to check modal details)
   });

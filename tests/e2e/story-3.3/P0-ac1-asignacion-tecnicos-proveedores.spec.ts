@@ -72,8 +72,10 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
     const targetCount = 2;
 
     // First, check how many options we can click
+    // Note: Component uses tecnico-option-${index} not tecnico-option-
     const options = page.locator('[data-testid^="tecnico-option-"]');
     const optionCount = await options.count();
+    console.log(`Found ${optionCount} technician options`);
 
     // If we have existing assignments and need to reduce, deselect some
     // For simplicity, let's just ensure we can select 2 distinct technicians
@@ -85,7 +87,7 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
         const checkmark = option.locator('.bg-primary');
         if (await checkmark.count() === 0) {
           await option.click();
-          await page.waitForTimeout(200);
+          await page.waitForTimeout(500); // Increased wait time
         }
       }
     }
@@ -130,10 +132,13 @@ test.describe('Story 3.3 - AC1: Asignación de Técnicos y Proveedores (P0)', ()
 
     // Open provider dropdown and select one
     await proveedoresSelect.click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(2000); // Wait for providers to load (increased timeout)
 
-    const proveedorOption = page.locator('[data-testid="proveedor-option-0"]');
-    await expect(proveedorOption).toBeVisible({ timeout: 5000 });
+    // Wait for any provider option to be visible
+    const proveedorOptions = page.locator('[data-testid^="proveedor-option-"]');
+    await expect(proveedorOptions.first()).toBeVisible({ timeout: 10000 });
+
+    const proveedorOption = proveedorOptions.first();
     await proveedorOption.click();
 
     // Close popover

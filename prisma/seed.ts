@@ -51,10 +51,11 @@ async function main() {
       { name: 'can_manage_routines', label: 'Gestionar Rutinas', description: 'Permite gestionar rutinas preventivas' },
       { name: 'can_manage_users', label: 'Gestionar Usuarios', description: 'Permite gestionar usuarios del sistema' },
       { name: 'can_receive_reports', label: 'Recibir Reportes', description: 'Permite recibir notificaciones de averías' },
+      { name: 'can_verify_ot', label: 'Verificar OTs', description: 'Permite verificar reparaciones completadas' },
     ],
   })
 
-  console.log('✅ Created 15 capabilities')
+  console.log('✅ Created 16 capabilities')
 
   // Obtener todas las capabilities para asignarlas al admin
   const allCapabilities = await prisma.capability.findMany()

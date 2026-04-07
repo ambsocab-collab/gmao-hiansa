@@ -3,12 +3,16 @@ import { test, expect } from '../../fixtures/test.fixtures';
 /**
  * P1 E2E Tests for Story 3.4 AC7: Link a Avería Original
  *
- * TDD RED PHASE: Tests will fail until implementation is complete
+ * GREEN PHASE: Tests validate avería link functionality
  *
  * Acceptance Criteria:
  * - AC7: Link a avería original si existe failure_report_id
  * - Navegación a página de detalle de avería
  * - Modal muestra datos de avería si existe
+ *
+ * TestIDs aligned with ot-details-modal.tsx:
+ * - ot-details-modal (main modal)
+ * - link-averia-original (link to avería)
  *
  * Storage State: Uses supervisor auth from playwright/.auth/supervisor.json
  */
@@ -23,7 +27,6 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
   });
 
   test('[P1-AC7-001] Link a avería original visible si existe', async ({ page }) => {
-    // RED PHASE: This test will fail - avería link not implemented yet
     // This test requires an OT that was created from an avería
 
     const tabla = page.getByTestId('ots-lista-tabla');
@@ -34,7 +37,7 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // If this OT has a failure_report_id, the link should be visible
@@ -51,8 +54,6 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
   });
 
   test('[P1-AC7-002] Click en link avería navega correctamente', async ({ page }) => {
-    // RED PHASE: This test will fail - avería navigation not implemented yet
-
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -61,7 +62,7 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // Try to find and click the avería link
@@ -77,7 +78,6 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
   });
 
   test('[P1-AC7-003] Modal muestra datos de avería si existe', async ({ page }) => {
-    // RED PHASE: This test will fail - avería data display not implemented yet
     const tabla = page.getByTestId('ots-lista-tabla');
     await expect(tabla).toBeVisible({ timeout: 10000 });
 
@@ -86,7 +86,7 @@ test.describe('Story 3.4 - AC7: Link a Avería Original (P1)', () => {
     const verDetallesBtn = firstRow.getByTestId('btn-ver-detalles');
     await verDetallesBtn.click();
 
-    const modal = page.locator('[data-testid^="modal-ot-info-"]');
+    const modal = page.getByTestId('ot-details-modal');
     await expect(modal).toBeVisible({ timeout: 5000 });
 
     // If OT has avería, should show: reporter, descripción, foto

@@ -32,8 +32,9 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
       // Find a PENDIENTE OT (StatusBadge shows "Pendiente")
+      // The OT list uses estado-badge-{id} testid pattern
       const pendienteRow = otRows.filter({
-        has: page.locator('[data-testid="status-badge"]').getByText('Pendiente')
+        has: page.locator('[data-testid^="estado-badge-"]').getByText('Pendiente')
       }).first();
 
       // Seed data provides 5 PENDIENTE OTs
@@ -52,18 +53,34 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       const proveedoresSelect = assignmentModal.getByTestId('proveedores-select');
       await expect(proveedoresSelect).toBeEnabled();
       await proveedoresSelect.click();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2000); // Wait for providers to load
 
-      // Select first provider option
-      const proveedorOption = page.locator('[data-testid="proveedor-option-0"]');
-      await expect(proveedorOption).toBeVisible({ timeout: 3000 });
+      // Select first provider option - use a more flexible selector
+      const proveedorOptions = page.locator('[data-testid^="proveedor-option-"]');
+      await expect(proveedorOptions.first()).toBeVisible({ timeout: 10000 });
+
+      const proveedorOption = proveedorOptions.first();
       await proveedorOption.click();
       await page.keyboard.press('Escape');
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
-      // Save assignment
+      // Verify provider was selected (badge should appear) or check that button text changed
+      // The provider select should show the selected provider name
+      const selectedProveedor = assignmentModal.locator('[data-testid="selected-proveedor-badge"]');
+
+      // Check if badge is visible, if not, the provider might be shown in the select button itself
+      const badgeVisible = await selectedProveedor.isVisible().catch(() => false);
+
+      if (!badgeVisible) {
+        // Check if the select button shows a provider name (alternative UI)
+        const selectText = await proveedoresSelect.textContent();
+        const hasProviderSelected = selectText && !selectText.includes('Seleccionar proveedor');
+        expect(hasProviderSelected).toBe(true);
+      }
+
+      // Save assignment - button should be enabled since we selected a provider
       const guardarBtn = assignmentModal.getByTestId('guardar-asignacion-btn');
-      await expect(guardarBtn).toBeEnabled();
+      await expect(guardarBtn).toBeEnabled({ timeout: 10000 });
       await guardarBtn.click();
 
       // Wait for modal to close (indicates success)
@@ -93,9 +110,9 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
-      // Find OT with "Reparación" in status badge
+      // Find OT with "Reparación Externa" in status badge (uses estado-badge-{id} testid)
       const otEnReparacion = otRows.filter({
-        has: page.locator('[data-testid="status-badge"]').getByText('Reparación')
+        has: page.locator('[data-testid^="estado-badge-"]').getByText('Reparación')
       }).first();
 
       // Expect to find the OT since seed data provides 3 REPARACION_EXTERNA OTs
@@ -104,8 +121,8 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       // Click on the row to open details modal
       await otEnReparacion.click();
 
-      // Details modal should open (uses ot-details-modal-{id} testid)
-      const detailsModal = page.locator('[data-testid^="ot-details-modal-"]');
+      // Details modal should open
+      const detailsModal = page.locator('[data-testid="ot-details-modal"]');
       await expect(detailsModal).toBeVisible({ timeout: 5000 });
 
       // Verify OT is in REPARACION_EXTERNA state
@@ -113,7 +130,7 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       await expect(estadoBadge).toContainText('Reparación');
 
       // If confirmation button exists, test the full flow
-      const confirmarBtn = detailsModal.getByTestId('btn-confirmar-recepcion');
+      const confirmarBtn = detailsModal.getByTestId('confirmar-recepcion-btn');
       if (await confirmarBtn.isVisible()) {
         await expect(confirmarBtn).toBeEnabled();
         await confirmarBtn.click();
@@ -168,22 +185,23 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
       const otRows = page.locator('[data-testid^="ot-row-"]');
       await expect(otRows.first()).toBeVisible({ timeout: 10000 });
 
-      // Find OT with "Reparación" in status badge
+      // Find OT with "Reparación Externa" in status badge (uses estado-badge-{id} testid)
       const otEnReparacion = otRows.filter({
-        has: page.locator('[data-testid="status-badge"]').getByText('Reparación')
+        has: page.locator('[data-testid^="estado-badge-"]').getByText('Reparación')
       }).first();
 
       // Expect to find the OT since seed data provides 3 REPARACION_EXTERNA OTs
       await expect(otEnReparacion).toBeVisible({ timeout: 10000 });
 
-      // Click on the row to open details modal
-      await otEnReparacion.click();
+      // Click on the OT number cell to open details modal (avoids clicking on buttons/checkboxes)
+      const otNumeroCell = otEnReparacion.locator('[data-testid^="ot-numero-"]');
+      await otNumeroCell.click();
 
-      const detailsModal = page.locator('[data-testid^="ot-details-modal-"]');
+      const detailsModal = page.locator('[data-testid="ot-details-modal"]');
       await expect(detailsModal).toBeVisible({ timeout: 5000 });
 
       // If confirmation button exists, test the verification flow
-      const confirmarBtn = detailsModal.getByTestId('btn-confirmar-recepcion');
+      const confirmarBtn = detailsModal.getByTestId('confirmar-recepcion-btn');
       if (await confirmarBtn.isVisible()) {
         await confirmarBtn.click();
 
@@ -228,20 +246,21 @@ test.describe('Story 3.3 - AC5: Confirmación de Recepción de Proveedor (P0)', 
 
       // Find an OT that does NOT show "Reparación" in status
       const otNormal = otRows.filter({
-        hasNot: page.locator('[data-testid="status-badge"]').getByText('Reparación')
+        hasNot: page.locator('[data-testid^="estado-badge-"]').getByText('Reparación')
       }).first();
 
       // Seed data provides many OTs in other states (ASIGNADA, EN_PROGRESO, etc.)
       await expect(otNormal).toBeVisible({ timeout: 10000 });
 
-      // Click on the row to open details modal
-      await otNormal.click();
+      // Click on the equipo cell to open details modal (avoids clicking on buttons/checkboxes)
+      const equipoCell = otNormal.locator('[data-testid^="ot-equipo-"]');
+      await equipoCell.click();
 
-      const detailsModal = page.locator('[data-testid^="ot-details-modal-"]');
+      const detailsModal = page.locator('[data-testid="ot-details-modal"]');
       await expect(detailsModal).toBeVisible({ timeout: 5000 });
 
       // "Confirmar Recepción" button should NOT be visible for non-REPARACION_EXTERNA OTs
-      const confirmarBtn = detailsModal.getByTestId('btn-confirmar-recepcion');
+      const confirmarBtn = detailsModal.getByTestId('confirmar-recepcion-btn');
       await expect(confirmarBtn).not.toBeVisible();
     });
   });
