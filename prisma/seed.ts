@@ -103,10 +103,9 @@ async function main() {
     },
   })
 
-  // Asignar solo capabilities de operario a B. Soto
-  const operarioCapabilities = allCapabilities.filter((cap) => cap.name === 'can_create_failure_report')
+  // Asignar TODAS las capabilities a B. Soto
   await prisma.userCapability.createMany({
-    data: operarioCapabilities.map((cap) => ({
+    data: allCapabilities.map((cap) => ({
       userId: bsoto.id,
       capabilityId: cap.id,
     })),
