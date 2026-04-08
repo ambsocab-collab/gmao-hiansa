@@ -133,7 +133,7 @@ export function KanbanBoard({ initialWorkOrders, canAssignTechnicians = false }:
   } | null>(null)
   const [, setRefreshKey] = useState(0) // Triggers re-render when assignments change
   const [isMobile, setIsMobile] = useState(false)
-  const [isTablet, setIsTablet] = useState(false)
+  const [_isTablet, setIsTablet] = useState(false)
   const [visibleColumnRange, setVisibleColumnRange] = useState({ start: 1, end: 8 })
   const [isKpiPanelCollapsed, setIsKpiPanelCollapsed] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)

@@ -11,9 +11,7 @@
  * - Colapsable en tablet
  */
 
-import { useState } from 'react'
 import { WorkOrderEstado } from '@prisma/client'
-import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, ClipboardList, Play, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

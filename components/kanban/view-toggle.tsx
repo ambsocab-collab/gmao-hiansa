@@ -27,9 +27,9 @@ export interface ViewToggleProps {
 }
 
 export function ViewToggle({ currentView = 'kanban' }: ViewToggleProps) {
-  const router = useRouter()
+  const _router = useRouter()
   const pathname = usePathname()
-  const [viewMode, setViewMode] = useState<ViewMode>(currentView)
+  const [_viewMode, setViewMode] = useState<ViewMode>(currentView)
 
   // Determine if we're on kanban or list view based on pathname
   const isKanbanActive = pathname?.includes('/kanban')

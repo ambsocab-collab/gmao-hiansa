@@ -194,8 +194,11 @@ export function OTDetailsModal({ workOrder, open, onOpenChange }: OTDetailsModal
 
   /**
    * Story 3.3 AC5: Confirm provider work received
+   * Note: This function is kept for potential future use or refactoring
+   * Currently, the confirm logic is inline in the AlertDialog for visual verification flow
    */
-  async function handleConfirmProviderWork() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function _handleConfirmProviderWork() {
     setIsConfirmingProvider(true)
 
     try {
