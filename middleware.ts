@@ -70,7 +70,6 @@ export function getOrCreateCorrelationId(request: Headers): string {
  */
 export const ROUTE_CAPABILITIES: Record<string, string[]> = {
   '/dashboard': [], // No capabilities required - all authenticated users can access
-  '/work-orders': ['can_view_all_ots'],
   '/ots': ['can_view_all_ots'], // Story 3.1: Kanban de 8 columnas (supervisores)
   '/mis-ots': ['can_view_own_ots'], // Story 3.2: Gestión de OTs asignadas (técnicos)
   '/assets': ['can_manage_assets'],
@@ -243,8 +242,6 @@ export const config = {
     // Note: Must match both exact path and paths with sub-paths
     '/dashboard',
     '/dashboard/:path*',
-    '/work-orders',
-    '/work-orders/:path*',
     '/ots',
     '/ots/:path*', // Story 3.1: OTs routes (kanban, listado, etc.)
     '/mis-ots',

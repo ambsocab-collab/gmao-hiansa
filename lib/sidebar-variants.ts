@@ -33,7 +33,10 @@ const ROUTE_VARIANTS: Record<string, SidebarVariant> = {
   '/dashboard': 'default',
 
   // Dirección 2: Kanban First (200px)
-  '/kanban': 'compact',
+  '/ots/kanban': 'compact',
+
+  // Dirección 4: Data Heavy (160px)
+  '/ots/lista': 'mini',
 
   // Dirección 4: Data Heavy (160px)
   '/kpis': 'mini',

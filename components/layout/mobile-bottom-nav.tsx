@@ -98,7 +98,7 @@ export function MobileBottomNav() {
 
   // Only show primary items in bottom nav (Dashboard, Reportar Avería, Mis OTs, Órdenes de Trabajo)
   const bottomNavItems = allNavItems.filter((item) =>
-    ['/dashboard', '/averias/nuevo', '/mis-ots', '/work-orders'].includes(
+    ['/dashboard', '/averias/nuevo', '/mis-ots', '/ots/kanban'].includes(
       item.href
     )
   )
@@ -119,7 +119,9 @@ export function MobileBottomNav() {
         <div className="grid grid-cols-4 gap-0">
           {bottomNavItems.map((item) => {
             const isActive =
-              pathname === item.href || pathname.startsWith(item.href + '/')
+              pathname === item.href ||
+              pathname.startsWith(item.href + '/') ||
+              ('activePrefix' in item && item.activePrefix != null && pathname.startsWith(item.activePrefix + '/'))
 
             return (
               <NavTab

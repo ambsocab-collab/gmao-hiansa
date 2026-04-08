@@ -110,7 +110,11 @@ export function Navigation({ userCapabilities, className }: NavigationProps) {
           <NavItem
             key={item.href}
             item={item}
-            isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
+            isActive={
+              pathname === item.href ||
+              pathname.startsWith(item.href + '/') ||
+              (item.activePrefix != null && pathname.startsWith(item.activePrefix + '/'))
+            }
           />
         ))}
 

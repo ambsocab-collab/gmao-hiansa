@@ -27,6 +27,8 @@ export interface NavigationItem {
   requiredCapability: string
   /** Optional: data-testid for E2E testing */
   testId?: string
+  /** Optional: prefix for active state matching (e.g., '/ots' matches /ots/kanban and /ots/lista) */
+  activePrefix?: string
 }
 
 /**
@@ -66,10 +68,11 @@ const ALL_NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     label: 'Órdenes de Trabajo',
-    href: '/work-orders',
+    href: '/ots/kanban',
     icon: 'Wrench',
     requiredCapability: 'can_view_all_ots',
     testId: 'nav-work-orders',
+    activePrefix: '/ots',
   },
   {
     label: 'Activos/Equipos',
