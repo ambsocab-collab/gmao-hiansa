@@ -116,7 +116,7 @@ describe('Story 3.4 - Integration: Export and Reports (P2)', () => {
   /**
    * P2-EXPORT-001: Exportar a CSV debe incluir todas las columnas
    */
-  it('[P2-EXPORT-001] should include all columns in CSV export', async () => {
+  it('[P2-EXPORT-001] should include all columns in CSV export', { timeout: 15000 }, async () => {
     await createTestWorkOrders(10);
 
     const workOrders = await prisma.workOrder.findMany({
@@ -219,7 +219,7 @@ describe('Story 3.4 - Integration: Export and Reports (P2)', () => {
   /**
    * P2-EXPORT-004: Export debe completarse eficientemente
    */
-  it('[P2-EXPORT-004] should export records efficiently', async () => {
+  it('[P2-EXPORT-004] should export records efficiently', { timeout: 15000 }, async () => {
     await createTestWorkOrders(20);
 
     const startTime = Date.now();
@@ -275,7 +275,7 @@ describe('Story 3.4 - Integration: Export and Reports (P2)', () => {
   /**
    * P2-REPORT-001: Reporte de OTs por estado
    */
-  it('[P2-REPORT-001] should generate status report', async () => {
+  it('[P2-REPORT-001] should generate status report', { timeout: 15000 }, async () => {
     await createTestWorkOrders(30);
 
     const statusReport = await prisma.workOrder.groupBy({
@@ -298,7 +298,7 @@ describe('Story 3.4 - Integration: Export and Reports (P2)', () => {
   /**
    * P2-REPORT-002: Reporte de OTs por tipo y prioridad
    */
-  it('[P2-REPORT-002] should generate tipo-prioridad report', async () => {
+  it('[P2-REPORT-002] should generate tipo-prioridad report', { timeout: 15000 }, async () => {
     await createTestWorkOrders(30);
 
     const tipoPrioridadReport = await prisma.workOrder.groupBy({

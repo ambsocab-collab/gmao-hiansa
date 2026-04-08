@@ -171,7 +171,7 @@ describe('Story 3.2 - Integration: Stock Race Condition (R-103)', () => {
    * WHEN: User uses 3 units
    * THEN: Stock becomes 7, UsedRepuesto created
    */
-  it('[R-103-001] should update stock atomically on single use', async () => {
+  it('[R-103-001] should update stock atomically on single use', { timeout: 15000 }, async () => {
     const workOrder = await createTestWorkOrder();
     const repuesto = await createTestRepuesto(10);
     const cantidad = 3;

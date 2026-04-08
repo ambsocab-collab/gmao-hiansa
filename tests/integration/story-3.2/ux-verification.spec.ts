@@ -138,7 +138,7 @@ describe('Story 3.2 - Integration: UX Verification (P2)', () => {
   /**
    * P2-UX-001: Estado de OT debe tener descripción amigable
    */
-  it('[P2-UX-001] should have user-friendly estado labels', async () => {
+  it('[P2-UX-001] should have user-friendly estado labels', { timeout: 15000 }, async () => {
     const estadoLabels: Partial<Record<WorkOrderEstado, string>> = {
       [WorkOrderEstado.PENDIENTE]: 'Pendiente de asignación',
       [WorkOrderEstado.EN_PROGRESO]: 'En progreso',

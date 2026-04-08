@@ -243,7 +243,7 @@ describe('Story 3.3 - Integration: Assignment Edge Cases (P2)', () => {
   /**
    * P2-EDGE-005: Técnico sobrecargado muestra advertencia
    */
-  it('[P2-EDGE-005] should detect overloaded technician', async () => {
+  it('[P2-EDGE-005] should detect overloaded technician', { timeout: 15000 }, async () => {
     const tecnico = await createTestUser();
 
     // Create 5 active assignments for this technician

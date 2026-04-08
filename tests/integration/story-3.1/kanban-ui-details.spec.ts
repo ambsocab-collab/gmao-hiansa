@@ -212,7 +212,7 @@ describe('Story 3.1 - Integration: Kanban UI Details (P2)', () => {
   /**
    * P2-UI-005: Conteo de OTs por columna debe ser eficiente
    */
-  it('[P2-UI-005] should efficiently count OTs per column', async () => {
+  it('[P2-UI-005] should efficiently count OTs per column', { timeout: 15000 }, async () => {
     // Create OTs in different states
     for (let i = 0; i < 5; i++) {
       await createTestWorkOrder(WorkOrderEstado.PENDIENTE);

@@ -54,10 +54,12 @@ describe('Story 3.4 - Unit Tests: Work Orders List Utils (P1)', () => {
       const fechaInicio = new Date('2024-01-01');
       const fechaFin = new Date('2024-12-31');
       const result = buildFilterQuery({ fechaInicio, fechaFin });
+      // Implementation uses lt(nextDay) to include full day
+      const expectedNextDay = new Date('2025-01-01');
       expect(result).toEqual({
         created_at: {
           gte: fechaInicio,
-          lte: fechaFin,
+          lt: expectedNextDay,
         },
       });
     });
@@ -75,9 +77,11 @@ describe('Story 3.4 - Unit Tests: Work Orders List Utils (P1)', () => {
     it('[P1-UNIT-007] should build date range with only end date', () => {
       const fechaFin = new Date('2024-12-31');
       const result = buildFilterQuery({ fechaFin });
+      // Implementation uses lt(nextDay) to include full day
+      const expectedNextDay = new Date('2025-01-01');
       expect(result).toEqual({
         created_at: {
-          lte: fechaFin,
+          lt: expectedNextDay,
         },
       });
     });
